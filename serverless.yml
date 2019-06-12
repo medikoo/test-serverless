@@ -1,4 +1,4 @@
-service: test-1x
+service: test-1
 
 provider:
   name: aws
