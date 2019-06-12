@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-1x",
+    "service": "test-1",
     "serviceObject": {
-      "name": "test-1x"
+      "name": "test-1"
     },
     "provider": {
       "stage": "dev",
@@ -33,13 +33,13 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-1x-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-1-dev-myFunction"
             }
           },
           "MyFunction2LogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-1x-dev-myFunction2"
+              "LogGroupName": "/aws/lambda/test-1-dev-myFunction2"
             }
           },
           "IamRoleLambdaExecution": {
@@ -68,7 +68,7 @@
                       "-",
                       [
                         "dev",
-                        "test-1x",
+                        "test-1",
                         "lambda"
                       ]
                     ]
@@ -83,10 +83,10 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1x-dev-myFunction:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev-myFunction:*"
                           },
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1x-dev-myFunction2:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev-myFunction2:*"
                           }
                         ]
                       },
@@ -97,10 +97,10 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1x-dev-myFunction:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev-myFunction:*:*"
                           },
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1x-dev-myFunction2:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev-myFunction2:*:*"
                           }
                         ]
                       }
@@ -113,7 +113,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-1x",
+                    "test-1",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -131,9 +131,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1x/dev/1559899400211-2019-06-07T09:23:20.211Z/myFunction.zip"
+                "S3Key": "serverless/test-1/dev/1560341323115-2019-06-12T12:08:43.115Z/myFunction.zip"
               },
-              "FunctionName": "test-1x-dev-myFunction",
+              "FunctionName": "test-1-dev-myFunction",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -150,14 +150,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunctionLambdaVersionjHaz6oIoTXhlmmKcAIxaMmWcehro3VIV28lu0Tkk": {
+          "MyFunctionLambdaVersioniRo9AYqMScv3lalrJw6mSWWnZJFyZlPkRrvUxmzxWls": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MyFunctionLambdaFunction"
               },
-              "CodeSha256": "IAIO/wt0S45ZsBznNrhVvL9XmIs0FHCgyayMZxfhrDU="
+              "CodeSha256": "6fwwEP0Jh0MHP28zP8V4YFi+pO8AS9mzgYMfKQ17k/8="
             }
           },
           "MyFunction2LambdaFunction": {
@@ -167,9 +167,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1x/dev/1559899400211-2019-06-07T09:23:20.211Z/myFunction2.zip"
+                "S3Key": "serverless/test-1/dev/1560341323115-2019-06-12T12:08:43.115Z/myFunction2.zip"
               },
-              "FunctionName": "test-1x-dev-myFunction2",
+              "FunctionName": "test-1-dev-myFunction2",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -186,14 +186,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunction2LambdaVersionX1iKKOQeA6IRVNSd9OkXBak0TZpj8fJAEDeo2I": {
+          "MyFunction2LambdaVersionoWTq7002XIal7bVpSUmDeiM3E3XY15nILp5Sbo9C4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MyFunction2LambdaFunction"
               },
-              "CodeSha256": "IAIO/wt0S45ZsBznNrhVvL9XmIs0FHCgyayMZxfhrDU="
+              "CodeSha256": "6fwwEP0Jh0MHP28zP8V4YFi+pO8AS9mzgYMfKQ17k/8="
             }
           }
         },
@@ -206,13 +206,13 @@
           "MyFunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MyFunctionLambdaVersionjHaz6oIoTXhlmmKcAIxaMmWcehro3VIV28lu0Tkk"
+              "Ref": "MyFunctionLambdaVersioniRo9AYqMScv3lalrJw6mSWWnZJFyZlPkRrvUxmzxWls"
             }
           },
           "MyFunction2LambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MyFunction2LambdaVersionX1iKKOQeA6IRVNSd9OkXBak0TZpj8fJAEDeo2I"
+              "Ref": "MyFunction2LambdaVersionoWTq7002XIal7bVpSUmDeiM3E3XY15nILp5Sbo9C4"
             }
           }
         }
@@ -254,7 +254,7 @@
       "myFunction": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-1x-dev-myFunction",
+        "name": "test-1-dev-myFunction",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
         },
@@ -266,7 +266,7 @@
       "myFunction2": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-1x-dev-myFunction2",
+        "name": "test-1-dev-myFunction2",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction2.zip"
         },
@@ -280,7 +280,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-1x/dev/1559899400211-2019-06-07T09:23:20.211Z",
+    "artifactDirectoryName": "serverless/test-1/dev/1560341323115-2019-06-12T12:08:43.115Z",
     "artifact": ""
   }
 }
