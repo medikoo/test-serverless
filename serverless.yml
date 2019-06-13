@@ -1,8 +1,5 @@
 service: test-1
 
-tenant: medikoo
-app: medikoo-test
-
 custom:
   service:
     name: log-group-issue-lambda
