@@ -131,7 +131,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1/dev/1560432120621-2019-06-13T13:22:00.621Z/myFunction.zip"
+                "S3Key": "serverless/test-1/dev/1560432446675-2019-06-13T13:27:26.675Z/myFunction.zip"
               },
               "FunctionName": "log-group-issue-lambda-myFunction",
               "Handler": "index.handler",
@@ -167,7 +167,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1/dev/1560432120621-2019-06-13T13:22:00.621Z/myFunction2.zip"
+                "S3Key": "serverless/test-1/dev/1560432446675-2019-06-13T13:27:26.675Z/myFunction2.zip"
               },
               "FunctionName": "test-1-dev-myFunction2",
               "Handler": "index.handler",
@@ -317,7 +317,7 @@
                   },
                   {
                     "StatusCode": 504,
-                    "SelectionPattern": "([\\s\\S]*\\[504\\][\\s\\S]*)|(^[Task timed out].*)",
+                    "SelectionPattern": "([\\s\\S]*\\[504\\][\\s\\S]*)|(.*Task timed out after \\d+\\.\\d+ seconds$)",
                     "ResponseParameters": {},
                     "ResponseTemplates": {}
                   }
@@ -372,7 +372,7 @@
               ]
             }
           },
-          "ApiGatewayDeployment1560432119023": {
+          "ApiGatewayDeployment1560432445001": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -554,7 +554,7 @@
                     "pattern": "[\\s\\S]*\\[502\\][\\s\\S]*"
                   },
                   "504": {
-                    "pattern": "([\\s\\S]*\\[504\\][\\s\\S]*)|(^[Task timed out].*)"
+                    "pattern": "([\\s\\S]*\\[504\\][\\s\\S]*)|(.*Task timed out after \\d+\\.\\d+ seconds$)"
                   }
                 }
               }
@@ -576,7 +576,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-1/dev/1560432120621-2019-06-13T13:22:00.621Z",
+    "artifactDirectoryName": "serverless/test-1/dev/1560432446675-2019-06-13T13:27:26.675Z",
     "artifact": ""
   }
 }
