@@ -20,6 +20,3 @@ functions:
     handler: index.handler
   myFunction2:
     handler: index.handler
-
-plugins:
-  - serverless-plugin-reducer
