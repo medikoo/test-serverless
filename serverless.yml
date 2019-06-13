@@ -1,5 +1,9 @@
 service: test-1
 
+custom:
+  service:
+    name: log-group-issue-lambda
+
 provider:
   name: aws
   runtime: nodejs10.x
@@ -9,6 +13,7 @@ package:
 
 functions:
   myFunction:
+    name: ${self:custom.service.name}-myFunction
     handler: index.handler
   myFunction2:
     handler: index.handler

@@ -33,7 +33,7 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-1-dev-myFunction"
+              "LogGroupName": "/aws/lambda/log-group-issue-lambda-myFunction"
             }
           },
           "MyFunction2LogGroup": {
@@ -83,10 +83,10 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev-myFunction:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev*:*"
                           },
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev-myFunction2:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/log-group-issue-lambda-myFunction:*"
                           }
                         ]
                       },
@@ -97,10 +97,10 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev-myFunction:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev*:*:*"
                           },
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev-myFunction2:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/log-group-issue-lambda-myFunction:*:*"
                           }
                         ]
                       }
@@ -131,9 +131,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1/dev/1560341323115-2019-06-12T12:08:43.115Z/myFunction.zip"
+                "S3Key": "serverless/test-1/dev/1560347330001-2019-06-12T13:48:50.001Z/myFunction.zip"
               },
-              "FunctionName": "test-1-dev-myFunction",
+              "FunctionName": "log-group-issue-lambda-myFunction",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -150,14 +150,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunctionLambdaVersioniRo9AYqMScv3lalrJw6mSWWnZJFyZlPkRrvUxmzxWls": {
+          "MyFunctionLambdaVersionFglcWH7hIOVuablkEDys36FctKzFeI3VUeRCwchZ8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MyFunctionLambdaFunction"
               },
-              "CodeSha256": "6fwwEP0Jh0MHP28zP8V4YFi+pO8AS9mzgYMfKQ17k/8="
+              "CodeSha256": "U9oZ+8OT2oiZxazolUEZ8Ty4EYO2uzhGDgOvAavYEAM="
             }
           },
           "MyFunction2LambdaFunction": {
@@ -167,7 +167,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1/dev/1560341323115-2019-06-12T12:08:43.115Z/myFunction2.zip"
+                "S3Key": "serverless/test-1/dev/1560347330001-2019-06-12T13:48:50.001Z/myFunction2.zip"
               },
               "FunctionName": "test-1-dev-myFunction2",
               "Handler": "index.handler",
@@ -186,14 +186,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunction2LambdaVersionoWTq7002XIal7bVpSUmDeiM3E3XY15nILp5Sbo9C4": {
+          "MyFunction2LambdaVersion8fpDYPdbF3o549et4XRZhNDDgn5jpkDhv0Lh6gE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MyFunction2LambdaFunction"
               },
-              "CodeSha256": "6fwwEP0Jh0MHP28zP8V4YFi+pO8AS9mzgYMfKQ17k/8="
+              "CodeSha256": "U9oZ+8OT2oiZxazolUEZ8Ty4EYO2uzhGDgOvAavYEAM="
             }
           }
         },
@@ -206,13 +206,13 @@
           "MyFunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MyFunctionLambdaVersioniRo9AYqMScv3lalrJw6mSWWnZJFyZlPkRrvUxmzxWls"
+              "Ref": "MyFunctionLambdaVersionFglcWH7hIOVuablkEDys36FctKzFeI3VUeRCwchZ8"
             }
           },
           "MyFunction2LambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MyFunction2LambdaVersionoWTq7002XIal7bVpSUmDeiM3E3XY15nILp5Sbo9C4"
+              "Ref": "MyFunction2LambdaVersion8fpDYPdbF3o549et4XRZhNDDgn5jpkDhv0Lh6gE"
             }
           }
         }
@@ -246,15 +246,20 @@
       },
       "vpc": {}
     },
+    "custom": {
+      "service": {
+        "name": "log-group-issue-lambda"
+      }
+    },
     "plugins": [
       "serverless-plugin-reducer"
     ],
     "pluginsData": {},
     "functions": {
       "myFunction": {
+        "name": "log-group-issue-lambda-myFunction",
         "handler": "index.handler",
         "events": [],
-        "name": "test-1-dev-myFunction",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
         },
@@ -276,11 +281,12 @@
         "vpc": {}
       }
     },
+    "serviceFilename": "serverless.yml",
     "layers": {}
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-1/dev/1560341323115-2019-06-12T12:08:43.115Z",
+    "artifactDirectoryName": "serverless/test-1/dev/1560347330001-2019-06-12T13:48:50.001Z",
     "artifact": ""
   }
 }
