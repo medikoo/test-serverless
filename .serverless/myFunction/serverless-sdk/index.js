@@ -5978,13 +5978,13 @@
                 console.log(
                   "ServerlessSDK: Handler: Loading AWS Lambda handler..."
                 ),
-              (invocationEvent, awsContext, a) => {
+              (invocationEvent, awsContext, awsCallback) => {
                 n.$.config.debug &&
                   console.log(
-                    `ServerlessSDK: Handler: AWS Lambda wrapped handler executed with these values ${invocationEvent} ${awsContext} ${a}...`
+                    `ServerlessSDK: Handler: AWS Lambda wrapped handler executed with these values ${invocationEvent} ${awsContext} ${awsCallback}...`
                   ),
                   (awsContext = awsContext || {});
-                const c = this,
+                const handlerAwsContext = this,
                   l = u((invocationEvent = invocationEvent || {})),
                   f = n.transaction({
                     tenantId: i.tenantId,
@@ -6091,14 +6091,14 @@
                 }
                 f.set("event.custom.stage", i.stageName);
                 const p = f.$.spans,
-                  callback = (e, t) => {
+                  callback = (error, result) => {
                     try {
                       n.$.config.debug &&
                         console.log(
                           "ServerlessSDK: Handler: AWS Lambda wrapped callback executed..."
                         );
-                      const o = () => a.call(c, e || null, t || null);
-                      return e ? f.error(e, o) : f.end(o);
+                      const o = () => awsCallback.call(handlerAwsContext, error || null, result || null);
+                      return error ? f.error(error, o) : f.end(o);
                     } finally {
                       r.removeAllListeners("span");
                     }
