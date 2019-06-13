@@ -183,7 +183,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1/dev/1560419071221-2019-06-13T09:44:31.221Z/myFunction.zip"
+                "S3Key": "serverless/test-1/dev/1560420119401-2019-06-13T10:01:59.401Z/myFunction.zip"
               },
               "FunctionName": "log-group-issue-lambda-myFunction",
               "Handler": "s-myFunction.handler",
@@ -202,14 +202,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunctionLambdaVersion5FohWL00xVebmvoHngFmNXq3zK3n6dNR4h3Ay9tubg": {
+          "MyFunctionLambdaVersionbEMNwclqYVwtUyZxWxpuM7KWUWVlzGs4C2gEAf67U": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MyFunctionLambdaFunction"
               },
-              "CodeSha256": "KCy1LY5Sks39bAi3rJq9u/TlXJLvCIHHCM2u99HntuA="
+              "CodeSha256": "sIhVPBnleFDB7jKjvAQ7kcWxR3cC61j4q0Ams9xGJsQ="
             }
           },
           "MyFunction2LambdaFunction": {
@@ -219,7 +219,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1/dev/1560419071221-2019-06-13T09:44:31.221Z/myFunction2.zip"
+                "S3Key": "serverless/test-1/dev/1560420119401-2019-06-13T10:01:59.401Z/myFunction2.zip"
               },
               "FunctionName": "test-1-dev-myFunction2",
               "Handler": "s-myFunction2.handler",
@@ -238,14 +238,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunction2LambdaVersionR9nPA6CFucxS3MDE8XooWviU0xoDrFu1mfBUPs59y8": {
+          "MyFunction2LambdaVersionLc0JNlGzWtnfaquLIYuT5BbbZYkXLrPBJd7db0K94": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MyFunction2LambdaFunction"
               },
-              "CodeSha256": "ZitrFEco+3JKn3lUMQ7MqTfzaOgfFfy5BWNPW3xsPKM="
+              "CodeSha256": "NHZ62+8+zeXJqPN48TCJgUdReG9fi1grPlKDg5z0DD4="
             }
           },
           "CloudWatchLogsSubscriptionFilterMyFunctionLogGroup": {
@@ -286,13 +286,13 @@
           "MyFunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MyFunctionLambdaVersion5FohWL00xVebmvoHngFmNXq3zK3n6dNR4h3Ay9tubg"
+              "Ref": "MyFunctionLambdaVersionbEMNwclqYVwtUyZxWxpuM7KWUWVlzGs4C2gEAf67U"
             }
           },
           "MyFunction2LambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MyFunction2LambdaVersionR9nPA6CFucxS3MDE8XooWviU0xoDrFu1mfBUPs59y8"
+              "Ref": "MyFunction2LambdaVersionLc0JNlGzWtnfaquLIYuT5BbbZYkXLrPBJd7db0K94"
             }
           }
         }
@@ -370,7 +370,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-1/dev/1560419071221-2019-06-13T09:44:31.221Z",
+    "artifactDirectoryName": "serverless/test-1/dev/1560420119401-2019-06-13T10:01:59.401Z",
     "artifact": ""
   }
 }
