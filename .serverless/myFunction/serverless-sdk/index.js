@@ -5921,11 +5921,11 @@
     function(e, t, n) {
       e.exports = n(19);
     },
-    function(e, t, n) {
-      const r = n(20),
-        o = n(5),
-        i = n(60),
-        u = n(73);
+    function(e, t, require) {
+      const spanEmitter = require(20),
+        o = require(5),
+        i = require(60),
+        u = require(73);
       e.exports = class {
         constructor(e) {
           (this.$ = {}),
@@ -5942,12 +5942,12 @@
           return new i(e);
         }
         handler(originalHandler, t) {
-          const n = this,
+          const sfe = this,
             i = {};
           let s;
           if (
             ((t = t || {}),
-            n.$.config.debug &&
+            sfe.$.config.debug &&
               console.log(
                 `ServerlessSDK: Handler: Loading function handler with these inputs: ${o.EOL}${originalHandler}${o.EOL}${t}...`
               ),
@@ -5974,19 +5974,19 @@
             "aws.lambda" === i.computeType)
           )
             return (
-              n.$.config.debug &&
+              sfe.$.config.debug &&
                 console.log(
                   "ServerlessSDK: Handler: Loading AWS Lambda handler..."
                 ),
               (invocationEvent, awsContext, awsCallback) => {
-                n.$.config.debug &&
+                sfe.$.config.debug &&
                   console.log(
                     `ServerlessSDK: Handler: AWS Lambda wrapped handler executed with these values ${invocationEvent} ${awsContext} ${awsCallback}...`
                   ),
                   (awsContext = awsContext || {});
                 const handlerAwsContext = this,
                   l = u((invocationEvent = invocationEvent || {})),
-                  f = n.transaction({
+                  sfeTransaction = sfe.transaction({
                     tenantId: i.tenantId,
                     applicationName: i.applicationName,
                     appUid: i.appUid,
@@ -5999,115 +5999,115 @@
                     eventType: l
                   });
                 if (
-                  (f.set(
+                  (sfeTransaction.set(
                     "compute.runtime",
                     `aws.lambda.nodejs.${process.versions.node}`
                   ),
-                  f.set("compute.region", process.env.AWS_REGION),
-                  f.set(
+                  sfeTransaction.set("compute.region", process.env.AWS_REGION),
+                  sfeTransaction.set(
                     "compute.memorySize",
                     process.env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE
                   ),
-                  f.set(
+                  sfeTransaction.set(
                     "compute.custom.functionName",
                     process.env.AWS_LAMBDA_FUNCTION_NAME
                   ),
-                  f.set(
+                  sfeTransaction.set(
                     "compute.custom.functionVersion",
                     process.env.AWS_LAMBDA_FUNCTION_VERSION
                   ),
-                  f.set("compute.custom.arn", awsContext.invokedFunctionArn),
-                  f.set("compute.custom.region", process.env.AWS_REGION),
-                  f.set(
+                  sfeTransaction.set("compute.custom.arn", awsContext.invokedFunctionArn),
+                  sfeTransaction.set("compute.custom.region", process.env.AWS_REGION),
+                  sfeTransaction.set(
                     "compute.custom.memorySize",
                     process.env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE
                   ),
-                  f.set("compute.custom.invokeId", awsContext.invokeId),
-                  f.set("compute.custom.awsRequestId", awsContext.awsRequestId),
-                  f.set(
+                  sfeTransaction.set("compute.custom.invokeId", awsContext.invokeId),
+                  sfeTransaction.set("compute.custom.awsRequestId", awsContext.awsRequestId),
+                  sfeTransaction.set(
                     "compute.custom.xTraceId",
                     process.env._X_AMZN_TRACE_ID
                   ),
-                  f.set(
+                  sfeTransaction.set(
                     "compute.custom.logGroupName",
                     process.env.AWS_LAMBDA_LOG_GROUP_NAME
                   ),
-                  f.set(
+                  sfeTransaction.set(
                     "compute.custom.logStreamName",
                     process.env.AWS_LAMBDA_LOG_STREAM_NAME
                   ),
-                  f.set("compute.custom.envPlatform", process.platform),
-                  f.set("compute.custom.envArch", process.arch),
-                  f.set("compute.custom.envMemoryTotal", o.totalmem()),
-                  f.set("compute.custom.envMemoryFree", o.freemem()),
-                  f.set("compute.custom.envCpus", JSON.stringify(o.cpus())),
+                  sfeTransaction.set("compute.custom.envPlatform", process.platform),
+                  sfeTransaction.set("compute.custom.envArch", process.arch),
+                  sfeTransaction.set("compute.custom.envMemoryTotal", o.totalmem()),
+                  sfeTransaction.set("compute.custom.envMemoryFree", o.freemem()),
+                  sfeTransaction.set("compute.custom.envCpus", JSON.stringify(o.cpus())),
                   "aws.apigateway.http" === l)
                 ) {
                   const e =
                     invocationEvent.requestContext.requestTimeEpoch || Date.now().valueOf();
-                  f.set("event.timestamp", new Date(e).toISOString()),
-                    f.set("event.source", "aws.apigateway"),
-                    f.set("event.custom.accountId", invocationEvent.requestContext.accountId),
-                    f.set("event.custom.apiId", invocationEvent.requestContext.apiId),
-                    f.set(
+                  sfeTransaction.set("event.timestamp", new Date(e).toISOString()),
+                    sfeTransaction.set("event.source", "aws.apigateway"),
+                    sfeTransaction.set("event.custom.accountId", invocationEvent.requestContext.accountId),
+                    sfeTransaction.set("event.custom.apiId", invocationEvent.requestContext.apiId),
+                    sfeTransaction.set(
                       "event.custom.resourceId",
                       invocationEvent.requestContext.resourceId
                     ),
-                    f.set(
+                    sfeTransaction.set(
                       "event.custom.domainPrefix",
                       invocationEvent.requestContext.domainPrefix
                     ),
-                    f.set("event.custom.domain", invocationEvent.requestContext.domainName),
-                    f.set("event.custom.requestId", invocationEvent.requestContext.requestId),
-                    f.set(
+                    sfeTransaction.set("event.custom.domain", invocationEvent.requestContext.domainName),
+                    sfeTransaction.set("event.custom.requestId", invocationEvent.requestContext.requestId),
+                    sfeTransaction.set(
                       "event.custom.extendedRequestId",
                       invocationEvent.requestContext.extendedRequestId
                     ),
-                    f.set(
+                    sfeTransaction.set(
                       "event.custom.requestTime",
                       invocationEvent.requestContext.requestTime
                     ),
-                    f.set(
+                    sfeTransaction.set(
                       "event.custom.requestTimeEpoch",
                       invocationEvent.requestContext.requestTimeEpoch
                     ),
-                    f.set(
+                    sfeTransaction.set(
                       "event.custom.httpPath",
                       invocationEvent.requestContext.resourcePath
                     ),
-                    f.set(
+                    sfeTransaction.set(
                       "event.custom.httpMethod",
                       invocationEvent.requestContext.httpMethod
                     ),
-                    f.set(
+                    sfeTransaction.set(
                       "event.custom.xTraceId",
                       invocationEvent.headers["X-Amzn-Trace-Id"]
                     ),
-                    f.set(
+                    sfeTransaction.set(
                       "event.custom.xForwardedFor",
                       invocationEvent.headers["X-Forwarded-For"]
                     ),
-                    f.set("event.custom.userAgent", invocationEvent.headers["User-Agent"]);
+                    sfeTransaction.set("event.custom.userAgent", invocationEvent.headers["User-Agent"]);
                 }
-                f.set("event.custom.stage", i.stageName);
-                const p = f.$.spans,
+                sfeTransaction.set("event.custom.stage", i.stageName);
+                const p = sfeTransaction.$.spans,
                   callback = (error, result) => {
                     try {
-                      n.$.config.debug &&
+                      sfe.$.config.debug &&
                         console.log(
                           "ServerlessSDK: Handler: AWS Lambda wrapped callback executed..."
                         );
                       const o = () => awsCallback.call(handlerAwsContext, error || null, result || null);
-                      return error ? f.error(error, o) : f.end(o);
+                      return error ? sfeTransaction.error(error, o) : sfeTransaction.end(o);
                     } finally {
-                      r.removeAllListeners("span");
+                      spanEmitter.removeAllListeners("span");
                     }
                   };
                 let handlerResult;
                 (awsContext.done = callback),
                   (awsContext.succeed = result => callback(null, result)),
                   (awsContext.fail = error => callback(error, null)),
-                  r.on("span", e => {
+                  spanEmitter.on("span", e => {
                     p.push(e);
                   });
                 try {
