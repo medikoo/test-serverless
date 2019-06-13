@@ -6103,23 +6103,23 @@
                       r.removeAllListeners("span");
                     }
                   };
-                let g;
+                let handlerResult;
                 (awsContext.done = callback),
-                  (awsContext.succeed = e => callback(null, e)),
-                  (awsContext.fail = e => callback(e, null)),
+                  (awsContext.succeed = result => callback(null, result)),
+                  (awsContext.fail = error => callback(error, null)),
                   r.on("span", e => {
                     p.push(e);
                   });
                 try {
-                  g = originalHandler(invocationEvent, awsContext, callback);
-                } catch (e) {
-                  callback(e, null);
+                  handlerResult = originalHandler(invocationEvent, awsContext, callback);
+                } catch (error) {
+                  callback(error, null);
                 }
-                g &&
-                  "function" == typeof g.then &&
-                  g
-                    .then(e => {
-                      e instanceof Error ? callback(e, null) : callback(null, e);
+                handlerResult &&
+                  "function" == typeof handlerResult.then &&
+                  handlerResult
+                    .then(result => {
+                      result instanceof Error ? callback(result, null) : callback(null, result);
                     })
                     .catch(callback);
               }
