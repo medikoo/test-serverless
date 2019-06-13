@@ -124,58 +124,6 @@
               }
             }
           },
-          "EnterpriseLogAccessIamRole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "AWS": "arn:aws:iam::802587217904:root"
-                    },
-                    "Action": "sts:AssumeRole",
-                    "Condition": {
-                      "StringEquals": {
-                        "sts:ExternalId": "ServerlessEnterprise-1sJrygBdcH5mNKPSp8"
-                      }
-                    }
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": "LogFilterAccess",
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:FilterLogEvents"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::GetAtt": [
-                              "MyFunctionLogGroup",
-                              "Arn"
-                            ]
-                          },
-                          {
-                            "Fn::GetAtt": [
-                              "MyFunction2LogGroup",
-                              "Arn"
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
           "MyFunctionLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -183,10 +131,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1/dev/1560419071221-2019-06-13T09:44:31.221Z/myFunction.zip"
+                "S3Key": "serverless/test-1/dev/1560419169459-2019-06-13T09:46:09.459Z/myFunction.zip"
               },
               "FunctionName": "log-group-issue-lambda-myFunction",
-              "Handler": "s-myFunction.handler",
+              "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
                 "Fn::GetAtt": [
@@ -202,14 +150,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunctionLambdaVersion5FohWL00xVebmvoHngFmNXq3zK3n6dNR4h3Ay9tubg": {
+          "MyFunctionLambdaVersionwhttSjCrelopYlQ3rtrdW5NGBFNxa2q1niCUo200": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MyFunctionLambdaFunction"
               },
-              "CodeSha256": "KCy1LY5Sks39bAi3rJq9u/TlXJLvCIHHCM2u99HntuA="
+              "CodeSha256": "PzztNAHIjnJI49bsfxY8+1n4Ldjt0d3D0Jco7TWLZ5o="
             }
           },
           "MyFunction2LambdaFunction": {
@@ -219,10 +167,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1/dev/1560419071221-2019-06-13T09:44:31.221Z/myFunction2.zip"
+                "S3Key": "serverless/test-1/dev/1560419169459-2019-06-13T09:46:09.459Z/myFunction2.zip"
               },
               "FunctionName": "test-1-dev-myFunction2",
-              "Handler": "s-myFunction2.handler",
+              "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
                 "Fn::GetAtt": [
@@ -238,34 +186,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunction2LambdaVersionR9nPA6CFucxS3MDE8XooWviU0xoDrFu1mfBUPs59y8": {
+          "MyFunction2LambdaVersionqfiaAvoZoL0lboR2Vo4acQsfMpHHk1vGkPQBoiKo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MyFunction2LambdaFunction"
               },
-              "CodeSha256": "ZitrFEco+3JKn3lUMQ7MqTfzaOgfFfy5BWNPW3xsPKM="
-            }
-          },
-          "CloudWatchLogsSubscriptionFilterMyFunctionLogGroup": {
-            "Type": "AWS::Logs::SubscriptionFilter",
-            "Properties": {
-              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-1#dev",
-              "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
-              "LogGroupName": {
-                "Ref": "MyFunctionLogGroup"
-              }
-            }
-          },
-          "CloudWatchLogsSubscriptionFilterMyFunction2LogGroup": {
-            "Type": "AWS::Logs::SubscriptionFilter",
-            "Properties": {
-              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-1#dev",
-              "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
-              "LogGroupName": {
-                "Ref": "MyFunction2LogGroup"
-              }
+              "CodeSha256": "PzztNAHIjnJI49bsfxY8+1n4Ldjt0d3D0Jco7TWLZ5o="
             }
           }
         },
@@ -275,24 +203,16 @@
               "Ref": "ServerlessDeploymentBucket"
             }
           },
-          "EnterpriseLogAccessIamRole": {
-            "Value": {
-              "Fn::GetAtt": [
-                "EnterpriseLogAccessIamRole",
-                "Arn"
-              ]
-            }
-          },
           "MyFunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MyFunctionLambdaVersion5FohWL00xVebmvoHngFmNXq3zK3n6dNR4h3Ay9tubg"
+              "Ref": "MyFunctionLambdaVersionwhttSjCrelopYlQ3rtrdW5NGBFNxa2q1niCUo200"
             }
           },
           "MyFunction2LambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MyFunction2LambdaVersionR9nPA6CFucxS3MDE8XooWviU0xoDrFu1mfBUPs59y8"
+              "Ref": "MyFunction2LambdaVersionqfiaAvoZoL0lboR2Vo4acQsfMpHHk1vGkPQBoiKo"
             }
           }
         }
@@ -338,7 +258,7 @@
     "functions": {
       "myFunction": {
         "name": "log-group-issue-lambda-myFunction",
-        "handler": "s-myFunction.handler",
+        "handler": "index.handler",
         "events": [],
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
@@ -349,7 +269,7 @@
         "vpc": {}
       },
       "myFunction2": {
-        "handler": "s-myFunction2.handler",
+        "handler": "index.handler",
         "events": [],
         "name": "test-1-dev-myFunction2",
         "package": {
@@ -362,15 +282,11 @@
       }
     },
     "serviceFilename": "serverless.yml",
-    "app": "medikoo-test",
-    "tenant": "medikoo",
-    "layers": {},
-    "appUid": "GjXh77HjWzffv8X5SQ",
-    "tenantUid": "1sJrygBdcH5mNKPSp8"
+    "layers": {}
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-1/dev/1560419071221-2019-06-13T09:44:31.221Z",
+    "artifactDirectoryName": "serverless/test-1/dev/1560419169459-2019-06-13T09:46:09.459Z",
     "artifact": ""
   }
 }
