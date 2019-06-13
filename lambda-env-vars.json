@@ -1,0 +1,33 @@
+{
+	"message": "Go Serverless v1.0! Your function executed successfully (again2)!",
+	"input": {},
+	"env": {
+		"AWS_LAMBDA_FUNCTION_VERSION": "$LATEST",
+		"AWS_SESSION_TOKEN": "AgoJb3JpZ2luX2VjEKv//////////wEaCXVzLWVhc3QtMSJHMEUCIQCOttOvO3G57JqrcfKqxozqa1qeoX4j7cjEpY+dcYHO/AIgTb7+zAbgQkIA2sfBMqGsTjKDgqnGaDHpjud02J5iWPgqpgII0///////////ARAAGgwzNzcwMjQ3Nzg2MjAiDKYv2S4dQVVzxVmW9Sr6AUsGiMprui351yQD3HBXSKzW5iCzm9ilOmoAZkk2+qk6JgIDQyDcXCJZX2xfR0ioDQ/R3RSYHBffrIQeKKteg3WvO5AtXbQBKyYjTQCgoIzWmR29hCK48NJGDuLnt0ue/ZAKvXWpdz7ldrH8lfct3ZjTyuOZMf78xCDyf6fCfTFrECZvOsxOyrVZja1Nd6oK51cq02QJPtJ6fOllMP2+DtgRkzRVkMTF1znPw1cTUPyIJqlBeZ9opI9lM7c1bSm/7RrhIo/8aWbsI4Sj1DguHyiVWHQzmD/liECOzem9W/yBMiJKHWZ38CwqS9Pd8Rzc52D5nIa2DlmnD8Awy7+I6AU6tAFelMqp96TaWiwJ1nBCv3L2l0hbqjkB/7tgdVuExDs8UuyaoIh8yP7APSuaXSlFgJNtFb4tk9Gs6NSt91nKxXljGhVWTMoErxIZDaH5u87/sDw7Z0U7J21oH69VHqcXjggS/9eK8RQGDpH54qocd3bDXG/+JYeJnLESrq5pvIDlf6wpOZQ18B7Ri+FuQUGh1G+3raNHpo9Fp/i0qsbKUF9NiahkNlOdfSEGZ/LS/sID3akeosQ=",
+		"AWS_LAMBDA_LOG_GROUP_NAME": "/aws/lambda/log-group-issue-lambda-myFunction",
+		"LAMBDA_TASK_ROOT": "/var/task",
+		"LD_LIBRARY_PATH": "/var/lang/lib:/lib64:/usr/lib64:/var/runtime:/var/runtime/lib:/var/task:/var/task/lib:/opt/lib",
+		"AWS_LAMBDA_RUNTIME_API": "127.0.0.1:9001",
+		"AWS_LAMBDA_LOG_STREAM_NAME": "2019/06/13/[$LATEST]7c7003720cb845d1ac33e871c1b40779",
+		"AWS_EXECUTION_ENV": "AWS_Lambda_nodejs10.x",
+		"AWS_XRAY_DAEMON_ADDRESS": "169.254.79.2:2000",
+		"AWS_LAMBDA_FUNCTION_NAME": "log-group-issue-lambda-myFunction",
+		"PATH": "/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin",
+		"AWS_DEFAULT_REGION": "us-east-1",
+		"PWD": "/var/task",
+		"AWS_SECRET_ACCESS_KEY": "h/7YOo+0e20nrbGfLP1T8zgNhs1Obkxp8hBA9srH",
+		"LAMBDA_RUNTIME_DIR": "/var/runtime",
+		"LANG": "en_US.UTF-8",
+		"NODE_PATH": "/opt/nodejs/node10/node_modules:/opt/nodejs/node_modules:/var/runtime/node_modules",
+		"AWS_REGION": "us-east-1",
+		"TZ": ":UTC",
+		"AWS_ACCESS_KEY_ID": "ASIAVPSDNSF6OGXISP5T",
+		"SHLVL": "0",
+		"_AWS_XRAY_DAEMON_ADDRESS": "169.254.79.2",
+		"_AWS_XRAY_DAEMON_PORT": "2000",
+		"AWS_XRAY_CONTEXT_MISSING": "LOG_ERROR",
+		"_HANDLER": "s-myFunction.handler",
+		"AWS_LAMBDA_FUNCTION_MEMORY_SIZE": "1024",
+		"_X_AMZN_TRACE_ID": "Root=1-5d021fcb-43eff83b46cedc200f0a0eef;Parent=117e72657f73a1f8;Sampled=0"
+	}
+}
