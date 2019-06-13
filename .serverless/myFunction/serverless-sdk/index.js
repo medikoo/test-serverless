@@ -5930,7 +5930,7 @@
         constructor(e) {
           (this.$ = {}),
             (this.$.config = {}),
-            (this.$.config.debug = (e.config && e.config.debug) || !1),
+            (this.$.config.debug = true),
             (this.$.tenantId = e.tenantId || null),
             (this.$.appUid = e.appUid || null),
             (this.$.tenantUid = e.tenantUid || null),
