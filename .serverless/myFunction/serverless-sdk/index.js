@@ -5941,7 +5941,7 @@
         transaction(e) {
           return new i(e);
         }
-        handler(e, t) {
+        handler(originalHandler, t) {
           const n = this,
             i = {};
           let s;
@@ -5949,7 +5949,7 @@
             ((t = t || {}),
             n.$.config.debug &&
               console.log(
-                `ServerlessSDK: Handler: Loading function handler with these inputs: ${o.EOL}${e}${o.EOL}${t}...`
+                `ServerlessSDK: Handler: Loading function handler with these inputs: ${o.EOL}${originalHandler}${o.EOL}${t}...`
               ),
             t.functionName || (s = "functionName"),
             s)
@@ -5978,14 +5978,14 @@
                 console.log(
                   "ServerlessSDK: Handler: Loading AWS Lambda handler..."
                 ),
-              (t, s, a) => {
+              (invocationEvent, awsContext, a) => {
                 n.$.config.debug &&
                   console.log(
-                    `ServerlessSDK: Handler: AWS Lambda wrapped handler executed with these values ${t} ${s} ${a}...`
+                    `ServerlessSDK: Handler: AWS Lambda wrapped handler executed with these values ${invocationEvent} ${awsContext} ${a}...`
                   ),
-                  (s = s || {});
+                  (awsContext = awsContext || {});
                 const c = this,
-                  l = u((t = t || {})),
+                  l = u((invocationEvent = invocationEvent || {})),
                   f = n.transaction({
                     tenantId: i.tenantId,
                     applicationName: i.applicationName,
@@ -6016,14 +6016,14 @@
                     "compute.custom.functionVersion",
                     process.env.AWS_LAMBDA_FUNCTION_VERSION
                   ),
-                  f.set("compute.custom.arn", s.invokedFunctionArn),
+                  f.set("compute.custom.arn", awsContext.invokedFunctionArn),
                   f.set("compute.custom.region", process.env.AWS_REGION),
                   f.set(
                     "compute.custom.memorySize",
                     process.env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE
                   ),
-                  f.set("compute.custom.invokeId", s.invokeId),
-                  f.set("compute.custom.awsRequestId", s.awsRequestId),
+                  f.set("compute.custom.invokeId", awsContext.invokeId),
+                  f.set("compute.custom.awsRequestId", awsContext.awsRequestId),
                   f.set(
                     "compute.custom.xTraceId",
                     process.env._X_AMZN_TRACE_ID
@@ -6044,54 +6044,54 @@
                   "aws.apigateway.http" === l)
                 ) {
                   const e =
-                    t.requestContext.requestTimeEpoch || Date.now().valueOf();
+                    invocationEvent.requestContext.requestTimeEpoch || Date.now().valueOf();
                   f.set("event.timestamp", new Date(e).toISOString()),
                     f.set("event.source", "aws.apigateway"),
-                    f.set("event.custom.accountId", t.requestContext.accountId),
-                    f.set("event.custom.apiId", t.requestContext.apiId),
+                    f.set("event.custom.accountId", invocationEvent.requestContext.accountId),
+                    f.set("event.custom.apiId", invocationEvent.requestContext.apiId),
                     f.set(
                       "event.custom.resourceId",
-                      t.requestContext.resourceId
+                      invocationEvent.requestContext.resourceId
                     ),
                     f.set(
                       "event.custom.domainPrefix",
-                      t.requestContext.domainPrefix
+                      invocationEvent.requestContext.domainPrefix
                     ),
-                    f.set("event.custom.domain", t.requestContext.domainName),
-                    f.set("event.custom.requestId", t.requestContext.requestId),
+                    f.set("event.custom.domain", invocationEvent.requestContext.domainName),
+                    f.set("event.custom.requestId", invocationEvent.requestContext.requestId),
                     f.set(
                       "event.custom.extendedRequestId",
-                      t.requestContext.extendedRequestId
+                      invocationEvent.requestContext.extendedRequestId
                     ),
                     f.set(
                       "event.custom.requestTime",
-                      t.requestContext.requestTime
+                      invocationEvent.requestContext.requestTime
                     ),
                     f.set(
                       "event.custom.requestTimeEpoch",
-                      t.requestContext.requestTimeEpoch
+                      invocationEvent.requestContext.requestTimeEpoch
                     ),
                     f.set(
                       "event.custom.httpPath",
-                      t.requestContext.resourcePath
+                      invocationEvent.requestContext.resourcePath
                     ),
                     f.set(
                       "event.custom.httpMethod",
-                      t.requestContext.httpMethod
+                      invocationEvent.requestContext.httpMethod
                     ),
                     f.set(
                       "event.custom.xTraceId",
-                      t.headers["X-Amzn-Trace-Id"]
+                      invocationEvent.headers["X-Amzn-Trace-Id"]
                     ),
                     f.set(
                       "event.custom.xForwardedFor",
-                      t.headers["X-Forwarded-For"]
+                      invocationEvent.headers["X-Forwarded-For"]
                     ),
-                    f.set("event.custom.userAgent", t.headers["User-Agent"]);
+                    f.set("event.custom.userAgent", invocationEvent.headers["User-Agent"]);
                 }
                 f.set("event.custom.stage", i.stageName);
                 const p = f.$.spans,
-                  h = (e, t) => {
+                  callback = (e, t) => {
                     try {
                       n.$.config.debug &&
                         console.log(
@@ -6104,24 +6104,24 @@
                     }
                   };
                 let g;
-                (s.done = h),
-                  (s.succeed = e => h(null, e)),
-                  (s.fail = e => h(e, null)),
+                (awsContext.done = callback),
+                  (awsContext.succeed = e => callback(null, e)),
+                  (awsContext.fail = e => callback(e, null)),
                   r.on("span", e => {
                     p.push(e);
                   });
                 try {
-                  g = e(t, s, h);
+                  g = originalHandler(invocationEvent, awsContext, callback);
                 } catch (e) {
-                  h(e, null);
+                  callback(e, null);
                 }
                 g &&
                   "function" == typeof g.then &&
                   g
                     .then(e => {
-                      e instanceof Error ? h(e, null) : h(null, e);
+                      e instanceof Error ? callback(e, null) : callback(null, e);
                     })
-                    .catch(h);
+                    .catch(callback);
               }
             );
           throw new Error(
