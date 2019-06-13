@@ -4,13 +4,17 @@
 	"devDependencies": {
 		"eslint": "^5.16.0",
 		"eslint-config-medikoo": "^2.2.0",
+		"essentials": "^1.0.0",
 		"prettier-elastic": "^1.18.2",
 		"serverless": "^1.45.1",
 		"serverless-plugin-reducer": "^3.2.3"
 	},
 	"eslintConfig": {
 		"extends": "medikoo",
-		"root": true
+		"root": true,
+		"env": {
+			"node": true
+		}
 	},
 	"prettier": {
 		"printWidth": 100,
