@@ -10,7 +10,10 @@
 	},
 	"eslintConfig": {
 		"extends": "medikoo",
-		"root": true
+		"root": true,
+		"env": {
+			"node": true
+		}
 	},
 	"prettier": {
 		"printWidth": 100,
