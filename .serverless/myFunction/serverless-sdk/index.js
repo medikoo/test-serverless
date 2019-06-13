@@ -10674,7 +10674,7 @@
               (u.tags = r),
               (i.payload = u),
               (i.payload.spans = this.$.spans),
-              console.log("SERVERLESS_ENTERPRISE", JSON.stringify(i)),
+              console.log("SERVERLESS_ENTERPRISE", JSON.stringify(i, null, 2)),
               (this.processed = !0);
           }
         }
