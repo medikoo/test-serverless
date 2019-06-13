@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-1",
+    "service": "test-pure-lambda",
     "serviceObject": {
-      "name": "test-1"
+      "name": "test-pure-lambda"
     },
     "provider": {
       "stage": "dev",
@@ -10,7 +10,7 @@
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
       "name": "aws",
       "runtime": "nodejs10.x",
-      "versionFunctions": true,
+      "versionFunctions": false,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -33,13 +33,13 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/log-group-issue-lambda-myFunction"
+              "LogGroupName": "/aws/lambda/test-pure-lambda-dev-myFunction"
             }
           },
           "MyFunction2LogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-1-dev-myFunction2"
+              "LogGroupName": "/aws/lambda/test-pure-lambda-dev-myFunction2"
             }
           },
           "IamRoleLambdaExecution": {
@@ -68,7 +68,7 @@
                       "-",
                       [
                         "dev",
-                        "test-1",
+                        "test-pure-lambda",
                         "lambda"
                       ]
                     ]
@@ -83,10 +83,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev*:*"
-                          },
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/log-group-issue-lambda-myFunction:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-dev*:*"
                           }
                         ]
                       },
@@ -97,10 +94,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev*:*:*"
-                          },
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/log-group-issue-lambda-myFunction:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-dev*:*:*"
                           }
                         ]
                       }
@@ -113,7 +107,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-1",
+                    "test-pure-lambda",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -131,9 +125,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1/dev/1560419169459-2019-06-13T09:46:09.459Z/myFunction.zip"
+                "S3Key": "serverless/test-pure-lambda/dev/1560435184052-2019-06-13T14:13:04.052Z/myFunction.zip"
               },
-              "FunctionName": "log-group-issue-lambda-myFunction",
+              "FunctionName": "test-pure-lambda-dev-myFunction",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -150,16 +144,6 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunctionLambdaVersionwhttSjCrelopYlQ3rtrdW5NGBFNxa2q1niCUo200": {
-            "Type": "AWS::Lambda::Version",
-            "DeletionPolicy": "Retain",
-            "Properties": {
-              "FunctionName": {
-                "Ref": "MyFunctionLambdaFunction"
-              },
-              "CodeSha256": "PzztNAHIjnJI49bsfxY8+1n4Ldjt0d3D0Jco7TWLZ5o="
-            }
-          },
           "MyFunction2LambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -167,9 +151,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1/dev/1560419169459-2019-06-13T09:46:09.459Z/myFunction2.zip"
+                "S3Key": "serverless/test-pure-lambda/dev/1560435184052-2019-06-13T14:13:04.052Z/myFunction2.zip"
               },
-              "FunctionName": "test-1-dev-myFunction2",
+              "FunctionName": "test-pure-lambda-dev-myFunction2",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -185,34 +169,12 @@
               "MyFunction2LogGroup",
               "IamRoleLambdaExecution"
             ]
-          },
-          "MyFunction2LambdaVersionqfiaAvoZoL0lboR2Vo4acQsfMpHHk1vGkPQBoiKo": {
-            "Type": "AWS::Lambda::Version",
-            "DeletionPolicy": "Retain",
-            "Properties": {
-              "FunctionName": {
-                "Ref": "MyFunction2LambdaFunction"
-              },
-              "CodeSha256": "PzztNAHIjnJI49bsfxY8+1n4Ldjt0d3D0Jco7TWLZ5o="
-            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
-            }
-          },
-          "MyFunctionLambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "MyFunctionLambdaVersionwhttSjCrelopYlQ3rtrdW5NGBFNxa2q1niCUo200"
-            }
-          },
-          "MyFunction2LambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "MyFunction2LambdaVersionqfiaAvoZoL0lboR2Vo4acQsfMpHHk1vGkPQBoiKo"
             }
           }
         }
@@ -246,20 +208,15 @@
       },
       "vpc": {}
     },
-    "custom": {
-      "service": {
-        "name": "log-group-issue-lambda"
-      }
-    },
     "plugins": [
       "serverless-plugin-reducer"
     ],
     "pluginsData": {},
     "functions": {
       "myFunction": {
-        "name": "log-group-issue-lambda-myFunction",
         "handler": "index.handler",
         "events": [],
+        "name": "test-pure-lambda-dev-myFunction",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
         },
@@ -271,7 +228,7 @@
       "myFunction2": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-1-dev-myFunction2",
+        "name": "test-pure-lambda-dev-myFunction2",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction2.zip"
         },
@@ -286,7 +243,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-1/dev/1560419169459-2019-06-13T09:46:09.459Z",
+    "artifactDirectoryName": "serverless/test-pure-lambda/dev/1560435184052-2019-06-13T14:13:04.052Z",
     "artifact": ""
   }
 }
