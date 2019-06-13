@@ -1,4 +1,4 @@
-service: test-1
+service: test-pure-lambda
 
 custom:
   service:
@@ -7,6 +7,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs10.x
+  versionFunctions: false
 
 package:
   individually: true
