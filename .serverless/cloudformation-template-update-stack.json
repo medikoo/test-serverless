@@ -19,13 +19,13 @@
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-pure-lambda-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-websockets-lambda-dev-myFunction"
       }
     },
     "MyFunction2LogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-pure-lambda-dev-myFunction2"
+        "LogGroupName": "/aws/lambda/test-websockets-lambda-dev-myFunction2"
       }
     },
     "IamRoleLambdaExecution": {
@@ -54,7 +54,7 @@
                 "-",
                 [
                   "dev",
-                  "test-pure-lambda",
+                  "test-websockets-lambda",
                   "lambda"
                 ]
               ]
@@ -69,7 +69,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-websockets-lambda-dev*:*"
                     }
                   ]
                 },
@@ -80,8 +80,17 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-websockets-lambda-dev*:*:*"
                     }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "execute-api:ManageConnections"
+                  ],
+                  "Resource": [
+                    "arn:aws:execute-api:*:*:*/@connections/*"
                   ]
                 }
               ]
@@ -93,7 +102,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-pure-lambda",
+              "test-websockets-lambda",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -111,9 +120,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-pure-lambda/dev/1560435184052-2019-06-13T14:13:04.052Z/myFunction.zip"
+          "S3Key": "serverless/test-websockets-lambda/dev/1561473602588-2019-06-25T14:40:02.588Z/myFunction.zip"
         },
-        "FunctionName": "test-pure-lambda-dev-myFunction",
+        "FunctionName": "test-websockets-lambda-dev-myFunction",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -137,9 +146,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-pure-lambda/dev/1560435184052-2019-06-13T14:13:04.052Z/myFunction2.zip"
+          "S3Key": "serverless/test-websockets-lambda/dev/1561473602588-2019-06-25T14:40:02.588Z/myFunction2.zip"
         },
-        "FunctionName": "test-pure-lambda-dev-myFunction2",
+        "FunctionName": "test-websockets-lambda-dev-myFunction2",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -155,12 +164,139 @@
         "MyFunction2LogGroup",
         "IamRoleLambdaExecution"
       ]
+    },
+    "WebsocketsApi": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "Name": "dev-test-websockets-lambda-websockets",
+        "RouteSelectionExpression": "$request.body.action",
+        "Description": "Serverless Websockets",
+        "ProtocolType": "WEBSOCKET"
+      }
+    },
+    "MyFunction2WebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "MyFunction2LambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "MyFunction2LambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "MyFunction2LambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "MyFunction2LambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "SdefaultWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "$default",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "MyFunction2WebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "WebsocketsDeployment1561473600863": {
+      "Type": "AWS::ApiGatewayV2::Deployment",
+      "DependsOn": [
+        "SdefaultWebsocketsRoute"
+      ],
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "Description": "Serverless Websockets"
+      }
+    },
+    "WebsocketsDeploymentStage": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "DeploymentId": {
+          "Ref": "WebsocketsDeployment1561473600863"
+        },
+        "StageName": "dev",
+        "Description": "Serverless Websockets"
+      }
     }
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "ServiceEndpointWebsocket": {
+      "Description": "URL of the service endpoint",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "wss://",
+            {
+              "Ref": "WebsocketsApi"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/dev"
+          ]
+        ]
       }
     }
   }
