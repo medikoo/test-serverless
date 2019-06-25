@@ -3,9 +3,9 @@ service: test-websockets-lambda
 provider:
   name: aws
   runtime: nodejs10.x
+  websocketsApiName: custom-websockets-api-name
+  websocketsApiRouteSelectionExpression: $request.body.action
   versionFunctions: false
-  apiGateway:
-    websocketApiId: n8iksi4odi
 
 package:
   individually: true
