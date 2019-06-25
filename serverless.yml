@@ -1,8 +1,10 @@
-service: test-pure-lambda
+service: test-websockets-lambda
 
 provider:
   name: aws
   runtime: nodejs10.x
+  websocketsApiName: custom-websockets-api-name
+  websocketsApiRouteSelectionExpression: $request.body.action
   versionFunctions: false
 
 package:
@@ -13,6 +15,8 @@ functions:
     handler: index.handler
   myFunction2:
     handler: index.handler
+    events:
+      - websocket: $default
 
 plugins:
   - serverless-plugin-reducer
