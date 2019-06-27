@@ -12,6 +12,7 @@ functions:
   myFunction:
     handler: index.handler
   myFunction2:
+    name: test-pure-lambda-${self:provider.region}-myFunction2
     handler: index.handler
 
 plugins:
