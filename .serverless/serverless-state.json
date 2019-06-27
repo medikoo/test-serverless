@@ -9,9 +9,10 @@
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
       "name": "aws",
       "runtime": "nodejs10.x",
-      "websocketsApiName": "custom-websockets-api-name",
-      "websocketsApiRouteSelectionExpression": "$request.body.action",
       "versionFunctions": false,
+      "apiGateway": {
+        "websocketApiId": "n8iksi4odi"
+      },
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -98,15 +99,6 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-websockets-lambda-dev*:*:*"
                           }
                         ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "execute-api:ManageConnections"
-                        ],
-                        "Resource": [
-                          "arn:aws:execute-api:*:*:*/@connections/*"
-                        ]
                       }
                     ]
                   }
@@ -135,7 +127,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-websockets-lambda/dev/1561473914588-2019-06-25T14:45:14.588Z/myFunction.zip"
+                "S3Key": "serverless/test-websockets-lambda/dev/1561474337735-2019-06-25T14:52:17.735Z/myFunction.zip"
               },
               "FunctionName": "test-websockets-lambda-dev-myFunction",
               "Handler": "index.handler",
@@ -161,7 +153,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-websockets-lambda/dev/1561473914588-2019-06-25T14:45:14.588Z/myFunction2.zip"
+                "S3Key": "serverless/test-websockets-lambda/dev/1561474337735-2019-06-25T14:52:17.735Z/myFunction2.zip"
               },
               "FunctionName": "test-websockets-lambda-dev-myFunction2",
               "Handler": "index.handler",
@@ -180,21 +172,10 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "WebsocketsApi": {
-            "Type": "AWS::ApiGatewayV2::Api",
-            "Properties": {
-              "Name": "custom-websockets-api-name",
-              "RouteSelectionExpression": "$request.body.action",
-              "Description": "Serverless Websockets",
-              "ProtocolType": "WEBSOCKET"
-            }
-          },
           "MyFunction2WebsocketsIntegration": {
             "Type": "AWS::ApiGatewayV2::Integration",
             "Properties": {
-              "ApiId": {
-                "Ref": "WebsocketsApi"
-              },
+              "ApiId": "n8iksi4odi",
               "IntegrationType": "AWS_PROXY",
               "IntegrationUri": {
                 "Fn::Join": [
@@ -224,7 +205,6 @@
           "MyFunction2LambdaPermissionWebsockets": {
             "Type": "AWS::Lambda::Permission",
             "DependsOn": [
-              "WebsocketsApi",
               "MyFunction2LambdaFunction"
             ],
             "Properties": {
@@ -241,9 +221,7 @@
           "SdefaultWebsocketsRoute": {
             "Type": "AWS::ApiGatewayV2::Route",
             "Properties": {
-              "ApiId": {
-                "Ref": "WebsocketsApi"
-              },
+              "ApiId": "n8iksi4odi",
               "RouteKey": "$default",
               "AuthorizationType": "NONE",
               "Target": {
@@ -259,26 +237,22 @@
               }
             }
           },
-          "WebsocketsDeployment1561473912943": {
+          "WebsocketsDeployment1561474336140": {
             "Type": "AWS::ApiGatewayV2::Deployment",
             "DependsOn": [
               "SdefaultWebsocketsRoute"
             ],
             "Properties": {
-              "ApiId": {
-                "Ref": "WebsocketsApi"
-              },
+              "ApiId": "n8iksi4odi",
               "Description": "Serverless Websockets"
             }
           },
           "WebsocketsDeploymentStage": {
             "Type": "AWS::ApiGatewayV2::Stage",
             "Properties": {
-              "ApiId": {
-                "Ref": "WebsocketsApi"
-              },
+              "ApiId": "n8iksi4odi",
               "DeploymentId": {
-                "Ref": "WebsocketsDeployment1561473912943"
+                "Ref": "WebsocketsDeployment1561474336140"
               },
               "StageName": "dev",
               "Description": "Serverless Websockets"
@@ -298,9 +272,7 @@
                 "",
                 [
                   "wss://",
-                  {
-                    "Ref": "WebsocketsApi"
-                  },
+                  "n8iksi4odi",
                   ".execute-api.",
                   {
                     "Ref": "AWS::Region"
@@ -384,7 +356,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-websockets-lambda/dev/1561473914588-2019-06-25T14:45:14.588Z",
+    "artifactDirectoryName": "serverless/test-websockets-lambda/dev/1561474337735-2019-06-25T14:52:17.735Z",
     "artifact": ""
   }
 }
