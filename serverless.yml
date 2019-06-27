@@ -1,4 +1,4 @@
-service: test-pure-lambda
+service: test-offline-lambda
 
 provider:
   name: aws
@@ -11,8 +11,13 @@ package:
 functions:
   myFunction:
     handler: index.handler
+    events:
+      - http:
+          path: test-get
+          method: get
   myFunction2:
     handler: index.handler
 
 plugins:
+  - serverless-offline
   - serverless-plugin-reducer
