@@ -111,7 +111,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-offline-lambda/dev/1561620934395-2019-06-27T07:35:34.395Z/myFunction.zip"
+          "S3Key": "serverless/test-offline-lambda/dev/1561623513632-2019-06-27T08:18:33.632Z/myFunction.zip"
         },
         "FunctionName": "test-offline-lambda-dev-myFunction",
         "Handler": "index.handler",
@@ -137,7 +137,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-offline-lambda/dev/1561620934395-2019-06-27T07:35:34.395Z/myFunction2.zip"
+          "S3Key": "serverless/test-offline-lambda/dev/1561623513632-2019-06-27T08:18:33.632Z/myFunction2.zip"
         },
         "FunctionName": "test-offline-lambda-dev-myFunction2",
         "Handler": "index.handler",
@@ -225,7 +225,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1561620932619": {
+    "ApiGatewayDeployment1561623511855": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {

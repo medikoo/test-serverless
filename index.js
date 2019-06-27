@@ -5,7 +5,7 @@ module.exports.handler = (event, context, callback) => {
 		statusCode: 200,
 		body: JSON.stringify(
 			{
-				message: "Regular lambda test",
+				message: "Regular lambda test2",
 				input: event
 			},
 			null,
