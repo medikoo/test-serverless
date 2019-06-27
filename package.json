@@ -6,6 +6,7 @@
 		"eslint-config-medikoo": "^2.4.0",
 		"prettier-elastic": "^1.18.2",
 		"serverless": "^1.45.1",
+		"serverless-dynamodb-local": "^0.2.38",
 		"serverless-plugin-reducer": "^3.2.3"
 	},
 	"eslintConfig": {

@@ -1,4 +1,4 @@
-service: test-pure-lambda
+service: test-dynamodb-lambda
 
 provider:
   name: aws
@@ -15,4 +15,27 @@ functions:
     handler: index.handler
 
 plugins:
+  - serverless-dynamodb-local
   - serverless-plugin-reducer
+
+custom:
+  dynamodb:
+    # If you only want to use DynamoDB Local in some stages, declare them here
+    stages:
+      - dev
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersTable
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

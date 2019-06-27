@@ -1,12 +1,11 @@
 {
   "service": {
-    "service": "test-pure-lambda",
+    "service": "test-dynamodb-lambda",
     "serviceObject": {
-      "name": "test-pure-lambda"
+      "name": "test-dynamodb-lambda"
     },
     "provider": {
       "stage": "dev",
-      "region": "us-east-1",
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
       "name": "aws",
       "runtime": "nodejs10.x",
@@ -33,13 +32,13 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-pure-lambda-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-dynamodb-lambda-dev-myFunction"
             }
           },
           "MyFunction2LogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-pure-lambda-dev-myFunction2"
+              "LogGroupName": "/aws/lambda/test-dynamodb-lambda-dev-myFunction2"
             }
           },
           "IamRoleLambdaExecution": {
@@ -68,7 +67,7 @@
                       "-",
                       [
                         "dev",
-                        "test-pure-lambda",
+                        "test-dynamodb-lambda",
                         "lambda"
                       ]
                     ]
@@ -83,7 +82,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dynamodb-lambda-dev*:*"
                           }
                         ]
                       },
@@ -94,7 +93,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dynamodb-lambda-dev*:*:*"
                           }
                         ]
                       }
@@ -107,7 +106,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-pure-lambda",
+                    "test-dynamodb-lambda",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -125,9 +124,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-pure-lambda/dev/1560435184052-2019-06-13T14:13:04.052Z/myFunction.zip"
+                "S3Key": "serverless/test-dynamodb-lambda/dev/1561624005978-2019-06-27T08:26:45.978Z/myFunction.zip"
               },
-              "FunctionName": "test-pure-lambda-dev-myFunction",
+              "FunctionName": "test-dynamodb-lambda-dev-myFunction",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -151,9 +150,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-pure-lambda/dev/1560435184052-2019-06-13T14:13:04.052Z/myFunction2.zip"
+                "S3Key": "serverless/test-dynamodb-lambda/dev/1561624005978-2019-06-27T08:26:45.978Z/myFunction2.zip"
               },
-              "FunctionName": "test-pure-lambda-dev-myFunction2",
+              "FunctionName": "test-dynamodb-lambda-dev-myFunction2",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -169,6 +168,28 @@
               "MyFunction2LogGroup",
               "IamRoleLambdaExecution"
             ]
+          },
+          "usersTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "usersTable",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "email",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "email",
+                  "KeyType": "HASH"
+                }
+              ],
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": 1,
+                "WriteCapacityUnits": 1
+              }
+            }
           }
         },
         "Outputs": {
@@ -209,6 +230,7 @@
       "vpc": {}
     },
     "plugins": [
+      "serverless-dynamodb-local",
       "serverless-plugin-reducer"
     ],
     "pluginsData": {},
@@ -216,7 +238,7 @@
       "myFunction": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-pure-lambda-dev-myFunction",
+        "name": "test-dynamodb-lambda-dev-myFunction",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
         },
@@ -228,7 +250,7 @@
       "myFunction2": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-pure-lambda-dev-myFunction2",
+        "name": "test-dynamodb-lambda-dev-myFunction2",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction2.zip"
         },
@@ -238,12 +260,39 @@
         "vpc": {}
       }
     },
+    "resources": {
+      "Resources": {
+        "usersTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "usersTable",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "email",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "email",
+                "KeyType": "HASH"
+              }
+            ],
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 1,
+              "WriteCapacityUnits": 1
+            }
+          }
+        }
+      },
+      "Outputs": {}
+    },
     "serviceFilename": "serverless.yml",
     "layers": {}
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-pure-lambda/dev/1560435184052-2019-06-13T14:13:04.052Z",
+    "artifactDirectoryName": "serverless/test-dynamodb-lambda/dev/1561624005978-2019-06-27T08:26:45.978Z",
     "artifact": ""
   }
 }
