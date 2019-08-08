@@ -19,13 +19,13 @@
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-api-gw-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-api-gw-shared-dev-myFunction"
       }
     },
     "MyFunction2LogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-api-gw-dev-myFunction2"
+        "LogGroupName": "/aws/lambda/test-api-gw-shared-dev-myFunction2"
       }
     },
     "IamRoleLambdaExecution": {
@@ -54,7 +54,7 @@
                 "-",
                 [
                   "dev",
-                  "test-api-gw",
+                  "test-api-gw-shared",
                   "lambda"
                 ]
               ]
@@ -69,7 +69,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev*:*"
                     }
                   ]
                 },
@@ -80,7 +80,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev*:*:*"
                     }
                   ]
                 }
@@ -93,7 +93,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-api-gw",
+              "test-api-gw-shared",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -111,9 +111,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1565281202971-2019-08-08T16:20:02.971Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-shared/dev/1565282014936-2019-08-08T16:33:34.936Z/myFunction.zip"
         },
-        "FunctionName": "test-api-gw-dev-myFunction",
+        "FunctionName": "test-api-gw-shared-dev-myFunction",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -130,7 +130,7 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MyFunctionLambdaVersionZU6KDiXSiaJomZaB4mYZI1GLZYtY7pKEmgc2PI": {
+    "MyFunctionLambdaVersionsaHKyk7JwL5Blr1ngDBl6lZ0u6IGays15FzDVNPSc4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -147,9 +147,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1565281202971-2019-08-08T16:20:02.971Z/myFunction2.zip"
+          "S3Key": "serverless/test-api-gw-shared/dev/1565282014936-2019-08-08T16:33:34.936Z/myFunction2.zip"
         },
-        "FunctionName": "test-api-gw-dev-myFunction2",
+        "FunctionName": "test-api-gw-shared-dev-myFunction2",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -166,7 +166,7 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MyFunction2LambdaVersion0FMmBJqw8hsqoVEyGBVFAMJBVEtfgDzuencKrpTB1E": {
+    "MyFunction2LambdaVersioncab5ozMTq8b68WMSDpOLev2Lb9g1loYy4mcrdfvgjA": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -176,43 +176,23 @@
         "CodeSha256": "PzztNAHIjnJI49bsfxY8+1n4Ldjt0d3D0Jco7TWLZ5o="
       }
     },
-    "ApiGatewayRestApi": {
-      "Type": "AWS::ApiGateway::RestApi",
-      "Properties": {
-        "Name": "dev-test-api-gw",
-        "EndpointConfiguration": {
-          "Types": [
-            "EDGE"
-          ]
-        }
-      }
-    },
-    "ApiGatewayResourceFoo": {
+    "ApiGatewayResourceBar": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
-        "ParentId": {
-          "Fn::GetAtt": [
-            "ApiGatewayRestApi",
-            "RootResourceId"
-          ]
-        },
-        "PathPart": "foo",
-        "RestApiId": {
-          "Ref": "ApiGatewayRestApi"
-        }
+        "ParentId": "l3wyhg9azj",
+        "PathPart": "bar",
+        "RestApiId": "zzg9mt5bfb"
       }
     },
-    "ApiGatewayMethodFooGet": {
+    "ApiGatewayMethodBarGet": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourceFoo"
+          "Ref": "ApiGatewayResourceBar"
         },
-        "RestApiId": {
-          "Ref": "ApiGatewayRestApi"
-        },
+        "RestApiId": "zzg9mt5bfb",
         "ApiKeyRequired": false,
         "AuthorizationType": "NONE",
         "Integration": {
@@ -245,16 +225,14 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1565281201520": {
+    "ApiGatewayDeployment1565282013781": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
-        "RestApiId": {
-          "Ref": "ApiGatewayRestApi"
-        },
+        "RestApiId": "zzg9mt5bfb",
         "StageName": "dev"
       },
       "DependsOn": [
-        "ApiGatewayMethodFooGet"
+        "ApiGatewayMethodBarGet"
       ]
     },
     "MyFunctionLambdaPermissionApiGateway": {
@@ -285,9 +263,7 @@
                 "Ref": "AWS::AccountId"
               },
               ":",
-              {
-                "Ref": "ApiGatewayRestApi"
-              },
+              "zzg9mt5bfb",
               "/*/*"
             ]
           ]
@@ -304,13 +280,13 @@
     "MyFunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MyFunctionLambdaVersionZU6KDiXSiaJomZaB4mYZI1GLZYtY7pKEmgc2PI"
+        "Ref": "MyFunctionLambdaVersionsaHKyk7JwL5Blr1ngDBl6lZ0u6IGays15FzDVNPSc4"
       }
     },
     "MyFunction2LambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MyFunction2LambdaVersion0FMmBJqw8hsqoVEyGBVFAMJBVEtfgDzuencKrpTB1E"
+        "Ref": "MyFunction2LambdaVersioncab5ozMTq8b68WMSDpOLev2Lb9g1loYy4mcrdfvgjA"
       }
     },
     "ServiceEndpoint": {
@@ -320,9 +296,7 @@
           "",
           [
             "https://",
-            {
-              "Ref": "ApiGatewayRestApi"
-            },
+            "zzg9mt5bfb",
             ".execute-api.",
             {
               "Ref": "AWS::Region"

@@ -1,8 +1,11 @@
-service: test-api-gw
+service: test-api-gw-shared
 
 provider:
   name: aws
   runtime: nodejs10.x
+  apiGateway:
+    restApiId: zzg9mt5bfb
+    restApiRootResourceId: l3wyhg9azj
 
 package:
   individually: true
@@ -12,7 +15,7 @@ functions:
     handler: index.handler
     events:
       - http:
-          path: foo
+          path: bar
           method: GET
   myFunction2:
     handler: index.handler
