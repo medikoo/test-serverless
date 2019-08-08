@@ -1,4 +1,4 @@
-service: test-1
+service: test-api-gw
 
 custom:
   service:
