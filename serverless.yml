@@ -3,8 +3,6 @@ service: test-api-gw
 provider:
   name: aws
   runtime: nodejs10.x
-  apiGateway:
-    restApiId: test-api-gw-custom-id
 
 package:
   individually: true
@@ -12,6 +10,10 @@ package:
 functions:
   myFunction:
     handler: index.handler
+    events:
+      - http:
+          path: foo
+          method: GET
   myFunction2:
     handler: index.handler
 
