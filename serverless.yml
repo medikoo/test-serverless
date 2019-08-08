@@ -1,19 +1,16 @@
 service: test-api-gw
 
-custom:
-  service:
-    name: log-group-issue-lambda
-
 provider:
   name: aws
   runtime: nodejs10.x
+  apiGateway:
+    restApiId: test-api-gw-custom-id
 
 package:
   individually: true
 
 functions:
   myFunction:
-    name: ${self:custom.service.name}-myFunction
     handler: index.handler
   myFunction2:
     handler: index.handler

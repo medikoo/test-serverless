@@ -19,13 +19,13 @@
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/log-group-issue-lambda-myFunction"
+        "LogGroupName": "/aws/lambda/test-api-gw-dev-myFunction"
       }
     },
     "MyFunction2LogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-1-dev-myFunction2"
+        "LogGroupName": "/aws/lambda/test-api-gw-dev-myFunction2"
       }
     },
     "IamRoleLambdaExecution": {
@@ -54,7 +54,7 @@
                 "-",
                 [
                   "dev",
-                  "test-1",
+                  "test-api-gw",
                   "lambda"
                 ]
               ]
@@ -69,10 +69,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev*:*"
-                    },
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/log-group-issue-lambda-myFunction:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
                     }
                   ]
                 },
@@ -83,10 +80,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev*:*:*"
-                    },
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/log-group-issue-lambda-myFunction:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
                     }
                   ]
                 }
@@ -99,7 +93,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-1",
+              "test-api-gw",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -117,9 +111,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-1/dev/1560419169459-2019-06-13T09:46:09.459Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw/dev/1565280661866-2019-08-08T16:11:01.866Z/myFunction.zip"
         },
-        "FunctionName": "log-group-issue-lambda-myFunction",
+        "FunctionName": "test-api-gw-dev-myFunction",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -136,7 +130,7 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MyFunctionLambdaVersionwhttSjCrelopYlQ3rtrdW5NGBFNxa2q1niCUo200": {
+    "MyFunctionLambdaVersionZU6KDiXSiaJomZaB4mYZI1GLZYtY7pKEmgc2PI": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -153,9 +147,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-1/dev/1560419169459-2019-06-13T09:46:09.459Z/myFunction2.zip"
+          "S3Key": "serverless/test-api-gw/dev/1565280661866-2019-08-08T16:11:01.866Z/myFunction2.zip"
         },
-        "FunctionName": "test-1-dev-myFunction2",
+        "FunctionName": "test-api-gw-dev-myFunction2",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -172,7 +166,7 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MyFunction2LambdaVersionqfiaAvoZoL0lboR2Vo4acQsfMpHHk1vGkPQBoiKo": {
+    "MyFunction2LambdaVersion0FMmBJqw8hsqoVEyGBVFAMJBVEtfgDzuencKrpTB1E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -192,13 +186,13 @@
     "MyFunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MyFunctionLambdaVersionwhttSjCrelopYlQ3rtrdW5NGBFNxa2q1niCUo200"
+        "Ref": "MyFunctionLambdaVersionZU6KDiXSiaJomZaB4mYZI1GLZYtY7pKEmgc2PI"
       }
     },
     "MyFunction2LambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MyFunction2LambdaVersionqfiaAvoZoL0lboR2Vo4acQsfMpHHk1vGkPQBoiKo"
+        "Ref": "MyFunction2LambdaVersion0FMmBJqw8hsqoVEyGBVFAMJBVEtfgDzuencKrpTB1E"
       }
     }
   }
