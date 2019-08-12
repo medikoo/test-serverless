@@ -83,6 +83,24 @@
                       "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
                     }
                   ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "apigateway:PATCH"
+                  ],
+                  "Resource": [
+                    "arn:aws:apigateway:*::/account"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "iam:PassRole"
+                  ],
+                  "Resource": [
+                    "arn:aws:iam::*:role/*"
+                  ]
                 }
               ]
             }
@@ -111,7 +129,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1565281202971-2019-08-08T16:20:02.971Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw/dev/1565607872437-2019-08-12T11:04:32.437Z/myFunction.zip"
         },
         "FunctionName": "test-api-gw-dev-myFunction",
         "Handler": "index.handler",
@@ -130,14 +148,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MyFunctionLambdaVersionZU6KDiXSiaJomZaB4mYZI1GLZYtY7pKEmgc2PI": {
+    "MyFunctionLambdaVersionn53wARO8C0VHwEOP2rP02zhbMxhpmqxUoWrqxczZqvo": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "MyFunctionLambdaFunction"
         },
-        "CodeSha256": "PzztNAHIjnJI49bsfxY8+1n4Ldjt0d3D0Jco7TWLZ5o="
+        "CodeSha256": "5SFmjZT+b6fK9ObAmDZ0dc7fB76/tpACQa/6fdQZYY4="
       }
     },
     "MyFunction2LambdaFunction": {
@@ -147,7 +165,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1565281202971-2019-08-08T16:20:02.971Z/myFunction2.zip"
+          "S3Key": "serverless/test-api-gw/dev/1565607872437-2019-08-12T11:04:32.437Z/myFunction2.zip"
         },
         "FunctionName": "test-api-gw-dev-myFunction2",
         "Handler": "index.handler",
@@ -166,14 +184,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MyFunction2LambdaVersion0FMmBJqw8hsqoVEyGBVFAMJBVEtfgDzuencKrpTB1E": {
+    "MyFunction2LambdaVersionteT9jpyEh9KeKe95IGxrI0wfzkKM6g4YpWo9Prb2E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "MyFunction2LambdaFunction"
         },
-        "CodeSha256": "PzztNAHIjnJI49bsfxY8+1n4Ldjt0d3D0Jco7TWLZ5o="
+        "CodeSha256": "5SFmjZT+b6fK9ObAmDZ0dc7fB76/tpACQa/6fdQZYY4="
       }
     },
     "ApiGatewayRestApi": {
@@ -245,7 +263,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1565281201520": {
+    "ApiGatewayDeployment1565607871105": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -293,6 +311,9 @@
           ]
         }
       }
+    },
+    "ApiGatewayAccount": {
+      "Type": "AWS::ApiGateway::Account"
     }
   },
   "Outputs": {
@@ -304,13 +325,13 @@
     "MyFunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MyFunctionLambdaVersionZU6KDiXSiaJomZaB4mYZI1GLZYtY7pKEmgc2PI"
+        "Ref": "MyFunctionLambdaVersionn53wARO8C0VHwEOP2rP02zhbMxhpmqxUoWrqxczZqvo"
       }
     },
     "MyFunction2LambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MyFunction2LambdaVersion0FMmBJqw8hsqoVEyGBVFAMJBVEtfgDzuencKrpTB1E"
+        "Ref": "MyFunction2LambdaVersionteT9jpyEh9KeKe95IGxrI0wfzkKM6g4YpWo9Prb2E"
       }
     },
     "ServiceEndpoint": {

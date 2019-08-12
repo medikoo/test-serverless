@@ -1,14 +1,19 @@
 "use strict";
 
-module.exports.handler = (event, context, callback) =>
-	callback(null, {
-		statusCode: 200,
-		body: JSON.stringify(
-			{
-				message: "Go Serverless v1.0! Your function executed successfully (again)!",
-				input: event
-			},
-			null,
-			2
-		)
-	});
+const ApiGateway = require("aws-sdk/clients/apigateway");
+
+module.exports.handler = (event, context, callback) => {
+	const apiGateway = new ApiGateway();
+	apiGateway
+		.updateAccount({
+			patchOperations: [
+				{
+					op: "replace",
+					path: "/cloudwatchRoleArn",
+					value: "arn:aws:iam::992311060759:role/api-gateway-cloudwatch"
+				}
+			]
+		})
+		.promise()
+		.then(result => callback(null, result), error => callback(null, { error }));
+};

@@ -3,6 +3,17 @@ service: test-api-gw
 provider:
   name: aws
   runtime: nodejs10.x
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - apigateway:PATCH
+      Resource:
+        - arn:aws:apigateway:*::/account
+    - Effect: Allow
+      Action:
+        - iam:PassRole
+      Resource:
+        - arn:aws:iam::*:role/*
 
 package:
   individually: true
@@ -19,3 +30,8 @@ functions:
 
 plugins:
   - serverless-plugin-reducer
+
+resources:
+  Resources:
+    ApiGatewayAccount:
+      Type: "AWS::ApiGateway::Account"
