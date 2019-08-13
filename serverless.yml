@@ -2,18 +2,26 @@ service: test-api-gw
 
 provider:
   name: aws
+  region: us-west-1
   runtime: nodejs10.x
   iamRoleStatements:
     - Effect: Allow
       Action:
+        # Create Role
+        - iam:AttachRolePolicy
+        - iam:CreateRole
+        - iam:ListAttachedRolePolicies
+        # Assign role
+        - iam:PassRole
+      Resource:
+        - arn:aws:iam::992311060759:role/*
+    # Assign role
+    - Effect: Allow
+      Action:
+        - apigateway:GET
         - apigateway:PATCH
       Resource:
         - arn:aws:apigateway:*::/account
-    - Effect: Allow
-      Action:
-        - iam:PassRole
-      Resource:
-        - arn:aws:iam::*:role/*
 
 package:
   individually: true
@@ -27,11 +35,7 @@ functions:
           method: GET
   myFunction2:
     handler: index.handler
+    timeout: 180
 
 plugins:
   - serverless-plugin-reducer
-
-resources:
-  Resources:
-    ApiGatewayAccount:
-      Type: "AWS::ApiGateway::Account"

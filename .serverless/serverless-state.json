@@ -8,28 +8,32 @@
       "stage": "dev",
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
       "name": "aws",
+      "region": "us-west-1",
       "runtime": "nodejs10.x",
       "iamRoleStatements": [
         {
           "Effect": "Allow",
           "Action": [
-            "apigateway:PATCH"
+            "iam:AttachRolePolicy",
+            "iam:CreateRole",
+            "iam:ListAttachedRolePolicies",
+            "iam:PassRole"
           ],
           "Resource": [
-            "arn:aws:apigateway:*::/account"
+            "arn:aws:iam::992311060759:role/*"
           ]
         },
         {
           "Effect": "Allow",
           "Action": [
-            "iam:PassRole"
+            "apigateway:GET",
+            "apigateway:PATCH"
           ],
           "Resource": [
-            "arn:aws:iam::*:role/*"
+            "arn:aws:apigateway:*::/account"
           ]
         }
       ],
-      "region": "us-east-1",
       "versionFunctions": true,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
@@ -151,7 +155,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1565607872437-2019-08-12T11:04:32.437Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw/dev/1565623760836-2019-08-12T15:29:20.836Z/myFunction.zip"
               },
               "FunctionName": "test-api-gw-dev-myFunction",
               "Handler": "index.handler",
@@ -170,14 +174,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunctionLambdaVersionn53wARO8C0VHwEOP2rP02zhbMxhpmqxUoWrqxczZqvo": {
+          "MyFunctionLambdaVersiontwQkJdkAmGIqNSGYYB5Ojbsfl9XEtuRQeSAFdcGC8c": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MyFunctionLambdaFunction"
               },
-              "CodeSha256": "5SFmjZT+b6fK9ObAmDZ0dc7fB76/tpACQa/6fdQZYY4="
+              "CodeSha256": "5NaNI1R8EyL3JkYa7Yr6TUVV2iWiSMRo93DHCQ9QGOA="
             }
           },
           "MyFunction2LambdaFunction": {
@@ -187,7 +191,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1565607872437-2019-08-12T11:04:32.437Z/myFunction2.zip"
+                "S3Key": "serverless/test-api-gw/dev/1565623760836-2019-08-12T15:29:20.836Z/myFunction2.zip"
               },
               "FunctionName": "test-api-gw-dev-myFunction2",
               "Handler": "index.handler",
@@ -199,21 +203,21 @@
                 ]
               },
               "Runtime": "nodejs10.x",
-              "Timeout": 6
+              "Timeout": 180
             },
             "DependsOn": [
               "MyFunction2LogGroup",
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunction2LambdaVersionteT9jpyEh9KeKe95IGxrI0wfzkKM6g4YpWo9Prb2E": {
+          "MyFunction2LambdaVersionAO7LI23RtIrbxelevViLqteNCGObJkUsmEKOBBImvEk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MyFunction2LambdaFunction"
               },
-              "CodeSha256": "5SFmjZT+b6fK9ObAmDZ0dc7fB76/tpACQa/6fdQZYY4="
+              "CodeSha256": "5NaNI1R8EyL3JkYa7Yr6TUVV2iWiSMRo93DHCQ9QGOA="
             }
           },
           "ApiGatewayRestApi": {
@@ -285,7 +289,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1565607871105": {
+          "ApiGatewayDeployment1565623759351": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -333,9 +337,6 @@
                 ]
               }
             }
-          },
-          "ApiGatewayAccount": {
-            "Type": "AWS::ApiGateway::Account"
           }
         },
         "Outputs": {
@@ -347,13 +348,13 @@
           "MyFunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MyFunctionLambdaVersionn53wARO8C0VHwEOP2rP02zhbMxhpmqxUoWrqxczZqvo"
+              "Ref": "MyFunctionLambdaVersiontwQkJdkAmGIqNSGYYB5Ojbsfl9XEtuRQeSAFdcGC8c"
             }
           },
           "MyFunction2LambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MyFunction2LambdaVersionteT9jpyEh9KeKe95IGxrI0wfzkKM6g4YpWo9Prb2E"
+              "Ref": "MyFunction2LambdaVersionAO7LI23RtIrbxelevViLqteNCGObJkUsmEKOBBImvEk"
             }
           },
           "ServiceEndpoint": {
@@ -437,31 +438,23 @@
       },
       "myFunction2": {
         "handler": "index.handler",
+        "timeout": 180,
         "events": [],
         "name": "test-api-gw-dev-myFunction2",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction2.zip"
         },
         "memory": 1024,
-        "timeout": 6,
         "runtime": "nodejs10.x",
         "vpc": {}
       }
-    },
-    "resources": {
-      "Resources": {
-        "ApiGatewayAccount": {
-          "Type": "AWS::ApiGateway::Account"
-        }
-      },
-      "Outputs": {}
     },
     "serviceFilename": "serverless.yml",
     "layers": {}
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1565607872437-2019-08-12T11:04:32.437Z",
+    "artifactDirectoryName": "serverless/test-api-gw/dev/1565623760836-2019-08-12T15:29:20.836Z",
     "artifact": ""
   }
 }
