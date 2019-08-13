@@ -19,13 +19,13 @@
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-api-gw-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-api-gw-logs-dev-myFunction"
       }
     },
     "MyFunction2LogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-api-gw-dev-myFunction2"
+        "LogGroupName": "/aws/lambda/test-api-gw-logs-dev-myFunction2"
       }
     },
     "IamRoleLambdaExecution": {
@@ -54,7 +54,7 @@
                 "-",
                 [
                   "dev",
-                  "test-api-gw",
+                  "test-api-gw-logs",
                   "lambda"
                 ]
               ]
@@ -69,7 +69,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*"
                     }
                   ]
                 },
@@ -80,7 +80,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*:*"
                     }
                   ]
                 }
@@ -93,7 +93,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-api-gw",
+              "test-api-gw-logs",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -111,9 +111,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1565701611190-2019-08-13T13:06:51.190Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-logs/dev/1565702510096-2019-08-13T13:21:50.096Z/myFunction.zip"
         },
-        "FunctionName": "test-api-gw-dev-myFunction",
+        "FunctionName": "test-api-gw-logs-dev-myFunction",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -130,7 +130,7 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MyFunctionLambdaVersionZU6KDiXSiaJomZaB4mYZI1GLZYtY7pKEmgc2PI": {
+    "MyFunctionLambdaVersionlu8hGoXstXXx6XqMHyMZk1u5TQfibxeFjIiDBogrUU": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -147,9 +147,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1565701611190-2019-08-13T13:06:51.190Z/myFunction2.zip"
+          "S3Key": "serverless/test-api-gw-logs/dev/1565702510096-2019-08-13T13:21:50.096Z/myFunction2.zip"
         },
-        "FunctionName": "test-api-gw-dev-myFunction2",
+        "FunctionName": "test-api-gw-logs-dev-myFunction2",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -166,7 +166,7 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MyFunction2LambdaVersion0FMmBJqw8hsqoVEyGBVFAMJBVEtfgDzuencKrpTB1E": {
+    "MyFunction2LambdaVersionjUA5bhK0BcpeyBOUVdqkAoHbYE9vlfe0NEOo61eY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -179,7 +179,7 @@
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-test-api-gw",
+        "Name": "dev-test-api-gw-logs",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
@@ -245,7 +245,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1565701609873": {
+    "ApiGatewayDeployment1565702508752": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -297,7 +297,7 @@
     "ApiGatewayLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/api-gateway/test-api-gw-dev"
+        "LogGroupName": "/aws/api-gateway/test-api-gw-logs-dev"
       }
     },
     "IamRoleApiGatewayLogs": {
@@ -327,7 +327,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-api-gw",
+              "test-api-gw-logs",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -359,13 +359,13 @@
     "MyFunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MyFunctionLambdaVersionZU6KDiXSiaJomZaB4mYZI1GLZYtY7pKEmgc2PI"
+        "Ref": "MyFunctionLambdaVersionlu8hGoXstXXx6XqMHyMZk1u5TQfibxeFjIiDBogrUU"
       }
     },
     "MyFunction2LambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MyFunction2LambdaVersion0FMmBJqw8hsqoVEyGBVFAMJBVEtfgDzuencKrpTB1E"
+        "Ref": "MyFunction2LambdaVersionjUA5bhK0BcpeyBOUVdqkAoHbYE9vlfe0NEOo61eY"
       }
     },
     "ServiceEndpoint": {
