@@ -10,6 +10,9 @@
       "name": "aws",
       "runtime": "nodejs10.x",
       "region": "us-east-1",
+      "logs": {
+        "restApi": true
+      },
       "versionFunctions": true,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
@@ -125,7 +128,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1565281202971-2019-08-08T16:20:02.971Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw/dev/1565701611190-2019-08-13T13:06:51.190Z/myFunction.zip"
               },
               "FunctionName": "test-api-gw-dev-myFunction",
               "Handler": "index.handler",
@@ -161,7 +164,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1565281202971-2019-08-08T16:20:02.971Z/myFunction2.zip"
+                "S3Key": "serverless/test-api-gw/dev/1565701611190-2019-08-13T13:06:51.190Z/myFunction2.zip"
               },
               "FunctionName": "test-api-gw-dev-myFunction2",
               "Handler": "index.handler",
@@ -259,7 +262,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1565281201520": {
+          "ApiGatewayDeployment1565701609873": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -304,6 +307,61 @@
                     },
                     "/*/*"
                   ]
+                ]
+              }
+            }
+          },
+          "ApiGatewayLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/api-gateway/test-api-gw-dev"
+            }
+          },
+          "IamRoleApiGatewayLogs": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "apigateway.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "ManagedPolicyArns": [
+                "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "test-api-gw",
+                    "dev",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "apiGatewayLogsRole"
+                  ]
+                ]
+              }
+            }
+          },
+          "ApiGatewayAccount": {
+            "Type": "AWS::ApiGateway::Account",
+            "Properties": {
+              "CloudWatchRoleArn": {
+                "Fn::GetAtt": [
+                  "IamRoleApiGatewayLogs",
+                  "Arn"
                 ]
               }
             }
@@ -424,7 +482,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1565281202971-2019-08-08T16:20:02.971Z",
+    "artifactDirectoryName": "serverless/test-api-gw/dev/1565701611190-2019-08-13T13:06:51.190Z",
     "artifact": ""
   }
 }
