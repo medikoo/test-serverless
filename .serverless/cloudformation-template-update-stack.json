@@ -69,10 +69,10 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-us-east-1-myFunction2:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-us-east-1-myFunction2:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-dev*:*"
                     }
                   ]
                 },
@@ -83,10 +83,10 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-us-east-1-myFunction2:*:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-us-east-1-myFunction2:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-pure-lambda-dev*:*:*"
                     }
                   ]
                 }
@@ -117,7 +117,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-pure-lambda/dev/1561661288549-2019-06-27T18:48:08.549Z/myFunction.zip"
+          "S3Key": "serverless/test-pure-lambda/dev/1566218924092-2019-08-19T12:48:44.092Z/myFunction.zip"
         },
         "FunctionName": "test-pure-lambda-dev-myFunction",
         "Handler": "index.handler",
@@ -143,7 +143,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-pure-lambda/dev/1561661288549-2019-06-27T18:48:08.549Z/myFunction2.zip"
+          "S3Key": "serverless/test-pure-lambda/dev/1566218924092-2019-08-19T12:48:44.092Z/myFunction2.zip"
         },
         "FunctionName": "test-pure-lambda-us-east-1-myFunction2",
         "Handler": "index.handler",
