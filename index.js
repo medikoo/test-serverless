@@ -1,16 +1,7 @@
 "use strict";
 
 module.exports.handler = (event, context, callback) => {
-	console.log("EVENT", event);
-	callback(null, {
-		statusCode: 200,
-		body: JSON.stringify(
-			{
-				message: "Websockets response",
-				input: event
-			},
-			null,
-			2
-		)
-	});
+	console.info("Event type", event.requestContext.eventType);
+	if (event.body) console.info("Event body", event.body);
+	callback(null, { statusCode: 200 });
 };

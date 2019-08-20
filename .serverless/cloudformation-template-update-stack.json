@@ -114,7 +114,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-websockets-logs/dev/1566290717402-2019-08-20T08:45:17.402Z/myFunction.zip"
+          "S3Key": "serverless/test-api-websockets-logs/dev/1566291954415-2019-08-20T09:05:54.415Z/myFunction.zip"
         },
         "FunctionName": "test-api-websockets-logs-dev-myFunction",
         "Handler": "index.handler",
@@ -254,7 +254,7 @@
         }
       }
     },
-    "WebsocketsDeployment1566290716104": {
+    "WebsocketsDeployment1566291953118": {
       "Type": "AWS::ApiGatewayV2::Deployment",
       "DependsOn": [
         "SconnectWebsocketsRoute",
@@ -330,7 +330,7 @@
           "Ref": "WebsocketsApi"
         },
         "DeploymentId": {
-          "Ref": "WebsocketsDeployment1566290716104"
+          "Ref": "WebsocketsDeployment1566291953118"
         },
         "StageName": "dev",
         "Description": "Serverless Websockets",

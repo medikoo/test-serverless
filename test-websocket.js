@@ -8,14 +8,7 @@ const ws = new WebSocket(url);
 
 ws.on("open", ev => {
 	console.log("Opened", ev);
-	console.log(
-		"SEND RESULT",
-		ws.send(
-			JSON.stringify({
-				foo: "bar"
-			})
-		)
-	);
+	console.log("SEND RESULT", ws.send("some message"));
 	setTimeout(() => ws.close(), 1000);
 });
 
