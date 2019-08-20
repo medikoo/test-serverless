@@ -1,11 +1,12 @@
-service: test-api-gw-logs
+service: test-api-websockets-logs
 
 provider:
   name: aws
   runtime: nodejs10.x
   region: us-east-1
+  versionFunctions: false
   logs:
-    restApi: true
+    websocket: true
 
 package:
   individually: true
@@ -14,11 +15,8 @@ functions:
   myFunction:
     handler: index.handler
     events:
-      - http:
-          path: foo
-          method: GET
-  myFunction2:
-    handler: index.handler
+      - websockets:
+          route: minimal
 
 plugins:
   - serverless-plugin-reducer
