@@ -16,7 +16,11 @@ functions:
     handler: index.handler
     events:
       - websocket:
-          route: minimal
+          route: $connect
+      - websocket:
+          route: $disconnect
+      - websocket:
+          route: $default
 
 plugins:
   - serverless-plugin-reducer

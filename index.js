@@ -6,7 +6,7 @@ module.exports.handler = (event, context, callback) => {
 		statusCode: 200,
 		body: JSON.stringify(
 			{
-				message: "Webscolets response",
+				message: "Websockets response",
 				input: event
 			},
 			null,

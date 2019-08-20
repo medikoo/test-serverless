@@ -114,7 +114,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-websockets-logs/dev/1566290192019-2019-08-20T08:36:32.019Z/myFunction.zip"
+          "S3Key": "serverless/test-api-websockets-logs/dev/1566290717402-2019-08-20T08:45:17.402Z/myFunction.zip"
         },
         "FunctionName": "test-api-websockets-logs-dev-myFunction",
         "Handler": "index.handler",
@@ -191,13 +191,13 @@
         "Principal": "apigateway.amazonaws.com"
       }
     },
-    "minimalWebsocketsRoute": {
+    "SconnectWebsocketsRoute": {
       "Type": "AWS::ApiGatewayV2::Route",
       "Properties": {
         "ApiId": {
           "Ref": "WebsocketsApi"
         },
-        "RouteKey": "minimal",
+        "RouteKey": "$connect",
         "AuthorizationType": "NONE",
         "Target": {
           "Fn::Join": [
@@ -212,10 +212,54 @@
         }
       }
     },
-    "WebsocketsDeployment1566290191191": {
+    "SdisconnectWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "$disconnect",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "MyFunctionWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "SdefaultWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "$default",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "MyFunctionWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "WebsocketsDeployment1566290716104": {
       "Type": "AWS::ApiGatewayV2::Deployment",
       "DependsOn": [
-        "minimalWebsocketsRoute"
+        "SconnectWebsocketsRoute",
+        "SdisconnectWebsocketsRoute",
+        "SdefaultWebsocketsRoute"
       ],
       "Properties": {
         "ApiId": {
@@ -286,7 +330,7 @@
           "Ref": "WebsocketsApi"
         },
         "DeploymentId": {
-          "Ref": "WebsocketsDeployment1566290191191"
+          "Ref": "WebsocketsDeployment1566290716104"
         },
         "StageName": "dev",
         "Description": "Serverless Websockets",
