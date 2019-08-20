@@ -15,7 +15,7 @@ functions:
   myFunction:
     handler: index.handler
     events:
-      - websockets:
+      - websocket:
           route: minimal
 
 plugins:
