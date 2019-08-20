@@ -1,24 +1,26 @@
-service: test-api-gw-shared
+service: test-api-gw-export-shared
 
 provider:
   name: aws
   runtime: nodejs10.x
-  apiGateway:
-    restApiId: zzg9mt5bfb
-    restApiRootResourceId: l3wyhg9azj
 
-package:
-  individually: true
+resources:
+  Resources:
+    CfExportedApiGw:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: CfExportedApiGw
 
-functions:
-  myFunction:
-    handler: index.handler
-    events:
-      - http:
-          path: bar
-          method: GET
-  myFunction2:
-    handler: index.handler
-
-plugins:
-  - serverless-plugin-reducer
+  Outputs:
+    apiGatewayRestApiId:
+      Value:
+        Ref: CfExportedApiGw
+      Export:
+        Name: CfExportedApiGw-restApiId
+    apiGatewayRestApiRootResourceId:
+      Value:
+        Fn::GetAtt:
+          - CfExportedApiGw
+          - RootResourceId
+      Export:
+        Name: CfExportedApiGw-rootResourceId
