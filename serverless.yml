@@ -12,7 +12,7 @@ functions:
   function:
     handler: index.handler
     events:
-      - s3: photos
+      - s3: test-for-s3-events
 
 plugins:
   - serverless-plugin-reducer

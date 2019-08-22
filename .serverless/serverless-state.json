@@ -119,7 +119,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-for-s3-events/dev/1566460929685-2019-08-22T08:02:09.685Z/function.zip"
+                "S3Key": "serverless/test-lambda-for-s3-events/dev/1566461282439-2019-08-22T08:08:02.439Z/function.zip"
               },
               "FunctionName": "test-lambda-for-s3-events-dev-function",
               "Handler": "index.handler",
@@ -138,10 +138,10 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "S3BucketPhotos": {
+          "S3BucketTestfors3events": {
             "Type": "AWS::S3::Bucket",
             "Properties": {
-              "BucketName": "photos",
+              "BucketName": "test-for-s3-events",
               "NotificationConfiguration": {
                 "LambdaConfigurations": [
                   {
@@ -157,10 +157,10 @@
               }
             },
             "DependsOn": [
-              "FunctionLambdaPermissionPhotosS3"
+              "FunctionLambdaPermissionTestfors3eventsS3"
             ]
           },
-          "FunctionLambdaPermissionPhotosS3": {
+          "FunctionLambdaPermissionTestfors3eventsS3": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
@@ -179,7 +179,7 @@
                     {
                       "Ref": "AWS::Partition"
                     },
-                    ":s3:::photos"
+                    ":s3:::test-for-s3-events"
                   ]
                 ]
               }
@@ -232,7 +232,7 @@
         "handler": "index.handler",
         "events": [
           {
-            "s3": "photos"
+            "s3": "test-for-s3-events"
           }
         ],
         "name": "test-lambda-for-s3-events-dev-function",
@@ -250,7 +250,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda-for-s3-events/dev/1566460929685-2019-08-22T08:02:09.685Z",
+    "artifactDirectoryName": "serverless/test-lambda-for-s3-events/dev/1566461282439-2019-08-22T08:08:02.439Z",
     "artifact": ""
   }
 }
