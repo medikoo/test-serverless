@@ -3,6 +3,7 @@ service: test-api-gw-shared
 provider:
   name: aws
   runtime: nodejs10.x
+  versionFunctions: false
   apiGateway:
     restApiId: zzg9mt5bfb
     restApiRootResourceId: l3wyhg9azj

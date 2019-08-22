@@ -111,7 +111,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-shared/dev/1565282014936-2019-08-08T16:33:34.936Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-shared/dev/1566485640483-2019-08-22T14:54:00.483Z/myFunction.zip"
         },
         "FunctionName": "test-api-gw-shared-dev-myFunction",
         "Handler": "index.handler",
@@ -130,16 +130,6 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MyFunctionLambdaVersionsaHKyk7JwL5Blr1ngDBl6lZ0u6IGays15FzDVNPSc4": {
-      "Type": "AWS::Lambda::Version",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "MyFunctionLambdaFunction"
-        },
-        "CodeSha256": "PzztNAHIjnJI49bsfxY8+1n4Ldjt0d3D0Jco7TWLZ5o="
-      }
-    },
     "MyFunction2LambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -147,7 +137,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-shared/dev/1565282014936-2019-08-08T16:33:34.936Z/myFunction2.zip"
+          "S3Key": "serverless/test-api-gw-shared/dev/1566485640483-2019-08-22T14:54:00.483Z/myFunction2.zip"
         },
         "FunctionName": "test-api-gw-shared-dev-myFunction2",
         "Handler": "index.handler",
@@ -165,16 +155,6 @@
         "MyFunction2LogGroup",
         "IamRoleLambdaExecution"
       ]
-    },
-    "MyFunction2LambdaVersioncab5ozMTq8b68WMSDpOLev2Lb9g1loYy4mcrdfvgjA": {
-      "Type": "AWS::Lambda::Version",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "MyFunction2LambdaFunction"
-        },
-        "CodeSha256": "PzztNAHIjnJI49bsfxY8+1n4Ldjt0d3D0Jco7TWLZ5o="
-      }
     },
     "ApiGatewayResourceBar": {
       "Type": "AWS::ApiGateway::Resource",
@@ -225,7 +205,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1565282013781": {
+    "ApiGatewayDeployment1566485638979": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": "zzg9mt5bfb",
@@ -275,18 +255,6 @@
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
-      }
-    },
-    "MyFunctionLambdaFunctionQualifiedArn": {
-      "Description": "Current Lambda function version",
-      "Value": {
-        "Ref": "MyFunctionLambdaVersionsaHKyk7JwL5Blr1ngDBl6lZ0u6IGays15FzDVNPSc4"
-      }
-    },
-    "MyFunction2LambdaFunctionQualifiedArn": {
-      "Description": "Current Lambda function version",
-      "Value": {
-        "Ref": "MyFunction2LambdaVersioncab5ozMTq8b68WMSDpOLev2Lb9g1loYy4mcrdfvgjA"
       }
     },
     "ServiceEndpoint": {
