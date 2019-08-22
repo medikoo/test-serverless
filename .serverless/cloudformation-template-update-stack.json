@@ -105,7 +105,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-for-s3-events/dev/1566461282439-2019-08-22T08:08:02.439Z/function.zip"
+          "S3Key": "serverless/test-lambda-for-s3-events/dev/1566461479242-2019-08-22T08:11:19.242Z/function.zip"
         },
         "FunctionName": "test-lambda-for-s3-events-dev-function",
         "Handler": "index.handler",
@@ -157,17 +157,9 @@
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "s3.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition"
-              },
-              ":s3:::test-for-s3-events"
-            ]
-          ]
+        "SourceArn": "arn:aws:s3:::test-for-s3-events",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId"
         }
       }
     }
