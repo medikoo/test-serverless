@@ -1,4 +1,4 @@
-service: test-pure-lambda
+service: test-lambda-for-s3-events
 
 provider:
   name: aws
@@ -9,11 +9,10 @@ package:
   individually: true
 
 functions:
-  myFunction:
+  function:
     handler: index.handler
-  myFunction2:
-    name: test-pure-lambda-${self:provider.region}-myFunction2
-    handler: index.handler
+    events:
+      - s3: photos
 
 plugins:
   - serverless-plugin-reducer
