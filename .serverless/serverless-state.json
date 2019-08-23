@@ -11,8 +11,8 @@
       "runtime": "nodejs10.x",
       "versionFunctions": false,
       "apiGateway": {
-        "restApiId": "zzg9mt5bfb",
-        "restApiRootResourceId": "l3wyhg9azj"
+        "restApiId": "pkhriceyzl",
+        "restApiRootResourceId": "1xufji4tak"
       },
       "region": "us-east-1",
       "remoteFunctionData": null,
@@ -129,7 +129,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-shared/dev/1566485640483-2019-08-22T14:54:00.483Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw-shared/dev/1566546124091-2019-08-23T07:42:04.091Z/myFunction.zip"
               },
               "FunctionName": "test-api-gw-shared-dev-myFunction",
               "Handler": "index.handler",
@@ -155,7 +155,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-shared/dev/1566485640483-2019-08-22T14:54:00.483Z/myFunction2.zip"
+                "S3Key": "serverless/test-api-gw-shared/dev/1566546124091-2019-08-23T07:42:04.091Z/myFunction2.zip"
               },
               "FunctionName": "test-api-gw-shared-dev-myFunction2",
               "Handler": "index.handler",
@@ -177,9 +177,9 @@
           "ApiGatewayResourceBar": {
             "Type": "AWS::ApiGateway::Resource",
             "Properties": {
-              "ParentId": "l3wyhg9azj",
+              "ParentId": "1xufji4tak",
               "PathPart": "bar",
-              "RestApiId": "zzg9mt5bfb"
+              "RestApiId": "pkhriceyzl"
             }
           },
           "ApiGatewayMethodBarGet": {
@@ -190,7 +190,7 @@
               "ResourceId": {
                 "Ref": "ApiGatewayResourceBar"
               },
-              "RestApiId": "zzg9mt5bfb",
+              "RestApiId": "pkhriceyzl",
               "ApiKeyRequired": false,
               "AuthorizationType": "NONE",
               "Integration": {
@@ -223,10 +223,10 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1566485638979": {
+          "ApiGatewayDeployment1566546122694": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
-              "RestApiId": "zzg9mt5bfb",
+              "RestApiId": "pkhriceyzl",
               "StageName": "dev"
             },
             "DependsOn": [
@@ -261,7 +261,7 @@
                       "Ref": "AWS::AccountId"
                     },
                     ":",
-                    "zzg9mt5bfb",
+                    "pkhriceyzl",
                     "/*/*"
                   ]
                 ]
@@ -282,7 +282,7 @@
                 "",
                 [
                   "https://",
-                  "zzg9mt5bfb",
+                  "pkhriceyzl",
                   ".execute-api.",
                   {
                     "Ref": "AWS::Region"
@@ -370,7 +370,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-shared/dev/1566485640483-2019-08-22T14:54:00.483Z",
+    "artifactDirectoryName": "serverless/test-api-gw-shared/dev/1566546124091-2019-08-23T07:42:04.091Z",
     "artifact": ""
   }
 }

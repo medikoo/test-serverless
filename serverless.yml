@@ -5,8 +5,8 @@ provider:
   runtime: nodejs10.x
   versionFunctions: false
   apiGateway:
-    restApiId: zzg9mt5bfb
-    restApiRootResourceId: l3wyhg9azj
+    restApiId: pkhriceyzl
+    restApiRootResourceId: 1xufji4tak
 
 package:
   individually: true
