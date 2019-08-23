@@ -115,7 +115,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-shared/dev/1566560126613-2019-08-23T11:35:26.613Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-shared/dev/1566560372900-2019-08-23T11:39:32.900Z/myFunction.zip"
         },
         "FunctionName": "test-api-gw-shared-dev-myFunction",
         "Handler": "index.handler",
@@ -127,7 +127,13 @@
           ]
         },
         "Runtime": "nodejs10.x",
-        "Timeout": 6
+        "Timeout": 6,
+        "Tags": [
+          {
+            "Key": "foo",
+            "Value": "bar"
+          }
+        ]
       },
       "DependsOn": [
         "MyFunctionLogGroup",
@@ -141,7 +147,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-shared/dev/1566560126613-2019-08-23T11:35:26.613Z/myFunction2.zip"
+          "S3Key": "serverless/test-api-gw-shared/dev/1566560372900-2019-08-23T11:39:32.900Z/myFunction2.zip"
         },
         "FunctionName": "test-api-gw-shared-dev-myFunction2",
         "Handler": "index.handler",
@@ -153,7 +159,13 @@
           ]
         },
         "Runtime": "nodejs10.x",
-        "Timeout": 6
+        "Timeout": 6,
+        "Tags": [
+          {
+            "Key": "foo",
+            "Value": "bar"
+          }
+        ]
       },
       "DependsOn": [
         "MyFunction2LogGroup",
@@ -209,7 +221,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1566560125488": {
+    "ApiGatewayDeployment1566560371816": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": "pkhriceyzl",

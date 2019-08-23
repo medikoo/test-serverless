@@ -7,6 +7,8 @@ provider:
   apiGateway:
     restApiId: pkhriceyzl
     restApiRootResourceId: 1xufji4tak
+  tags:
+    foo: bar
 
 package:
   individually: true
