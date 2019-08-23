@@ -69,10 +69,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev-myFunction:*"
-                    },
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev-myFunction2:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev*:*"
                     }
                   ]
                 },
@@ -83,10 +80,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev-myFunction:*:*"
-                    },
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev-myFunction2:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev*:*:*"
                     }
                   ]
                 }
@@ -101,7 +95,9 @@
             [
               "test-api-gw-shared",
               "dev",
-              "us-east-1",
+              {
+                "Ref": "AWS::Region"
+              },
               "lambdaRole"
             ]
           ]
@@ -115,7 +111,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-shared/dev/1566560372900-2019-08-23T11:39:32.900Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-shared/dev/1566561423594-2019-08-23T11:57:03.594Z/myFunction.zip"
         },
         "FunctionName": "test-api-gw-shared-dev-myFunction",
         "Handler": "index.handler",
@@ -147,7 +143,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-shared/dev/1566560372900-2019-08-23T11:39:32.900Z/myFunction2.zip"
+          "S3Key": "serverless/test-api-gw-shared/dev/1566561423594-2019-08-23T11:57:03.594Z/myFunction2.zip"
         },
         "FunctionName": "test-api-gw-shared-dev-myFunction2",
         "Handler": "index.handler",
@@ -175,9 +171,13 @@
     "ApiGatewayResourceBar": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
-        "ParentId": "1xufji4tak",
+        "ParentId": {
+          "Fn::ImportValue": "CfExportedApiGw-rootResourceId"
+        },
         "PathPart": "bar",
-        "RestApiId": "pkhriceyzl"
+        "RestApiId": {
+          "Fn::ImportValue": "CfExportedApiGw-restApiId"
+        }
       }
     },
     "ApiGatewayMethodBarGet": {
@@ -188,7 +188,9 @@
         "ResourceId": {
           "Ref": "ApiGatewayResourceBar"
         },
-        "RestApiId": "pkhriceyzl",
+        "RestApiId": {
+          "Fn::ImportValue": "CfExportedApiGw-restApiId"
+        },
         "ApiKeyRequired": false,
         "AuthorizationType": "NONE",
         "Integration": {
@@ -221,10 +223,12 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1566560371816": {
+    "ApiGatewayDeployment1566561422283": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
-        "RestApiId": "pkhriceyzl",
+        "RestApiId": {
+          "Fn::ImportValue": "CfExportedApiGw-restApiId"
+        },
         "StageName": "dev"
       },
       "DependsOn": [
@@ -241,17 +245,7 @@
           ]
         },
         "Action": "lambda:InvokeFunction",
-        "Principal": {
-          "Fn::Join": [
-            "",
-            [
-              "apigateway.",
-              {
-                "Ref": "AWS::URLSuffix"
-              }
-            ]
-          ]
-        },
+        "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
           "Fn::Join": [
             "",
@@ -269,7 +263,9 @@
                 "Ref": "AWS::AccountId"
               },
               ":",
-              "pkhriceyzl",
+              {
+                "Fn::ImportValue": "CfExportedApiGw-restApiId"
+              },
               "/*/*"
             ]
           ]
@@ -290,8 +286,14 @@
           "",
           [
             "https://",
-            "pkhriceyzl",
-            ".execute-api.us-east-1.",
+            {
+              "Fn::ImportValue": "CfExportedApiGw-restApiId"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
             {
               "Ref": "AWS::URLSuffix"
             },

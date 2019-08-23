@@ -5,8 +5,10 @@ provider:
   runtime: nodejs10.x
   versionFunctions: false
   apiGateway:
-    restApiId: pkhriceyzl
-    restApiRootResourceId: 1xufji4tak
+    restApiId:
+      "Fn::ImportValue": CfExportedApiGw-restApiId
+    restApiRootResourceId:
+      "Fn::ImportValue": CfExportedApiGw-rootResourceId
   tags:
     foo: bar
 
