@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw-shared",
+    "service": "test-api-gw-shared-2",
     "serviceObject": {
-      "name": "test-api-gw-shared"
+      "name": "test-api-gw-shared-2"
     },
     "provider": {
       "stage": "dev",
@@ -17,9 +17,6 @@
         "restApiRootResourceId": {
           "Fn::ImportValue": "CfExportedApiGw-rootResourceId"
         }
-      },
-      "logs": {
-        "restApi": true
       },
       "region": "us-east-1",
       "remoteFunctionData": null,
@@ -44,13 +41,13 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-shared-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-api-gw-shared-2-dev-myFunction"
             }
           },
           "MyFunction2LogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-shared-dev-myFunction2"
+              "LogGroupName": "/aws/lambda/test-api-gw-shared-2-dev-myFunction2"
             }
           },
           "IamRoleLambdaExecution": {
@@ -79,7 +76,7 @@
                       "-",
                       [
                         "dev",
-                        "test-api-gw-shared",
+                        "test-api-gw-shared-2",
                         "lambda"
                       ]
                     ]
@@ -94,7 +91,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-2-dev*:*"
                           }
                         ]
                       },
@@ -105,7 +102,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-2-dev*:*:*"
                           }
                         ]
                       }
@@ -118,7 +115,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw-shared",
+                    "test-api-gw-shared-2",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -136,9 +133,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-shared/dev/1566556797913-2019-08-23T10:39:57.913Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw-shared-2/dev/1566557007566-2019-08-23T10:43:27.566Z/myFunction.zip"
               },
-              "FunctionName": "test-api-gw-shared-dev-myFunction",
+              "FunctionName": "test-api-gw-shared-2-dev-myFunction",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -162,9 +159,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-shared/dev/1566556797913-2019-08-23T10:39:57.913Z/myFunction2.zip"
+                "S3Key": "serverless/test-api-gw-shared-2/dev/1566557007566-2019-08-23T10:43:27.566Z/myFunction2.zip"
               },
-              "FunctionName": "test-api-gw-shared-dev-myFunction2",
+              "FunctionName": "test-api-gw-shared-2-dev-myFunction2",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -181,25 +178,25 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "ApiGatewayResourceBar": {
+          "ApiGatewayResourceBar2": {
             "Type": "AWS::ApiGateway::Resource",
             "Properties": {
               "ParentId": {
                 "Fn::ImportValue": "CfExportedApiGw-rootResourceId"
               },
-              "PathPart": "bar",
+              "PathPart": "bar2",
               "RestApiId": {
                 "Fn::ImportValue": "CfExportedApiGw-restApiId"
               }
             }
           },
-          "ApiGatewayMethodBarGet": {
+          "ApiGatewayMethodBar2Get": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
               "HttpMethod": "GET",
               "RequestParameters": {},
               "ResourceId": {
-                "Ref": "ApiGatewayResourceBar"
+                "Ref": "ApiGatewayResourceBar2"
               },
               "RestApiId": {
                 "Fn::ImportValue": "CfExportedApiGw-restApiId"
@@ -236,7 +233,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1566556796706": {
+          "ApiGatewayDeployment1566557006260": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -245,7 +242,7 @@
               "StageName": "dev"
             },
             "DependsOn": [
-              "ApiGatewayMethodBarGet"
+              "ApiGatewayMethodBar2Get"
             ]
           },
           "MyFunctionLambdaPermissionApiGateway": {
@@ -283,118 +280,6 @@
                   ]
                 ]
               }
-            }
-          },
-          "ApiGatewayLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/api-gateway/test-api-gw-shared-dev"
-            }
-          },
-          "CustomApiGatewayAccountCloudWatchRole": {
-            "Type": "Custom::ApiGatewayAccountRole",
-            "Version": 1,
-            "Properties": {
-              "ServiceToken": {
-                "Fn::GetAtt": [
-                  "CustomDashresourceDashapigwDashcwDashroleLambdaFunction",
-                  "Arn"
-                ]
-              }
-            }
-          },
-          "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/test-api-gw-shared/dev/1566556797913-2019-08-23T10:39:57.913Z/custom-resources.zip"
-              },
-              "FunctionName": "test-api-gw-shared-dev-custom-resource-apigw-cw-role",
-              "Handler": "apiGatewayCloudWatchRole/handler.handler",
-              "MemorySize": 1024,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleCustomResourcesLambdaExecution",
-                  "Arn"
-                ]
-              },
-              "Runtime": "nodejs10.x",
-              "Timeout": 180
-            },
-            "DependsOn": [
-              "IamRoleCustomResourcesLambdaExecution"
-            ]
-          },
-          "IamRoleCustomResourcesLambdaExecution": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": {
-                    "Fn::Join": [
-                      "-",
-                      [
-                        "dev",
-                        "test-api-gw-shared",
-                        "custom-resources-lambda"
-                      ]
-                    ]
-                  },
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Resource": {
-                          "Fn::Join": [
-                            ":",
-                            [
-                              "arn:aws:iam:",
-                              {
-                                "Ref": "AWS::AccountId"
-                              },
-                              "role/*"
-                            ]
-                          ]
-                        },
-                        "Action": [
-                          "iam:AttachRolePolicy",
-                          "iam:CreateRole",
-                          "iam:ListAttachedRolePolicies",
-                          "iam:PassRole"
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Resource": "arn:aws:apigateway:*::/account",
-                        "Action": [
-                          "apigateway:GET",
-                          "apigateway:PATCH"
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
             }
           }
         },
@@ -468,13 +353,13 @@
         "events": [
           {
             "http": {
-              "path": "bar",
+              "path": "bar2",
               "method": "get",
               "integration": "AWS_PROXY"
             }
           }
         ],
-        "name": "test-api-gw-shared-dev-myFunction",
+        "name": "test-api-gw-shared-2-dev-myFunction",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
         },
@@ -486,7 +371,7 @@
       "myFunction2": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-api-gw-shared-dev-myFunction2",
+        "name": "test-api-gw-shared-2-dev-myFunction2",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction2.zip"
         },
@@ -501,7 +386,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-shared/dev/1566556797913-2019-08-23T10:39:57.913Z",
+    "artifactDirectoryName": "serverless/test-api-gw-shared-2/dev/1566557007566-2019-08-23T10:43:27.566Z",
     "artifact": ""
   }
 }

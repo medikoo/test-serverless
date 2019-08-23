@@ -1,4 +1,4 @@
-service: test-api-gw-shared
+service: test-api-gw-shared-2
 
 provider:
   name: aws
@@ -9,8 +9,6 @@ provider:
       "Fn::ImportValue": CfExportedApiGw-restApiId
     restApiRootResourceId:
       "Fn::ImportValue": CfExportedApiGw-rootResourceId
-  logs:
-    restApi: true
 
 package:
   individually: true
@@ -20,7 +18,7 @@ functions:
     handler: index.handler
     events:
       - http:
-          path: bar
+          path: bar2
           method: GET
   myFunction2:
     handler: index.handler
