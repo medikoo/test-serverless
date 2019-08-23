@@ -7,8 +7,6 @@ provider:
   apiGateway:
     restApiId: pkhriceyzl
     restApiRootResourceId: 1xufji4tak
-  logs:
-    restApi: true
 
 package:
   individually: true
