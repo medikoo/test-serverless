@@ -1,16 +1,19 @@
 {
   "service": {
-    "service": "test-api-gw-export-shared",
+    "service": "test-api-gw-export-shared-with-lambdas",
     "serviceObject": {
-      "name": "test-api-gw-export-shared"
+      "name": "test-api-gw-export-shared-with-lambdas"
     },
     "provider": {
       "stage": "dev",
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
       "name": "aws",
       "runtime": "nodejs10.x",
+      "versionFunctions": false,
+      "tracing": {
+        "apiGateway": true
+      },
       "region": "us-east-1",
-      "versionFunctions": true,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -30,10 +33,230 @@
               }
             }
           },
-          "CfExportedApiGw": {
+          "MyFunctionLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-api-gw-export-shared-with-lambdas-dev-myFunction"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "dev",
+                        "test-api-gw-export-shared-with-lambdas",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-export-shared-with-lambdas-dev*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-export-shared-with-lambdas-dev*:*:*"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "test-api-gw-export-shared-with-lambdas",
+                    "dev",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "lambdaRole"
+                  ]
+                ]
+              }
+            }
+          },
+          "MyFunctionLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-api-gw-export-shared-with-lambdas/dev/1566568069109-2019-08-23T13:47:49.109Z/myFunction.zip"
+              },
+              "FunctionName": "test-api-gw-export-shared-with-lambdas-dev-myFunction",
+              "Handler": "index.handler",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs10.x",
+              "Timeout": 6
+            },
+            "DependsOn": [
+              "MyFunctionLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "CfExportedApiGw"
+              "Name": "CfExportedApiGwWithLambdas",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              }
+            }
+          },
+          "ApiGatewayResourceCore": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "core",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodCoreGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceCore"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "MyFunctionLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayDeployment1566568067812": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodCoreGet"
+            ]
+          },
+          "MyFunctionLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "MyFunctionLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
             }
           }
         },
@@ -43,23 +266,46 @@
               "Ref": "ServerlessDeploymentBucket"
             }
           },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
+            }
+          },
           "apiGatewayRestApiId": {
             "Value": {
-              "Ref": "CfExportedApiGw"
+              "Ref": "ApiGatewayRestApi"
             },
             "Export": {
-              "Name": "CfExportedApiGw-restApiId"
+              "Name": "CfExportedApiGwWithLambdas-restApiId"
             }
           },
           "apiGatewayRestApiRootResourceId": {
             "Value": {
               "Fn::GetAtt": [
-                "CfExportedApiGw",
+                "ApiGatewayRestApi",
                 "RootResourceId"
               ]
             },
             "Export": {
-              "Name": "CfExportedApiGw-rootResourceId"
+              "Name": "CfExportedApiGwWithLambdas-rootResourceId"
             }
           }
         }
@@ -90,37 +336,62 @@
             }
           }
         }
+      },
+      "vpc": {}
+    },
+    "plugins": [
+      "serverless-plugin-reducer"
+    ],
+    "pluginsData": {},
+    "functions": {
+      "myFunction": {
+        "handler": "index.handler",
+        "events": [
+          {
+            "http": {
+              "path": "core",
+              "method": "get",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "test-api-gw-export-shared-with-lambdas-dev-myFunction",
+        "package": {
+          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs10.x",
+        "vpc": {}
       }
     },
-    "pluginsData": {},
-    "functions": {},
     "resources": {
       "Resources": {
-        "CfExportedApiGw": {
+        "ApiGatewayRestApi": {
           "Type": "AWS::ApiGateway::RestApi",
           "Properties": {
-            "Name": "CfExportedApiGw"
+            "Name": "CfExportedApiGwWithLambdas"
           }
         }
       },
       "Outputs": {
         "apiGatewayRestApiId": {
           "Value": {
-            "Ref": "CfExportedApiGw"
+            "Ref": "ApiGatewayRestApi"
           },
           "Export": {
-            "Name": "CfExportedApiGw-restApiId"
+            "Name": "CfExportedApiGwWithLambdas-restApiId"
           }
         },
         "apiGatewayRestApiRootResourceId": {
           "Value": {
             "Fn::GetAtt": [
-              "CfExportedApiGw",
+              "ApiGatewayRestApi",
               "RootResourceId"
             ]
           },
           "Export": {
-            "Name": "CfExportedApiGw-rootResourceId"
+            "Name": "CfExportedApiGwWithLambdas-rootResourceId"
           }
         }
       }
@@ -129,7 +400,8 @@
     "layers": {}
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-api-gw-export-shared/dev/1566220462175-2019-08-19T13:14:22.175Z",
+    "individually": true,
+    "artifactDirectoryName": "serverless/test-api-gw-export-shared-with-lambdas/dev/1566568069109-2019-08-23T13:47:49.109Z",
     "artifact": ""
   }
 }

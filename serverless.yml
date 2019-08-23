@@ -1,26 +1,43 @@
-service: test-api-gw-export-shared
+service: test-api-gw-export-shared-with-lambdas
 
 provider:
   name: aws
   runtime: nodejs10.x
+  versionFunctions: false
+  tracing:
+    apiGateway: true
+
+package:
+  individually: true
+
+functions:
+  myFunction:
+    handler: index.handler
+    events:
+      - http:
+          path: core
+          method: GET
+
+plugins:
+  - serverless-plugin-reducer
 
 resources:
   Resources:
-    CfExportedApiGw:
+    ApiGatewayRestApi:
       Type: AWS::ApiGateway::RestApi
       Properties:
-        Name: CfExportedApiGw
+        Name: CfExportedApiGwWithLambdas
 
   Outputs:
     apiGatewayRestApiId:
       Value:
-        Ref: CfExportedApiGw
+        Ref: ApiGatewayRestApi
       Export:
-        Name: CfExportedApiGw-restApiId
+        Name: CfExportedApiGwWithLambdas-restApiId
     apiGatewayRestApiRootResourceId:
       Value:
         Fn::GetAtt:
-          - CfExportedApiGw
+          - ApiGatewayRestApi
           - RootResourceId
       Export:
-        Name: CfExportedApiGw-rootResourceId
+        Name: CfExportedApiGwWithLambdas-rootResourceId
