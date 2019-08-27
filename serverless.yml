@@ -1,9 +1,10 @@
-service: test-api-gw-shared
+service: test-api-gw-shared-other-sls-stage
 
 provider:
   name: aws
   runtime: nodejs10.x
   region: us-east-1
+  stage: other
   versionFunctions: false
   apiGateway:
     restApiId: pkhriceyzl
@@ -17,7 +18,7 @@ functions:
     handler: index.handler
     events:
       - http:
-          path: bar
+          path: bar3
           method: GET
 
 plugins:

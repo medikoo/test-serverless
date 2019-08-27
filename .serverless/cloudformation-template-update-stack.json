@@ -19,7 +19,7 @@
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-api-gw-shared-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-api-gw-shared-other-sls-stage-other-myFunction"
       }
     },
     "IamRoleLambdaExecution": {
@@ -47,8 +47,8 @@
               "Fn::Join": [
                 "-",
                 [
-                  "dev",
-                  "test-api-gw-shared",
+                  "other",
+                  "test-api-gw-shared-other-sls-stage",
                   "lambda"
                 ]
               ]
@@ -63,7 +63,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-other-sls-stage-other*:*"
                     }
                   ]
                 },
@@ -74,7 +74,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-other-sls-stage-other*:*:*"
                     }
                   ]
                 }
@@ -87,8 +87,8 @@
           "Fn::Join": [
             "-",
             [
-              "test-api-gw-shared",
-              "dev",
+              "test-api-gw-shared-other-sls-stage",
+              "other",
               {
                 "Ref": "AWS::Region"
               },
@@ -105,9 +105,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-shared/dev/1566919384671-2019-08-27T15:23:04.671Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-shared-other-sls-stage/other/1566919672057-2019-08-27T15:27:52.057Z/myFunction.zip"
         },
-        "FunctionName": "test-api-gw-shared-dev-myFunction",
+        "FunctionName": "test-api-gw-shared-other-sls-stage-other-myFunction",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -124,21 +124,21 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "ApiGatewayResourceBar": {
+    "ApiGatewayResourceBar3": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": "1xufji4tak",
-        "PathPart": "bar",
+        "PathPart": "bar3",
         "RestApiId": "pkhriceyzl"
       }
     },
-    "ApiGatewayMethodBarGet": {
+    "ApiGatewayMethodBar3Get": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourceBar"
+          "Ref": "ApiGatewayResourceBar3"
         },
         "RestApiId": "pkhriceyzl",
         "ApiKeyRequired": false,
@@ -173,14 +173,14 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1566919383859": {
+    "ApiGatewayDeployment1566919671260": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": "pkhriceyzl",
-        "StageName": "dev"
+        "StageName": "other"
       },
       "DependsOn": [
-        "ApiGatewayMethodBarGet"
+        "ApiGatewayMethodBar3Get"
       ]
     },
     "MyFunctionLambdaPermissionApiGateway": {
@@ -241,7 +241,7 @@
             {
               "Ref": "AWS::URLSuffix"
             },
-            "/dev"
+            "/other"
           ]
         ]
       }
