@@ -5,7 +5,7 @@
       "name": "test-api-gw"
     },
     "provider": {
-      "stage": "dev",
+      "stage": "other",
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
       "name": "aws",
       "runtime": "nodejs10.x",
@@ -119,7 +119,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/other/1566919121675-2019-08-27T15:18:41.675Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw/other/1566919260985-2019-08-27T15:21:00.985Z/myFunction.zip"
               },
               "FunctionName": "test-api-gw-other-myFunction",
               "Handler": "index.handler",
@@ -207,7 +207,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1566919120364": {
+          "ApiGatewayDeployment1566919259697": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -348,7 +348,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/other/1566919121675-2019-08-27T15:18:41.675Z",
+    "artifactDirectoryName": "serverless/test-api-gw/other/1566919260985-2019-08-27T15:21:00.985Z",
     "artifact": ""
   }
 }
