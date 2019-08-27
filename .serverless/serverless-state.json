@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-custom-role-lambda",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-custom-role-lambda"
     },
     "provider": {
       "stage": "dev",
@@ -34,7 +34,7 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-custom-role-lambda-dev-myFunction"
             }
           },
           "MyFunctionLambdaFunction": {
@@ -44,9 +44,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1566893902516-2019-08-27T08:18:22.516Z/myFunction.zip"
+                "S3Key": "serverless/test-custom-role-lambda/dev/1566894028986-2019-08-27T08:20:28.986Z/myFunction.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-myFunction",
+              "FunctionName": "test-custom-role-lambda-dev-myFunction",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": "arn:aws:iam::992311060759:role/test-custom-role",
@@ -103,7 +103,7 @@
       "myFunction": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-regular-lambda-dev-myFunction",
+        "name": "test-custom-role-lambda-dev-myFunction",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
         },
@@ -118,7 +118,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1566893902516-2019-08-27T08:18:22.516Z",
+    "artifactDirectoryName": "serverless/test-custom-role-lambda/dev/1566894028986-2019-08-27T08:20:28.986Z",
     "artifact": ""
   }
 }

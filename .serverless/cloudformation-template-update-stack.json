@@ -19,7 +19,7 @@
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-custom-role-lambda-dev-myFunction"
       }
     },
     "MyFunctionLambdaFunction": {
@@ -29,9 +29,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1566893902516-2019-08-27T08:18:22.516Z/myFunction.zip"
+          "S3Key": "serverless/test-custom-role-lambda/dev/1566894028986-2019-08-27T08:20:28.986Z/myFunction.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-myFunction",
+        "FunctionName": "test-custom-role-lambda-dev-myFunction",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": "arn:aws:iam::992311060759:role/test-custom-role",

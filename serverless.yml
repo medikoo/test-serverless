@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-custom-role-lambda
 
 provider:
   name: aws
