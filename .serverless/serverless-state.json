@@ -10,6 +10,7 @@
       "name": "aws",
       "runtime": "nodejs10.x",
       "versionFunctions": false,
+      "role": "arn:aws:iam::992311060759:role/test-custom-role",
       "region": "us-east-1",
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
@@ -36,82 +37,6 @@
               "LogGroupName": "/aws/lambda/test-regular-lambda-dev-myFunction"
             }
           },
-          "IamRoleLambdaExecution": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": {
-                    "Fn::Join": [
-                      "-",
-                      [
-                        "dev",
-                        "test-regular-lambda",
-                        "lambda"
-                      ]
-                    ]
-                  },
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:CreateLogStream"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
-                          }
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:PutLogEvents"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ],
-              "Path": "/",
-              "RoleName": {
-                "Fn::Join": [
-                  "-",
-                  [
-                    "test-regular-lambda",
-                    "dev",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    "lambdaRole"
-                  ]
-                ]
-              }
-            }
-          },
           "MyFunctionLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -119,23 +44,17 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1566893541998-2019-08-27T08:12:21.998Z/myFunction.zip"
+                "S3Key": "serverless/test-regular-lambda/dev/1566893902516-2019-08-27T08:18:22.516Z/myFunction.zip"
               },
               "FunctionName": "test-regular-lambda-dev-myFunction",
               "Handler": "index.handler",
               "MemorySize": 1024,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              },
+              "Role": "arn:aws:iam::992311060759:role/test-custom-role",
               "Runtime": "nodejs10.x",
               "Timeout": 6
             },
             "DependsOn": [
-              "MyFunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "MyFunctionLogGroup"
             ]
           }
         },
@@ -199,7 +118,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1566893541998-2019-08-27T08:12:21.998Z",
+    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1566893902516-2019-08-27T08:18:22.516Z",
     "artifact": ""
   }
 }
