@@ -19,7 +19,7 @@
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-event-bridge-lambda-dev-myFunction"
       }
     },
     "IamRoleLambdaExecution": {
@@ -48,7 +48,7 @@
                 "-",
                 [
                   "dev",
-                  "test-regular-lambda",
+                  "test-event-bridge-lambda",
                   "lambda"
                 ]
               ]
@@ -63,7 +63,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-event-bridge-lambda-dev*:*"
                     }
                   ]
                 },
@@ -74,7 +74,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-event-bridge-lambda-dev*:*:*"
                     }
                   ]
                 }
@@ -87,7 +87,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-regular-lambda",
+              "test-event-bridge-lambda",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -105,9 +105,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1566893541998-2019-08-27T08:12:21.998Z/myFunction.zip"
+          "S3Key": "serverless/test-event-bridge-lambda/dev/1566894606416-2019-08-27T08:30:06.416Z/myFunction.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-myFunction",
+        "FunctionName": "test-event-bridge-lambda-dev-myFunction",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -123,6 +123,142 @@
         "MyFunctionLogGroup",
         "IamRoleLambdaExecution"
       ]
+    },
+    "MyFunctionCustomEventBridge1": {
+      "Type": "Custom::EventBridge",
+      "Version": 1,
+      "DependsOn": [
+        "MyFunctionLambdaFunction",
+        "CustomDashresourceDasheventDashbridgeLambdaFunction"
+      ],
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomDashresourceDasheventDashbridgeLambdaFunction",
+            "Arn"
+          ]
+        },
+        "FunctionName": "test-event-bridge-lambda-dev-myFunction",
+        "EventBridgeConfig": {
+          "RuleName": "test-event-bridge-lambda-dev-myFunction-rule-1",
+          "Schedule": "rate(7 days)",
+          "Input": {
+            "key1": "value1"
+          }
+        }
+      }
+    },
+    "CustomDashresourceDasheventDashbridgeLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/test-event-bridge-lambda/dev/1566894606416-2019-08-27T08:30:06.416Z/custom-resources.zip"
+        },
+        "FunctionName": "test-event-bridge-lambda-dev-custom-resource-event-bridge",
+        "Handler": "eventBridge/handler.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleCustomResourcesLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs10.x",
+        "Timeout": 180
+      },
+      "DependsOn": [
+        "IamRoleCustomResourcesLambdaExecution"
+      ]
+    },
+    "IamRoleCustomResourcesLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "dev",
+                  "test-event-bridge-lambda",
+                  "custom-resources-lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      ":",
+                      [
+                        "arn:aws:events",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        "rule/test-event-bridge-lambda-dev-myFunction-rule-1"
+                      ]
+                    ]
+                  },
+                  "Action": [
+                    "events:PutRule",
+                    "events:RemoveTargets",
+                    "events:PutTargets",
+                    "events:DeleteRule"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      ":",
+                      [
+                        "arn:aws:lambda",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        "function",
+                        "test-event-bridge-lambda-dev-myFunction"
+                      ]
+                    ]
+                  },
+                  "Action": [
+                    "lambda:AddPermission",
+                    "lambda:RemovePermission"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
   },
   "Outputs": {

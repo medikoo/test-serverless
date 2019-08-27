@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-event-bridge-lambda
 
 provider:
   name: aws
@@ -11,6 +11,11 @@ package:
 functions:
   myFunction:
     handler: index.handler
+    events:
+      - eventBridge:
+          schedule: rate(7 days)
+          input:
+            key1: value1
 
 plugins:
   - serverless-plugin-reducer
