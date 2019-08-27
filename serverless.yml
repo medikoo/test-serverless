@@ -12,6 +12,10 @@ package:
 functions:
   myFunction:
     handler: index.handler
+    events:
+      - http:
+          path: foo
+          method: GET
 
 plugins:
   - serverless-plugin-reducer
