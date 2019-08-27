@@ -2,6 +2,7 @@ service: test-api-gw
 
 provider:
   name: aws
+  stage: other
   runtime: nodejs10.x
   region: us-east-1
   versionFunctions: false

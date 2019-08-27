@@ -19,7 +19,7 @@
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-api-gw-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-api-gw-other-myFunction"
       }
     },
     "IamRoleLambdaExecution": {
@@ -47,7 +47,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "dev",
+                  "other",
                   "test-api-gw",
                   "lambda"
                 ]
@@ -63,7 +63,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-other*:*"
                     }
                   ]
                 },
@@ -74,7 +74,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-other*:*:*"
                     }
                   ]
                 }
@@ -88,7 +88,7 @@
             "-",
             [
               "test-api-gw",
-              "dev",
+              "other",
               {
                 "Ref": "AWS::Region"
               },
@@ -105,9 +105,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1566919025264-2019-08-27T15:17:05.264Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw/other/1566919121675-2019-08-27T15:18:41.675Z/myFunction.zip"
         },
-        "FunctionName": "test-api-gw-dev-myFunction",
+        "FunctionName": "test-api-gw-other-myFunction",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -127,7 +127,7 @@
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-test-api-gw",
+        "Name": "other-test-api-gw",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
@@ -193,13 +193,13 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1566919023820": {
+    "ApiGatewayDeployment1566919120364": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         },
-        "StageName": "dev"
+        "StageName": "other"
       },
       "DependsOn": [
         "ApiGatewayMethodFooGet"
@@ -267,7 +267,7 @@
             {
               "Ref": "AWS::URLSuffix"
             },
-            "/dev"
+            "/other"
           ]
         ]
       }
