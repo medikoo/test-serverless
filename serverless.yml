@@ -3,12 +3,11 @@ service: test-api-gw-shared
 provider:
   name: aws
   runtime: nodejs10.x
+  region: us-east-1
   versionFunctions: false
   apiGateway:
     restApiId: pkhriceyzl
     restApiRootResourceId: 1xufji4tak
-  logs:
-    restApi: true
 
 package:
   individually: true
@@ -20,8 +19,6 @@ functions:
       - http:
           path: bar
           method: GET
-  myFunction2:
-    handler: index.handler
 
 plugins:
   - serverless-plugin-reducer
