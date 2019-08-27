@@ -1,4 +1,4 @@
-service: test-custom-role-lambda
+service: test-custom-role-with-eb
 
 provider:
   name: aws
@@ -16,6 +16,10 @@ functions:
       - http:
           path: foo
           method: GET
+      - eventBridge:
+          schedule: rate(7 days)
+          input:
+            key1: value1
 
 plugins:
   - serverless-plugin-reducer
