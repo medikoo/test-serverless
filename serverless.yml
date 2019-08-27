@@ -1,4 +1,4 @@
-service: test-pure-lambda
+service: test-regular-lambda
 
 provider:
   name: aws
@@ -10,9 +10,6 @@ package:
 
 functions:
   myFunction:
-    handler: index.handler
-  myFunction2:
-    name: test-pure-lambda-${self:provider.region}-myFunction2
     handler: index.handler
 
 plugins:
