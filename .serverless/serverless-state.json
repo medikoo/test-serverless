@@ -11,6 +11,9 @@
       "runtime": "nodejs10.x",
       "versionFunctions": false,
       "role": "arn:aws:iam::992311060759:role/test-custom-role",
+      "logs": {
+        "restApi": true
+      },
       "region": "us-east-1",
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
@@ -44,7 +47,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-custom-role-lambda/dev/1566894248070-2019-08-27T08:24:08.070Z/myFunction.zip"
+                "S3Key": "serverless/test-custom-role-lambda/dev/1566894319174-2019-08-27T08:25:19.174Z/myFunction.zip"
               },
               "FunctionName": "test-custom-role-lambda-dev-myFunction",
               "Handler": "index.handler",
@@ -126,7 +129,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1566894246813": {
+          "ApiGatewayDeployment1566894318362": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -173,6 +176,118 @@
                   ]
                 ]
               }
+            }
+          },
+          "ApiGatewayLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/api-gateway/test-custom-role-lambda-dev"
+            }
+          },
+          "CustomApiGatewayAccountCloudWatchRole": {
+            "Type": "Custom::ApiGatewayAccountRole",
+            "Version": 1,
+            "Properties": {
+              "ServiceToken": {
+                "Fn::GetAtt": [
+                  "CustomDashresourceDashapigwDashcwDashroleLambdaFunction",
+                  "Arn"
+                ]
+              }
+            }
+          },
+          "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-custom-role-lambda/dev/1566894319174-2019-08-27T08:25:19.174Z/custom-resources.zip"
+              },
+              "FunctionName": "test-custom-role-lambda-dev-custom-resource-apigw-cw-role",
+              "Handler": "apiGatewayCloudWatchRole/handler.handler",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleCustomResourcesLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs10.x",
+              "Timeout": 180
+            },
+            "DependsOn": [
+              "IamRoleCustomResourcesLambdaExecution"
+            ]
+          },
+          "IamRoleCustomResourcesLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "dev",
+                        "test-custom-role-lambda",
+                        "custom-resources-lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Resource": {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn:aws:iam:",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              "role/*"
+                            ]
+                          ]
+                        },
+                        "Action": [
+                          "iam:AttachRolePolicy",
+                          "iam:CreateRole",
+                          "iam:ListAttachedRolePolicies",
+                          "iam:PassRole"
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Resource": "arn:aws:apigateway:*::/account",
+                        "Action": [
+                          "apigateway:GET",
+                          "apigateway:PATCH"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
             }
           }
         },
@@ -267,7 +382,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-custom-role-lambda/dev/1566894248070-2019-08-27T08:24:08.070Z",
+    "artifactDirectoryName": "serverless/test-custom-role-lambda/dev/1566894319174-2019-08-27T08:25:19.174Z",
     "artifact": ""
   }
 }

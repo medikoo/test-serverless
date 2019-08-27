@@ -5,6 +5,8 @@ provider:
   runtime: nodejs10.x
   versionFunctions: false
   role: arn:aws:iam::992311060759:role/test-custom-role
+  logs:
+    restApi: true
 
 package:
   individually: true
