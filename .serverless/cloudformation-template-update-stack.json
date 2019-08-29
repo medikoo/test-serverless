@@ -105,7 +105,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-logs/dev/1567072846116-2019-08-29T10:00:46.116Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-logs/dev/1567074266329-2019-08-29T10:24:26.329Z/myFunction.zip"
         },
         "FunctionName": "test-api-gw-logs-dev-myFunction",
         "Handler": "index.handler",
@@ -193,7 +193,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1567072845237": {
+    "ApiGatewayDeployment1567074265104": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -263,7 +263,7 @@
     "CustomDashresourceDashapigwDashcwDashroleLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/custom-resource-apigw-cw-role"
+        "LogGroupName": "/aws/lambda/test-api-gw-logs-dev-custom-resource-apigw-cw-role"
       }
     },
     "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
@@ -273,7 +273,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-logs/dev/1567072846116-2019-08-29T10:00:46.116Z/custom-resources.zip"
+          "S3Key": "serverless/test-api-gw-logs/dev/1567074266329-2019-08-29T10:24:26.329Z/custom-resources.zip"
         },
         "FunctionName": "test-api-gw-logs-dev-custom-resource-apigw-cw-role",
         "Handler": "apiGatewayCloudWatchRole/handler.handler",
