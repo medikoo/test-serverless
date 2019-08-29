@@ -7,9 +7,9 @@
 	},
 	"devDependencies": {
 		"eslint": "^5.16.0",
-		"eslint-config-medikoo": "^2.2.0",
+		"eslint-config-medikoo": "^2.5.1",
 		"prettier-elastic": "^1.18.2",
-		"serverless": "^1.45.1",
+		"serverless": "^1.51.0",
 		"serverless-plugin-reducer": "^3.2.3"
 	},
 	"eslintConfig": {
