@@ -12,7 +12,8 @@
       "region": "us-east-1",
       "versionFunctions": false,
       "logs": {
-        "restApi": true
+        "restApi": true,
+        "frameworkLambda": true
       },
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
@@ -122,7 +123,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1567074266329-2019-08-29T10:24:26.329Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw-logs/dev/1567076959118-2019-08-29T11:09:19.118Z/myFunction.zip"
               },
               "FunctionName": "test-api-gw-logs-dev-myFunction",
               "Handler": "index.handler",
@@ -210,7 +211,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1567074265104": {
+          "ApiGatewayDeployment1567076957825": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -277,12 +278,6 @@
               }
             }
           },
-          "CustomDashresourceDashapigwDashcwDashroleLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-logs-dev-custom-resource-apigw-cw-role"
-            }
-          },
           "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -290,7 +285,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1567074266329-2019-08-29T10:24:26.329Z/custom-resources.zip"
+                "S3Key": "serverless/test-api-gw-logs/dev/1567076959118-2019-08-29T11:09:19.118Z/custom-resources.zip"
               },
               "FunctionName": "test-api-gw-logs-dev-custom-resource-apigw-cw-role",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -305,8 +300,8 @@
               "Timeout": 180
             },
             "DependsOn": [
-              "CustomDashresourceDashapigwDashcwDashroleLogGroup",
-              "IamRoleCustomResourcesLambdaExecution"
+              "IamRoleCustomResourcesLambdaExecution",
+              "CustomDashresourceDashapigwDashcwDashroleLogGroup"
             ]
           },
           "IamRoleCustomResourcesLambdaExecution": {
@@ -398,6 +393,12 @@
                   }
                 }
               ]
+            }
+          },
+          "CustomDashresourceDashapigwDashcwDashroleLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-api-gw-logs-dev-custom-resource-apigw-cw-role"
             }
           }
         },
@@ -492,7 +493,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1567074266329-2019-08-29T10:24:26.329Z",
+    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1567076959118-2019-08-29T11:09:19.118Z",
     "artifact": ""
   }
 }

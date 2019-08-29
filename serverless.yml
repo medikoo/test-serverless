@@ -8,6 +8,7 @@ provider:
   versionFunctions: false
   logs:
     restApi: true
+    frameworkLambda: true
 
 package:
   individually: true
