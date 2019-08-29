@@ -105,7 +105,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-logs/dev/1567067263991-2019-08-29T08:27:43.991Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-logs/dev/1567072846116-2019-08-29T10:00:46.116Z/myFunction.zip"
         },
         "FunctionName": "test-api-gw-logs-dev-myFunction",
         "Handler": "index.handler",
@@ -193,7 +193,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1567067262662": {
+    "ApiGatewayDeployment1567072845237": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -260,6 +260,12 @@
         }
       }
     },
+    "CustomDashresourceDashapigwDashcwDashroleLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/custom-resource-apigw-cw-role"
+      }
+    },
     "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -267,7 +273,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-logs/dev/1567067263991-2019-08-29T08:27:43.991Z/custom-resources.zip"
+          "S3Key": "serverless/test-api-gw-logs/dev/1567072846116-2019-08-29T10:00:46.116Z/custom-resources.zip"
         },
         "FunctionName": "test-api-gw-logs-dev-custom-resource-apigw-cw-role",
         "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -282,6 +288,7 @@
         "Timeout": 180
       },
       "DependsOn": [
+        "CustomDashresourceDashapigwDashcwDashroleLogGroup",
         "IamRoleCustomResourcesLambdaExecution"
       ]
     },
@@ -319,6 +326,28 @@
             "PolicyDocument": {
               "Version": "2012-10-17",
               "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*:*"
+                    }
+                  ]
+                },
                 {
                   "Effect": "Allow",
                   "Resource": {
