@@ -1,16 +1,16 @@
 {
   "service": {
-    "service": "test-1",
+    "service": "test-dashboard-plugin",
     "serviceObject": {
-      "name": "test-1"
+      "name": "test-dashboard-plugin"
     },
     "provider": {
       "stage": "dev",
-      "region": "us-east-1",
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
       "name": "aws",
       "runtime": "nodejs10.x",
-      "versionFunctions": true,
+      "region": "us-east-1",
+      "versionFunctions": false,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -33,13 +33,7 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/log-group-issue-lambda-myFunction"
-            }
-          },
-          "MyFunction2LogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/lambda/test-1-dev-myFunction2"
+              "LogGroupName": "/aws/lambda/test-dashboard-plugin-dev-myFunction"
             }
           },
           "IamRoleLambdaExecution": {
@@ -68,7 +62,7 @@
                       "-",
                       [
                         "dev",
-                        "test-1",
+                        "test-dashboard-plugin",
                         "lambda"
                       ]
                     ]
@@ -83,10 +77,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev*:*"
-                          },
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/log-group-issue-lambda-myFunction:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-plugin-dev*:*"
                           }
                         ]
                       },
@@ -97,10 +88,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-1-dev*:*:*"
-                          },
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/log-group-issue-lambda-myFunction:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-plugin-dev*:*:*"
                           }
                         ]
                       }
@@ -113,7 +101,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-1",
+                    "test-dashboard-plugin",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -161,12 +149,6 @@
                               "MyFunctionLogGroup",
                               "Arn"
                             ]
-                          },
-                          {
-                            "Fn::GetAtt": [
-                              "MyFunction2LogGroup",
-                              "Arn"
-                            ]
                           }
                         ]
                       }
@@ -183,10 +165,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-1/dev/1560422035773-2019-06-13T10:33:55.773Z/myFunction.zip"
+                "S3Key": "serverless/test-dashboard-plugin/dev/1567687585226-2019-09-05T12:46:25.226Z/myFunction.zip"
               },
-              "FunctionName": "log-group-issue-lambda-myFunction",
-              "Handler": "s-myFunction.handler",
+              "FunctionName": "test-dashboard-plugin-dev-myFunction",
+              "Handler": "s_myFunction.handler",
               "MemorySize": 1024,
               "Role": {
                 "Fn::GetAtt": [
@@ -202,69 +184,13 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunctionLambdaVersioncuLThzpwqLcwwQld1tv7oIQ41ALR3Tlxg7gB4jiMT7o": {
-            "Type": "AWS::Lambda::Version",
-            "DeletionPolicy": "Retain",
-            "Properties": {
-              "FunctionName": {
-                "Ref": "MyFunctionLambdaFunction"
-              },
-              "CodeSha256": "QsHQw8q57wc7R6VrAsbV47M3hru+K01yq92ietKNq14="
-            }
-          },
-          "MyFunction2LambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/test-1/dev/1560422035773-2019-06-13T10:33:55.773Z/myFunction2.zip"
-              },
-              "FunctionName": "test-1-dev-myFunction2",
-              "Handler": "s-myFunction2.handler",
-              "MemorySize": 1024,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              },
-              "Runtime": "nodejs10.x",
-              "Timeout": 6
-            },
-            "DependsOn": [
-              "MyFunction2LogGroup",
-              "IamRoleLambdaExecution"
-            ]
-          },
-          "MyFunction2LambdaVersionQZA4VVVebkYQixbR3cXOAFtV3yvrBROcnMAMtHIhezs": {
-            "Type": "AWS::Lambda::Version",
-            "DeletionPolicy": "Retain",
-            "Properties": {
-              "FunctionName": {
-                "Ref": "MyFunction2LambdaFunction"
-              },
-              "CodeSha256": "FwPCR9aAIxksZAp03LzMagl4l3iyhbCVgoFujkT5v3E="
-            }
-          },
           "CloudWatchLogsSubscriptionFilterMyFunctionLogGroup": {
             "Type": "AWS::Logs::SubscriptionFilter",
             "Properties": {
-              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-1#dev",
+              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard-plugin#dev",
               "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
               "LogGroupName": {
                 "Ref": "MyFunctionLogGroup"
-              }
-            }
-          },
-          "CloudWatchLogsSubscriptionFilterMyFunction2LogGroup": {
-            "Type": "AWS::Logs::SubscriptionFilter",
-            "Properties": {
-              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-1#dev",
-              "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
-              "LogGroupName": {
-                "Ref": "MyFunction2LogGroup"
               }
             }
           }
@@ -281,18 +207,6 @@
                 "EnterpriseLogAccessIamRole",
                 "Arn"
               ]
-            }
-          },
-          "MyFunctionLambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "MyFunctionLambdaVersioncuLThzpwqLcwwQld1tv7oIQ41ALR3Tlxg7gB4jiMT7o"
-            }
-          },
-          "MyFunction2LambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "MyFunction2LambdaVersionQZA4VVVebkYQixbR3cXOAFtV3yvrBROcnMAMtHIhezs"
             }
           }
         }
@@ -324,12 +238,12 @@
           }
         }
       },
+      "logs": {
+        "restApi": {
+          "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourceId\":\"$context.resourceId\",\"resourcePath\":\"$context.resourcePath\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"status\":\"$context.status\",\"authLatency\":\"$context.authorizer.integrationLatency\",\"integrationLatency\":\"$context.integrationLatency\",\"integrationStatus\":\"$context.integrationStatus\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_ACCESS_LOG\",\"version\":\"1.0.0\"}"
+        }
+      },
       "vpc": {}
-    },
-    "custom": {
-      "service": {
-        "name": "log-group-issue-lambda"
-      }
     },
     "plugins": [
       "serverless-plugin-reducer"
@@ -337,23 +251,11 @@
     "pluginsData": {},
     "functions": {
       "myFunction": {
-        "name": "log-group-issue-lambda-myFunction",
-        "handler": "s-myFunction.handler",
+        "handler": "s_myFunction.handler",
         "events": [],
+        "name": "test-dashboard-plugin-dev-myFunction",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
-        },
-        "memory": 1024,
-        "timeout": 6,
-        "runtime": "nodejs10.x",
-        "vpc": {}
-      },
-      "myFunction2": {
-        "handler": "s-myFunction2.handler",
-        "events": [],
-        "name": "test-1-dev-myFunction2",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction2.zip"
         },
         "memory": 1024,
         "timeout": 6,
@@ -370,7 +272,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-1/dev/1560422035773-2019-06-13T10:33:55.773Z",
+    "artifactDirectoryName": "serverless/test-dashboard-plugin/dev/1567687585226-2019-09-05T12:46:25.226Z",
     "artifact": ""
   }
 }

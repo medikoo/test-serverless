@@ -1,24 +1,20 @@
-service: test-1
+service: test-dashboard-plugin
 
 tenant: medikoo
 app: medikoo-test
 
-custom:
-  service:
-    name: log-group-issue-lambda
-
 provider:
   name: aws
   runtime: nodejs10.x
+  region: us-east-1
+  stage: dev
+  versionFunctions: false
 
 package:
   individually: true
 
 functions:
   myFunction:
-    name: ${self:custom.service.name}-myFunction
-    handler: index.handler
-  myFunction2:
     handler: index.handler
 
 plugins:
