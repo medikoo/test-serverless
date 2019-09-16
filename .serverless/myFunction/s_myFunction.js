@@ -4,10 +4,10 @@ tenantId: 'medikoo',
 applicationName: 'medikoo-test',
 appUid: 'GjXh77HjWzffv8X5SQ',
 tenantUid: '1sJrygBdcH5mNKPSp8',
-deploymentUid: '9611c0a6-6c93-44b2-b3c1-425973ba09ff',
+deploymentUid: 'cae614af-2abb-432e-b47e-28c4da474cfe',
 serviceName: 'test-dashboard-plugin',
 stageName: 'dev',
-pluginVersion: '1.3.10'})
+pluginVersion: '2.0.0'})
 const handlerWrapperArgs = { functionName: 'test-dashboard-plugin-dev-myFunction', timeout: 6}
 try {
   const userHandler = require('./index.js')
