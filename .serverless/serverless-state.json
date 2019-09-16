@@ -165,7 +165,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard-plugin/dev/1567687585226-2019-09-05T12:46:25.226Z/myFunction.zip"
+                "S3Key": "serverless/test-dashboard-plugin/dev/1568643324394-2019-09-16T14:15:24.394Z/myFunction.zip"
               },
               "FunctionName": "test-dashboard-plugin-dev-myFunction",
               "Handler": "s_myFunction.handler",
@@ -255,6 +255,10 @@
         "events": [],
         "name": "test-dashboard-plugin-dev-myFunction",
         "package": {
+          "include": [
+            "s_myFunction.js",
+            "serverless_sdk/**"
+          ],
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
         },
         "memory": 1024,
@@ -272,7 +276,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard-plugin/dev/1567687585226-2019-09-05T12:46:25.226Z",
+    "artifactDirectoryName": "serverless/test-dashboard-plugin/dev/1568643324394-2019-09-16T14:15:24.394Z",
     "artifact": ""
   }
 }
