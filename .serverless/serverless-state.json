@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-vpc",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-vpc"
     },
     "provider": {
       "stage": "dev",
@@ -33,7 +33,7 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-vpc-dev-myFunction"
             }
           },
           "IamRoleLambdaExecution": {
@@ -62,7 +62,7 @@
                       "-",
                       [
                         "dev",
-                        "test-regular-lambda",
+                        "test-vpc",
                         "lambda"
                       ]
                     ]
@@ -77,7 +77,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-vpc-dev*:*"
                           }
                         ]
                       },
@@ -88,7 +88,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-vpc-dev*:*:*"
                           }
                         ]
                       }
@@ -101,7 +101,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda",
+                    "test-vpc",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -119,9 +119,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1567067164588-2019-08-29T08:26:04.588Z/myFunction.zip"
+                "S3Key": "serverless/test-vpc/dev/1569325426451-2019-09-24T11:43:46.451Z/myFunction.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-myFunction",
+              "FunctionName": "test-vpc-dev-myFunction",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -180,11 +180,12 @@
       "serverless-plugin-reducer"
     ],
     "pluginsData": {},
+    "vpc": false,
     "functions": {
       "myFunction": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-regular-lambda-dev-myFunction",
+        "name": "test-vpc-dev-myFunction",
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
         },
@@ -199,7 +200,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1567067164588-2019-08-29T08:26:04.588Z",
+    "artifactDirectoryName": "serverless/test-vpc/dev/1569325426451-2019-09-24T11:43:46.451Z",
     "artifact": ""
   }
 }

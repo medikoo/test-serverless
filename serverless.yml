@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-vpc
 
 provider:
   name: aws
