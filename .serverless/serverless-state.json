@@ -30,6 +30,204 @@
               }
             }
           },
+          "VPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+              "CidrBlock": "10.0.0.0/16",
+              "EnableDnsSupport": true,
+              "EnableDnsHostnames": true,
+              "InstanceTenancy": "default",
+              "Tags": [
+                {
+                  "Key": "Name",
+                  "Value": {
+                    "Ref": "AWS::StackName"
+                  }
+                }
+              ]
+            }
+          },
+          "NatPublicIp": {
+            "Type": "AWS::EC2::EIP",
+            "DependsOn": "VPC",
+            "Properties": {
+              "Domain": "vpc"
+            }
+          },
+          "InternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {
+              "Tags": [
+                {
+                  "Key": "Name",
+                  "Value": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        {
+                          "Ref": "AWS::StackName"
+                        },
+                        "gateway"
+                      ]
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "VPCGatewayAttachment": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+              "VpcId": {
+                "Ref": "VPC"
+              },
+              "InternetGatewayId": {
+                "Ref": "InternetGateway"
+              }
+            }
+          },
+          "RouteTablePrivate": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+              "VpcId": {
+                "Ref": "VPC"
+              }
+            }
+          },
+          "RouteTablePublic": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+              "VpcId": {
+                "Ref": "VPC"
+              }
+            }
+          },
+          "SubnetPrivateuseast1a": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+              "VpcId": {
+                "Ref": "VPC"
+              },
+              "CidrBlock": "10.0.1.0/24",
+              "AvailabilityZone": "us-east-1a",
+              "MapPublicIpOnLaunch": false,
+              "Tags": [
+                {
+                  "Key": "Name",
+                  "Value": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        {
+                          "Ref": "AWS::StackName"
+                        },
+                        "subnet"
+                      ]
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "SubnetPublicuseast1a": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+              "VpcId": {
+                "Ref": "VPC"
+              },
+              "CidrBlock": "10.0.2.0/24",
+              "AvailabilityZone": "us-east-1a",
+              "MapPublicIpOnLaunch": false,
+              "Tags": [
+                {
+                  "Key": "Name",
+                  "Value": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        {
+                          "Ref": "AWS::StackName"
+                        },
+                        "subnet"
+                      ]
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "SubnetPublicuseast1aNatGateway": {
+            "Type": "AWS::EC2::NatGateway",
+            "DependsOn": "NatPublicIp",
+            "Properties": {
+              "AllocationId": {
+                "Fn::GetAtt": [
+                  "NatPublicIp",
+                  "AllocationId"
+                ]
+              },
+              "SubnetId": {
+                "Ref": "SubnetPublicuseast1a"
+              }
+            }
+          },
+          "RouteSubnetPublicuseast1aNatGateway": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+              "DestinationCidrBlock": "0.0.0.0/0",
+              "RouteTableId": {
+                "Ref": "RouteTablePrivate"
+              },
+              "NatGatewayId": {
+                "Ref": "SubnetPublicuseast1aNatGateway"
+              }
+            },
+            "DependsOn": "VPCGatewayAttachment"
+          },
+          "RouteInternetGateway": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+              "DestinationCidrBlock": "0.0.0.0/0",
+              "RouteTableId": {
+                "Ref": "RouteTablePublic"
+              },
+              "GatewayId": {
+                "Ref": "InternetGateway"
+              }
+            },
+            "DependsOn": "VPCGatewayAttachment"
+          },
+          "SubnetPublicuseast1aRouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+              "SubnetId": {
+                "Ref": "SubnetPublicuseast1a"
+              },
+              "RouteTableId": {
+                "Ref": "RouteTablePublic"
+              }
+            }
+          },
+          "SubnetPrivateuseast1aRouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+              "SubnetId": {
+                "Ref": "SubnetPrivateuseast1a"
+              },
+              "RouteTableId": {
+                "Ref": "RouteTablePrivate"
+              }
+            }
+          },
+          "LambdaSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+              "VpcId": {
+                "Ref": "VPC"
+              },
+              "GroupDescription": "SecurityGroup for Serverless Functions"
+            }
+          },
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
@@ -109,7 +307,21 @@
                     "lambdaRole"
                   ]
                 ]
-              }
+              },
+              "ManagedPolicyArns": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                    ]
+                  ]
+                }
+              ]
             }
           },
           "MyFunctionLambdaFunction": {
@@ -119,7 +331,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-vpc/dev/1569325426451-2019-09-24T11:43:46.451Z/myFunction.zip"
+                "S3Key": "serverless/test-vpc/dev/1569325471926-2019-09-24T11:44:31.926Z/myFunction.zip"
               },
               "FunctionName": "test-vpc-dev-myFunction",
               "Handler": "index.handler",
@@ -131,7 +343,22 @@
                 ]
               },
               "Runtime": "nodejs10.x",
-              "Timeout": 6
+              "Timeout": 6,
+              "VpcConfig": {
+                "SecurityGroupIds": [
+                  {
+                    "Fn::GetAtt": [
+                      "LambdaSecurityGroup",
+                      "GroupId"
+                    ]
+                  }
+                ],
+                "SubnetIds": [
+                  {
+                    "Ref": "SubnetPrivateuseast1a"
+                  }
+                ]
+              }
             },
             "DependsOn": [
               "MyFunctionLogGroup",
@@ -143,6 +370,78 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "VPC": {
+            "Value": {
+              "Ref": "VPC"
+            },
+            "Export": {
+              "Name": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    {
+                      "Ref": "AWS::StackName"
+                    },
+                    "VPC"
+                  ]
+                ]
+              }
+            }
+          },
+          "SubnetPublicuseast1a": {
+            "Value": {
+              "Ref": "SubnetPublicuseast1a"
+            },
+            "Export": {
+              "Name": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    {
+                      "Ref": "AWS::StackName"
+                    },
+                    "SubnetPublicuseast1a"
+                  ]
+                ]
+              }
+            }
+          },
+          "SubnetPrivateuseast1a": {
+            "Value": {
+              "Ref": "SubnetPrivateuseast1a"
+            },
+            "Export": {
+              "Name": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    {
+                      "Ref": "AWS::StackName"
+                    },
+                    "SubnetPrivateuseast1a"
+                  ]
+                ]
+              }
+            }
+          },
+          "LambdaSecurityGroup": {
+            "Value": {
+              "Ref": "LambdaSecurityGroup"
+            },
+            "Export": {
+              "Name": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    {
+                      "Ref": "AWS::StackName"
+                    },
+                    "LambdaSecurityGroup"
+                  ]
+                ]
+              }
             }
           }
         }
@@ -180,27 +479,55 @@
       "serverless-plugin-reducer"
     ],
     "pluginsData": {},
-    "vpc": false,
+    "vpc": true,
     "functions": {
       "myFunction": {
         "handler": "index.handler",
         "events": [],
         "name": "test-vpc-dev-myFunction",
+        "vpc": {
+          "securityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "LambdaSecurityGroup",
+                "GroupId"
+              ]
+            }
+          ],
+          "subnetIds": [
+            {
+              "Ref": "SubnetPrivateuseast1a"
+            }
+          ]
+        },
         "package": {
           "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs10.x",
-        "vpc": {}
+        "runtime": "nodejs10.x"
       }
     },
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "layers": {},
+    "outputs": {
+      "VPC": {
+        "Ref": "VPC"
+      },
+      "SubnetPublicuseast1a": {
+        "Ref": "SubnetPublicuseast1a"
+      },
+      "SubnetPrivateuseast1a": {
+        "Ref": "SubnetPrivateuseast1a"
+      },
+      "LambdaSecurityGroup": {
+        "Ref": "LambdaSecurityGroup"
+      }
+    }
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-vpc/dev/1569325426451-2019-09-24T11:43:46.451Z",
+    "artifactDirectoryName": "serverless/test-vpc/dev/1569325471926-2019-09-24T11:44:31.926Z",
     "artifact": ""
   }
 }
