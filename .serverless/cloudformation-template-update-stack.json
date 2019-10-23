@@ -16,6 +16,42 @@
         }
       }
     },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
@@ -105,7 +141,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-logs/dev/1571821342848-2019-10-23T09:02:22.848Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-logs/dev/1571843357290-2019-10-23T15:09:17.290Z/myFunction.zip"
         },
         "FunctionName": "test-api-gw-logs-dev-myFunction",
         "Handler": "index.handler",
@@ -193,7 +229,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1571821341431": {
+    "ApiGatewayDeployment1571843355854": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -358,7 +394,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-logs/dev/1571821342848-2019-10-23T09:02:22.848Z/custom-resources.zip"
+          "S3Key": "serverless/test-api-gw-logs/dev/1571843357290-2019-10-23T15:09:17.290Z/custom-resources.zip"
         },
         "FunctionName": "test-api-gw-logs-dev-custom-resource-apigw-cw-role",
         "Handler": "apiGatewayCloudWatchRole/handler.handler",
