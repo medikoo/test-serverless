@@ -16,6 +16,42 @@
         }
       }
     },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
@@ -105,7 +141,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1567067164588-2019-08-29T08:26:04.588Z/myFunction.zip"
+          "S3Key": "serverless/test-regular-lambda/dev/1572521626891-2019-10-31T11:33:46.891Z/myFunction.zip"
         },
         "FunctionName": "test-regular-lambda-dev-myFunction",
         "Handler": "index.handler",
