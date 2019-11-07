@@ -6,7 +6,7 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
+      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
       "runtime": "nodejs10.x",
       "region": "us-east-1",
@@ -24,6 +24,42 @@
                   {
                     "ServerSideEncryptionByDefault": {
                       "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:aws:s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
                     }
                   }
                 ]
@@ -119,7 +155,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1566919025264-2019-08-27T15:17:05.264Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw/dev/1573121187131-2019-11-07T10:06:27.131Z/myFunction.zip"
               },
               "FunctionName": "test-api-gw-dev-myFunction",
               "Handler": "index.handler",
@@ -207,7 +243,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1566919023820": {
+          "ApiGatewayDeployment1573121185765": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -305,6 +341,42 @@
                 ]
               }
             }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:aws:s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
           }
         },
         "Outputs": {
@@ -335,7 +407,7 @@
         ],
         "name": "test-api-gw-dev-myFunction",
         "package": {
-          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
+          "artifact": "/Users/medikoo/Projects/serverless-test/.serverless/myFunction.zip"
         },
         "memory": 1024,
         "timeout": 6,
@@ -348,7 +420,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1566919025264-2019-08-27T15:17:05.264Z",
+    "artifactDirectoryName": "serverless/test-api-gw/dev/1573121187131-2019-11-07T10:06:27.131Z",
     "artifact": ""
   }
 }
