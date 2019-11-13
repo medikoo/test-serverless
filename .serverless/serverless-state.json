@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw-logs",
+    "service": "test-api-gw-tags",
     "serviceObject": {
-      "name": "test-api-gw-logs"
+      "name": "test-api-gw-tags"
     },
     "provider": {
       "stage": "dev",
@@ -11,9 +11,8 @@
       "runtime": "nodejs10.x",
       "region": "us-east-1",
       "versionFunctions": false,
-      "logs": {
-        "restApi": true,
-        "frameworkLambda": true
+      "tags": {
+        "foo": "bar"
       },
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
@@ -51,7 +50,11 @@
                         "Fn::Join": [
                           "",
                           [
-                            "arn:aws:s3:::",
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
                             {
                               "Ref": "ServerlessDeploymentBucket"
                             },
@@ -73,7 +76,7 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-logs-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-api-gw-tags-dev-myFunction"
             }
           },
           "IamRoleLambdaExecution": {
@@ -102,7 +105,7 @@
                       "-",
                       [
                         "dev",
-                        "test-api-gw-logs",
+                        "test-api-gw-tags",
                         "lambda"
                       ]
                     ]
@@ -117,7 +120,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-tags-dev*:*"
                           }
                         ]
                       },
@@ -128,7 +131,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-tags-dev*:*:*"
                           }
                         ]
                       }
@@ -141,7 +144,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw-logs",
+                    "test-api-gw-tags",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -159,9 +162,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1571843357290-2019-10-23T15:09:17.290Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw-tags/dev/1573646958242-2019-11-13T12:09:18.242Z/myFunction.zip"
               },
-              "FunctionName": "test-api-gw-logs-dev-myFunction",
+              "FunctionName": "test-api-gw-tags-dev-myFunction",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -171,7 +174,13 @@
                 ]
               },
               "Runtime": "nodejs10.x",
-              "Timeout": 6
+              "Timeout": 6,
+              "Tags": [
+                {
+                  "Key": "foo",
+                  "Value": "bar"
+                }
+              ]
             },
             "DependsOn": [
               "MyFunctionLogGroup",
@@ -181,7 +190,7 @@
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "dev-test-api-gw-logs",
+              "Name": "dev-test-api-gw-tags",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -247,7 +256,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1571843355854": {
+          "ApiGatewayDeployment1573646956389": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -294,147 +303,6 @@
                   ]
                 ]
               }
-            }
-          },
-          "ApiGatewayLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/api-gateway/test-api-gw-logs-dev"
-            }
-          },
-          "CustomApiGatewayAccountCloudWatchRole": {
-            "Type": "Custom::ApiGatewayAccountRole",
-            "Version": 1,
-            "Properties": {
-              "ServiceToken": {
-                "Fn::GetAtt": [
-                  "CustomDashresourceDashapigwDashcwDashroleLambdaFunction",
-                  "Arn"
-                ]
-              }
-            }
-          },
-          "IamRoleCustomResourcesLambdaExecution": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": {
-                    "Fn::Join": [
-                      "-",
-                      [
-                        "dev",
-                        "test-api-gw-logs",
-                        "custom-resources-lambda"
-                      ]
-                    ]
-                  },
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:CreateLogStream"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*"
-                          }
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:PutLogEvents"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*:*"
-                          }
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Resource": {
-                          "Fn::Join": [
-                            ":",
-                            [
-                              "arn:aws:iam:",
-                              {
-                                "Ref": "AWS::AccountId"
-                              },
-                              "role/*"
-                            ]
-                          ]
-                        },
-                        "Action": [
-                          "iam:AttachRolePolicy",
-                          "iam:CreateRole",
-                          "iam:ListAttachedRolePolicies",
-                          "iam:PassRole"
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Resource": "arn:aws:apigateway:*::/account",
-                        "Action": [
-                          "apigateway:GET",
-                          "apigateway:PATCH"
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
-          "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/test-api-gw-logs/dev/1571843357290-2019-10-23T15:09:17.290Z/custom-resources.zip"
-              },
-              "FunctionName": "test-api-gw-logs-dev-custom-resource-apigw-cw-role",
-              "Handler": "apiGatewayCloudWatchRole/handler.handler",
-              "MemorySize": 1024,
-              "Runtime": "nodejs10.x",
-              "Timeout": 180,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleCustomResourcesLambdaExecution",
-                  "Arn"
-                ]
-              }
-            },
-            "DependsOn": [
-              "IamRoleCustomResourcesLambdaExecution",
-              "CustomDashresourceDashapigwDashcwDashroleLogGroup"
-            ]
-          },
-          "CustomDashresourceDashapigwDashcwDashroleLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-logs-dev-custom-resource-apigw-cw-role"
             }
           }
         },
@@ -504,7 +372,11 @@
                         "Fn::Join": [
                           "",
                           [
-                            "arn:aws:s3:::",
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
                             {
                               "Ref": "ServerlessDeploymentBucket"
                             },
@@ -550,9 +422,9 @@
             }
           }
         ],
-        "name": "test-api-gw-logs-dev-myFunction",
+        "name": "test-api-gw-tags-dev-myFunction",
         "package": {
-          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
         },
         "memory": 1024,
         "timeout": 6,
@@ -565,7 +437,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1571843357290-2019-10-23T15:09:17.290Z",
+    "artifactDirectoryName": "serverless/test-api-gw-tags/dev/1573646958242-2019-11-13T12:09:18.242Z",
     "artifact": ""
   }
 }

@@ -1,4 +1,4 @@
-service: test-api-gw-logs
+service: test-api-gw-tags
 
 provider:
   name: aws
@@ -6,9 +6,8 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
-  logs:
-    restApi: true
-    frameworkLambda: true
+  tags:
+    foo: "bar"
 
 package:
   individually: true
