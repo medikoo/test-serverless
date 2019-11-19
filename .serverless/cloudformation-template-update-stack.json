@@ -33,7 +33,11 @@
                   "Fn::Join": [
                     "",
                     [
-                      "arn:aws:s3:::",
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
                       {
                         "Ref": "ServerlessDeploymentBucket"
                       },
@@ -141,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1572521626891-2019-10-31T11:33:46.891Z/myFunction.zip"
+          "S3Key": "serverless/test-regular-lambda/dev/1573818732333-2019-11-15T11:52:12.333Z/myFunction.zip"
         },
         "FunctionName": "test-regular-lambda-dev-myFunction",
         "Handler": "index.handler",
