@@ -5,7 +5,7 @@ app: medikoo-test
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   region: us-east-1
   stage: dev
   versionFunctions: false
