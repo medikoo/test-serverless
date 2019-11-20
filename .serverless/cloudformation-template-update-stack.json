@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1573818732333-2019-11-15T11:52:12.333Z/myFunction.zip"
+          "S3Key": "serverless/test-regular-lambda/dev/1574238957378-2019-11-20T08:35:57.378Z/myFunction.zip"
         },
         "FunctionName": "test-regular-lambda-dev-myFunction",
         "Handler": "index.handler",
@@ -156,7 +156,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs10.x",
+        "Runtime": "nodejs12.x",
         "Timeout": 6
       },
       "DependsOn": [
