@@ -8,7 +8,7 @@
       "stage": "dev",
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
-      "runtime": "nodejs10.x",
+      "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
       "logs": {
@@ -51,7 +51,11 @@
                         "Fn::Join": [
                           "",
                           [
-                            "arn:aws:s3:::",
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
                             {
                               "Ref": "ServerlessDeploymentBucket"
                             },
@@ -159,7 +163,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1571843357290-2019-10-23T15:09:17.290Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw-logs/dev/1574239561977-2019-11-20T08:46:01.977Z/myFunction.zip"
               },
               "FunctionName": "test-api-gw-logs-dev-myFunction",
               "Handler": "index.handler",
@@ -170,7 +174,7 @@
                   "Arn"
                 ]
               },
-              "Runtime": "nodejs10.x",
+              "Runtime": "nodejs12.x",
               "Timeout": 6
             },
             "DependsOn": [
@@ -247,7 +251,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1571843355854": {
+          "ApiGatewayDeployment1574239560641": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -412,7 +416,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1571843357290-2019-10-23T15:09:17.290Z/custom-resources.zip"
+                "S3Key": "serverless/test-api-gw-logs/dev/1574239561977-2019-11-20T08:46:01.977Z/custom-resources.zip"
               },
               "FunctionName": "test-api-gw-logs-dev-custom-resource-apigw-cw-role",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -504,7 +508,11 @@
                         "Fn::Join": [
                           "",
                           [
-                            "arn:aws:s3:::",
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
                             {
                               "Ref": "ServerlessDeploymentBucket"
                             },
@@ -552,11 +560,11 @@
         ],
         "name": "test-api-gw-logs-dev-myFunction",
         "package": {
-          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs10.x",
+        "runtime": "nodejs12.x",
         "vpc": {}
       }
     },
@@ -565,7 +573,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1571843357290-2019-10-23T15:09:17.290Z",
+    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1574239561977-2019-11-20T08:46:01.977Z",
     "artifact": ""
   }
 }
