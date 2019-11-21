@@ -6,6 +6,8 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
+  iamManagedPolicies:
+    - arn:aws:iam::aws:policy/AdministratorAccess
 
 package:
   individually: true

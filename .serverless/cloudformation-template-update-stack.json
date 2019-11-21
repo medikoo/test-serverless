@@ -135,7 +135,10 @@
               "lambdaRole"
             ]
           ]
-        }
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AdministratorAccess"
+        ]
       }
     },
     "FunctionLambdaFunction": {
@@ -145,7 +148,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-custom-iam-managed-policies/dev/1574335758756-2019-11-21T11:29:18.756Z/function.zip"
+          "S3Key": "serverless/test-custom-iam-managed-policies/dev/1574335866314-2019-11-21T11:31:06.314Z/function.zip"
         },
         "FunctionName": "test-custom-iam-managed-policies-dev-function",
         "Handler": "index.handler",
