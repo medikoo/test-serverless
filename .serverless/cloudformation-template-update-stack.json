@@ -56,10 +56,10 @@
         }
       }
     },
-    "MyFunctionLogGroup": {
+    "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-custom-iam-managed-policies-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -88,7 +88,7 @@
                 "-",
                 [
                   "dev",
-                  "test-regular-lambda",
+                  "test-custom-iam-managed-policies",
                   "lambda"
                 ]
               ]
@@ -103,7 +103,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-custom-iam-managed-policies-dev*:*"
                     }
                   ]
                 },
@@ -114,7 +114,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-custom-iam-managed-policies-dev*:*:*"
                     }
                   ]
                 }
@@ -127,7 +127,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-regular-lambda",
+              "test-custom-iam-managed-policies",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -138,16 +138,16 @@
         }
       }
     },
-    "MyFunctionLambdaFunction": {
+    "FunctionLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1574238957378-2019-11-20T08:35:57.378Z/myFunction.zip"
+          "S3Key": "serverless/test-custom-iam-managed-policies/dev/1574335758756-2019-11-21T11:29:18.756Z/function.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-myFunction",
+        "FunctionName": "test-custom-iam-managed-policies-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -160,7 +160,7 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "MyFunctionLogGroup",
+        "FunctionLogGroup",
         "IamRoleLambdaExecution"
       ]
     }
