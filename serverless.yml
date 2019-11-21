@@ -1,4 +1,4 @@
-service: test-timeout-leak
+service: test-thenable-callback-mix
 
 provider:
   name: aws

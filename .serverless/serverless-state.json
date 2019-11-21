@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-timeout-leak",
+    "service": "test-thenable-callback-mix",
     "serviceObject": {
-      "name": "test-timeout-leak"
+      "name": "test-thenable-callback-mix"
     },
     "provider": {
       "stage": "dev",
@@ -73,7 +73,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-timeout-leak-dev-function"
+              "LogGroupName": "/aws/lambda/test-thenable-callback-mix-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -102,7 +102,7 @@
                       "-",
                       [
                         "dev",
-                        "test-timeout-leak",
+                        "test-thenable-callback-mix",
                         "lambda"
                       ]
                     ]
@@ -117,7 +117,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-timeout-leak-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-thenable-callback-mix-dev*:*"
                           }
                         ]
                       },
@@ -128,7 +128,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-timeout-leak-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-thenable-callback-mix-dev*:*:*"
                           }
                         ]
                       }
@@ -141,7 +141,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-timeout-leak",
+                    "test-thenable-callback-mix",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -159,9 +159,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-timeout-leak/dev/1574332242893-2019-11-21T10:30:42.893Z/function.zip"
+                "S3Key": "serverless/test-thenable-callback-mix/dev/1574333226059-2019-11-21T10:47:06.059Z/function.zip"
               },
-              "FunctionName": "test-timeout-leak-dev-function",
+              "FunctionName": "test-thenable-callback-mix-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -264,7 +264,7 @@
       "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-timeout-leak-dev-function",
+        "name": "test-thenable-callback-mix-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -279,7 +279,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-timeout-leak/dev/1574332242893-2019-11-21T10:30:42.893Z",
+    "artifactDirectoryName": "serverless/test-thenable-callback-mix/dev/1574333226059-2019-11-21T10:47:06.059Z",
     "artifact": ""
   }
 }
