@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-timeout-leak/dev/1574331349338-2019-11-21T10:15:49.338Z/function.zip"
+          "S3Key": "serverless/test-timeout-leak/dev/1574332242893-2019-11-21T10:30:42.893Z/function.zip"
         },
         "FunctionName": "test-timeout-leak-dev-function",
         "Handler": "index.handler",
