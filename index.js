@@ -14,6 +14,6 @@ module.exports.handler = (event, context, callback) => {
 				currentInvocationId
 			} after ${ Date.now() - currentTime }ms at ${ Date.now() }`
 		);
-	}, 15000);
+	}, 15000).unref();
 	setTimeout(() => callback(null, {}), 3000);
 };
