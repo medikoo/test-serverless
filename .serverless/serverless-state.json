@@ -1,14 +1,14 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-timeout-leak",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-timeout-leak"
     },
     "provider": {
       "stage": "dev",
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
-      "runtime": "nodejs12.x",
+      "runtime": "nodejs8.10",
       "region": "us-east-1",
       "versionFunctions": false,
       "remoteFunctionData": null,
@@ -70,10 +70,10 @@
               }
             }
           },
-          "MyFunctionLogGroup": {
+          "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-timeout-leak-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -102,7 +102,7 @@
                       "-",
                       [
                         "dev",
-                        "test-regular-lambda",
+                        "test-timeout-leak",
                         "lambda"
                       ]
                     ]
@@ -117,7 +117,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-timeout-leak-dev*:*"
                           }
                         ]
                       },
@@ -128,7 +128,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-timeout-leak-dev*:*:*"
                           }
                         ]
                       }
@@ -141,7 +141,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda",
+                    "test-timeout-leak",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -152,16 +152,16 @@
               }
             }
           },
-          "MyFunctionLambdaFunction": {
+          "FunctionLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1574238957378-2019-11-20T08:35:57.378Z/myFunction.zip"
+                "S3Key": "serverless/test-timeout-leak/dev/1574330353400-2019-11-21T09:59:13.400Z/function.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-myFunction",
+              "FunctionName": "test-timeout-leak-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -170,11 +170,11 @@
                   "Arn"
                 ]
               },
-              "Runtime": "nodejs12.x",
+              "Runtime": "nodejs8.10",
               "Timeout": 6
             },
             "DependsOn": [
-              "MyFunctionLogGroup",
+              "FunctionLogGroup",
               "IamRoleLambdaExecution"
             ]
           }
@@ -261,16 +261,16 @@
     ],
     "pluginsData": {},
     "functions": {
-      "myFunction": {
+      "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-regular-lambda-dev-myFunction",
+        "name": "test-timeout-leak-dev-function",
         "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs12.x",
+        "runtime": "nodejs8.10",
         "vpc": {}
       }
     },
@@ -279,7 +279,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1574238957378-2019-11-20T08:35:57.378Z",
+    "artifactDirectoryName": "serverless/test-timeout-leak/dev/1574330353400-2019-11-21T09:59:13.400Z",
     "artifact": ""
   }
 }
