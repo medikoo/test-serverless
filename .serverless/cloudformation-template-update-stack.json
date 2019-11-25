@@ -59,7 +59,7 @@
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-deployment-bucket-ecnryption-dev-myFunction"
       }
     },
     "IamRoleLambdaExecution": {
@@ -88,7 +88,7 @@
                 "-",
                 [
                   "dev",
-                  "test-regular-lambda",
+                  "test-deployment-bucket-ecnryption",
                   "lambda"
                 ]
               ]
@@ -103,7 +103,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-deployment-bucket-ecnryption-dev*:*"
                     }
                   ]
                 },
@@ -114,7 +114,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-deployment-bucket-ecnryption-dev*:*:*"
                     }
                   ]
                 }
@@ -127,7 +127,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-regular-lambda",
+              "test-deployment-bucket-ecnryption",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -145,9 +145,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1574238957378-2019-11-20T08:35:57.378Z/myFunction.zip"
+          "S3Key": "serverless/test-deployment-bucket-ecnryption/dev/1574683992958-2019-11-25T12:13:12.958Z/myFunction.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-myFunction",
+        "FunctionName": "test-deployment-bucket-ecnryption-dev-myFunction",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
