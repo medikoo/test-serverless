@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-custom-package-path/dev/1574690302966-2019-11-25T13:58:22.966Z/myFunction.zip"
+          "S3Key": "serverless/test-custom-package-path/dev/1574690380379-2019-11-25T13:59:40.379Z/myFunction.zip"
         },
         "FunctionName": "test-custom-package-path-dev-myFunction",
         "Handler": "index.handler",
