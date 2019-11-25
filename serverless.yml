@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-custom-package-path
 
 provider:
   name: aws
@@ -9,6 +9,7 @@ provider:
 
 package:
   individually: true
+  path: custom-package-path
 
 functions:
   myFunction:
