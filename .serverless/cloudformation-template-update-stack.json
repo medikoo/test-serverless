@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1574238957378-2019-11-20T08:35:57.378Z/myFunction.zip"
+          "S3Key": "serverless/test-regular-lambda/dev/1574689884855-2019-11-25T13:51:24.855Z/myFunction.zip"
         },
         "FunctionName": "test-regular-lambda-dev-myFunction",
         "Handler": "index.handler",
