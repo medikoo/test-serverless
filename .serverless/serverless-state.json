@@ -1,16 +1,15 @@
 {
   "service": {
-    "service": "test-websockets-lambda",
+    "service": "test-websocket-lambda",
     "serviceObject": {
-      "name": "test-websockets-lambda"
+      "name": "test-websocket-lambda"
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
+      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
-      "runtime": "nodejs10.x",
-      "websocketsApiName": "custom-websockets-api-name",
-      "websocketsApiRouteSelectionExpression": "$request.body.action",
+      "runtime": "nodejs12.x",
+      "region": "us-east-1",
       "versionFunctions": false,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
@@ -31,16 +30,50 @@
               }
             }
           },
-          "MyFunctionLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-websockets-lambda-dev-myFunction"
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
             }
           },
-          "MyFunction2LogGroup": {
+          "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-websockets-lambda-dev-myFunction2"
+              "LogGroupName": "/aws/lambda/test-websocket-lambda-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -69,7 +102,7 @@
                       "-",
                       [
                         "dev",
-                        "test-websockets-lambda",
+                        "test-websocket-lambda",
                         "lambda"
                       ]
                     ]
@@ -84,7 +117,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-websockets-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-websocket-lambda-dev*:*"
                           }
                         ]
                       },
@@ -95,7 +128,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-websockets-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-websocket-lambda-dev*:*:*"
                           }
                         ]
                       },
@@ -117,7 +150,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-websockets-lambda",
+                    "test-websocket-lambda",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -128,16 +161,16 @@
               }
             }
           },
-          "MyFunctionLambdaFunction": {
+          "FunctionLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-websockets-lambda/dev/1561473914588-2019-06-25T14:45:14.588Z/myFunction.zip"
+                "S3Key": "serverless/test-websocket-lambda/dev/1574783021683-2019-11-26T15:43:41.683Z/function.zip"
               },
-              "FunctionName": "test-websockets-lambda-dev-myFunction",
+              "FunctionName": "test-websocket-lambda-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -146,50 +179,24 @@
                   "Arn"
                 ]
               },
-              "Runtime": "nodejs10.x",
+              "Runtime": "nodejs12.x",
               "Timeout": 6
             },
             "DependsOn": [
-              "MyFunctionLogGroup",
-              "IamRoleLambdaExecution"
-            ]
-          },
-          "MyFunction2LambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/test-websockets-lambda/dev/1561473914588-2019-06-25T14:45:14.588Z/myFunction2.zip"
-              },
-              "FunctionName": "test-websockets-lambda-dev-myFunction2",
-              "Handler": "index.handler",
-              "MemorySize": 1024,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              },
-              "Runtime": "nodejs10.x",
-              "Timeout": 6
-            },
-            "DependsOn": [
-              "MyFunction2LogGroup",
+              "FunctionLogGroup",
               "IamRoleLambdaExecution"
             ]
           },
           "WebsocketsApi": {
             "Type": "AWS::ApiGatewayV2::Api",
             "Properties": {
-              "Name": "custom-websockets-api-name",
+              "Name": "dev-test-websocket-lambda-websockets",
               "RouteSelectionExpression": "$request.body.action",
               "Description": "Serverless Websockets",
               "ProtocolType": "WEBSOCKET"
             }
           },
-          "MyFunction2WebsocketsIntegration": {
+          "FunctionWebsocketsIntegration": {
             "Type": "AWS::ApiGatewayV2::Integration",
             "Properties": {
               "ApiId": {
@@ -211,7 +218,7 @@
                     ":lambda:path/2015-03-31/functions/",
                     {
                       "Fn::GetAtt": [
-                        "MyFunction2LambdaFunction",
+                        "FunctionLambdaFunction",
                         "Arn"
                       ]
                     },
@@ -221,16 +228,16 @@
               }
             }
           },
-          "MyFunction2LambdaPermissionWebsockets": {
+          "FunctionLambdaPermissionWebsockets": {
             "Type": "AWS::Lambda::Permission",
             "DependsOn": [
               "WebsocketsApi",
-              "MyFunction2LambdaFunction"
+              "FunctionLambdaFunction"
             ],
             "Properties": {
               "FunctionName": {
                 "Fn::GetAtt": [
-                  "MyFunction2LambdaFunction",
+                  "FunctionLambdaFunction",
                   "Arn"
                 ]
               },
@@ -252,14 +259,14 @@
                   [
                     "integrations",
                     {
-                      "Ref": "MyFunction2WebsocketsIntegration"
+                      "Ref": "FunctionWebsocketsIntegration"
                     }
                   ]
                 ]
               }
             }
           },
-          "WebsocketsDeployment1561473912943": {
+          "WebsocketsDeployment1574783020164": {
             "Type": "AWS::ApiGatewayV2::Deployment",
             "DependsOn": [
               "SdefaultWebsocketsRoute"
@@ -278,7 +285,7 @@
                 "Ref": "WebsocketsApi"
               },
               "DeploymentId": {
-                "Ref": "WebsocketsDeployment1561473912943"
+                "Ref": "WebsocketsDeployment1574783020164"
               },
               "StageName": "dev",
               "Description": "Serverless Websockets"
@@ -333,6 +340,46 @@
                 ]
               }
             }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
           }
         },
         "Outputs": {
@@ -350,32 +397,20 @@
     ],
     "pluginsData": {},
     "functions": {
-      "myFunction": {
-        "handler": "index.handler",
-        "events": [],
-        "name": "test-websockets-lambda-dev-myFunction",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
-        },
-        "memory": 1024,
-        "timeout": 6,
-        "runtime": "nodejs10.x",
-        "vpc": {}
-      },
-      "myFunction2": {
+      "function": {
         "handler": "index.handler",
         "events": [
           {
             "websocket": "$default"
           }
         ],
-        "name": "test-websockets-lambda-dev-myFunction2",
+        "name": "test-websocket-lambda-dev-function",
         "package": {
-          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction2.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs10.x",
+        "runtime": "nodejs12.x",
         "vpc": {}
       }
     },
@@ -384,7 +419,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-websockets-lambda/dev/1561473914588-2019-06-25T14:45:14.588Z",
+    "artifactDirectoryName": "serverless/test-websocket-lambda/dev/1574783021683-2019-11-26T15:43:41.683Z",
     "artifact": ""
   }
 }
