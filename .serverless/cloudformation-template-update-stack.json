@@ -56,10 +56,10 @@
         }
       }
     },
-    "MyFunctionLogGroup": {
+    "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -138,16 +138,16 @@
         }
       }
     },
-    "MyFunctionLambdaFunction": {
+    "FunctionLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1574689884855-2019-11-25T13:51:24.855Z/myFunction.zip"
+          "S3Key": "serverless/test-regular-lambda/dev/1574776135289-2019-11-26T13:48:55.289Z/function.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-myFunction",
+        "FunctionName": "test-regular-lambda-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -160,7 +160,7 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "MyFunctionLogGroup",
+        "FunctionLogGroup",
         "IamRoleLambdaExecution"
       ]
     }
