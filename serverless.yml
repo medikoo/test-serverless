@@ -1,4 +1,7 @@
-service: test-split-stacks
+service: test-split-stacks-dashboard
+
+tenant: medikoo
+app: medikoo-test
 
 provider:
   name: aws

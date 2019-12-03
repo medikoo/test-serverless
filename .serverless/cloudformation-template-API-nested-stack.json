@@ -6,7 +6,7 @@
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-test-split-stacks",
+        "Name": "dev-test-split-stacks-dashboard",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"

@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-split-stacks",
+    "service": "test-split-stacks-dashboard",
     "serviceObject": {
-      "name": "test-split-stacks"
+      "name": "test-split-stacks-dashboard"
     },
     "provider": {
       "stage": "dev",
@@ -34,7 +34,7 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-split-stacks-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-split-stacks-dashboard-dev-myFunction"
             },
             "DependsOn": []
           },
@@ -64,7 +64,7 @@
                       "-",
                       [
                         "dev",
-                        "test-split-stacks",
+                        "test-split-stacks-dashboard",
                         "lambda"
                       ]
                     ]
@@ -79,7 +79,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-split-stacks-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-split-stacks-dashboard-dev*:*"
                           }
                         ]
                       },
@@ -90,7 +90,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-split-stacks-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-split-stacks-dashboard-dev*:*:*"
                           }
                         ]
                       }
@@ -103,7 +103,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-split-stacks",
+                    "test-split-stacks-dashboard",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -115,6 +115,53 @@
             },
             "DependsOn": []
           },
+          "EnterpriseLogAccessIamRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "AWS": "arn:aws:iam::802587217904:root"
+                    },
+                    "Action": "sts:AssumeRole",
+                    "Condition": {
+                      "StringEquals": {
+                        "sts:ExternalId": "ServerlessEnterprise-1sJrygBdcH5mNKPSp8"
+                      }
+                    }
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": "LogFilterAccess",
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:FilterLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::GetAtt": [
+                              "MyFunctionLogGroup",
+                              "Arn"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "DependsOn": []
+          },
           "MyFunctionLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -122,10 +169,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-split-stacks/dev/1575387108969-2019-12-03T15:31:48.969Z/myFunction.zip"
+                "S3Key": "serverless/test-split-stacks-dashboard/dev/1575387397572-2019-12-03T15:36:37.572Z/myFunction.zip"
               },
-              "FunctionName": "test-split-stacks-dev-myFunction",
-              "Handler": "index.handler",
+              "FunctionName": "test-split-stacks-dashboard-dev-myFunction",
+              "Handler": "s_myFunction.handler",
               "MemorySize": 1024,
               "Role": {
                 "Fn::GetAtt": [
@@ -193,7 +240,7 @@
               "APINestedStack"
             ]
           },
-          "ApiGatewayDeployment1575387107376": {
+          "ApiGatewayDeployment1575387393885": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -207,6 +254,121 @@
             "DependsOn": [
               "ApiGatewayMethodFooGet",
               "APINestedStack"
+            ]
+          },
+          "ApiGatewayLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/api-gateway/test-split-stacks-dashboard-dev"
+            },
+            "DependsOn": []
+          },
+          "CustomApiGatewayAccountCloudWatchRole": {
+            "Type": "Custom::ApiGatewayAccountRole",
+            "Version": 1,
+            "Properties": {
+              "ServiceToken": {
+                "Fn::GetAtt": [
+                  "CustomDashresourceDashapigwDashcwDashroleLambdaFunction",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": []
+          },
+          "IamRoleCustomResourcesLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "dev",
+                        "test-split-stacks-dashboard",
+                        "custom-resources-lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Resource": {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn:aws:iam:",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              "role/*"
+                            ]
+                          ]
+                        },
+                        "Action": [
+                          "iam:AttachRolePolicy",
+                          "iam:CreateRole",
+                          "iam:ListAttachedRolePolicies",
+                          "iam:PassRole"
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Resource": "arn:aws:apigateway:*::/account",
+                        "Action": [
+                          "apigateway:GET",
+                          "apigateway:PATCH"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "DependsOn": []
+          },
+          "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-split-stacks-dashboard/dev/1575387397572-2019-12-03T15:36:37.572Z/custom-resources.zip"
+              },
+              "FunctionName": "test-split-stacks-dashboard-dev-custom-resource-apigw-cw-role",
+              "Handler": "apiGatewayCloudWatchRole/handler.handler",
+              "MemorySize": 1024,
+              "Runtime": "nodejs12.x",
+              "Timeout": 180,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleCustomResourcesLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "IamRoleCustomResourcesLambdaExecution"
             ]
           },
           "PoliciesNestedStack": {
@@ -225,7 +387,7 @@
                     {
                       "Ref": "ServerlessDeploymentBucket"
                     },
-                    "serverless/test-split-stacks/dev/1575387108969-2019-12-03T15:31:48.969Z",
+                    "serverless/test-split-stacks-dashboard/dev/1575387397572-2019-12-03T15:36:37.572Z",
                     "cloudformation-template-Policies-nested-stack.json"
                   ]
                 ]
@@ -247,7 +409,7 @@
                     {
                       "Ref": "ServerlessDeploymentBucket"
                     },
-                    "serverless/test-split-stacks/dev/1575387108969-2019-12-03T15:31:48.969Z",
+                    "serverless/test-split-stacks-dashboard/dev/1575387397572-2019-12-03T15:36:37.572Z",
                     "cloudformation-template-API-nested-stack.json"
                   ]
                 ]
@@ -279,7 +441,7 @@
                     {
                       "Ref": "ServerlessDeploymentBucket"
                     },
-                    "serverless/test-split-stacks/dev/1575387108969-2019-12-03T15:31:48.969Z",
+                    "serverless/test-split-stacks-dashboard/dev/1575387397572-2019-12-03T15:36:37.572Z",
                     "cloudformation-template-Permissions-nested-stack.json"
                   ]
                 ]
@@ -289,12 +451,40 @@
               "APINestedStack",
               "MyFunctionLambdaFunction"
             ]
+          },
+          "CloudWatchLogsSubscriptionFilterMyFunctionLogGroup": {
+            "Type": "AWS::Logs::SubscriptionFilter",
+            "Properties": {
+              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-split-stacks-dashboard#dev",
+              "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
+              "LogGroupName": {
+                "Ref": "MyFunctionLogGroup"
+              }
+            }
+          },
+          "CloudWatchLogsSubscriptionFilterApiGatewayLogGroup": {
+            "Type": "AWS::Logs::SubscriptionFilter",
+            "Properties": {
+              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-split-stacks-dashboard#dev",
+              "FilterPattern": "\"SLS_ACCESS_LOG\"",
+              "LogGroupName": {
+                "Ref": "ApiGatewayLogGroup"
+              }
+            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "EnterpriseLogAccessIamRole": {
+            "Value": {
+              "Fn::GetAtt": [
+                "EnterpriseLogAccessIamRole",
+                "Arn"
+              ]
             }
           },
           "ServiceEndpoint": {
@@ -392,6 +582,11 @@
           }
         }
       },
+      "logs": {
+        "restApi": {
+          "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourceId\":\"$context.resourceId\",\"resourcePath\":\"$context.resourcePath\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"status\":\"$context.status\",\"authLatency\":\"$context.authorizer.integrationLatency\",\"integrationLatency\":\"$context.integrationLatency\",\"integrationStatus\":\"$context.integrationStatus\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_ACCESS_LOG\",\"version\":\"1.0.0\"}"
+        }
+      },
       "vpc": {}
     },
     "plugins": [
@@ -401,7 +596,7 @@
     "pluginsData": {},
     "functions": {
       "myFunction": {
-        "handler": "index.handler",
+        "handler": "s_myFunction.handler",
         "events": [
           {
             "http": {
@@ -411,8 +606,12 @@
             }
           }
         ],
-        "name": "test-split-stacks-dev-myFunction",
+        "name": "test-split-stacks-dashboard-dev-myFunction",
         "package": {
+          "include": [
+            "s_myFunction.js",
+            "serverless_sdk/**"
+          ],
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
         },
         "memory": 1024,
@@ -422,11 +621,15 @@
       }
     },
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "app": "medikoo-test",
+    "tenant": "medikoo",
+    "layers": {},
+    "appUid": "GjXh77HjWzffv8X5SQ",
+    "tenantUid": "1sJrygBdcH5mNKPSp8"
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-split-stacks/dev/1575387108969-2019-12-03T15:31:48.969Z",
+    "artifactDirectoryName": "serverless/test-split-stacks-dashboard/dev/1575387397572-2019-12-03T15:36:37.572Z",
     "artifact": ""
   }
 }
