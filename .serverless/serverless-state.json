@@ -8,7 +8,7 @@
       "stage": "dev",
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
-      "runtime": "nodejs10.x",
+      "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
       "remoteFunctionData": null,
@@ -47,7 +47,11 @@
                         "Fn::Join": [
                           "",
                           [
-                            "arn:aws:s3:::",
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
                             {
                               "Ref": "ServerlessDeploymentBucket"
                             },
@@ -155,7 +159,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1573121187131-2019-11-07T10:06:27.131Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw/dev/1575386836335-2019-12-03T15:27:16.335Z/myFunction.zip"
               },
               "FunctionName": "test-api-gw-dev-myFunction",
               "Handler": "index.handler",
@@ -166,7 +170,7 @@
                   "Arn"
                 ]
               },
-              "Runtime": "nodejs10.x",
+              "Runtime": "nodejs12.x",
               "Timeout": 6
             },
             "DependsOn": [
@@ -243,7 +247,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1573121185765": {
+          "ApiGatewayDeployment1575386834399": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -359,7 +363,11 @@
                         "Fn::Join": [
                           "",
                           [
-                            "arn:aws:s3:::",
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
                             {
                               "Ref": "ServerlessDeploymentBucket"
                             },
@@ -407,11 +415,11 @@
         ],
         "name": "test-api-gw-dev-myFunction",
         "package": {
-          "artifact": "/Users/medikoo/Projects/serverless-test/.serverless/myFunction.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs10.x",
+        "runtime": "nodejs12.x",
         "vpc": {}
       }
     },
@@ -420,7 +428,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1573121187131-2019-11-07T10:06:27.131Z",
+    "artifactDirectoryName": "serverless/test-api-gw/dev/1575386836335-2019-12-03T15:27:16.335Z",
     "artifact": ""
   }
 }
