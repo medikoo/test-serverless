@@ -1,12 +1,13 @@
 {
-	"name": "serverless-test-1",
+	"name": "test-serverless",
 	"author": "Mariusz Nowak <medyk@medikoo.com> (https://www.medikoo.com/)",
 	"devDependencies": {
 		"eslint": "^5.16.0",
 		"eslint-config-medikoo": "^2.2.0",
 		"prettier-elastic": "^1.18.2",
 		"serverless": "^1.45.1",
-		"serverless-plugin-reducer": "^3.2.3"
+		"serverless-plugin-reducer": "^3.2.3",
+		"serverless-plugin-split-stacks": "^1.9.2"
 	},
 	"eslintConfig": {
 		"extends": "medikoo",

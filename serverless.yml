@@ -1,4 +1,4 @@
-service: test-api-gw
+service: test-split-stacks
 
 provider:
   name: aws
@@ -20,3 +20,4 @@ functions:
 
 plugins:
   - serverless-plugin-reducer
+  - serverless-plugin-split-stacks

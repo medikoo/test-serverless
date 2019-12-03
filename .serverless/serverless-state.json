@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw",
+    "service": "test-split-stacks",
     "serviceObject": {
-      "name": "test-api-gw"
+      "name": "test-split-stacks"
     },
     "provider": {
       "stage": "dev",
@@ -28,53 +28,15 @@
                   }
                 ]
               }
-            }
-          },
-          "ServerlessDeploymentBucketPolicy": {
-            "Type": "AWS::S3::BucketPolicy",
-            "Properties": {
-              "Bucket": {
-                "Ref": "ServerlessDeploymentBucket"
-              },
-              "PolicyDocument": {
-                "Statement": [
-                  {
-                    "Action": "s3:*",
-                    "Effect": "Deny",
-                    "Principal": "*",
-                    "Resource": [
-                      {
-                        "Fn::Join": [
-                          "",
-                          [
-                            "arn:",
-                            {
-                              "Ref": "AWS::Partition"
-                            },
-                            ":s3:::",
-                            {
-                              "Ref": "ServerlessDeploymentBucket"
-                            },
-                            "/*"
-                          ]
-                        ]
-                      }
-                    ],
-                    "Condition": {
-                      "Bool": {
-                        "aws:SecureTransport": false
-                      }
-                    }
-                  }
-                ]
-              }
-            }
+            },
+            "DependsOn": []
           },
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-dev-myFunction"
-            }
+              "LogGroupName": "/aws/lambda/test-split-stacks-dev-myFunction"
+            },
+            "DependsOn": []
           },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
@@ -102,7 +64,7 @@
                       "-",
                       [
                         "dev",
-                        "test-api-gw",
+                        "test-split-stacks",
                         "lambda"
                       ]
                     ]
@@ -117,7 +79,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-split-stacks-dev*:*"
                           }
                         ]
                       },
@@ -128,7 +90,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-split-stacks-dev*:*:*"
                           }
                         ]
                       }
@@ -141,7 +103,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw",
+                    "test-split-stacks",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -150,7 +112,8 @@
                   ]
                 ]
               }
-            }
+            },
+            "DependsOn": []
           },
           "MyFunctionLambdaFunction": {
             "Type": "AWS::Lambda::Function",
@@ -159,9 +122,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1575386836335-2019-12-03T15:27:16.335Z/myFunction.zip"
+                "S3Key": "serverless/test-split-stacks/dev/1575387108969-2019-12-03T15:31:48.969Z/myFunction.zip"
               },
-              "FunctionName": "test-api-gw-dev-myFunction",
+              "FunctionName": "test-split-stacks-dev-myFunction",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -178,42 +141,22 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "ApiGatewayRestApi": {
-            "Type": "AWS::ApiGateway::RestApi",
-            "Properties": {
-              "Name": "dev-test-api-gw",
-              "EndpointConfiguration": {
-                "Types": [
-                  "EDGE"
-                ]
-              }
-            }
-          },
-          "ApiGatewayResourceFoo": {
-            "Type": "AWS::ApiGateway::Resource",
-            "Properties": {
-              "ParentId": {
-                "Fn::GetAtt": [
-                  "ApiGatewayRestApi",
-                  "RootResourceId"
-                ]
-              },
-              "PathPart": "foo",
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
           "ApiGatewayMethodFooGet": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
               "HttpMethod": "GET",
               "RequestParameters": {},
               "ResourceId": {
-                "Ref": "ApiGatewayResourceFoo"
+                "Fn::GetAtt": [
+                  "APINestedStack",
+                  "Outputs.ApiGatewayResourceFoo"
+                ]
               },
               "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
+                "Fn::GetAtt": [
+                  "APINestedStack",
+                  "Outputs.ApiGatewayRestApi"
+                ]
               },
               "ApiKeyRequired": false,
               "AuthorizationType": "NONE",
@@ -245,56 +188,107 @@
                 }
               },
               "MethodResponses": []
-            }
+            },
+            "DependsOn": [
+              "APINestedStack"
+            ]
           },
-          "ApiGatewayDeployment1575386834399": {
+          "ApiGatewayDeployment1575387107376": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
+                "Fn::GetAtt": [
+                  "APINestedStack",
+                  "Outputs.ApiGatewayRestApi"
+                ]
               },
               "StageName": "dev"
             },
             "DependsOn": [
-              "ApiGatewayMethodFooGet"
+              "ApiGatewayMethodFooGet",
+              "APINestedStack"
             ]
           },
-          "MyFunctionLambdaPermissionApiGateway": {
-            "Type": "AWS::Lambda::Permission",
+          "PoliciesNestedStack": {
+            "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-              "FunctionName": {
-                "Fn::GetAtt": [
-                  "MyFunctionLambdaFunction",
-                  "Arn"
-                ]
+              "Parameters": {
+                "ServerlessDeploymentBucketParameter": {
+                  "Ref": "ServerlessDeploymentBucket"
+                }
               },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "apigateway.amazonaws.com",
-              "SourceArn": {
+              "TemplateURL": {
                 "Fn::Join": [
-                  "",
+                  "/",
                   [
-                    "arn:",
+                    "https://s3.amazonaws.com",
                     {
-                      "Ref": "AWS::Partition"
+                      "Ref": "ServerlessDeploymentBucket"
                     },
-                    ":execute-api:",
+                    "serverless/test-split-stacks/dev/1575387108969-2019-12-03T15:31:48.969Z",
+                    "cloudformation-template-Policies-nested-stack.json"
+                  ]
+                ]
+              }
+            },
+            "DependsOn": [
+              "ServerlessDeploymentBucket"
+            ]
+          },
+          "APINestedStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+              "Parameters": {},
+              "TemplateURL": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "https://s3.amazonaws.com",
                     {
-                      "Ref": "AWS::Region"
+                      "Ref": "ServerlessDeploymentBucket"
                     },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId"
-                    },
-                    ":",
-                    {
-                      "Ref": "ApiGatewayRestApi"
-                    },
-                    "/*/*"
+                    "serverless/test-split-stacks/dev/1575387108969-2019-12-03T15:31:48.969Z",
+                    "cloudformation-template-API-nested-stack.json"
                   ]
                 ]
               }
             }
+          },
+          "PermissionsNestedStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+              "Parameters": {
+                "ApiGatewayRestApiParameter": {
+                  "Fn::GetAtt": [
+                    "APINestedStack",
+                    "Outputs.ApiGatewayRestApi"
+                  ]
+                },
+                "MyFunctionLambdaFunctionArnParameter": {
+                  "Fn::GetAtt": [
+                    "MyFunctionLambdaFunction",
+                    "Arn"
+                  ]
+                }
+              },
+              "TemplateURL": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "https://s3.amazonaws.com",
+                    {
+                      "Ref": "ServerlessDeploymentBucket"
+                    },
+                    "serverless/test-split-stacks/dev/1575387108969-2019-12-03T15:31:48.969Z",
+                    "cloudformation-template-Permissions-nested-stack.json"
+                  ]
+                ]
+              }
+            },
+            "DependsOn": [
+              "APINestedStack",
+              "MyFunctionLambdaFunction"
+            ]
           }
         },
         "Outputs": {
@@ -311,7 +305,10 @@
                 [
                   "https://",
                   {
-                    "Ref": "ApiGatewayRestApi"
+                    "Fn::GetAtt": [
+                      "APINestedStack",
+                      "Outputs.ApiGatewayRestApi"
+                    ]
                   },
                   ".execute-api.",
                   {
@@ -398,7 +395,8 @@
       "vpc": {}
     },
     "plugins": [
-      "serverless-plugin-reducer"
+      "serverless-plugin-reducer",
+      "serverless-plugin-split-stacks"
     ],
     "pluginsData": {},
     "functions": {
@@ -413,7 +411,7 @@
             }
           }
         ],
-        "name": "test-api-gw-dev-myFunction",
+        "name": "test-split-stacks-dev-myFunction",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
         },
@@ -428,7 +426,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1575386836335-2019-12-03T15:27:16.335Z",
+    "artifactDirectoryName": "serverless/test-split-stacks/dev/1575387108969-2019-12-03T15:31:48.969Z",
     "artifact": ""
   }
 }
