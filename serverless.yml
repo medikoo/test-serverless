@@ -3,7 +3,7 @@ service: test-lambda-kinesis
 provider:
   name: aws
   runtime: nodejs12.x
-  region: us-east-1
+  region: eu-west-1
   stage: dev
   versionFunctions: false
 
@@ -16,7 +16,7 @@ functions:
     events:
       - stream:
           type: kinesis
-          arn: arn:aws:kinesis:us-east-1:992311060759:stream/test
+          arn: arn:aws:kinesis:eu-west-1:992311060759:stream/test
 
 plugins:
   - serverless-plugin-reducer

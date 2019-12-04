@@ -9,7 +9,7 @@
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
-      "region": "us-east-1",
+      "region": "eu-west-1",
       "versionFunctions": false,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
@@ -141,7 +141,7 @@
                           "kinesis:ListStreams"
                         ],
                         "Resource": [
-                          "arn:aws:kinesis:us-east-1:992311060759:stream/test"
+                          "arn:aws:kinesis:eu-west-1:992311060759:stream/test"
                         ]
                       }
                     ]
@@ -171,7 +171,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-kinesis/dev/1575492218261-2019-12-04T20:43:38.261Z/function.zip"
+                "S3Key": "serverless/test-lambda-kinesis/dev/1575492937303-2019-12-04T20:55:37.303Z/function.zip"
               },
               "FunctionName": "test-lambda-kinesis-dev-function",
               "Handler": "index.handler",
@@ -196,7 +196,7 @@
             "Properties": {
               "BatchSize": 10,
               "ParallelizationFactor": 1,
-              "EventSourceArn": "arn:aws:kinesis:us-east-1:992311060759:stream/test",
+              "EventSourceArn": "arn:aws:kinesis:eu-west-1:992311060759:stream/test",
               "FunctionName": {
                 "Fn::GetAtt": [
                   "FunctionLambdaFunction",
@@ -296,7 +296,7 @@
           {
             "stream": {
               "type": "kinesis",
-              "arn": "arn:aws:kinesis:us-east-1:992311060759:stream/test"
+              "arn": "arn:aws:kinesis:eu-west-1:992311060759:stream/test"
             }
           }
         ],
@@ -315,7 +315,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda-kinesis/dev/1575492218261-2019-12-04T20:43:38.261Z",
+    "artifactDirectoryName": "serverless/test-lambda-kinesis/dev/1575492937303-2019-12-04T20:55:37.303Z",
     "artifact": ""
   }
 }
