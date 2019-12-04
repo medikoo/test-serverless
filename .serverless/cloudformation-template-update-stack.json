@@ -59,7 +59,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+        "LogGroupName": "/aws/lambda/test-provisioned-concurrency-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -88,7 +88,7 @@
                 "-",
                 [
                   "dev",
-                  "test-regular-lambda",
+                  "test-provisioned-concurrency",
                   "lambda"
                 ]
               ]
@@ -103,7 +103,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-provisioned-concurrency-dev*:*"
                     }
                   ]
                 },
@@ -114,7 +114,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-provisioned-concurrency-dev*:*:*"
                     }
                   ]
                 }
@@ -127,7 +127,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-regular-lambda",
+              "test-provisioned-concurrency",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -145,9 +145,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1574776135289-2019-11-26T13:48:55.289Z/function.zip"
+          "S3Key": "serverless/test-provisioned-concurrency/dev/1575491965225-2019-12-04T20:39:25.225Z/function.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-function",
+        "FunctionName": "test-provisioned-concurrency-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -163,12 +163,31 @@
         "FunctionLogGroup",
         "IamRoleLambdaExecution"
       ]
+    },
+    "FunctionLambdaVersionGXEMXiXBdfPj8LsZ3S9zpIZGC73RQ0HEZf7vIAWI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FunctionLambdaFunction"
+        },
+        "CodeSha256": "tiRfVi9qU4itGJ8Dc1rD2ww/+mYymnU5yFUl79dgLGw=",
+        "ProvisionedConcurrencyConfig": {
+          "ProvisionedConcurrentExecutions": 3
+        }
+      }
     }
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "FunctionLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "FunctionLambdaVersionGXEMXiXBdfPj8LsZ3S9zpIZGC73RQ0HEZf7vIAWI"
       }
     }
   }
