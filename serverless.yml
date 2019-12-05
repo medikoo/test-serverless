@@ -1,11 +1,10 @@
-service: test-api-gw
+service: test-api-gw-provisioned-concurrency
 
 provider:
   name: aws
   runtime: nodejs12.x
   region: us-east-1
   stage: dev
-  versionFunctions: false
 
 package:
   individually: true
@@ -13,6 +12,7 @@ package:
 functions:
   myFunction:
     handler: index.handler
+    provisionedConcurrency: 3
     events:
       - http:
           path: foo

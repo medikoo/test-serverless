@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw",
+    "service": "test-api-gw-provisioned-concurrency",
     "serviceObject": {
-      "name": "test-api-gw"
+      "name": "test-api-gw-provisioned-concurrency"
     },
     "provider": {
       "stage": "dev",
@@ -10,7 +10,7 @@
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
-      "versionFunctions": false,
+      "versionFunctions": true,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -73,7 +73,7 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-api-gw-provisioned-concurrency-dev-myFunction"
             }
           },
           "IamRoleLambdaExecution": {
@@ -102,7 +102,7 @@
                       "-",
                       [
                         "dev",
-                        "test-api-gw",
+                        "test-api-gw-provisioned-concurrency",
                         "lambda"
                       ]
                     ]
@@ -117,7 +117,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-provisioned-concurrency-dev*:*"
                           }
                         ]
                       },
@@ -128,7 +128,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-provisioned-concurrency-dev*:*:*"
                           }
                         ]
                       }
@@ -141,7 +141,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw",
+                    "test-api-gw-provisioned-concurrency",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -159,9 +159,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1575386836335-2019-12-03T15:27:16.335Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1575543382959-2019-12-05T10:56:22.959Z/myFunction.zip"
               },
-              "FunctionName": "test-api-gw-dev-myFunction",
+              "FunctionName": "test-api-gw-provisioned-concurrency-dev-myFunction",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -178,10 +178,23 @@
               "IamRoleLambdaExecution"
             ]
           },
+          "MyFunctionLambdaVersionBRhtOnI5smFeSVTICJzVUCLCh9HAZQYKUZqvb08lOZc": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "MyFunctionLambdaFunction"
+              },
+              "CodeSha256": "PzztNAHIjnJI49bsfxY8+1n4Ldjt0d3D0Jco7TWLZ5o=",
+              "ProvisionedConcurrencyConfig": {
+                "ProvisionedConcurrentExecutions": 3
+              }
+            }
+          },
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "dev-test-api-gw",
+              "Name": "dev-test-api-gw-provisioned-concurrency",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -247,7 +260,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1575386834399": {
+          "ApiGatewayDeployment1575543382012": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -301,6 +314,12 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "MyFunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "MyFunctionLambdaVersionBRhtOnI5smFeSVTICJzVUCLCh9HAZQYKUZqvb08lOZc"
             }
           },
           "ServiceEndpoint": {
@@ -404,6 +423,7 @@
     "functions": {
       "myFunction": {
         "handler": "index.handler",
+        "provisionedConcurrency": 3,
         "events": [
           {
             "http": {
@@ -413,7 +433,7 @@
             }
           }
         ],
-        "name": "test-api-gw-dev-myFunction",
+        "name": "test-api-gw-provisioned-concurrency-dev-myFunction",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
         },
@@ -428,7 +448,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1575386836335-2019-12-03T15:27:16.335Z",
+    "artifactDirectoryName": "serverless/test-api-gw-provisioned-concurrency/dev/1575543382959-2019-12-05T10:56:22.959Z",
     "artifact": ""
   }
 }
