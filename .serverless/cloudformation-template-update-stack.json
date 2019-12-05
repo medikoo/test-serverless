@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-provisioned-concurrency/dev/1575491965225-2019-12-04T20:39:25.225Z/function.zip"
+          "S3Key": "serverless/test-provisioned-concurrency/dev/1575493417221-2019-12-04T21:03:37.221Z/function.zip"
         },
         "FunctionName": "test-provisioned-concurrency-dev-function",
         "Handler": "index.handler",
@@ -164,14 +164,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "FunctionLambdaVersionGXEMXiXBdfPj8LsZ3S9zpIZGC73RQ0HEZf7vIAWI": {
+    "FunctionLambdaVersionh9UYWJDUj2JTcnMQ6KBhxs1Ox1OVcpIZRcv3tVw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "FunctionLambdaFunction"
         },
-        "CodeSha256": "tiRfVi9qU4itGJ8Dc1rD2ww/+mYymnU5yFUl79dgLGw=",
+        "CodeSha256": "fwPp46JM3MaxNB3fL+a3wODGxK+sbJ3w/Aov2Rw3WIE=",
         "ProvisionedConcurrencyConfig": {
           "ProvisionedConcurrentExecutions": 3
         }
@@ -187,7 +187,7 @@
     "FunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "FunctionLambdaVersionGXEMXiXBdfPj8LsZ3S9zpIZGC73RQ0HEZf7vIAWI"
+        "Ref": "FunctionLambdaVersionh9UYWJDUj2JTcnMQ6KBhxs1Ox1OVcpIZRcv3tVw"
       }
     }
   }
