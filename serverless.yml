@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-cognito-user-pool-existing
 
 provider:
   name: aws
@@ -13,6 +13,11 @@ package:
 functions:
   function:
     handler: index.handler
+    events:
+      - cognitoUserPool:
+          pool: foo
+          trigger: PreSignUp
+          existing: true
 
 plugins:
   - serverless-plugin-reducer
