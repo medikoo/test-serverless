@@ -15,6 +15,7 @@ functions:
     name: elo-authorize
     handler: index.handler
   function:
+    name: elo-function
     handler: index.handler
     events:
       - http:

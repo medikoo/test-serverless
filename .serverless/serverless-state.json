@@ -79,7 +79,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-lambda-authorizer-dev-function"
+              "LogGroupName": "/aws/lambda/elo-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -126,7 +126,7 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/elo-authorize:*"
                           },
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-lambda-authorizer-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/elo-function:*"
                           }
                         ]
                       },
@@ -140,7 +140,7 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/elo-authorize:*:*"
                           },
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-lambda-authorizer-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/elo-function:*:*"
                           }
                         ]
                       }
@@ -171,7 +171,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923246481-2019-12-09T20:27:26.481Z/authorize.zip"
+                "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923348801-2019-12-09T20:29:08.801Z/authorize.zip"
               },
               "FunctionName": "elo-authorize",
               "Handler": "index.handler",
@@ -197,9 +197,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923246481-2019-12-09T20:27:26.481Z/function.zip"
+                "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923348801-2019-12-09T20:29:08.801Z/function.zip"
               },
-              "FunctionName": "test-api-lambda-authorizer-dev-function",
+              "FunctionName": "elo-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -323,7 +323,7 @@
               "Type": "TOKEN"
             }
           },
-          "ApiGatewayDeployment1575923245520": {
+          "ApiGatewayDeployment1575923347851": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -504,6 +504,7 @@
         "vpc": {}
       },
       "function": {
+        "name": "elo-function",
         "handler": "index.handler",
         "events": [
           {
@@ -524,7 +525,6 @@
             }
           }
         ],
-        "name": "test-api-lambda-authorizer-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -539,7 +539,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1575923246481-2019-12-09T20:27:26.481Z",
+    "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1575923348801-2019-12-09T20:29:08.801Z",
     "artifact": ""
   }
 }
