@@ -59,13 +59,13 @@
     "AuthorizeLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/elo-authorize"
+        "LogGroupName": "/aws/lambda/authorize-foo"
       }
     },
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/elo-function"
+        "LogGroupName": "/aws/lambda/function-foo"
       }
     },
     "IamRoleLambdaExecution": {
@@ -94,7 +94,7 @@
                 "-",
                 [
                   "dev",
-                  "test-api-lambda-authorizer",
+                  "test-api-lambda-authorizer-foo",
                   "lambda"
                 ]
               ]
@@ -109,10 +109,10 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/elo-authorize:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/authorize-foo:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/elo-function:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/function-foo:*"
                     }
                   ]
                 },
@@ -123,10 +123,10 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/elo-authorize:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/authorize-foo:*:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/elo-function:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/function-foo:*:*"
                     }
                   ]
                 }
@@ -139,7 +139,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-api-lambda-authorizer",
+              "test-api-lambda-authorizer-foo",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -157,9 +157,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923466386-2019-12-09T20:31:06.386Z/authorize.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer-foo/dev/1575924046330-2019-12-09T20:40:46.330Z/authorize.zip"
         },
-        "FunctionName": "elo-authorize",
+        "FunctionName": "authorize-foo",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -183,9 +183,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923466386-2019-12-09T20:31:06.386Z/function.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer-foo/dev/1575924046330-2019-12-09T20:40:46.330Z/function.zip"
         },
-        "FunctionName": "elo-function",
+        "FunctionName": "function-foo",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -205,7 +205,7 @@
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-test-api-lambda-authorizer",
+        "Name": "dev-test-api-lambda-authorizer-foo",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
@@ -213,7 +213,7 @@
         }
       }
     },
-    "ApiGatewayResourceEloDashfoo": {
+    "ApiGatewayResourceFoo": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
@@ -222,19 +222,31 @@
             "RootResourceId"
           ]
         },
-        "PathPart": "elo-foo",
+        "PathPart": "foo",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
       }
     },
-    "ApiGatewayMethodEloDashfooGet": {
+    "ApiGatewayResourceFooTest": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceFoo"
+        },
+        "PathPart": "test",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodFooTestGet": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourceEloDashfoo"
+          "Ref": "ApiGatewayResourceFooTest"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -309,7 +321,7 @@
         "Type": "TOKEN"
       }
     },
-    "ApiGatewayDeployment1575923465420": {
+    "ApiGatewayDeployment1575924045353": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -318,7 +330,7 @@
         "StageName": "dev"
       },
       "DependsOn": [
-        "ApiGatewayMethodEloDashfooGet"
+        "ApiGatewayMethodFooTestGet"
       ]
     },
     "FunctionLambdaPermissionApiGateway": {

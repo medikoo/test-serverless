@@ -1,4 +1,4 @@
-service: test-api-lambda-authorizer
+service: test-api-lambda-authorizer-${opt:prefix}
 
 provider:
   name: aws
@@ -12,14 +12,14 @@ package:
 
 functions:
   authorize:
-    name: elo-authorize
+    name: authorize-${opt:prefix}
     handler: index.handler
   function:
-    name: elo-function
+    name: function-${opt:prefix}
     handler: index.handler
     events:
       - http:
-          path: elo-foo
+          path: /${opt:prefix}/test
           method: GET
           authorizer: authorize
 
