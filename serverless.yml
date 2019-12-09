@@ -11,6 +11,9 @@ package:
   individually: true
 
 functions:
+  authorize:
+    name: ${opt:prefix}-authorize # function name & patched authorizer name
+    handler: index.handler
   myFunction:
     handler: index.handler
     events:
