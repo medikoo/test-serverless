@@ -12,7 +12,7 @@ package:
 
 functions:
   authorize:
-    name: bar-authorize
+    name: elo-authorize
     handler: index.handler
   function:
     handler: index.handler

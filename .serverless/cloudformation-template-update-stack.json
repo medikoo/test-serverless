@@ -59,7 +59,7 @@
     "AuthorizeLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/bar-authorize"
+        "LogGroupName": "/aws/lambda/elo-authorize"
       }
     },
     "FunctionLogGroup": {
@@ -109,7 +109,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/bar-authorize:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/elo-authorize:*"
                     },
                     {
                       "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-lambda-authorizer-dev*:*"
@@ -123,7 +123,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/bar-authorize:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/elo-authorize:*:*"
                     },
                     {
                       "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-lambda-authorizer-dev*:*:*"
@@ -157,9 +157,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923128377-2019-12-09T20:25:28.377Z/authorize.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923246481-2019-12-09T20:27:26.481Z/authorize.zip"
         },
-        "FunctionName": "bar-authorize",
+        "FunctionName": "elo-authorize",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -183,7 +183,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923128377-2019-12-09T20:25:28.377Z/function.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923246481-2019-12-09T20:27:26.481Z/function.zip"
         },
         "FunctionName": "test-api-lambda-authorizer-dev-function",
         "Handler": "index.handler",
@@ -309,7 +309,7 @@
         "Type": "TOKEN"
       }
     },
-    "ApiGatewayDeployment1575923127268": {
+    "ApiGatewayDeployment1575923245520": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
