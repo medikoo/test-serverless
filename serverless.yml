@@ -12,7 +12,7 @@ package:
 
 functions:
   authorize:
-    name: foo-authorize # function name & patched authorizer name
+    name: bar-authorize
     handler: index.handler
   function:
     handler: index.handler
