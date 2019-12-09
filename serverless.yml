@@ -20,6 +20,7 @@ functions:
       - http:
           path: foo
           method: GET
+          authorizer: authorize
 
 plugins:
   - serverless-plugin-reducer
