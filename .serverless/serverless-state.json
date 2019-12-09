@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw",
+    "service": "test-api-lambda-authorizer",
     "serviceObject": {
-      "name": "test-api-gw"
+      "name": "test-api-lambda-authorizer"
     },
     "provider": {
       "stage": "dev",
@@ -76,10 +76,10 @@
               "LogGroupName": "/aws/lambda/foo-authorize"
             }
           },
-          "MyFunctionLogGroup": {
+          "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-api-lambda-authorizer-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -108,7 +108,7 @@
                       "-",
                       [
                         "dev",
-                        "test-api-gw",
+                        "test-api-lambda-authorizer",
                         "lambda"
                       ]
                     ]
@@ -126,7 +126,7 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/foo-authorize:*"
                           },
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-lambda-authorizer-dev*:*"
                           }
                         ]
                       },
@@ -140,7 +140,7 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/foo-authorize:*:*"
                           },
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-lambda-authorizer-dev*:*:*"
                           }
                         ]
                       }
@@ -153,7 +153,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw",
+                    "test-api-lambda-authorizer",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -171,7 +171,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1575921401899-2019-12-09T19:56:41.899Z/authorize.zip"
+                "S3Key": "serverless/test-api-lambda-authorizer/dev/1575922861037-2019-12-09T20:21:01.037Z/authorize.zip"
               },
               "FunctionName": "foo-authorize",
               "Handler": "index.handler",
@@ -190,16 +190,16 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunctionLambdaFunction": {
+          "FunctionLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1575921401899-2019-12-09T19:56:41.899Z/myFunction.zip"
+                "S3Key": "serverless/test-api-lambda-authorizer/dev/1575922861037-2019-12-09T20:21:01.037Z/function.zip"
               },
-              "FunctionName": "test-api-gw-dev-myFunction",
+              "FunctionName": "test-api-lambda-authorizer-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -212,14 +212,14 @@
               "Timeout": 6
             },
             "DependsOn": [
-              "MyFunctionLogGroup",
+              "FunctionLogGroup",
               "IamRoleLambdaExecution"
             ]
           },
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "dev-test-api-gw",
+              "Name": "dev-test-api-lambda-authorizer",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -273,7 +273,7 @@
                       ":lambda:path/2015-03-31/functions/",
                       {
                         "Fn::GetAtt": [
-                          "MyFunctionLambdaFunction",
+                          "FunctionLambdaFunction",
                           "Arn"
                         ]
                       },
@@ -285,7 +285,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1575921400898": {
+          "ApiGatewayDeployment1575922860095": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -297,12 +297,12 @@
               "ApiGatewayMethodFooGet"
             ]
           },
-          "MyFunctionLambdaPermissionApiGateway": {
+          "FunctionLambdaPermissionApiGateway": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
                 "Fn::GetAtt": [
-                  "MyFunctionLambdaFunction",
+                  "FunctionLambdaFunction",
                   "Arn"
                 ]
               },
@@ -452,7 +452,7 @@
         "runtime": "nodejs12.x",
         "vpc": {}
       },
-      "myFunction": {
+      "function": {
         "handler": "index.handler",
         "events": [
           {
@@ -463,9 +463,9 @@
             }
           }
         ],
-        "name": "test-api-gw-dev-myFunction",
+        "name": "test-api-lambda-authorizer-dev-function",
         "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
         "memory": 1024,
         "timeout": 6,
@@ -478,7 +478,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1575921401899-2019-12-09T19:56:41.899Z",
+    "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1575922861037-2019-12-09T20:21:01.037Z",
     "artifact": ""
   }
 }

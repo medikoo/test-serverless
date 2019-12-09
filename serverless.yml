@@ -1,4 +1,4 @@
-service: test-api-gw
+service: test-api-lambda-authorizer
 
 provider:
   name: aws
@@ -12,9 +12,9 @@ package:
 
 functions:
   authorize:
-    name: ${opt:prefix}-authorize # function name & patched authorizer name
+    name: foo-authorize # function name & patched authorizer name
     handler: index.handler
-  myFunction:
+  function:
     handler: index.handler
     events:
       - http:
