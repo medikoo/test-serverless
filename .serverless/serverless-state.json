@@ -10,7 +10,7 @@
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
-      "versionFunctions": true,
+      "versionFunctions": false,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -159,7 +159,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-provisioned-concurrency/dev/1575493417221-2019-12-04T21:03:37.221Z/function.zip"
+                "S3Key": "serverless/test-provisioned-concurrency/dev/1575899794257-2019-12-09T13:56:34.257Z/function.zip"
               },
               "FunctionName": "test-provisioned-concurrency-dev-function",
               "Handler": "index.handler",
@@ -178,16 +178,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "FunctionLambdaVersionh9UYWJDUj2JTcnMQ6KBhxs1Ox1OVcpIZRcv3tVw": {
+          "FunctionLambdaVersion": {
             "Type": "AWS::Lambda::Version",
-            "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "FunctionLambdaFunction"
               },
-              "CodeSha256": "fwPp46JM3MaxNB3fL+a3wODGxK+sbJ3w/Aov2Rw3WIE=",
               "ProvisionedConcurrencyConfig": {
-                "ProvisionedConcurrentExecutions": 3
+                "ProvisionedConcurrentExecutions": 5
               }
             }
           }
@@ -196,12 +194,6 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
-            }
-          },
-          "FunctionLambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "FunctionLambdaVersionh9UYWJDUj2JTcnMQ6KBhxs1Ox1OVcpIZRcv3tVw"
             }
           }
         }
@@ -282,7 +274,7 @@
     "functions": {
       "function": {
         "handler": "index.handler",
-        "provisionedConcurrency": 3,
+        "provisionedConcurrency": 5,
         "events": [],
         "name": "test-provisioned-concurrency-dev-function",
         "package": {
@@ -299,7 +291,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-provisioned-concurrency/dev/1575493417221-2019-12-04T21:03:37.221Z",
+    "artifactDirectoryName": "serverless/test-provisioned-concurrency/dev/1575899794257-2019-12-09T13:56:34.257Z",
     "artifact": ""
   }
 }

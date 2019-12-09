@@ -5,6 +5,7 @@ provider:
   runtime: nodejs12.x
   region: us-east-1
   stage: dev
+  versionFunctions: false
 
 package:
   individually: true
@@ -12,7 +13,7 @@ package:
 functions:
   function:
     handler: index.handler
-    provisionedConcurrency: 3
+    provisionedConcurrency: 5
 
 plugins:
   - serverless-plugin-reducer
