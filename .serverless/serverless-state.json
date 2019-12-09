@@ -10,7 +10,7 @@
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
-      "versionFunctions": true,
+      "versionFunctions": false,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -159,7 +159,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1575543382959-2019-12-05T10:56:22.959Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1575901744718-2019-12-09T14:29:04.718Z/myFunction.zip"
               },
               "FunctionName": "test-api-gw-provisioned-concurrency-dev-myFunction",
               "Handler": "index.handler",
@@ -178,14 +178,12 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MyFunctionLambdaVersionBRhtOnI5smFeSVTICJzVUCLCh9HAZQYKUZqvb08lOZc": {
+          "MyFunctionLambdaVersion": {
             "Type": "AWS::Lambda::Version",
-            "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MyFunctionLambdaFunction"
               },
-              "CodeSha256": "PzztNAHIjnJI49bsfxY8+1n4Ldjt0d3D0Jco7TWLZ5o=",
               "ProvisionedConcurrencyConfig": {
                 "ProvisionedConcurrentExecutions": 3
               }
@@ -260,7 +258,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1575543382012": {
+          "ApiGatewayDeployment1575901743771": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -314,12 +312,6 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
-            }
-          },
-          "MyFunctionLambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "MyFunctionLambdaVersionBRhtOnI5smFeSVTICJzVUCLCh9HAZQYKUZqvb08lOZc"
             }
           },
           "ServiceEndpoint": {
@@ -448,7 +440,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-provisioned-concurrency/dev/1575543382959-2019-12-05T10:56:22.959Z",
+    "artifactDirectoryName": "serverless/test-api-gw-provisioned-concurrency/dev/1575901744718-2019-12-09T14:29:04.718Z",
     "artifact": ""
   }
 }
