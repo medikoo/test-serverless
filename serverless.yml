@@ -19,7 +19,7 @@ functions:
     handler: index.handler
     events:
       - http:
-          path: foo
+          path: elo-foo
           method: GET
           authorizer: authorize
 

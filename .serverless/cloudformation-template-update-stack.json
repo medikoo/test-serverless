@@ -157,7 +157,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923348801-2019-12-09T20:29:08.801Z/authorize.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923466386-2019-12-09T20:31:06.386Z/authorize.zip"
         },
         "FunctionName": "elo-authorize",
         "Handler": "index.handler",
@@ -183,7 +183,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923348801-2019-12-09T20:29:08.801Z/function.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1575923466386-2019-12-09T20:31:06.386Z/function.zip"
         },
         "FunctionName": "elo-function",
         "Handler": "index.handler",
@@ -213,7 +213,7 @@
         }
       }
     },
-    "ApiGatewayResourceFoo": {
+    "ApiGatewayResourceEloDashfoo": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
@@ -222,19 +222,19 @@
             "RootResourceId"
           ]
         },
-        "PathPart": "foo",
+        "PathPart": "elo-foo",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
       }
     },
-    "ApiGatewayMethodFooGet": {
+    "ApiGatewayMethodEloDashfooGet": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourceFoo"
+          "Ref": "ApiGatewayResourceEloDashfoo"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -309,7 +309,7 @@
         "Type": "TOKEN"
       }
     },
-    "ApiGatewayDeployment1575923347851": {
+    "ApiGatewayDeployment1575923465420": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -318,7 +318,7 @@
         "StageName": "dev"
       },
       "DependsOn": [
-        "ApiGatewayMethodFooGet"
+        "ApiGatewayMethodEloDashfooGet"
       ]
     },
     "FunctionLambdaPermissionApiGateway": {
