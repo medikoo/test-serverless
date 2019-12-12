@@ -159,7 +159,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-provisioned-concurrency-alias/dev/1576140559817-2019-12-12T08:49:19.817Z/function.zip"
+                "S3Key": "serverless/test-provisioned-concurrency-alias/dev/1576141185259-2019-12-12T08:59:45.259Z/function.zip"
               },
               "FunctionName": "test-provisioned-concurrency-alias-dev-function",
               "Handler": "index.handler",
@@ -177,6 +177,19 @@
               "FunctionLogGroup",
               "IamRoleLambdaExecution"
             ]
+          },
+          "FunctionLambdaAlias": {
+            "Type": "AWS::Lambda::Alias",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "FunctionVersion": "$LATEST",
+              "Name": "latest",
+              "ProvisionedConcurrencyConfig": {
+                "ProvisionedConcurrentExecutions": 5
+              }
+            }
           }
         },
         "Outputs": {
@@ -274,12 +287,30 @@
         "vpc": {}
       }
     },
+    "resources": {
+      "Resources": {
+        "FunctionLambdaAlias": {
+          "Type": "AWS::Lambda::Alias",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "FunctionLambdaFunction"
+            },
+            "FunctionVersion": "$LATEST",
+            "Name": "latest",
+            "ProvisionedConcurrencyConfig": {
+              "ProvisionedConcurrentExecutions": 5
+            }
+          }
+        }
+      },
+      "Outputs": {}
+    },
     "serviceFilename": "serverless.yml",
     "layers": {}
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-provisioned-concurrency-alias/dev/1576140559817-2019-12-12T08:49:19.817Z",
+    "artifactDirectoryName": "serverless/test-provisioned-concurrency-alias/dev/1576141185259-2019-12-12T08:59:45.259Z",
     "artifact": ""
   }
 }

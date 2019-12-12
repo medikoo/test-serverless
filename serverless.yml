@@ -16,3 +16,15 @@ functions:
 
 plugins:
   - serverless-plugin-reducer
+
+resources:
+  Resources:
+    FunctionLambdaAlias:
+      Type: AWS::Lambda::Alias
+      Properties:
+        FunctionName:
+          Ref: FunctionLambdaFunction
+        FunctionVersion: $LATEST
+        Name: latest
+        ProvisionedConcurrencyConfig:
+          ProvisionedConcurrentExecutions: 5
