@@ -1,11 +1,9 @@
-service: test-regular-lambda
-
+service: test-knative
 provider:
-  name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
+  name: knative
+  # TODO: Complete configuration
+  docker:
+    username: foo
 
 package:
   individually: true
@@ -16,3 +14,4 @@ functions:
 
 plugins:
   - serverless-plugin-reducer
+  - serverless-knative
