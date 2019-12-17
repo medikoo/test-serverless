@@ -13,7 +13,7 @@ package:
 functions:
   function:
     handler: index.handler
-    provisionedConcurrency: 5
+    provisionedConcurrency: 3
 
 plugins:
   - serverless-plugin-reducer

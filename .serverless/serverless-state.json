@@ -159,7 +159,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-provisioned-concurrency/dev/1576590333431-2019-12-17T13:45:33.431Z/function.zip"
+                "S3Key": "serverless/test-provisioned-concurrency/dev/1576590753131-2019-12-17T13:52:33.131Z/function.zip"
               },
               "FunctionName": "test-provisioned-concurrency-dev-function",
               "Handler": "index.handler",
@@ -200,7 +200,7 @@
               },
               "Name": "provisioned",
               "ProvisionedConcurrencyConfig": {
-                "ProvisionedConcurrentExecutions": 5
+                "ProvisionedConcurrentExecutions": 3
               }
             },
             "DependsOn": "FunctionLambdaFunction"
@@ -290,7 +290,7 @@
     "functions": {
       "function": {
         "handler": "index.handler",
-        "provisionedConcurrency": 5,
+        "provisionedConcurrency": 3,
         "events": [],
         "name": "test-provisioned-concurrency-dev-function",
         "package": {
@@ -307,7 +307,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-provisioned-concurrency/dev/1576590333431-2019-12-17T13:45:33.431Z",
+    "artifactDirectoryName": "serverless/test-provisioned-concurrency/dev/1576590753131-2019-12-17T13:52:33.131Z",
     "artifact": ""
   }
 }
