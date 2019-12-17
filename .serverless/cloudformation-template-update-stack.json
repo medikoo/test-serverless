@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-provisioned-concurrency/dev/1575899794257-2019-12-09T13:56:34.257Z/function.zip"
+          "S3Key": "serverless/test-provisioned-concurrency/dev/1576590333431-2019-12-17T13:45:33.431Z/function.zip"
         },
         "FunctionName": "test-provisioned-concurrency-dev-function",
         "Handler": "index.handler",
@@ -164,16 +164,32 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "FunctionLambdaVersion": {
+    "FunctionProvConcLambdaVersion": {
       "Type": "AWS::Lambda::Version",
       "Properties": {
         "FunctionName": {
           "Ref": "FunctionLambdaFunction"
+        }
+      }
+    },
+    "FunctionProvConcLambdaAlias": {
+      "Type": "AWS::Lambda::Alias",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FunctionLambdaFunction"
         },
+        "FunctionVersion": {
+          "Fn::GetAtt": [
+            "FunctionProvConcLambdaVersion",
+            "Version"
+          ]
+        },
+        "Name": "provisioned",
         "ProvisionedConcurrencyConfig": {
           "ProvisionedConcurrentExecutions": 5
         }
-      }
+      },
+      "DependsOn": "FunctionLambdaFunction"
     }
   },
   "Outputs": {
