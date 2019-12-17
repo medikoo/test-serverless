@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-dynamodb-lambda/dev/1576581761484-2019-12-17T11:22:41.484Z/function.zip"
+          "S3Key": "serverless/test-dynamodb-lambda/dev/1576581904691-2019-12-17T11:25:04.691Z/function.zip"
         },
         "FunctionName": "test-dynamodb-lambda-dev-function",
         "Handler": "index.handler",
@@ -157,7 +157,14 @@
           ]
         },
         "Runtime": "nodejs12.x",
-        "Timeout": 6
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "events_store_table": {
+              "Ref": "TestTable"
+            }
+          }
+        }
       },
       "DependsOn": [
         "FunctionLogGroup",

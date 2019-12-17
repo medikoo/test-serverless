@@ -2,6 +2,7 @@
 	"name": "test-serverless",
 	"author": "Mariusz Nowak <medyk@medikoo.com> (https://www.medikoo.com/)",
 	"devDependencies": {
+		"aws-sdk": "^2.591.0",
 		"eslint": "^6.7.2",
 		"eslint-config-medikoo": "^2.4.0",
 		"prettier-elastic": "^1.18.2",
