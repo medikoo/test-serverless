@@ -2,16 +2,16 @@ service: test-dynamodb-lambda
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
+  region: us-east-1
+  stage: dev
   versionFunctions: false
 
 package:
   individually: true
 
 functions:
-  myFunction:
-    handler: index.handler
-  myFunction2:
+  function:
     handler: index.handler
 
 plugins:
@@ -29,7 +29,7 @@ resources:
     usersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: usersTable
+        TableName: testTable
         AttributeDefinitions:
           - AttributeName: email
             AttributeType: S
