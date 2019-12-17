@@ -6,6 +6,8 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
+  logs:
+    restApi: true
 
 package:
   individually: true

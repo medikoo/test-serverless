@@ -1,14 +1,4 @@
 "use strict";
 
 module.exports.handler = (event, context, callback) =>
-	callback(null, {
-		statusCode: 200,
-		body: JSON.stringify(
-			{
-				message: "Go Serverless v1.0! Your function executed successfully (again)!",
-				input: event
-			},
-			null,
-			2
-		)
-	});
+	callback(null, { statusCode: 200, body: JSON.stringify({ message: "Lambda test" }, null, 2) });

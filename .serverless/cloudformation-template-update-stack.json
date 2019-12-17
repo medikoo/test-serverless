@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1575901744718-2019-12-09T14:29:04.718Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1576595904616-2019-12-17T15:18:24.616Z/myFunction.zip"
         },
         "FunctionName": "test-api-gw-provisioned-concurrency-dev-myFunction",
         "Handler": "index.handler",
@@ -164,16 +164,32 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MyFunctionLambdaVersion": {
+    "MyFunctionProvConcLambdaVersion": {
       "Type": "AWS::Lambda::Version",
       "Properties": {
         "FunctionName": {
           "Ref": "MyFunctionLambdaFunction"
+        }
+      }
+    },
+    "MyFunctionProvConcLambdaAlias": {
+      "Type": "AWS::Lambda::Alias",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "MyFunctionLambdaFunction"
         },
+        "FunctionVersion": {
+          "Fn::GetAtt": [
+            "MyFunctionProvConcLambdaVersion",
+            "Version"
+          ]
+        },
+        "Name": "provisioned",
         "ProvisionedConcurrencyConfig": {
           "ProvisionedConcurrentExecutions": 3
         }
-      }
+      },
+      "DependsOn": "MyFunctionLambdaFunction"
     },
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
@@ -236,6 +252,13 @@
                     "Arn"
                   ]
                 },
+                ":",
+                {
+                  "Fn::GetAtt": [
+                    "MyFunctionProvConcLambdaVersion",
+                    "Version"
+                  ]
+                },
                 "/invocations"
               ]
             ]
@@ -244,7 +267,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1575901743771": {
+    "ApiGatewayDeployment1576595903160": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -292,6 +315,118 @@
           ]
         }
       }
+    },
+    "ApiGatewayLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/api-gateway/test-api-gw-provisioned-concurrency-dev"
+      }
+    },
+    "CustomApiGatewayAccountCloudWatchRole": {
+      "Type": "Custom::ApiGatewayAccountRole",
+      "Version": 1,
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomDashresourceDashapigwDashcwDashroleLambdaFunction",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "IamRoleCustomResourcesLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "dev",
+                  "test-api-gw-provisioned-concurrency",
+                  "custom-resources-lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      ":",
+                      [
+                        "arn:aws:iam:",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        "role/*"
+                      ]
+                    ]
+                  },
+                  "Action": [
+                    "iam:AttachRolePolicy",
+                    "iam:CreateRole",
+                    "iam:ListAttachedRolePolicies",
+                    "iam:PassRole"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": "arn:aws:apigateway:*::/account",
+                  "Action": [
+                    "apigateway:GET",
+                    "apigateway:PATCH"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1576595904616-2019-12-17T15:18:24.616Z/custom-resources.zip"
+        },
+        "FunctionName": "test-api-gw-provisioned-concurre5db30368454766477597e9b8602deb62",
+        "Handler": "apiGatewayCloudWatchRole/handler.handler",
+        "MemorySize": 1024,
+        "Runtime": "nodejs12.x",
+        "Timeout": 180,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleCustomResourcesLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "IamRoleCustomResourcesLambdaExecution"
+      ]
     }
   },
   "Outputs": {
