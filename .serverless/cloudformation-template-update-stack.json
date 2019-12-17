@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-dynamodb-lambda/dev/1576581647107-2019-12-17T11:20:47.107Z/function.zip"
+          "S3Key": "serverless/test-dynamodb-lambda/dev/1576581761484-2019-12-17T11:22:41.484Z/function.zip"
         },
         "FunctionName": "test-dynamodb-lambda-dev-function",
         "Handler": "index.handler",
@@ -164,7 +164,7 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "usersTable": {
+    "TestTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "TableName": "testTable",
