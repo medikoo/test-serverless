@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-vpc-link",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-vpc-link"
     },
     "provider": {
       "stage": "dev",
@@ -73,7 +73,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-vpc-link-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -102,7 +102,7 @@
                       "-",
                       [
                         "dev",
-                        "test-regular-lambda",
+                        "test-vpc-link",
                         "lambda"
                       ]
                     ]
@@ -117,7 +117,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-vpc-link-dev*:*"
                           }
                         ]
                       },
@@ -128,7 +128,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-vpc-link-dev*:*:*"
                           }
                         ]
                       }
@@ -141,7 +141,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda",
+                    "test-vpc-link",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -159,9 +159,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1574776135289-2019-11-26T13:48:55.289Z/function.zip"
+                "S3Key": "serverless/test-vpc-link/dev/1576576483798-2019-12-17T09:54:43.798Z/function.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-function",
+              "FunctionName": "test-vpc-link-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -177,12 +177,179 @@
               "FunctionLogGroup",
               "IamRoleLambdaExecution"
             ]
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "dev-test-vpc-link",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              }
+            }
+          },
+          "ApiGatewayResourceSearch": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "search",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodSearchOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".*\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceSearch"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodSearchPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceSearch"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "HTTP_PROXY",
+                "Uri": "http://nlb.api.com/search",
+                "ConnectionType": "VPC_LINK",
+                "ConnectionId": "a0dqy8"
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayDeployment1576576482865": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodSearchOptions",
+              "ApiGatewayMethodSearchPost"
+            ]
+          },
+          "FunctionLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "FunctionLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
             }
           }
         }
@@ -263,8 +430,40 @@
     "functions": {
       "function": {
         "handler": "index.handler",
-        "events": [],
-        "name": "test-regular-lambda-dev-function",
+        "events": [
+          {
+            "http": {
+              "path": "search",
+              "method": "post",
+              "integration": "HTTP_PROXY",
+              "connectionType": "VPC_LINK",
+              "connectionId": "a0dqy8",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "request": {
+                "uri": "http://nlb.api.com/search"
+              }
+            }
+          }
+        ],
+        "name": "test-vpc-link-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -279,7 +478,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1574776135289-2019-11-26T13:48:55.289Z",
+    "artifactDirectoryName": "serverless/test-vpc-link/dev/1576576483798-2019-12-17T09:54:43.798Z",
     "artifact": ""
   }
 }

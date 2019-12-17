@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-vpc-link
 
 provider:
   name: aws
@@ -13,6 +13,17 @@ package:
 functions:
   function:
     handler: index.handler
+    events:
+      - http:
+          path: search
+          method: post
+          integration: http-proxy
+          connectionType: vpc-link
+          connectionId: "a0dqy8"
+          cors: true
+          request:
+            uri: http://nlb.api.com/search
+            method: post
 
 plugins:
   - serverless-plugin-reducer
