@@ -3,7 +3,7 @@ service: test-cognito-user-pool-existing
 provider:
   name: aws
   runtime: nodejs12.x
-  region: us-east-1
+  region: eu-central-1
   stage: dev
   versionFunctions: false
 
@@ -15,8 +15,8 @@ functions:
     handler: index.handler
     events:
       - cognitoUserPool:
-          pool: foo
-          trigger: PreSignUp
+          pool: test-pool
+          trigger: PostConfirmation
           existing: true
 
 plugins:

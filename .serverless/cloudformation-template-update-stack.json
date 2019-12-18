@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-cognito-user-pool-existing/dev/1575640960397-2019-12-06T14:02:40.397Z/function.zip"
+          "S3Key": "serverless/test-cognito-user-pool-existing/dev/1576689975744-2019-12-18T17:26:15.744Z/function.zip"
         },
         "FunctionName": "test-cognito-user-pool-existing-dev-function",
         "Handler": "index.handler",
@@ -179,10 +179,10 @@
           ]
         },
         "FunctionName": "test-cognito-user-pool-existing-dev-function",
-        "UserPoolName": "foo",
+        "UserPoolName": "test-pool",
         "UserPoolConfigs": [
           {
-            "Trigger": "PreSignUp"
+            "Trigger": "PostConfirmation"
           }
         ]
       }
@@ -251,7 +251,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-cognito-user-pool-existing/dev/1575640960397-2019-12-06T14:02:40.397Z/custom-resources.zip"
+          "S3Key": "serverless/test-cognito-user-pool-existing/dev/1576689975744-2019-12-18T17:26:15.744Z/custom-resources.zip"
         },
         "FunctionName": "test-cognito-user-pool-existing-dev-custom-resource-existing-cup",
         "Handler": "cognitoUserPool/handler.handler",
