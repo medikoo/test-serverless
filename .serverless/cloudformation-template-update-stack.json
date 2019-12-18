@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1576595904616-2019-12-17T15:18:24.616Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1576664278563-2019-12-18T10:17:58.563Z/myFunction.zip"
         },
         "FunctionName": "test-api-gw-provisioned-concurrency-dev-myFunction",
         "Handler": "index.handler",
@@ -267,7 +267,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1576595903160": {
+    "ApiGatewayDeployment1576664276906": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -283,9 +283,22 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Fn::GetAtt": [
-            "MyFunctionLambdaFunction",
-            "Arn"
+          "Fn::Join": [
+            ":",
+            [
+              {
+                "Fn::GetAtt": [
+                  "MyFunctionLambdaFunction",
+                  "Arn"
+                ]
+              },
+              {
+                "Fn::GetAtt": [
+                  "MyFunctionProvConcLambdaVersion",
+                  "Version"
+                ]
+              }
+            ]
           ]
         },
         "Action": "lambda:InvokeFunction",
@@ -410,7 +423,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1576595904616-2019-12-17T15:18:24.616Z/custom-resources.zip"
+          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1576664278563-2019-12-18T10:17:58.563Z/custom-resources.zip"
         },
         "FunctionName": "test-api-gw-provisioned-concurre5db30368454766477597e9b8602deb62",
         "Handler": "apiGatewayCloudWatchRole/handler.handler",
