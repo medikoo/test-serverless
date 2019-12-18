@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw-logs",
+    "service": "test-many-custom-resources",
     "serviceObject": {
-      "name": "test-api-gw-logs"
+      "name": "test-many-custom-resources"
     },
     "provider": {
       "stage": "dev",
@@ -12,12 +12,7 @@
       "region": "us-east-1",
       "versionFunctions": false,
       "logs": {
-        "restApi": {
-          "executionLogging": true,
-          "level": "INFO",
-          "fullExecutionData": true,
-          "format": "{\"requestId\":\"$context.requestId\", \"api_key\": \"$context.identity.apiKey\", \"caller\":\"$context.identity.caller\", \"user\":\"$context.identity.user\", \"requestTime\":\"$context.requestTime\", \"httpMethod\":\"$context.httpMethod\", \"resourcePath\":\"$context.resourcePath\", \"status\":\"$context.status\", \"protocol\":\"$context.protocol\", \"responseLength\":\"$context.responseLength\"}"
-        },
+        "restApi": true,
         "frameworkLambda": true
       },
       "remoteFunctionData": null,
@@ -82,7 +77,13 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-logs-dev-function"
+              "LogGroupName": "/aws/lambda/test-many-custom-resources-dev-function"
+            }
+          },
+          "Function2LogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-many-custom-resources-dev-function2"
             }
           },
           "IamRoleLambdaExecution": {
@@ -111,7 +112,7 @@
                       "-",
                       [
                         "dev",
-                        "test-api-gw-logs",
+                        "test-many-custom-resources",
                         "lambda"
                       ]
                     ]
@@ -126,7 +127,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-many-custom-resources-dev*:*"
                           }
                         ]
                       },
@@ -137,7 +138,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-many-custom-resources-dev*:*:*"
                           }
                         ]
                       }
@@ -150,7 +151,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw-logs",
+                    "test-many-custom-resources",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -168,9 +169,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1576662011628-2019-12-18T09:40:11.628Z/function.zip"
+                "S3Key": "serverless/test-many-custom-resources/dev/1576686010545-2019-12-18T16:20:10.545Z/function.zip"
               },
-              "FunctionName": "test-api-gw-logs-dev-function",
+              "FunctionName": "test-many-custom-resources-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -187,10 +188,247 @@
               "IamRoleLambdaExecution"
             ]
           },
+          "Function2LambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-many-custom-resources/dev/1576686010545-2019-12-18T16:20:10.545Z/function2.zip"
+              },
+              "FunctionName": "test-many-custom-resources-dev-function2",
+              "Handler": "index.handler",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs12.x",
+              "Timeout": 6
+            },
+            "DependsOn": [
+              "Function2LogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "Function2CustomS31": {
+            "Type": "Custom::S3",
+            "Version": 1,
+            "DependsOn": [
+              "Function2LambdaFunction",
+              "CustomDashresourceDashexistingDashs3LambdaFunction"
+            ],
+            "Properties": {
+              "ServiceToken": {
+                "Fn::GetAtt": [
+                  "CustomDashresourceDashexistingDashs3LambdaFunction",
+                  "Arn"
+                ]
+              },
+              "FunctionName": "test-many-custom-resources-dev-function2",
+              "BucketName": "serverless-custom-bucket",
+              "BucketConfigs": [
+                {
+                  "Event": "s3:ObjectCreated:*",
+                  "Rules": []
+                }
+              ]
+            }
+          },
+          "IamRoleCustomResourcesLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "dev",
+                        "test-many-custom-resources",
+                        "custom-resources-lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-many-custom-resources-dev*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-many-custom-resources-dev*:*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Resource": {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              "s3",
+                              "",
+                              "",
+                              "serverless-custom-bucket"
+                            ]
+                          ]
+                        },
+                        "Action": [
+                          "s3:PutBucketNotification",
+                          "s3:GetBucketNotification"
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Resource": {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              "lambda",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              "function",
+                              "test-many-custom-resources-dev-function2"
+                            ]
+                          ]
+                        },
+                        "Action": [
+                          "lambda:AddPermission",
+                          "lambda:RemovePermission"
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Resource": {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              "iam:",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              "role/*"
+                            ]
+                          ]
+                        },
+                        "Action": [
+                          "iam:AttachRolePolicy",
+                          "iam:CreateRole",
+                          "iam:ListAttachedRolePolicies",
+                          "iam:PassRole"
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Resource": {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              "apigateway:*::/account"
+                            ]
+                          ]
+                        },
+                        "Action": [
+                          "apigateway:GET",
+                          "apigateway:PATCH"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "CustomDashresourceDashexistingDashs3LambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-many-custom-resources/dev/1576686010545-2019-12-18T16:20:10.545Z/custom-resources.zip"
+              },
+              "FunctionName": "test-many-custom-resources-dev-custom-resource-existing-s3",
+              "Handler": "s3/handler.handler",
+              "MemorySize": 1024,
+              "Runtime": "nodejs12.x",
+              "Timeout": 180,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleCustomResourcesLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "IamRoleCustomResourcesLambdaExecution",
+              "CustomDashresourceDashexistingDashs3LogGroup"
+            ]
+          },
+          "CustomDashresourceDashexistingDashs3LogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-many-custom-resources-dev-custom-resource-existing-s3"
+            }
+          },
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "dev-test-api-gw-logs",
+              "Name": "dev-test-many-custom-resources",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -256,7 +494,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1576662010301": {
+          "ApiGatewayDeployment1576686009867": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -308,7 +546,7 @@
           "ApiGatewayLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/api-gateway/test-api-gw-logs-dev"
+              "LogGroupName": "/aws/api-gateway/test-many-custom-resources-dev"
             }
           },
           "CustomApiGatewayAccountCloudWatchRole": {
@@ -323,112 +561,6 @@
               }
             }
           },
-          "IamRoleCustomResourcesLambdaExecution": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": {
-                    "Fn::Join": [
-                      "-",
-                      [
-                        "dev",
-                        "test-api-gw-logs",
-                        "custom-resources-lambda"
-                      ]
-                    ]
-                  },
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:CreateLogStream"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*"
-                          }
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:PutLogEvents"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-logs-dev*:*:*"
-                          }
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Resource": {
-                          "Fn::Join": [
-                            ":",
-                            [
-                              "arn",
-                              {
-                                "Ref": "AWS::Partition"
-                              },
-                              "iam:",
-                              {
-                                "Ref": "AWS::AccountId"
-                              },
-                              "role/*"
-                            ]
-                          ]
-                        },
-                        "Action": [
-                          "iam:AttachRolePolicy",
-                          "iam:CreateRole",
-                          "iam:ListAttachedRolePolicies",
-                          "iam:PassRole"
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Resource": {
-                          "Fn::Join": [
-                            ":",
-                            [
-                              "arn",
-                              {
-                                "Ref": "AWS::Partition"
-                              },
-                              "apigateway:*::/account"
-                            ]
-                          ]
-                        },
-                        "Action": [
-                          "apigateway:GET",
-                          "apigateway:PATCH"
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
           "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -436,9 +568,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1576662011628-2019-12-18T09:40:11.628Z/custom-resources.zip"
+                "S3Key": "serverless/test-many-custom-resources/dev/1576686010545-2019-12-18T16:20:10.545Z/custom-resources.zip"
               },
-              "FunctionName": "test-api-gw-logs-dev-custom-resource-apigw-cw-role",
+              "FunctionName": "test-many-custom-resources-dev-custom-resource-apigw-cw-role",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
               "MemorySize": 1024,
               "Runtime": "nodejs12.x",
@@ -458,7 +590,7 @@
           "CustomDashresourceDashapigwDashcwDashroleLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-logs-dev-custom-resource-apigw-cw-role"
+              "LogGroupName": "/aws/lambda/test-many-custom-resources-dev-custom-resource-apigw-cw-role"
             }
           }
         },
@@ -578,9 +710,28 @@
             }
           }
         ],
-        "name": "test-api-gw-logs-dev-function",
+        "name": "test-many-custom-resources-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {}
+      },
+      "function2": {
+        "handler": "index.handler",
+        "events": [
+          {
+            "s3": {
+              "bucket": "serverless-custom-bucket",
+              "existing": true
+            }
+          }
+        ],
+        "name": "test-many-custom-resources-dev-function2",
+        "package": {
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function2.zip"
         },
         "memory": 1024,
         "timeout": 6,
@@ -593,7 +744,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1576662011628-2019-12-18T09:40:11.628Z",
+    "artifactDirectoryName": "serverless/test-many-custom-resources/dev/1576686010545-2019-12-18T16:20:10.545Z",
     "artifact": ""
   }
 }
