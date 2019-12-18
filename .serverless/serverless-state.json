@@ -74,10 +74,10 @@
               }
             }
           },
-          "MyFunctionLogGroup": {
+          "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-logs-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-api-gw-logs-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -156,16 +156,16 @@
               }
             }
           },
-          "MyFunctionLambdaFunction": {
+          "FunctionLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1575300587325-2019-12-02T15:29:47.325Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw-logs/dev/1576661689396-2019-12-18T09:34:49.396Z/function.zip"
               },
-              "FunctionName": "test-api-gw-logs-dev-myFunction",
+              "FunctionName": "test-api-gw-logs-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -178,7 +178,7 @@
               "Timeout": 6
             },
             "DependsOn": [
-              "MyFunctionLogGroup",
+              "FunctionLogGroup",
               "IamRoleLambdaExecution"
             ]
           },
@@ -239,7 +239,7 @@
                       ":lambda:path/2015-03-31/functions/",
                       {
                         "Fn::GetAtt": [
-                          "MyFunctionLambdaFunction",
+                          "FunctionLambdaFunction",
                           "Arn"
                         ]
                       },
@@ -251,7 +251,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1575300585173": {
+          "ApiGatewayDeployment1576661688389": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -263,12 +263,12 @@
               "ApiGatewayMethodFooGet"
             ]
           },
-          "MyFunctionLambdaPermissionApiGateway": {
+          "FunctionLambdaPermissionApiGateway": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
                 "Fn::GetAtt": [
-                  "MyFunctionLambdaFunction",
+                  "FunctionLambdaFunction",
                   "Arn"
                 ]
               },
@@ -380,7 +380,11 @@
                           "Fn::Join": [
                             ":",
                             [
-                              "arn:aws:iam:",
+                              "arn",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              "iam:",
                               {
                                 "Ref": "AWS::AccountId"
                               },
@@ -397,7 +401,18 @@
                       },
                       {
                         "Effect": "Allow",
-                        "Resource": "arn:aws:apigateway:*::/account",
+                        "Resource": {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              "apigateway:*::/account"
+                            ]
+                          ]
+                        },
                         "Action": [
                           "apigateway:GET",
                           "apigateway:PATCH"
@@ -416,7 +431,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1575300587325-2019-12-02T15:29:47.325Z/custom-resources.zip"
+                "S3Key": "serverless/test-api-gw-logs/dev/1576661689396-2019-12-18T09:34:49.396Z/custom-resources.zip"
               },
               "FunctionName": "test-api-gw-logs-dev-custom-resource-apigw-cw-role",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -547,7 +562,7 @@
     ],
     "pluginsData": {},
     "functions": {
-      "myFunction": {
+      "function": {
         "handler": "index.handler",
         "events": [
           {
@@ -558,9 +573,9 @@
             }
           }
         ],
-        "name": "test-api-gw-logs-dev-myFunction",
+        "name": "test-api-gw-logs-dev-function",
         "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
         "memory": 1024,
         "timeout": 6,
@@ -573,7 +588,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1575300587325-2019-12-02T15:29:47.325Z",
+    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1576661689396-2019-12-18T09:34:49.396Z",
     "artifact": ""
   }
 }
