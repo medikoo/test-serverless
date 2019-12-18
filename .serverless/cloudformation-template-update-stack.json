@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-logs/dev/1576661689396-2019-12-18T09:34:49.396Z/function.zip"
+          "S3Key": "serverless/test-api-gw-logs/dev/1576662011628-2019-12-18T09:40:11.628Z/function.zip"
         },
         "FunctionName": "test-api-gw-logs-dev-function",
         "Handler": "index.handler",
@@ -233,7 +233,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1576661688389": {
+    "ApiGatewayDeployment1576662010301": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -413,7 +413,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-logs/dev/1576661689396-2019-12-18T09:34:49.396Z/custom-resources.zip"
+          "S3Key": "serverless/test-api-gw-logs/dev/1576662011628-2019-12-18T09:40:11.628Z/custom-resources.zip"
         },
         "FunctionName": "test-api-gw-logs-dev-custom-resource-apigw-cw-role",
         "Handler": "apiGatewayCloudWatchRole/handler.handler",

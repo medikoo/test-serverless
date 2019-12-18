@@ -12,7 +12,12 @@
       "region": "us-east-1",
       "versionFunctions": false,
       "logs": {
-        "restApi": true,
+        "restApi": {
+          "executionLogging": true,
+          "level": "INFO",
+          "fullExecutionData": true,
+          "format": "{\"requestId\":\"$context.requestId\", \"api_key\": \"$context.identity.apiKey\", \"caller\":\"$context.identity.caller\", \"user\":\"$context.identity.user\", \"requestTime\":\"$context.requestTime\", \"httpMethod\":\"$context.httpMethod\", \"resourcePath\":\"$context.resourcePath\", \"status\":\"$context.status\", \"protocol\":\"$context.protocol\", \"responseLength\":\"$context.responseLength\"}"
+        },
         "frameworkLambda": true
       },
       "remoteFunctionData": null,
@@ -163,7 +168,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1576661689396-2019-12-18T09:34:49.396Z/function.zip"
+                "S3Key": "serverless/test-api-gw-logs/dev/1576662011628-2019-12-18T09:40:11.628Z/function.zip"
               },
               "FunctionName": "test-api-gw-logs-dev-function",
               "Handler": "index.handler",
@@ -251,7 +256,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1576661688389": {
+          "ApiGatewayDeployment1576662010301": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -431,7 +436,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1576661689396-2019-12-18T09:34:49.396Z/custom-resources.zip"
+                "S3Key": "serverless/test-api-gw-logs/dev/1576662011628-2019-12-18T09:40:11.628Z/custom-resources.zip"
               },
               "FunctionName": "test-api-gw-logs-dev-custom-resource-apigw-cw-role",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -588,7 +593,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1576661689396-2019-12-18T09:34:49.396Z",
+    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1576662011628-2019-12-18T09:40:11.628Z",
     "artifact": ""
   }
 }

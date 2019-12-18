@@ -7,7 +7,11 @@ provider:
   stage: dev
   versionFunctions: false
   logs:
-    restApi: true
+    restApi:
+      executionLogging: true # Optional configuration which enables or disables execution logging. Defaults to true.
+      level: INFO # Optional configuration which specifies the log level to use for execution logging. May be set to either INFO or ERROR.
+      fullExecutionData: true # Optional configuration which specifies whether or not to log full requests/responses for execution logging. Defaults to true.
+      format: '{"requestId":"$context.requestId", "ip": "$context.identity.sourceIp", "api_key": "$context.identity.apiKey", "caller":"$context.identity.caller", "user":"$context.identity.user", "requestTime":"$context.requestTime", "httpMethod":"$context.httpMethod", "resourcePath":"$context.resourcePath", "status":"$context.status", "protocol":"$context.protocol", "responseLength":"$context.responseLength"}'
     frameworkLambda: true
 
 package:
