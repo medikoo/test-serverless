@@ -56,10 +56,10 @@
         }
       }
     },
-    "MyFunctionLogGroup": {
+    "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-api-gw-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-api-gw-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -138,16 +138,16 @@
         }
       }
     },
-    "MyFunctionLambdaFunction": {
+    "FunctionLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1575386836335-2019-12-03T15:27:16.335Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw/dev/1576676056057-2019-12-18T13:34:16.057Z/function.zip"
         },
-        "FunctionName": "test-api-gw-dev-myFunction",
+        "FunctionName": "test-api-gw-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -160,7 +160,7 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "MyFunctionLogGroup",
+        "FunctionLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
@@ -221,7 +221,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "MyFunctionLambdaFunction",
+                    "FunctionLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -233,7 +233,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1575386834399": {
+    "ApiGatewayDeployment1576676054433": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -245,12 +245,12 @@
         "ApiGatewayMethodFooGet"
       ]
     },
-    "MyFunctionLambdaPermissionApiGateway": {
+    "FunctionLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "MyFunctionLambdaFunction",
+            "FunctionLambdaFunction",
             "Arn"
           ]
         },
