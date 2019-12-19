@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-cognito-user-pool-existing/dev/1576689975744-2019-12-18T17:26:15.744Z/function.zip"
+          "S3Key": "serverless/test-cognito-user-pool-existing/dev/1576753162537-2019-12-19T10:59:22.537Z/function.zip"
         },
         "FunctionName": "test-cognito-user-pool-existing-dev-function",
         "Handler": "index.handler",
@@ -251,7 +251,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-cognito-user-pool-existing/dev/1576689975744-2019-12-18T17:26:15.744Z/custom-resources.zip"
+          "S3Key": "serverless/test-cognito-user-pool-existing/dev/1576753162537-2019-12-19T10:59:22.537Z/custom-resources.zip"
         },
         "FunctionName": "test-cognito-user-pool-existing-dev-custom-resource-existing-cup",
         "Handler": "cognitoUserPool/handler.handler",

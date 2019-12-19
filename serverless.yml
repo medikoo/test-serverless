@@ -3,7 +3,7 @@ service: test-cognito-user-pool-existing
 provider:
   name: aws
   runtime: nodejs12.x
-  region: eu-central-1
+  region: eu-west-1
   stage: dev
   versionFunctions: false
 
