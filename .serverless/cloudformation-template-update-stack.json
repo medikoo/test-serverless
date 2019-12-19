@@ -56,13 +56,7 @@
         }
       }
     },
-    "FunctionLogGroup": {
-      "Type": "AWS::Logs::LogGroup",
-      "Properties": {
-        "LogGroupName": "/aws/lambda/test-cognito-user-pool-existing-dev-function"
-      }
-    },
-    "IamRoleLambdaExecution": {
+    "SNSRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -72,7 +66,7 @@
               "Effect": "Allow",
               "Principal": {
                 "Service": [
-                  "lambda.amazonaws.com"
+                  "cognito-idp.amazonaws.com"
                 ]
               },
               "Action": [
@@ -83,197 +77,205 @@
         },
         "Policies": [
           {
-            "PolicyName": {
-              "Fn::Join": [
-                "-",
-                [
-                  "dev",
-                  "test-cognito-user-pool-existing",
-                  "lambda"
-                ]
-              ]
-            },
+            "PolicyName": "CognitoSNSPolicy",
             "PolicyDocument": {
               "Version": "2012-10-17",
               "Statement": [
                 {
                   "Effect": "Allow",
-                  "Action": [
-                    "logs:CreateLogStream"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-cognito-user-pool-existing-dev*:*"
-                    }
-                  ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:PutLogEvents"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-cognito-user-pool-existing-dev*:*:*"
-                    }
-                  ]
+                  "Action": "sns:publish",
+                  "Resource": "*"
                 }
               ]
             }
+          }
+        ]
+      }
+    },
+    "CognitoUserPool": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "UserPoolName": "test-pool",
+        "AutoVerifiedAttributes": [
+          "email"
+        ],
+        "SmsConfiguration": {
+          "ExternalId": "sms-config-external",
+          "SnsCallerArn": {
+            "Fn::GetAtt": [
+              "SNSRole",
+              "Arn"
+            ]
+          }
+        },
+        "Schema": [
+          {
+            "Name": "name",
+            "AttributeDataType": "String",
+            "Mutable": true,
+            "Required": true
+          },
+          {
+            "Name": "email",
+            "AttributeDataType": "String",
+            "Mutable": false,
+            "Required": true
+          },
+          {
+            "Name": "phone_number",
+            "AttributeDataType": "String",
+            "Mutable": false,
+            "Required": true
           }
         ],
-        "Path": "/",
-        "RoleName": {
-          "Fn::Join": [
-            "-",
-            [
-              "test-cognito-user-pool-existing",
-              "dev",
-              {
-                "Ref": "AWS::Region"
-              },
-              "lambdaRole"
-            ]
-          ]
-        }
+        "UsernameAttributes": [
+          "email",
+          "phone_number"
+        ]
       }
     },
-    "FunctionLambdaFunction": {
-      "Type": "AWS::Lambda::Function",
+    "CognitoUserPoolClient": {
+      "Type": "AWS::Cognito::UserPoolClient",
       "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "ServerlessDeploymentBucket"
-          },
-          "S3Key": "serverless/test-cognito-user-pool-existing/dev/1576689975744-2019-12-18T17:26:15.744Z/function.zip"
+        "ClientName": "test-pool-client",
+        "UserPoolId": {
+          "Ref": "CognitoUserPool"
         },
-        "FunctionName": "test-cognito-user-pool-existing-dev-function",
-        "Handler": "index.handler",
-        "MemorySize": 1024,
-        "Role": {
-          "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
-            "Arn"
-          ]
-        },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6
-      },
-      "DependsOn": [
-        "FunctionLogGroup",
-        "IamRoleLambdaExecution"
-      ]
+        "ExplicitAuthFlows": [
+          "ADMIN_NO_SRP_AUTH"
+        ],
+        "GenerateSecret": false
+      }
     },
-    "FunctionCustomCognitoUserPool1": {
-      "Type": "Custom::CognitoUserPool",
-      "Version": 1,
-      "DependsOn": [
-        "FunctionLambdaFunction",
-        "CustomDashresourceDashexistingDashcupLambdaFunction"
-      ],
+    "CognitoIdentityPool": {
+      "Type": "AWS::Cognito::IdentityPool",
       "Properties": {
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "CustomDashresourceDashexistingDashcupLambdaFunction",
-            "Arn"
-          ]
-        },
-        "FunctionName": "test-cognito-user-pool-existing-dev-function",
-        "UserPoolName": "test-pool",
-        "UserPoolConfigs": [
+        "IdentityPoolName": "IdentityPool",
+        "AllowUnauthenticatedIdentities": false,
+        "CognitoIdentityProviders": [
           {
-            "Trigger": "PostConfirmation"
+            "ClientId": {
+              "Ref": "CognitoUserPoolClient"
+            },
+            "ProviderName": {
+              "Fn::GetAtt": [
+                "CognitoUserPool",
+                "ProviderName"
+              ]
+            }
           }
         ]
       }
     },
-    "IamRoleCustomResourcesLambdaExecution": {
+    "CognitoIdentityPoolRoles": {
+      "Type": "AWS::Cognito::IdentityPoolRoleAttachment",
+      "Properties": {
+        "IdentityPoolId": {
+          "Ref": "CognitoIdentityPool"
+        },
+        "Roles": {
+          "authenticated": {
+            "Fn::GetAtt": [
+              "CognitoAuthRole",
+              "Arn"
+            ]
+          }
+        }
+      }
+    },
+    "CognitoAuthRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
+        "Path": "/",
         "AssumeRolePolicyDocument": {
           "Version": "2012-10-17",
           "Statement": [
             {
               "Effect": "Allow",
               "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
+                "Federated": "cognito-identity.amazonaws.com"
               },
               "Action": [
-                "sts:AssumeRole"
-              ]
+                "sts:AssumeRoleWithWebIdentity"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "cognito-identity.amazonaws.com:aud": {
+                    "Ref": "CognitoIdentityPool"
+                  }
+                },
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "authenticated"
+                }
+              }
             }
           ]
         },
         "Policies": [
           {
-            "PolicyName": {
-              "Fn::Join": [
-                "-",
-                [
-                  "dev",
-                  "test-cognito-user-pool-existing",
-                  "custom-resources-lambda"
-                ]
-              ]
-            },
+            "PolicyName": "CognitoAuthorizedPolicy",
             "PolicyDocument": {
               "Version": "2012-10-17",
               "Statement": [
                 {
                   "Effect": "Allow",
-                  "Resource": "*",
                   "Action": [
-                    "cognito-idp:ListUserPools",
-                    "cognito-idp:DescribeUserPool",
-                    "cognito-idp:UpdateUserPool"
-                  ]
+                    "mobileanalytics:PutEvents",
+                    "cognito-sync:*",
+                    "cognito-identity:*"
+                  ],
+                  "Resource": "*"
                 },
                 {
                   "Effect": "Allow",
-                  "Resource": "arn:aws:lambda:*:*:function:test-cognito-user-pool-existing-dev-function",
                   "Action": [
-                    "lambda:AddPermission",
-                    "lambda:RemovePermission"
-                  ]
+                    "execute-api:Invoke"
+                  ],
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:aws:execute-api:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":",
+                        "*",
+                        "/*"
+                      ]
+                    ]
+                  }
                 }
               ]
             }
           }
         ]
       }
-    },
-    "CustomDashresourceDashexistingDashcupLambdaFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "ServerlessDeploymentBucket"
-          },
-          "S3Key": "serverless/test-cognito-user-pool-existing/dev/1576689975744-2019-12-18T17:26:15.744Z/custom-resources.zip"
-        },
-        "FunctionName": "test-cognito-user-pool-existing-dev-custom-resource-existing-cup",
-        "Handler": "cognitoUserPool/handler.handler",
-        "MemorySize": 1024,
-        "Runtime": "nodejs12.x",
-        "Timeout": 180,
-        "Role": {
-          "Fn::GetAtt": [
-            "IamRoleCustomResourcesLambdaExecution",
-            "Arn"
-          ]
-        }
-      },
-      "DependsOn": [
-        "IamRoleCustomResourcesLambdaExecution"
-      ]
     }
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "UserPoolId": {
+      "Value": {
+        "Ref": "CognitoUserPool"
+      }
+    },
+    "UserPoolClientId": {
+      "Value": {
+        "Ref": "CognitoUserPoolClient"
+      }
+    },
+    "IdentityPoolId": {
+      "Value": {
+        "Ref": "CognitoIdentityPool"
       }
     }
   }
