@@ -145,7 +145,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1576664278563-2019-12-18T10:17:58.563Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1576847721321-2019-12-20T13:15:21.321Z/myFunction.zip"
         },
         "FunctionName": "test-api-gw-provisioned-concurrency-dev-myFunction",
         "Handler": "index.handler",
@@ -164,12 +164,13 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MyFunctionProvConcLambdaVersion": {
+    "MyFunctionLambdaVersionpwcl6HMCCLGOTapu8Jtdh5cOiZdqUwMT7UiM8eSzw": {
       "Type": "AWS::Lambda::Version",
       "Properties": {
         "FunctionName": {
           "Ref": "MyFunctionLambdaFunction"
-        }
+        },
+        "CodeSha256": "C/n1Qnq7Phfm/pziOL39oX1dsl9pMQ7YD8n2vyWdgR8="
       }
     },
     "MyFunctionProvConcLambdaAlias": {
@@ -180,7 +181,7 @@
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "MyFunctionProvConcLambdaVersion",
+            "MyFunctionLambdaVersionpwcl6HMCCLGOTapu8Jtdh5cOiZdqUwMT7UiM8eSzw",
             "Version"
           ]
         },
@@ -189,7 +190,81 @@
           "ProvisionedConcurrentExecutions": 3
         }
       },
-      "DependsOn": "MyFunctionLambdaFunction"
+      "DependsOn": "MyFunctionLambdaFunction",
+      "UpdatePolicy": {
+        "CodeDeployLambdaAliasUpdate": {
+          "ApplicationName": {
+            "Ref": "CodeDeployApplication"
+          },
+          "DeploymentGroupName": {
+            "Ref": "CodeDeployDeploymentGroup"
+          }
+        }
+      }
+    },
+    "CodeDeployApplication": {
+      "Type": "AWS::CodeDeploy::Application",
+      "Properties": {
+        "ComputePlatform": "Lambda"
+      }
+    },
+    "CodeDeployDeploymentGroup": {
+      "Type": "AWS::CodeDeploy::DeploymentGroup",
+      "Properties": {
+        "ApplicationName": {
+          "Ref": "CodeDeployApplication"
+        },
+        "AutoRollbackConfiguration": {
+          "Enabled": true,
+          "Events": [
+            "DEPLOYMENT_FAILURE",
+            "DEPLOYMENT_STOP_ON_ALARM",
+            "DEPLOYMENT_STOP_ON_REQUEST"
+          ]
+        },
+        "DeploymentConfigName": {
+          "Fn::Sub": [
+            "CodeDeployDefault.Lambda${ConfigName}",
+            {
+              "ConfigName": "AllAtOnce"
+            }
+          ]
+        },
+        "DeploymentStyle": {
+          "DeploymentType": "BLUE_GREEN",
+          "DeploymentOption": "WITH_TRAFFIC_CONTROL"
+        },
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "CodeDeployRole",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "CodeDeployRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForLambda"
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "codedeploy.amazonaws.com"
+                ]
+              }
+            }
+          ]
+        }
+      }
     },
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
@@ -255,7 +330,7 @@
                 ":",
                 {
                   "Fn::GetAtt": [
-                    "MyFunctionProvConcLambdaVersion",
+                    "MyFunctionLambdaVersionpwcl6HMCCLGOTapu8Jtdh5cOiZdqUwMT7UiM8eSzw",
                     "Version"
                   ]
                 },
@@ -267,7 +342,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1576664276906": {
+    "ApiGatewayDeployment1576847720426": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -294,7 +369,7 @@
               },
               {
                 "Fn::GetAtt": [
-                  "MyFunctionProvConcLambdaVersion",
+                  "MyFunctionLambdaVersionpwcl6HMCCLGOTapu8Jtdh5cOiZdqUwMT7UiM8eSzw",
                   "Version"
                 ]
               }
@@ -387,7 +462,11 @@
                     "Fn::Join": [
                       ":",
                       [
-                        "arn:aws:iam:",
+                        "arn",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        "iam:",
                         {
                           "Ref": "AWS::AccountId"
                         },
@@ -404,7 +483,18 @@
                 },
                 {
                   "Effect": "Allow",
-                  "Resource": "arn:aws:apigateway:*::/account",
+                  "Resource": {
+                    "Fn::Join": [
+                      ":",
+                      [
+                        "arn",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        "apigateway:*::/account"
+                      ]
+                    ]
+                  },
                   "Action": [
                     "apigateway:GET",
                     "apigateway:PATCH"
@@ -423,7 +513,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1576664278563-2019-12-18T10:17:58.563Z/custom-resources.zip"
+          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1576847721321-2019-12-20T13:15:21.321Z/custom-resources.zip"
         },
         "FunctionName": "test-api-gw-provisioned-concurre5db30368454766477597e9b8602deb62",
         "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -446,6 +536,12 @@
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "MyFunctionLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "MyFunctionLambdaVersionpwcl6HMCCLGOTapu8Jtdh5cOiZdqUwMT7UiM8eSzw"
       }
     },
     "ServiceEndpoint": {
