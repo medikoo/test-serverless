@@ -159,7 +159,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-provisioned-concurrency/dev/1576590753131-2019-12-17T13:52:33.131Z/function.zip"
+                "S3Key": "serverless/test-provisioned-concurrency/dev/1576845171628-2019-12-20T12:32:51.628Z/function.zip"
               },
               "FunctionName": "test-provisioned-concurrency-dev-function",
               "Handler": "index.handler",
@@ -178,12 +178,13 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "FunctionProvConcLambdaVersion": {
+          "FunctionLambdaVersionqseGJYqutKBuIcuPRgVImJbTVa7Ypot7CoEHZ5Ic": {
             "Type": "AWS::Lambda::Version",
             "Properties": {
               "FunctionName": {
                 "Ref": "FunctionLambdaFunction"
-              }
+              },
+              "CodeSha256": "ymNtyw92S84PCwcRq/MIJB7B/IKq1wGDTwH0iJTZmBo="
             }
           },
           "FunctionProvConcLambdaAlias": {
@@ -194,7 +195,7 @@
               },
               "FunctionVersion": {
                 "Fn::GetAtt": [
-                  "FunctionProvConcLambdaVersion",
+                  "FunctionLambdaVersionqseGJYqutKBuIcuPRgVImJbTVa7Ypot7CoEHZ5Ic",
                   "Version"
                 ]
               },
@@ -203,13 +204,93 @@
                 "ProvisionedConcurrentExecutions": 3
               }
             },
-            "DependsOn": "FunctionLambdaFunction"
+            "DependsOn": "FunctionLambdaFunction",
+            "UpdatePolicy": {
+              "CodeDeployLambdaAliasUpdate": {
+                "ApplicationName": {
+                  "Ref": "CodeDeployApplication"
+                },
+                "DeploymentGroupName": {
+                  "Ref": "CodeDeployDeploymentGroup"
+                }
+              }
+            }
+          },
+          "CodeDeployApplication": {
+            "Type": "AWS::CodeDeploy::Application",
+            "Properties": {
+              "ComputePlatform": "Lambda"
+            }
+          },
+          "CodeDeployDeploymentGroup": {
+            "Type": "AWS::CodeDeploy::DeploymentGroup",
+            "Properties": {
+              "ApplicationName": {
+                "Ref": "CodeDeployApplication"
+              },
+              "AutoRollbackConfiguration": {
+                "Enabled": true,
+                "Events": [
+                  "DEPLOYMENT_FAILURE",
+                  "DEPLOYMENT_STOP_ON_ALARM",
+                  "DEPLOYMENT_STOP_ON_REQUEST"
+                ]
+              },
+              "DeploymentConfigName": {
+                "Fn::Sub": [
+                  "CodeDeployDefault.Lambda${ConfigName}",
+                  {
+                    "ConfigName": "AllAtOnce"
+                  }
+                ]
+              },
+              "DeploymentStyle": {
+                "DeploymentType": "BLUE_GREEN",
+                "DeploymentOption": "WITH_TRAFFIC_CONTROL"
+              },
+              "ServiceRoleArn": {
+                "Fn::GetAtt": [
+                  "CodeDeployRole",
+                  "Arn"
+                ]
+              }
+            }
+          },
+          "CodeDeployRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "ManagedPolicyArns": [
+                "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForLambda"
+              ],
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Action": [
+                      "sts:AssumeRole"
+                    ],
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "codedeploy.amazonaws.com"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "FunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "FunctionLambdaVersionqseGJYqutKBuIcuPRgVImJbTVa7Ypot7CoEHZ5Ic"
             }
           }
         }
@@ -307,7 +388,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-provisioned-concurrency/dev/1576590753131-2019-12-17T13:52:33.131Z",
+    "artifactDirectoryName": "serverless/test-provisioned-concurrency/dev/1576845171628-2019-12-20T12:32:51.628Z",
     "artifact": ""
   }
 }
