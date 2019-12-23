@@ -20,12 +20,12 @@ functions:
       - http:
           path: foo
           method: GET
-  functionB:
+  functionC:
     handler: index.handler
-    provisionedConcurrency: 5
+    provisionedConcurrency: 4
     events:
       - http:
-          path: bar
+          path: marko
           method: GET
 
 plugins:

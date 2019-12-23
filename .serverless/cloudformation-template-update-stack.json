@@ -62,10 +62,10 @@
         "LogGroupName": "/aws/lambda/test-api-gw-provisioned-concurrency-dev-functionA"
       }
     },
-    "FunctionBLogGroup": {
+    "FunctionCLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-api-gw-provisioned-concurrency-dev-functionB"
+        "LogGroupName": "/aws/lambda/test-api-gw-provisioned-concurrency-dev-functionC"
       }
     },
     "IamRoleLambdaExecution": {
@@ -151,7 +151,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1577090037198-2019-12-23T08:33:57.198Z/functionA.zip"
+          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1577091065068-2019-12-23T08:51:05.068Z/functionA.zip"
         },
         "FunctionName": "test-api-gw-provisioned-concurrency-dev-functionA",
         "Handler": "index.handler",
@@ -272,16 +272,16 @@
         }
       }
     },
-    "FunctionBLambdaFunction": {
+    "FunctionCLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1577090037198-2019-12-23T08:33:57.198Z/functionB.zip"
+          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1577091065068-2019-12-23T08:51:05.068Z/functionC.zip"
         },
-        "FunctionName": "test-api-gw-provisioned-concurrency-dev-functionB",
+        "FunctionName": "test-api-gw-provisioned-concurrency-dev-functionC",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -294,37 +294,37 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "FunctionBLogGroup",
+        "FunctionCLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "FunctionBLambdaVersion0pCCs1K9yyp5jMNwQW00wOVFT6zsnFHhcNVhILH4": {
+    "FunctionCLambdaVersionrYttrc554cdVlKQdmzBzVW5sj4VTiv63Qk53dPJNc": {
       "Type": "AWS::Lambda::Version",
       "Properties": {
         "FunctionName": {
-          "Ref": "FunctionBLambdaFunction"
+          "Ref": "FunctionCLambdaFunction"
         },
         "CodeSha256": "MM7hgQmtFq+Otp3M+LwqpzO2vISdUrh3aKryCE/hs2E="
       }
     },
-    "FunctionBProvConcLambdaAlias": {
+    "FunctionCProvConcLambdaAlias": {
       "Type": "AWS::Lambda::Alias",
       "Properties": {
         "FunctionName": {
-          "Ref": "FunctionBLambdaFunction"
+          "Ref": "FunctionCLambdaFunction"
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "FunctionBLambdaVersion0pCCs1K9yyp5jMNwQW00wOVFT6zsnFHhcNVhILH4",
+            "FunctionCLambdaVersionrYttrc554cdVlKQdmzBzVW5sj4VTiv63Qk53dPJNc",
             "Version"
           ]
         },
         "Name": "provisioned",
         "ProvisionedConcurrencyConfig": {
-          "ProvisionedConcurrentExecutions": 5
+          "ProvisionedConcurrentExecutions": 4
         }
       },
-      "DependsOn": "FunctionBLambdaFunction",
+      "DependsOn": "FunctionCLambdaFunction",
       "UpdatePolicy": {
         "CodeDeployLambdaAliasUpdate": {
           "ApplicationName": {
@@ -362,7 +362,7 @@
         }
       }
     },
-    "ApiGatewayResourceBar": {
+    "ApiGatewayResourceMarko": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
@@ -371,7 +371,7 @@
             "RootResourceId"
           ]
         },
-        "PathPart": "bar",
+        "PathPart": "marko",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
@@ -422,13 +422,13 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayMethodBarGet": {
+    "ApiGatewayMethodMarkoGet": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourceBar"
+          "Ref": "ApiGatewayResourceMarko"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -453,7 +453,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "FunctionBLambdaFunction",
+                    "FunctionCLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -467,7 +467,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1577090036177": {
+    "ApiGatewayDeployment1577091063504": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -477,7 +477,7 @@
       },
       "DependsOn": [
         "ApiGatewayMethodFooGet",
-        "ApiGatewayMethodBarGet"
+        "ApiGatewayMethodMarkoGet"
       ]
     },
     "FunctionALambdaPermissionApiGateway": {
@@ -526,7 +526,7 @@
       },
       "DependsOn": "FunctionAProvConcLambdaAlias"
     },
-    "FunctionBLambdaPermissionApiGateway": {
+    "FunctionCLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
@@ -535,7 +535,7 @@
             [
               {
                 "Fn::GetAtt": [
-                  "FunctionBLambdaFunction",
+                  "FunctionCLambdaFunction",
                   "Arn"
                 ]
               },
@@ -570,7 +570,7 @@
           ]
         }
       },
-      "DependsOn": "FunctionBProvConcLambdaAlias"
+      "DependsOn": "FunctionCProvConcLambdaAlias"
     },
     "ApiGatewayLogGroup": {
       "Type": "AWS::Logs::LogGroup",
@@ -681,7 +681,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1577090037198-2019-12-23T08:33:57.198Z/custom-resources.zip"
+          "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1577091065068-2019-12-23T08:51:05.068Z/custom-resources.zip"
         },
         "FunctionName": "test-api-gw-provisioned-concurre5db30368454766477597e9b8602deb62",
         "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -712,10 +712,10 @@
         "Ref": "FunctionALambdaVersiond19R7VETPaJnAXwYE3nvfbhkQlcLFrvpOxgiK6drJk"
       }
     },
-    "FunctionBLambdaFunctionQualifiedArn": {
+    "FunctionCLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "FunctionBLambdaVersion0pCCs1K9yyp5jMNwQW00wOVFT6zsnFHhcNVhILH4"
+        "Ref": "FunctionCLambdaVersionrYttrc554cdVlKQdmzBzVW5sj4VTiv63Qk53dPJNc"
       }
     },
     "ServiceEndpoint": {
