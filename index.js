@@ -1,8 +1,7 @@
 "use strict";
 
-module.exports.handler = async (event, context) => {
-	console.log("ORIGINAL HANDLER");
-	return new Promise(resolve => {
+module.exports.handler = async event =>
+	new Promise(resolve => {
 		setTimeout(
 			() =>
 				resolve({
@@ -14,11 +13,9 @@ module.exports.handler = async (event, context) => {
 							input: event,
 							env: process.env
 						},
-						null,
-						2
+						null, 2
 					)
 				}),
 			2000
 		);
 	});
-};

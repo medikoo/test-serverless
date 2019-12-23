@@ -56,10 +56,10 @@
         }
       }
     },
-    "MyFunctionLogGroup": {
+    "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-dashboard-plugin-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-dashboard-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -88,7 +88,7 @@
                 "-",
                 [
                   "dev",
-                  "test-dashboard-plugin",
+                  "test-dashboard",
                   "lambda"
                 ]
               ]
@@ -99,11 +99,12 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "logs:CreateLogStream"
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup"
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-plugin-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-dev*:*"
                     }
                   ]
                 },
@@ -114,7 +115,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-plugin-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-dev*:*:*"
                     }
                   ]
                 }
@@ -127,7 +128,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-dashboard-plugin",
+              "test-dashboard",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -172,7 +173,7 @@
                   "Resource": [
                     {
                       "Fn::GetAtt": [
-                        "MyFunctionLogGroup",
+                        "FunctionLogGroup",
                         "Arn"
                       ]
                     }
@@ -184,17 +185,17 @@
         ]
       }
     },
-    "MyFunctionLambdaFunction": {
+    "FunctionLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-dashboard-plugin/dev/1574239101907-2019-11-20T08:38:21.907Z/myFunction.zip"
+          "S3Key": "serverless/test-dashboard/dev/1577108533742-2019-12-23T13:42:13.742Z/function.zip"
         },
-        "FunctionName": "test-dashboard-plugin-dev-myFunction",
-        "Handler": "s_myFunction.handler",
+        "FunctionName": "test-dashboard-dev-function",
+        "Handler": "s_function.handler",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -206,17 +207,17 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "MyFunctionLogGroup",
+        "FunctionLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "CloudWatchLogsSubscriptionFilterMyFunctionLogGroup": {
+    "CloudWatchLogsSubscriptionFilterFunctionLogGroup": {
       "Type": "AWS::Logs::SubscriptionFilter",
       "Properties": {
-        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard-plugin#dev",
+        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard#dev",
         "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
         "LogGroupName": {
-          "Ref": "MyFunctionLogGroup"
+          "Ref": "FunctionLogGroup"
         }
       }
     }
