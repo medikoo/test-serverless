@@ -4,11 +4,11 @@ tenantId: 'medikoo',
 applicationName: 'medikoo-test',
 appUid: 'GjXh77HjWzffv8X5SQ',
 tenantUid: '1sJrygBdcH5mNKPSp8',
-deploymentUid: 'da7f536b-7a3f-4ff7-b63c-1e4ebd464dff',
-serviceName: 'test-dashboard',
+deploymentUid: '11f3be58-3497-443c-967a-4a356e800e9c',
+serviceName: 'test-dashboard-api-gateway',
 stageName: 'dev',
 pluginVersion: '3.2.6'})
-const handlerWrapperArgs = { functionName: 'test-dashboard-dev-function', timeout: 6}
+const handlerWrapperArgs = { functionName: 'test-dashboard-api-gateway-dev-function', timeout: 6}
 try {
   const userHandler = require('./index.js')
   module.exports.handler = serverlessSDK.handler(userHandler.handler, handlerWrapperArgs)

@@ -1,4 +1,4 @@
-service: test-dashboard
+service: test-dashboard-api-gateway
 
 tenant: medikoo
 app: medikoo-test
@@ -16,6 +16,10 @@ package:
 functions:
   function:
     handler: index.handler
+    events:
+      - http:
+          path: foo
+          method: GET
 
 plugins:
   - serverless-plugin-reducer
