@@ -13,12 +13,19 @@ package:
   individually: true
 
 functions:
-  myFunction:
+  functionA:
     handler: index.handler
     provisionedConcurrency: 3
     events:
       - http:
           path: foo
+          method: GET
+  functionB:
+    handler: index.handler
+    provisionedConcurrency: 5
+    events:
+      - http:
+          path: bar
           method: GET
 
 plugins:
