@@ -169,7 +169,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1578052554703-2020-01-03T11:55:54.703Z/functionA.zip"
+                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1578069799127-2020-01-03T16:43:19.127Z/functionA.zip"
               },
               "FunctionName": "test-api-gw-provisioned-concurrency-dev-functionA",
               "Handler": "index.handler",
@@ -188,13 +188,13 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "FunctionALambdaVersionjfkTBNDor7uAsQv0h72j5io3InLG7EgDGIoL0EHs": {
+          "FunctionALambdaVersionFBWM92NkVSS5N9wICQBcXXq2bMkfTsy47ng8IAeIxo": {
             "Type": "AWS::Lambda::Version",
             "Properties": {
               "FunctionName": {
                 "Ref": "FunctionALambdaFunction"
               },
-              "CodeSha256": "8LvUQkAHrSXmbsUfE5rQcAatkFtF5mWL5XZkJeWyCRw="
+              "CodeSha256": "h03mpx5SCxwboad2h65ZBul+Utp6aQVmD+8qePPbyUk="
             }
           },
           "FunctionAProvConcLambdaAlias": {
@@ -205,90 +205,16 @@
               },
               "FunctionVersion": {
                 "Fn::GetAtt": [
-                  "FunctionALambdaVersionjfkTBNDor7uAsQv0h72j5io3InLG7EgDGIoL0EHs",
+                  "FunctionALambdaVersionFBWM92NkVSS5N9wICQBcXXq2bMkfTsy47ng8IAeIxo",
                   "Version"
                 ]
               },
               "Name": "provisioned",
               "ProvisionedConcurrencyConfig": {
-                "ProvisionedConcurrentExecutions": 3
+                "ProvisionedConcurrentExecutions": 1
               }
             },
-            "DependsOn": "FunctionALambdaFunction",
-            "UpdatePolicy": {
-              "CodeDeployLambdaAliasUpdate": {
-                "ApplicationName": {
-                  "Ref": "CodeDeployApplication"
-                },
-                "DeploymentGroupName": {
-                  "Ref": "CodeDeployDeploymentGroup"
-                }
-              }
-            }
-          },
-          "CodeDeployApplication": {
-            "Type": "AWS::CodeDeploy::Application",
-            "Properties": {
-              "ComputePlatform": "Lambda"
-            }
-          },
-          "CodeDeployDeploymentGroup": {
-            "Type": "AWS::CodeDeploy::DeploymentGroup",
-            "Properties": {
-              "ApplicationName": {
-                "Ref": "CodeDeployApplication"
-              },
-              "AutoRollbackConfiguration": {
-                "Enabled": true,
-                "Events": [
-                  "DEPLOYMENT_FAILURE",
-                  "DEPLOYMENT_STOP_ON_ALARM",
-                  "DEPLOYMENT_STOP_ON_REQUEST"
-                ]
-              },
-              "DeploymentConfigName": {
-                "Fn::Sub": [
-                  "CodeDeployDefault.Lambda${ConfigName}",
-                  {
-                    "ConfigName": "AllAtOnce"
-                  }
-                ]
-              },
-              "DeploymentStyle": {
-                "DeploymentType": "BLUE_GREEN",
-                "DeploymentOption": "WITH_TRAFFIC_CONTROL"
-              },
-              "ServiceRoleArn": {
-                "Fn::GetAtt": [
-                  "CodeDeployRole",
-                  "Arn"
-                ]
-              }
-            }
-          },
-          "CodeDeployRole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "ManagedPolicyArns": [
-                "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForLambda"
-              ],
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Action": [
-                      "sts:AssumeRole"
-                    ],
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "codedeploy.amazonaws.com"
-                      ]
-                    }
-                  }
-                ]
-              }
-            }
+            "DependsOn": "FunctionALambdaFunction"
           },
           "FunctionCLambdaFunction": {
             "Type": "AWS::Lambda::Function",
@@ -297,7 +223,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1578052554703-2020-01-03T11:55:54.703Z/functionC.zip"
+                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1578069799127-2020-01-03T16:43:19.127Z/functionC.zip"
               },
               "FunctionName": "test-api-gw-provisioned-concurrency-dev-functionC",
               "Handler": "index.handler",
@@ -316,13 +242,13 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "FunctionCLambdaVersionK4jD3p5ybon4eANyL8P3LLLMOUZOPTYtcl9WGZgtk": {
+          "FunctionCLambdaVersionVg6LlVU9hLnCcaAOg4sSsvoRoVnbG6IMBUVBcMg7U": {
             "Type": "AWS::Lambda::Version",
             "Properties": {
               "FunctionName": {
                 "Ref": "FunctionCLambdaFunction"
               },
-              "CodeSha256": "8LvUQkAHrSXmbsUfE5rQcAatkFtF5mWL5XZkJeWyCRw="
+              "CodeSha256": "h03mpx5SCxwboad2h65ZBul+Utp6aQVmD+8qePPbyUk="
             }
           },
           "FunctionCProvConcLambdaAlias": {
@@ -333,26 +259,16 @@
               },
               "FunctionVersion": {
                 "Fn::GetAtt": [
-                  "FunctionCLambdaVersionK4jD3p5ybon4eANyL8P3LLLMOUZOPTYtcl9WGZgtk",
+                  "FunctionCLambdaVersionVg6LlVU9hLnCcaAOg4sSsvoRoVnbG6IMBUVBcMg7U",
                   "Version"
                 ]
               },
               "Name": "provisioned",
               "ProvisionedConcurrencyConfig": {
-                "ProvisionedConcurrentExecutions": 4
+                "ProvisionedConcurrentExecutions": 1
               }
             },
-            "DependsOn": "FunctionCLambdaFunction",
-            "UpdatePolicy": {
-              "CodeDeployLambdaAliasUpdate": {
-                "ApplicationName": {
-                  "Ref": "CodeDeployApplication"
-                },
-                "DeploymentGroupName": {
-                  "Ref": "CodeDeployDeploymentGroup"
-                }
-              }
-            }
+            "DependsOn": "FunctionCLambdaFunction"
           },
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
@@ -506,7 +422,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1578052553423": {
+          "ApiGatewayDeployment1578069797136": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -720,7 +636,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1578052554703-2020-01-03T11:55:54.703Z/custom-resources.zip"
+                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1578069799127-2020-01-03T16:43:19.127Z/custom-resources.zip"
               },
               "FunctionName": "test-api-gw-provisioned-concurre5db30368454766477597e9b8602deb62",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -748,13 +664,13 @@
           "FunctionALambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FunctionALambdaVersionjfkTBNDor7uAsQv0h72j5io3InLG7EgDGIoL0EHs"
+              "Ref": "FunctionALambdaVersionFBWM92NkVSS5N9wICQBcXXq2bMkfTsy47ng8IAeIxo"
             }
           },
           "FunctionCLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FunctionCLambdaVersionK4jD3p5ybon4eANyL8P3LLLMOUZOPTYtcl9WGZgtk"
+              "Ref": "FunctionCLambdaVersionVg6LlVU9hLnCcaAOg4sSsvoRoVnbG6IMBUVBcMg7U"
             }
           },
           "ServiceEndpoint": {
@@ -858,7 +774,7 @@
     "functions": {
       "functionA": {
         "handler": "index.handler",
-        "provisionedConcurrency": 3,
+        "provisionedConcurrency": 1,
         "events": [
           {
             "http": {
@@ -876,11 +792,11 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "FunctionALambdaVersionjfkTBNDor7uAsQv0h72j5io3InLG7EgDGIoL0EHs"
+        "versionLogicalId": "FunctionALambdaVersionFBWM92NkVSS5N9wICQBcXXq2bMkfTsy47ng8IAeIxo"
       },
       "functionC": {
         "handler": "index.handler",
-        "provisionedConcurrency": 4,
+        "provisionedConcurrency": 1,
         "events": [
           {
             "http": {
@@ -898,7 +814,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "FunctionCLambdaVersionK4jD3p5ybon4eANyL8P3LLLMOUZOPTYtcl9WGZgtk"
+        "versionLogicalId": "FunctionCLambdaVersionVg6LlVU9hLnCcaAOg4sSsvoRoVnbG6IMBUVBcMg7U"
       }
     },
     "serviceFilename": "serverless.yml",
@@ -906,7 +822,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-provisioned-concurrency/dev/1578052554703-2020-01-03T11:55:54.703Z",
+    "artifactDirectoryName": "serverless/test-api-gw-provisioned-concurrency/dev/1578069799127-2020-01-03T16:43:19.127Z",
     "artifact": ""
   }
 }

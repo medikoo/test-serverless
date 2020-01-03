@@ -15,14 +15,14 @@ package:
 functions:
   functionA:
     handler: index.handler
-    provisionedConcurrency: 3
+    provisionedConcurrency: 1
     events:
       - http:
           path: foo
           method: GET
   functionC:
     handler: index.handler
-    provisionedConcurrency: 4
+    provisionedConcurrency: 1
     events:
       - http:
           path: marko
