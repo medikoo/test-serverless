@@ -4,7 +4,7 @@ tenantId: 'medikoo',
 applicationName: 'medikoo-test',
 appUid: 'GjXh77HjWzffv8X5SQ',
 tenantUid: '1sJrygBdcH5mNKPSp8',
-deploymentUid: 'da7f536b-7a3f-4ff7-b63c-1e4ebd464dff',
+deploymentUid: 'e2d3814b-8ac2-4091-b67e-802a7d98d216',
 serviceName: 'test-dashboard',
 stageName: 'dev',
 pluginVersion: '3.2.6'})
