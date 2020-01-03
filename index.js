@@ -6,6 +6,6 @@ module.exports.handler = (event, context, callback) => {
 	console.log("I'm in", Date.now() - startedAt, event);
 	callback(null, {
 		statusCode: 200,
-		body: JSON.stringify({ message: "Lambda test v5" }, null, 2)
+		body: JSON.stringify({ message: "Lambda test v6" }, null, 2)
 	});
 };
