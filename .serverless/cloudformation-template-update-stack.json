@@ -16,6 +16,46 @@
         }
       }
     },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
@@ -59,7 +99,8 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "logs:CreateLogStream"
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup"
                   ],
                   "Resource": [
                     {
@@ -105,7 +146,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-event-bridge-lambda/dev/1566894606416-2019-08-27T08:30:06.416Z/myFunction.zip"
+          "S3Key": "serverless/test-event-bridge-lambda/dev/1578070083226-2020-01-03T16:48:03.226Z/myFunction.zip"
         },
         "FunctionName": "test-event-bridge-lambda-dev-myFunction",
         "Handler": "index.handler",
@@ -116,7 +157,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs10.x",
+        "Runtime": "nodejs12.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -147,31 +188,6 @@
           }
         }
       }
-    },
-    "CustomDashresourceDasheventDashbridgeLambdaFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "ServerlessDeploymentBucket"
-          },
-          "S3Key": "serverless/test-event-bridge-lambda/dev/1566894606416-2019-08-27T08:30:06.416Z/custom-resources.zip"
-        },
-        "FunctionName": "test-event-bridge-lambda-dev-custom-resource-event-bridge",
-        "Handler": "eventBridge/handler.handler",
-        "MemorySize": 1024,
-        "Role": {
-          "Fn::GetAtt": [
-            "IamRoleCustomResourcesLambdaExecution",
-            "Arn"
-          ]
-        },
-        "Runtime": "nodejs10.x",
-        "Timeout": 180
-      },
-      "DependsOn": [
-        "IamRoleCustomResourcesLambdaExecution"
-      ]
     },
     "IamRoleCustomResourcesLambdaExecution": {
       "Type": "AWS::IAM::Role",
@@ -213,7 +229,11 @@
                     "Fn::Join": [
                       ":",
                       [
-                        "arn:aws:events",
+                        "arn",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        "events",
                         {
                           "Ref": "AWS::Region"
                         },
@@ -237,7 +257,11 @@
                     "Fn::Join": [
                       ":",
                       [
-                        "arn:aws:lambda",
+                        "arn",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        "lambda",
                         {
                           "Ref": "AWS::Region"
                         },
@@ -259,6 +283,31 @@
           }
         ]
       }
+    },
+    "CustomDashresourceDasheventDashbridgeLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/test-event-bridge-lambda/dev/1578070083226-2020-01-03T16:48:03.226Z/custom-resources.zip"
+        },
+        "FunctionName": "test-event-bridge-lambda-dev-custom-resource-event-bridge",
+        "Handler": "eventBridge/handler.handler",
+        "MemorySize": 1024,
+        "Runtime": "nodejs12.x",
+        "Timeout": 180,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleCustomResourcesLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "IamRoleCustomResourcesLambdaExecution"
+      ]
     }
   },
   "Outputs": {
