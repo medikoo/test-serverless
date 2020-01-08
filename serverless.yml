@@ -1,32 +1,19 @@
-service: test-api-gw-provisioned-concurrency
+service: test-7189
 
 provider:
   name: aws
   runtime: nodejs12.x
   region: us-east-1
   stage: dev
-  versionFunctions: false
-  logs:
-    restApi: true
-
-package:
-  individually: true
+  tracing:
+    lambda: true
+    apiGateway: true
 
 functions:
-  functionA:
+  function:
     handler: index.handler
-    provisionedConcurrency: 1
     events:
       - http:
           path: foo
           method: GET
-  functionC:
-    handler: index.handler
-    provisionedConcurrency: 1
-    events:
-      - http:
-          path: marko
-          method: GET
-
-plugins:
-  - serverless-plugin-reducer
+          cors: true

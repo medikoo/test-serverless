@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw-provisioned-concurrency",
+    "service": "test-7189",
     "serviceObject": {
-      "name": "test-api-gw-provisioned-concurrency"
+      "name": "test-7189"
     },
     "provider": {
       "stage": "dev",
@@ -10,10 +10,11 @@
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
-      "versionFunctions": false,
-      "logs": {
-        "restApi": true
+      "tracing": {
+        "lambda": true,
+        "apiGateway": true
       },
+      "versionFunctions": true,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -73,16 +74,10 @@
               }
             }
           },
-          "FunctionALogGroup": {
+          "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-provisioned-concurrency-dev-functionA"
-            }
-          },
-          "FunctionCLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-provisioned-concurrency-dev-functionC"
+              "LogGroupName": "/aws/lambda/test-7189-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -111,7 +106,7 @@
                       "-",
                       [
                         "dev",
-                        "test-api-gw-provisioned-concurrency",
+                        "test-7189",
                         "lambda"
                       ]
                     ]
@@ -127,7 +122,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-provisioned-concurrency-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7189-dev*:*"
                           }
                         ]
                       },
@@ -138,8 +133,18 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-provisioned-concurrency-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7189-dev*:*:*"
                           }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "xray:PutTraceSegments",
+                          "xray:PutTelemetryRecords"
+                        ],
+                        "Resource": [
+                          "*"
                         ]
                       }
                     ]
@@ -151,7 +156,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw-provisioned-concurrency",
+                    "test-7189",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -162,16 +167,16 @@
               }
             }
           },
-          "FunctionALambdaFunction": {
+          "FunctionLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1578069799127-2020-01-03T16:43:19.127Z/functionA.zip"
+                "S3Key": "serverless/test-7189/dev/1578502338066-2020-01-08T16:52:18.066Z/test-7189.zip"
               },
-              "FunctionName": "test-api-gw-provisioned-concurrency-dev-functionA",
+              "FunctionName": "test-7189-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -181,99 +186,30 @@
                 ]
               },
               "Runtime": "nodejs12.x",
-              "Timeout": 6
+              "Timeout": 6,
+              "TracingConfig": {
+                "Mode": "Active"
+              }
             },
             "DependsOn": [
-              "FunctionALogGroup",
+              "FunctionLogGroup",
               "IamRoleLambdaExecution"
             ]
           },
-          "FunctionALambdaVersionFBWM92NkVSS5N9wICQBcXXq2bMkfTsy47ng8IAeIxo": {
+          "FunctionLambdaVersionbqMZt0V56Rf2Y1CwPyMQae7wzU034AoVwxzjouEGs": {
             "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
-                "Ref": "FunctionALambdaFunction"
+                "Ref": "FunctionLambdaFunction"
               },
-              "CodeSha256": "h03mpx5SCxwboad2h65ZBul+Utp6aQVmD+8qePPbyUk="
+              "CodeSha256": "s4SNrTnsg+AZf+A6Em/o9Be6zfN2GgodAXdLbDn9/XI="
             }
-          },
-          "FunctionAProvConcLambdaAlias": {
-            "Type": "AWS::Lambda::Alias",
-            "Properties": {
-              "FunctionName": {
-                "Ref": "FunctionALambdaFunction"
-              },
-              "FunctionVersion": {
-                "Fn::GetAtt": [
-                  "FunctionALambdaVersionFBWM92NkVSS5N9wICQBcXXq2bMkfTsy47ng8IAeIxo",
-                  "Version"
-                ]
-              },
-              "Name": "provisioned",
-              "ProvisionedConcurrencyConfig": {
-                "ProvisionedConcurrentExecutions": 1
-              }
-            },
-            "DependsOn": "FunctionALambdaFunction"
-          },
-          "FunctionCLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1578069799127-2020-01-03T16:43:19.127Z/functionC.zip"
-              },
-              "FunctionName": "test-api-gw-provisioned-concurrency-dev-functionC",
-              "Handler": "index.handler",
-              "MemorySize": 1024,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              },
-              "Runtime": "nodejs12.x",
-              "Timeout": 6
-            },
-            "DependsOn": [
-              "FunctionCLogGroup",
-              "IamRoleLambdaExecution"
-            ]
-          },
-          "FunctionCLambdaVersionVg6LlVU9hLnCcaAOg4sSsvoRoVnbG6IMBUVBcMg7U": {
-            "Type": "AWS::Lambda::Version",
-            "Properties": {
-              "FunctionName": {
-                "Ref": "FunctionCLambdaFunction"
-              },
-              "CodeSha256": "h03mpx5SCxwboad2h65ZBul+Utp6aQVmD+8qePPbyUk="
-            }
-          },
-          "FunctionCProvConcLambdaAlias": {
-            "Type": "AWS::Lambda::Alias",
-            "Properties": {
-              "FunctionName": {
-                "Ref": "FunctionCLambdaFunction"
-              },
-              "FunctionVersion": {
-                "Fn::GetAtt": [
-                  "FunctionCLambdaVersionVg6LlVU9hLnCcaAOg4sSsvoRoVnbG6IMBUVBcMg7U",
-                  "Version"
-                ]
-              },
-              "Name": "provisioned",
-              "ProvisionedConcurrencyConfig": {
-                "ProvisionedConcurrentExecutions": 1
-              }
-            },
-            "DependsOn": "FunctionCLambdaFunction"
           },
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "dev-test-api-gw-provisioned-concurrency",
+              "Name": "dev-test-7189",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -317,16 +253,46 @@
               }
             }
           },
-          "ApiGatewayResourceMarko": {
-            "Type": "AWS::ApiGateway::Resource",
+          "ApiGatewayMethodFooOptions": {
+            "Type": "AWS::ApiGateway::Method",
             "Properties": {
-              "ParentId": {
-                "Fn::GetAtt": [
-                  "ApiGatewayRestApi",
-                  "RootResourceId"
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".*\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
                 ]
               },
-              "PathPart": "marko",
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFoo"
+              },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -363,12 +329,10 @@
                       ":lambda:path/2015-03-31/functions/",
                       {
                         "Fn::GetAtt": [
-                          "FunctionALambdaFunction",
+                          "FunctionLambdaFunction",
                           "Arn"
                         ]
                       },
-                      ":",
-                      "provisioned",
                       "/invocations"
                     ]
                   ]
@@ -377,52 +341,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayMethodMarkoGet": {
-            "Type": "AWS::ApiGateway::Method",
-            "Properties": {
-              "HttpMethod": "GET",
-              "RequestParameters": {},
-              "ResourceId": {
-                "Ref": "ApiGatewayResourceMarko"
-              },
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "ApiKeyRequired": false,
-              "AuthorizationType": "NONE",
-              "Integration": {
-                "IntegrationHttpMethod": "POST",
-                "Type": "AWS_PROXY",
-                "Uri": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":apigateway:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":lambda:path/2015-03-31/functions/",
-                      {
-                        "Fn::GetAtt": [
-                          "FunctionCLambdaFunction",
-                          "Arn"
-                        ]
-                      },
-                      ":",
-                      "provisioned",
-                      "/invocations"
-                    ]
-                  ]
-                }
-              },
-              "MethodResponses": []
-            }
-          },
-          "ApiGatewayDeployment1578069797136": {
+          "ApiGatewayDeployment1578502335155": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -431,11 +350,11 @@
               "StageName": "dev"
             },
             "DependsOn": [
-              "ApiGatewayMethodFooGet",
-              "ApiGatewayMethodMarkoGet"
+              "ApiGatewayMethodFooOptions",
+              "ApiGatewayMethodFooGet"
             ]
           },
-          "FunctionALambdaPermissionApiGateway": {
+          "FunctionLambdaPermissionApiGateway": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
@@ -444,11 +363,10 @@
                   [
                     {
                       "Fn::GetAtt": [
-                        "FunctionALambdaFunction",
+                        "FunctionLambdaFunction",
                         "Arn"
                       ]
-                    },
-                    "provisioned"
+                    }
                   ]
                 ]
               },
@@ -478,181 +396,7 @@
                   ]
                 ]
               }
-            },
-            "DependsOn": "FunctionAProvConcLambdaAlias"
-          },
-          "FunctionCLambdaPermissionApiGateway": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-              "FunctionName": {
-                "Fn::Join": [
-                  ":",
-                  [
-                    {
-                      "Fn::GetAtt": [
-                        "FunctionCLambdaFunction",
-                        "Arn"
-                      ]
-                    },
-                    "provisioned"
-                  ]
-                ]
-              },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "apigateway.amazonaws.com",
-              "SourceArn": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition"
-                    },
-                    ":execute-api:",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId"
-                    },
-                    ":",
-                    {
-                      "Ref": "ApiGatewayRestApi"
-                    },
-                    "/*/*"
-                  ]
-                ]
-              }
-            },
-            "DependsOn": "FunctionCProvConcLambdaAlias"
-          },
-          "ApiGatewayLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/api-gateway/test-api-gw-provisioned-concurrency-dev"
             }
-          },
-          "CustomApiGatewayAccountCloudWatchRole": {
-            "Type": "Custom::ApiGatewayAccountRole",
-            "Version": 1,
-            "Properties": {
-              "ServiceToken": {
-                "Fn::GetAtt": [
-                  "CustomDashresourceDashapigwDashcwDashroleLambdaFunction",
-                  "Arn"
-                ]
-              }
-            }
-          },
-          "IamRoleCustomResourcesLambdaExecution": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": {
-                    "Fn::Join": [
-                      "-",
-                      [
-                        "dev",
-                        "test-api-gw-provisioned-concurrency",
-                        "custom-resources-lambda"
-                      ]
-                    ]
-                  },
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Resource": {
-                          "Fn::Join": [
-                            ":",
-                            [
-                              "arn",
-                              {
-                                "Ref": "AWS::Partition"
-                              },
-                              "iam:",
-                              {
-                                "Ref": "AWS::AccountId"
-                              },
-                              "role/*"
-                            ]
-                          ]
-                        },
-                        "Action": [
-                          "iam:AttachRolePolicy",
-                          "iam:CreateRole",
-                          "iam:ListAttachedRolePolicies",
-                          "iam:PassRole"
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Resource": {
-                          "Fn::Join": [
-                            ":",
-                            [
-                              "arn",
-                              {
-                                "Ref": "AWS::Partition"
-                              },
-                              "apigateway:*::/account"
-                            ]
-                          ]
-                        },
-                        "Action": [
-                          "apigateway:GET",
-                          "apigateway:PATCH"
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
-          "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/test-api-gw-provisioned-concurrency/dev/1578069799127-2020-01-03T16:43:19.127Z/custom-resources.zip"
-              },
-              "FunctionName": "test-api-gw-provisioned-concurre5db30368454766477597e9b8602deb62",
-              "Handler": "apiGatewayCloudWatchRole/handler.handler",
-              "MemorySize": 1024,
-              "Runtime": "nodejs12.x",
-              "Timeout": 180,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleCustomResourcesLambdaExecution",
-                  "Arn"
-                ]
-              }
-            },
-            "DependsOn": [
-              "IamRoleCustomResourcesLambdaExecution"
-            ]
           }
         },
         "Outputs": {
@@ -661,16 +405,10 @@
               "Ref": "ServerlessDeploymentBucket"
             }
           },
-          "FunctionALambdaFunctionQualifiedArn": {
+          "FunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FunctionALambdaVersionFBWM92NkVSS5N9wICQBcXXq2bMkfTsy47ng8IAeIxo"
-            }
-          },
-          "FunctionCLambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "FunctionCLambdaVersionVg6LlVU9hLnCcaAOg4sSsvoRoVnbG6IMBUVBcMg7U"
+              "Ref": "FunctionLambdaVersionbqMZt0V56Rf2Y1CwPyMQae7wzU034AoVwxzjouEGs"
             }
           },
           "ServiceEndpoint": {
@@ -767,62 +505,53 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
     "pluginsData": {},
     "functions": {
-      "functionA": {
+      "function": {
         "handler": "index.handler",
-        "provisionedConcurrency": 1,
         "events": [
           {
             "http": {
               "path": "foo",
               "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
               "integration": "AWS_PROXY"
             }
           }
         ],
-        "name": "test-api-gw-provisioned-concurrency-dev-functionA",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/functionA.zip"
-        },
+        "name": "test-7189-dev-function",
+        "package": {},
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "FunctionALambdaVersionFBWM92NkVSS5N9wICQBcXXq2bMkfTsy47ng8IAeIxo"
-      },
-      "functionC": {
-        "handler": "index.handler",
-        "provisionedConcurrency": 1,
-        "events": [
-          {
-            "http": {
-              "path": "marko",
-              "method": "get",
-              "integration": "AWS_PROXY"
-            }
-          }
-        ],
-        "name": "test-api-gw-provisioned-concurrency-dev-functionC",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/functionC.zip"
-        },
-        "memory": 1024,
-        "timeout": 6,
-        "runtime": "nodejs12.x",
-        "vpc": {},
-        "versionLogicalId": "FunctionCLambdaVersionVg6LlVU9hLnCcaAOg4sSsvoRoVnbG6IMBUVBcMg7U"
+        "versionLogicalId": "FunctionLambdaVersionbqMZt0V56Rf2Y1CwPyMQae7wzU034AoVwxzjouEGs"
       }
     },
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "layers": {},
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-7189.zip"
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-provisioned-concurrency/dev/1578069799127-2020-01-03T16:43:19.127Z",
-    "artifact": ""
+    "artifactDirectoryName": "serverless/test-7189/dev/1578502338066-2020-01-08T16:52:18.066Z",
+    "artifact": "test-7189.zip"
   }
 }
