@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-stack-tags
 
 provider:
   name: aws
@@ -6,6 +6,8 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
+  stackTags:
+    environment: development
 
 package:
   individually: true

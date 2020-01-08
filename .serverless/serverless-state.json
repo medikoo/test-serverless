@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-stack-tags",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-stack-tags"
     },
     "provider": {
       "stage": "dev",
@@ -11,6 +11,9 @@
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
+      "stackTags": {
+        "environment": "development"
+      },
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -73,7 +76,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-stack-tags-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -102,7 +105,7 @@
                       "-",
                       [
                         "dev",
-                        "test-regular-lambda",
+                        "test-stack-tags",
                         "lambda"
                       ]
                     ]
@@ -118,7 +121,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-stack-tags-dev*:*"
                           }
                         ]
                       },
@@ -129,7 +132,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-stack-tags-dev*:*:*"
                           }
                         ]
                       }
@@ -142,7 +145,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda",
+                    "test-stack-tags",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -160,9 +163,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1576849282073-2019-12-20T13:41:22.073Z/function.zip"
+                "S3Key": "serverless/test-stack-tags/dev/1578495798838-2020-01-08T15:03:18.838Z/function.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-function",
+              "FunctionName": "test-stack-tags-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -265,7 +268,7 @@
       "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-regular-lambda-dev-function",
+        "name": "test-stack-tags-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -280,7 +283,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1576849282073-2019-12-20T13:41:22.073Z",
+    "artifactDirectoryName": "serverless/test-stack-tags/dev/1578495798838-2020-01-08T15:03:18.838Z",
     "artifact": ""
   }
 }
