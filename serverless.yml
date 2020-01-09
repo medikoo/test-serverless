@@ -17,3 +17,10 @@ functions:
           path: foo
           method: GET
           cors: true
+  functionB:
+    handler: index.handler
+    events:
+      - http:
+          path: foo
+          method: GET
+          cors: true

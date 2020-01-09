@@ -80,6 +80,12 @@
               "LogGroupName": "/aws/lambda/test-7189-dev-function"
             }
           },
+          "FunctionBLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-7189-dev-functionB"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -174,7 +180,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-7189/dev/1578502338066-2020-01-08T16:52:18.066Z/test-7189.zip"
+                "S3Key": "serverless/test-7189/dev/1578562384533-2020-01-09T09:33:04.533Z/test-7189.zip"
               },
               "FunctionName": "test-7189-dev-function",
               "Handler": "index.handler",
@@ -202,6 +208,45 @@
             "Properties": {
               "FunctionName": {
                 "Ref": "FunctionLambdaFunction"
+              },
+              "CodeSha256": "s4SNrTnsg+AZf+A6Em/o9Be6zfN2GgodAXdLbDn9/XI="
+            }
+          },
+          "FunctionBLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-7189/dev/1578562384533-2020-01-09T09:33:04.533Z/test-7189.zip"
+              },
+              "FunctionName": "test-7189-dev-functionB",
+              "Handler": "index.handler",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs12.x",
+              "Timeout": 6,
+              "TracingConfig": {
+                "Mode": "Active"
+              }
+            },
+            "DependsOn": [
+              "FunctionBLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "FunctionBLambdaVersionPq3IWylPoSrezud1qUaBwU8pitDIhIb0vxCzbu91zI": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionBLambdaFunction"
               },
               "CodeSha256": "s4SNrTnsg+AZf+A6Em/o9Be6zfN2GgodAXdLbDn9/XI="
             }
@@ -329,7 +374,7 @@
                       ":lambda:path/2015-03-31/functions/",
                       {
                         "Fn::GetAtt": [
-                          "FunctionLambdaFunction",
+                          "FunctionBLambdaFunction",
                           "Arn"
                         ]
                       },
@@ -341,7 +386,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1578502335155": {
+          "ApiGatewayDeployment1578562381073": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -351,6 +396,7 @@
             },
             "DependsOn": [
               "ApiGatewayMethodFooOptions",
+              "ApiGatewayMethodFooGet",
               "ApiGatewayMethodFooGet"
             ]
           },
@@ -397,6 +443,50 @@
                 ]
               }
             }
+          },
+          "FunctionBLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::Join": [
+                  ":",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "FunctionBLambdaFunction",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
           }
         },
         "Outputs": {
@@ -409,6 +499,12 @@
             "Description": "Current Lambda function version",
             "Value": {
               "Ref": "FunctionLambdaVersionbqMZt0V56Rf2Y1CwPyMQae7wzU034AoVwxzjouEGs"
+            }
+          },
+          "FunctionBLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "FunctionBLambdaVersionPq3IWylPoSrezud1qUaBwU8pitDIhIb0vxCzbu91zI"
             }
           },
           "ServiceEndpoint": {
@@ -544,6 +640,44 @@
         "runtime": "nodejs12.x",
         "vpc": {},
         "versionLogicalId": "FunctionLambdaVersionbqMZt0V56Rf2Y1CwPyMQae7wzU034AoVwxzjouEGs"
+      },
+      "functionB": {
+        "handler": "index.handler",
+        "events": [
+          {
+            "http": {
+              "path": "foo",
+              "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "test-7189-dev-functionB",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {},
+        "versionLogicalId": "FunctionBLambdaVersionPq3IWylPoSrezud1qUaBwU8pitDIhIb0vxCzbu91zI"
       }
     },
     "serviceFilename": "serverless.yml",
@@ -551,7 +685,7 @@
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-7189.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-7189/dev/1578502338066-2020-01-08T16:52:18.066Z",
+    "artifactDirectoryName": "serverless/test-7189/dev/1578562384533-2020-01-09T09:33:04.533Z",
     "artifact": "test-7189.zip"
   }
 }
