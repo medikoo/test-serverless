@@ -113,7 +113,8 @@
                       {
                         "Effect": "Allow",
                         "Action": [
-                          "logs:CreateLogStream"
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup"
                         ],
                         "Resource": [
                           {
@@ -159,7 +160,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1576676056057-2019-12-18T13:34:16.057Z/function.zip"
+                "S3Key": "serverless/test-api-gw/dev/1578586424376-2020-01-09T16:13:44.376Z/function.zip"
               },
               "FunctionName": "test-api-gw-dev-function",
               "Handler": "index.handler",
@@ -185,6 +186,27 @@
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
+                ]
+              },
+              "Policy": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": "*",
+                    "Action": "execute-api:Invoke",
+                    "Resource": [
+                      "execute-api:/*/*/*"
+                    ],
+                    "Condition": {
+                      "IpAddress": {
+                        "aws:SourceIp": [
+                          "0.0.0.0/0",
+                          "::/0"
+                        ]
+                      }
+                    }
+                  }
                 ]
               }
             }
@@ -247,7 +269,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1576676054433": {
+          "ApiGatewayDeployment1578586422732": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -263,9 +285,16 @@
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
-                "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
-                  "Arn"
+                "Fn::Join": [
+                  ":",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "FunctionLambdaFunction",
+                        "Arn"
+                      ]
+                    }
+                  ]
                 ]
               },
               "Action": "lambda:InvokeFunction",
@@ -428,7 +457,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1576676056057-2019-12-18T13:34:16.057Z",
+    "artifactDirectoryName": "serverless/test-api-gw/dev/1578586424376-2020-01-09T16:13:44.376Z",
     "artifact": ""
   }
 }
