@@ -24,3 +24,4 @@ functions:
           path: foo
           method: GET
           cors: true
+          authorizer: function

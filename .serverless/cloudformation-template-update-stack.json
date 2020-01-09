@@ -162,7 +162,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-7189/dev/1578562384533-2020-01-09T09:33:04.533Z/test-7189.zip"
+          "S3Key": "serverless/test-7189/dev/1578567701991-2020-01-09T11:01:41.991Z/test-7189.zip"
         },
         "FunctionName": "test-7189-dev-function",
         "Handler": "index.handler",
@@ -201,7 +201,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-7189/dev/1578562384533-2020-01-09T09:33:04.533Z/test-7189.zip"
+          "S3Key": "serverless/test-7189/dev/1578567701991-2020-01-09T11:01:41.991Z/test-7189.zip"
         },
         "FunctionName": "test-7189-dev-functionB",
         "Handler": "index.handler",
@@ -337,7 +337,7 @@
           "Ref": "ApiGatewayRestApi"
         },
         "ApiKeyRequired": false,
-        "AuthorizationType": "NONE",
+        "AuthorizationType": "CUSTOM",
         "Integration": {
           "IntegrationHttpMethod": "POST",
           "Type": "AWS_PROXY",
@@ -365,10 +365,48 @@
             ]
           }
         },
-        "MethodResponses": []
+        "MethodResponses": [],
+        "AuthorizerId": {
+          "Ref": "FunctionApiGatewayAuthorizer"
+        }
+      },
+      "DependsOn": "FunctionApiGatewayAuthorizer"
+    },
+    "FunctionApiGatewayAuthorizer": {
+      "Type": "AWS::ApiGateway::Authorizer",
+      "Properties": {
+        "IdentitySource": "method.request.header.Authorization",
+        "Name": "function",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "AuthorizerUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "FunctionLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        },
+        "Type": "TOKEN"
       }
     },
-    "ApiGatewayDeployment1578562381073": {
+    "ApiGatewayDeployment1578567698893": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -386,16 +424,9 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Fn::Join": [
-            ":",
-            [
-              {
-                "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
-                  "Arn"
-                ]
-              }
-            ]
+          "Fn::GetAtt": [
+            "FunctionLambdaFunction",
+            "Arn"
           ]
         },
         "Action": "lambda:InvokeFunction",
@@ -430,16 +461,9 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Fn::Join": [
-            ":",
-            [
-              {
-                "Fn::GetAtt": [
-                  "FunctionBLambdaFunction",
-                  "Arn"
-                ]
-              }
-            ]
+          "Fn::GetAtt": [
+            "FunctionBLambdaFunction",
+            "Arn"
           ]
         },
         "Action": "lambda:InvokeFunction",
