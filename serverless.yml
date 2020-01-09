@@ -1,4 +1,4 @@
-service: test-api-gw
+service: test-api-gw-integration-creds
 
 provider:
   name: aws
@@ -17,6 +17,15 @@ functions:
       - http:
           path: foo
           method: GET
+          authorizer: aws_iam
 
 plugins:
   - serverless-plugin-reducer
+
+resources:
+  Resources:
+    ApiGatewayMethodFooGet:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        Integration:
+          Credentials: "arn:aws:iam::*:user/*"

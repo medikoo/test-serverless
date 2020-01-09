@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw",
+    "service": "test-api-gw-integration-creds",
     "serviceObject": {
-      "name": "test-api-gw"
+      "name": "test-api-gw-integration-creds"
     },
     "provider": {
       "stage": "dev",
@@ -73,7 +73,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-dev-function"
+              "LogGroupName": "/aws/lambda/test-api-gw-integration-creds-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -102,7 +102,7 @@
                       "-",
                       [
                         "dev",
-                        "test-api-gw",
+                        "test-api-gw-integration-creds",
                         "lambda"
                       ]
                     ]
@@ -118,7 +118,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-integration-creds-dev*:*"
                           }
                         ]
                       },
@@ -129,7 +129,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-integration-creds-dev*:*:*"
                           }
                         ]
                       }
@@ -142,7 +142,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw",
+                    "test-api-gw-integration-creds",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -160,9 +160,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1578586459898-2020-01-09T16:14:19.898Z/function.zip"
+                "S3Key": "serverless/test-api-gw-integration-creds/dev/1578589491108-2020-01-09T17:04:51.108Z/function.zip"
               },
-              "FunctionName": "test-api-gw-dev-function",
+              "FunctionName": "test-api-gw-integration-creds-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -182,7 +182,7 @@
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "dev-test-api-gw",
+              "Name": "dev-test-api-gw-integration-creds",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -238,7 +238,7 @@
                 "Ref": "ApiGatewayRestApi"
               },
               "ApiKeyRequired": false,
-              "AuthorizationType": "NONE",
+              "AuthorizationType": "AWS_IAM",
               "Integration": {
                 "IntegrationHttpMethod": "POST",
                 "Type": "AWS_PROXY",
@@ -264,12 +264,13 @@
                       "/invocations"
                     ]
                   ]
-                }
+                },
+                "Credentials": "arn:aws:iam::*:user/*"
               },
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1578586458069": {
+          "ApiGatewayDeployment1578589489988": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -438,11 +439,15 @@
             "http": {
               "path": "foo",
               "method": "get",
+              "authorizer": {
+                "type": "AWS_IAM",
+                "identitySource": "method.request.header.Authorization"
+              },
               "integration": "AWS_PROXY"
             }
           }
         ],
-        "name": "test-api-gw-dev-function",
+        "name": "test-api-gw-integration-creds-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -452,12 +457,25 @@
         "vpc": {}
       }
     },
+    "resources": {
+      "Resources": {
+        "ApiGatewayMethodFooGet": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "Integration": {
+              "Credentials": "arn:aws:iam::*:user/*"
+            }
+          }
+        }
+      },
+      "Outputs": {}
+    },
     "serviceFilename": "serverless.yml",
     "layers": {}
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1578586459898-2020-01-09T16:14:19.898Z",
+    "artifactDirectoryName": "serverless/test-api-gw-integration-creds/dev/1578589491108-2020-01-09T17:04:51.108Z",
     "artifact": ""
   }
 }
