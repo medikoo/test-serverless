@@ -105,7 +105,8 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "logs:CreateLogStream"
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup"
                   ],
                   "Resource": [
                     {
@@ -157,7 +158,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer-foo/dev/1575924046330-2019-12-09T20:40:46.330Z/authorize.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer-foo/dev/1578997279530-2020-01-14T10:21:19.530Z/authorize.zip"
         },
         "FunctionName": "authorize-foo",
         "Handler": "index.handler",
@@ -183,7 +184,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer-foo/dev/1575924046330-2019-12-09T20:40:46.330Z/function.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer-foo/dev/1578997279530-2020-01-14T10:21:19.530Z/function.zip"
         },
         "FunctionName": "function-foo",
         "Handler": "index.handler",
@@ -209,6 +210,27 @@
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
+          ]
+        },
+        "Policy": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "execute-api:Invoke",
+              "Resource": [
+                "execute-api:/*/*/*"
+              ],
+              "Condition": {
+                "IpAddress": {
+                  "aws:SourceIp": [
+                    "0.0.0.0/0",
+                    "::/0"
+                  ]
+                }
+              }
+            }
           ]
         }
       }
@@ -321,7 +343,7 @@
         "Type": "TOKEN"
       }
     },
-    "ApiGatewayDeployment1575924045353": {
+    "ApiGatewayDeployment1578997277668": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
