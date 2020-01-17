@@ -6,6 +6,15 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
+  environment:
+    APIG_ENDPOINT:
+      Fn::Join:
+        - ""
+        - - Ref: WebsocketsApi
+          - .execute-api.
+          - Ref: AWS::Region
+          - .amazonaws.com/
+          - ${self:provider.stage}
 
 package:
   individually: true

@@ -155,7 +155,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-websocket-lambda/dev/1579251393401-2020-01-17T08:56:33.401Z/function.zip"
+          "S3Key": "serverless/test-websocket-lambda/dev/1579251478642-2020-01-17T08:57:58.642Z/function.zip"
         },
         "FunctionName": "test-websocket-lambda-dev-function",
         "Handler": "index.handler",
@@ -167,7 +167,27 @@
           ]
         },
         "Runtime": "nodejs12.x",
-        "Timeout": 6
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "APIG_ENDPOINT": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "WebsocketsApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".amazonaws.com/",
+                  "dev"
+                ]
+              ]
+            }
+          }
+        }
       },
       "DependsOn": [
         "FunctionLogGroup",
@@ -253,7 +273,7 @@
         }
       }
     },
-    "WebsocketsDeployment1579251391303": {
+    "WebsocketsDeployment1579251477405": {
       "Type": "AWS::ApiGatewayV2::Deployment",
       "DependsOn": [
         "SdefaultWebsocketsRoute"
@@ -272,7 +292,7 @@
           "Ref": "WebsocketsApi"
         },
         "DeploymentId": {
-          "Ref": "WebsocketsDeployment1579251391303"
+          "Ref": "WebsocketsDeployment1579251477405"
         },
         "StageName": "dev",
         "Description": "Serverless Websockets"
