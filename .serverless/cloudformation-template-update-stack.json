@@ -155,7 +155,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-7206/local/1579251893462-2020-01-17T09:04:53.462Z/ws-connection-handler.zip"
+          "S3Key": "serverless/test-7206/local/1579251937064-2020-01-17T09:05:37.064Z/test-7206.zip"
         },
         "FunctionName": "test-7206-local-ws-connection-handler",
         "Handler": "index.js",
@@ -194,14 +194,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "WsDashconnectionDashhandlerLambdaVersionC7GIrKoZYJdP8nc6WJcV5qGpDZwXnTPkcRRIH2wOZs": {
+    "WsDashconnectionDashhandlerLambdaVersionNUSYiwu5Cfc5E6iAamhQIyVyNm3yzwJj4VDo9FPjZw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "WsDashconnectionDashhandlerLambdaFunction"
         },
-        "CodeSha256": "zn2lQQrH9ketCHDtLCp3otYspG6ko+6qQvhol99bDIQ="
+        "CodeSha256": "Vr8ZVLa1NHEQR2w3NlYAyz2BPf/wLsvXsXxaPCu+6Co="
       }
     },
     "WebsocketsApi": {
@@ -346,7 +346,7 @@
         }
       }
     },
-    "WebsocketsDeployment1579251892309": {
+    "WebsocketsDeployment1579251933726": {
       "Type": "AWS::ApiGatewayV2::Deployment",
       "DependsOn": [
         "SconnectWebsocketsRoute",
@@ -368,7 +368,7 @@
           "Ref": "WebsocketsApi"
         },
         "DeploymentId": {
-          "Ref": "WebsocketsDeployment1579251892309"
+          "Ref": "WebsocketsDeployment1579251933726"
         },
         "StageName": "local",
         "Description": "Serverless Websockets"
@@ -384,7 +384,7 @@
     "WsDashconnectionDashhandlerLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "WsDashconnectionDashhandlerLambdaVersionC7GIrKoZYJdP8nc6WJcV5qGpDZwXnTPkcRRIH2wOZs"
+        "Ref": "WsDashconnectionDashhandlerLambdaVersionNUSYiwu5Cfc5E6iAamhQIyVyNm3yzwJj4VDo9FPjZw"
       }
     },
     "ServiceEndpointWebsocket": {

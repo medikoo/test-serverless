@@ -21,9 +21,6 @@ custom:
     local: "${self:service}-local"
     dev: "${self:service}-dev"
 
-package:
-  individually: true
-
 functions:
   # region WebSockets
   ws-connection-handler:
@@ -40,6 +37,3 @@ functions:
 
       - websocket:
           route: $disconnect
-
-plugins:
-  - serverless-plugin-reducer
