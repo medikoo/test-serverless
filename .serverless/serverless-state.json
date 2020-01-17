@@ -113,7 +113,8 @@
                       {
                         "Effect": "Allow",
                         "Action": [
-                          "logs:CreateLogStream"
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup"
                         ],
                         "Resource": [
                           {
@@ -168,7 +169,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-websocket-lambda/dev/1574783021683-2019-11-26T15:43:41.683Z/function.zip"
+                "S3Key": "serverless/test-websocket-lambda/dev/1579251393401-2020-01-17T08:56:33.401Z/function.zip"
               },
               "FunctionName": "test-websocket-lambda-dev-function",
               "Handler": "index.handler",
@@ -266,7 +267,7 @@
               }
             }
           },
-          "WebsocketsDeployment1574783020164": {
+          "WebsocketsDeployment1579251391303": {
             "Type": "AWS::ApiGatewayV2::Deployment",
             "DependsOn": [
               "SdefaultWebsocketsRoute"
@@ -285,7 +286,7 @@
                 "Ref": "WebsocketsApi"
               },
               "DeploymentId": {
-                "Ref": "WebsocketsDeployment1574783020164"
+                "Ref": "WebsocketsDeployment1579251391303"
               },
               "StageName": "dev",
               "Description": "Serverless Websockets"
@@ -415,11 +416,12 @@
       }
     },
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "layers": {},
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-websocket-lambda/dev/1574783021683-2019-11-26T15:43:41.683Z",
+    "artifactDirectoryName": "serverless/test-websocket-lambda/dev/1579251393401-2020-01-17T08:56:33.401Z",
     "artifact": ""
   }
 }
