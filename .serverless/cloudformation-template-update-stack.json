@@ -56,10 +56,10 @@
         }
       }
     },
-    "FunctionLogGroup": {
+    "WsDashconnectionDashhandlerLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-websocket-lambda-dev-function"
+        "LogGroupName": "/aws/lambda/test-7206-local-ws-connection-handler"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,8 +87,8 @@
               "Fn::Join": [
                 "-",
                 [
-                  "dev",
-                  "test-websocket-lambda",
+                  "local",
+                  "test-7206",
                   "lambda"
                 ]
               ]
@@ -104,7 +104,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-websocket-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7206-local*:*"
                     }
                   ]
                 },
@@ -115,7 +115,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-websocket-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7206-local*:*:*"
                     }
                   ]
                 },
@@ -137,8 +137,8 @@
           "Fn::Join": [
             "-",
             [
-              "test-websocket-lambda",
-              "dev",
+              "test-7206",
+              "local",
               {
                 "Ref": "AWS::Region"
               },
@@ -148,17 +148,17 @@
         }
       }
     },
-    "FunctionLambdaFunction": {
+    "WsDashconnectionDashhandlerLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-websocket-lambda/dev/1579251478642-2020-01-17T08:57:58.642Z/function.zip"
+          "S3Key": "serverless/test-7206/local/1579251893462-2020-01-17T09:04:53.462Z/ws-connection-handler.zip"
         },
-        "FunctionName": "test-websocket-lambda-dev-function",
-        "Handler": "index.handler",
+        "FunctionName": "test-7206-local-ws-connection-handler",
+        "Handler": "index.js",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -182,7 +182,7 @@
                     "Ref": "AWS::Region"
                   },
                   ".amazonaws.com/",
-                  "dev"
+                  "local"
                 ]
               ]
             }
@@ -190,20 +190,30 @@
         }
       },
       "DependsOn": [
-        "FunctionLogGroup",
+        "WsDashconnectionDashhandlerLogGroup",
         "IamRoleLambdaExecution"
       ]
+    },
+    "WsDashconnectionDashhandlerLambdaVersionC7GIrKoZYJdP8nc6WJcV5qGpDZwXnTPkcRRIH2wOZs": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "WsDashconnectionDashhandlerLambdaFunction"
+        },
+        "CodeSha256": "zn2lQQrH9ketCHDtLCp3otYspG6ko+6qQvhol99bDIQ="
+      }
     },
     "WebsocketsApi": {
       "Type": "AWS::ApiGatewayV2::Api",
       "Properties": {
-        "Name": "dev-test-websocket-lambda-websockets",
+        "Name": "local-test-7206-websockets",
         "RouteSelectionExpression": "$request.body.action",
         "Description": "Serverless Websockets",
         "ProtocolType": "WEBSOCKET"
       }
     },
-    "FunctionWebsocketsIntegration": {
+    "WsDashconnectionDashhandlerWebsocketsIntegration": {
       "Type": "AWS::ApiGatewayV2::Integration",
       "Properties": {
         "ApiId": {
@@ -225,7 +235,7 @@
               ":lambda:path/2015-03-31/functions/",
               {
                 "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
+                  "WsDashconnectionDashhandlerLambdaFunction",
                   "Arn"
                 ]
               },
@@ -235,21 +245,63 @@
         }
       }
     },
-    "FunctionLambdaPermissionWebsockets": {
+    "WsDashconnectionDashhandlerLambdaPermissionWebsockets": {
       "Type": "AWS::Lambda::Permission",
       "DependsOn": [
         "WebsocketsApi",
-        "FunctionLambdaFunction"
+        "WsDashconnectionDashhandlerLambdaFunction"
       ],
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "FunctionLambdaFunction",
+            "WsDashconnectionDashhandlerLambdaFunction",
             "Arn"
           ]
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "SconnectWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "$connect",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "WsDashconnectionDashhandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "messageWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "message",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "WsDashconnectionDashhandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
       }
     },
     "SdefaultWebsocketsRoute": {
@@ -266,17 +318,41 @@
             [
               "integrations",
               {
-                "Ref": "FunctionWebsocketsIntegration"
+                "Ref": "WsDashconnectionDashhandlerWebsocketsIntegration"
               }
             ]
           ]
         }
       }
     },
-    "WebsocketsDeployment1579251477405": {
+    "SdisconnectWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "$disconnect",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "WsDashconnectionDashhandlerWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "WebsocketsDeployment1579251892309": {
       "Type": "AWS::ApiGatewayV2::Deployment",
       "DependsOn": [
-        "SdefaultWebsocketsRoute"
+        "SconnectWebsocketsRoute",
+        "messageWebsocketsRoute",
+        "SdefaultWebsocketsRoute",
+        "SdisconnectWebsocketsRoute"
       ],
       "Properties": {
         "ApiId": {
@@ -292,9 +368,9 @@
           "Ref": "WebsocketsApi"
         },
         "DeploymentId": {
-          "Ref": "WebsocketsDeployment1579251477405"
+          "Ref": "WebsocketsDeployment1579251892309"
         },
-        "StageName": "dev",
+        "StageName": "local",
         "Description": "Serverless Websockets"
       }
     }
@@ -303,6 +379,12 @@
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "WsDashconnectionDashhandlerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "WsDashconnectionDashhandlerLambdaVersionC7GIrKoZYJdP8nc6WJcV5qGpDZwXnTPkcRRIH2wOZs"
       }
     },
     "ServiceEndpointWebsocket": {
@@ -323,7 +405,7 @@
             {
               "Ref": "AWS::URLSuffix"
             },
-            "/dev"
+            "/local"
           ]
         ]
       }

@@ -1,11 +1,10 @@
-service: test-websocket-lambda
+service: test-7206
 
 provider:
   name: aws
   runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
+  stage: "${opt:stage, self:custom.defaults.stage}"
+  profile: "${self:custom.profiles.${self:provider.stage}}"
   environment:
     APIG_ENDPOINT:
       Fn::Join:
@@ -15,15 +14,32 @@ provider:
           - Ref: AWS::Region
           - .amazonaws.com/
           - ${self:provider.stage}
+custom:
+  defaults:
+    stage: local
+  profiles:
+    local: "${self:service}-local"
+    dev: "${self:service}-dev"
 
 package:
   individually: true
 
 functions:
-  function:
-    handler: index.handler
+  # region WebSockets
+  ws-connection-handler:
+    handler: index.js
     events:
-      - websocket: $default
+      - websocket:
+          route: $connect
+
+      - websocket:
+          route: message
+
+      - websocket:
+          route: $default
+
+      - websocket:
+          route: $disconnect
 
 plugins:
   - serverless-plugin-reducer
