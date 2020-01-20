@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-dashboard",
+    "service": "test-dashboard-outputs",
     "serviceObject": {
-      "name": "test-dashboard"
+      "name": "test-dashboard-outputs"
     },
     "provider": {
       "stage": "dev",
@@ -73,7 +73,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-dashboard-dev-function"
+              "LogGroupName": "/aws/lambda/test-dashboard-outputs-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -102,7 +102,7 @@
                       "-",
                       [
                         "dev",
-                        "test-dashboard",
+                        "test-dashboard-outputs",
                         "lambda"
                       ]
                     ]
@@ -118,7 +118,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-outputs-dev*:*"
                           }
                         ]
                       },
@@ -129,7 +129,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-outputs-dev*:*:*"
                           }
                         ]
                       }
@@ -142,7 +142,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-dashboard",
+                    "test-dashboard-outputs",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -206,9 +206,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard/dev/1578049752461-2020-01-03T11:09:12.461Z/function.zip"
+                "S3Key": "serverless/test-dashboard-outputs/dev/1579525315036-2020-01-20T13:01:55.036Z/function.zip"
               },
-              "FunctionName": "test-dashboard-dev-function",
+              "FunctionName": "test-dashboard-outputs-dev-function",
               "Handler": "s_function.handler",
               "MemorySize": 1024,
               "Role": {
@@ -228,7 +228,7 @@
           "CloudWatchLogsSubscriptionFilterFunctionLogGroup": {
             "Type": "AWS::Logs::SubscriptionFilter",
             "Properties": {
-              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard#dev",
+              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard-outputs#dev",
               "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
               "LogGroupName": {
                 "Ref": "FunctionLogGroup"
@@ -334,7 +334,7 @@
       "function": {
         "handler": "s_function.handler",
         "events": [],
-        "name": "test-dashboard-dev-function",
+        "name": "test-dashboard-outputs-dev-function",
         "package": {
           "include": [
             "s_function.js",
@@ -350,14 +350,24 @@
     },
     "serviceFilename": "serverless.yml",
     "app": "medikoo-test",
-    "tenant": "medikoo",
+    "org": "medikoo",
     "layers": {},
+    "outputs": {
+      "my-key": "my-value",
+      "test.dotted": "foo",
+      "my-availability-zones": [
+        "us-east-1a",
+        "us-east-1b"
+      ]
+    },
+    "isDashboardMonitoringPreconfigured": true,
+    "isDashboardAppPreconfigured": true,
     "appUid": "GjXh77HjWzffv8X5SQ",
-    "tenantUid": "1sJrygBdcH5mNKPSp8"
+    "orgUid": "1sJrygBdcH5mNKPSp8"
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard/dev/1578049752461-2020-01-03T11:09:12.461Z",
+    "artifactDirectoryName": "serverless/test-dashboard-outputs/dev/1579525315036-2020-01-20T13:01:55.036Z",
     "artifact": ""
   }
 }

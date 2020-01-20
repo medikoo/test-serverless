@@ -1,7 +1,14 @@
-service: test-dashboard
+service: test-dashboard-outputs
 
 tenant: medikoo
 app: medikoo-test
+
+outputs:
+  my-key: my-value
+  test.dotted: foo
+  my-availability-zones:
+    - us-east-1a
+    - us-east-1b
 
 provider:
   name: aws
