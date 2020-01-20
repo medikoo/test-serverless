@@ -146,7 +146,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1578586459898-2020-01-09T16:14:19.898Z/function.zip"
+          "S3Key": "serverless/test-api-gw/dev/1579525498349-2020-01-20T13:04:58.349Z/function.zip"
         },
         "FunctionName": "test-api-gw-dev-function",
         "Handler": "index.handler",
@@ -174,27 +174,7 @@
             "EDGE"
           ]
         },
-        "Policy": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "execute-api:Invoke",
-              "Resource": [
-                "execute-api:/*/*/*"
-              ],
-              "Condition": {
-                "IpAddress": {
-                  "aws:SourceIp": [
-                    "0.0.0.0/0",
-                    "::/0"
-                  ]
-                }
-              }
-            }
-          ]
-        }
+        "Policy": ""
       }
     },
     "ApiGatewayResourceFoo": {
@@ -255,7 +235,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1578586458069": {
+    "ApiGatewayDeployment1579525496646": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -271,16 +251,9 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Fn::Join": [
-            ":",
-            [
-              {
-                "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
-                  "Arn"
-                ]
-              }
-            ]
+          "Fn::GetAtt": [
+            "FunctionLambdaFunction",
+            "Arn"
           ]
         },
         "Action": "lambda:InvokeFunction",
