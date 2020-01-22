@@ -6,8 +6,15 @@ app: medikoo-test
 outputs:
   my-key: my-value
   test.dotted: foo
+  marko:
+    fabio: elo
+    miszko: gazo
   my-availability-zones:
     - us-east-1a
+    - us-east-1b
+  array-in-array:
+    - - foo
+      - bar
     - us-east-1b
 
 provider:
