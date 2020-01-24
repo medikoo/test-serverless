@@ -59,7 +59,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-api-gw-dev-function"
+        "LogGroupName": "/aws/lambda/test-http-api-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -88,7 +88,7 @@
                 "-",
                 [
                   "dev",
-                  "test-api-gw",
+                  "test-http-api",
                   "lambda"
                 ]
               ]
@@ -104,7 +104,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*"
                     }
                   ]
                 },
@@ -115,7 +115,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*:*"
                     }
                   ]
                 }
@@ -128,7 +128,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-api-gw",
+              "test-http-api",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -146,9 +146,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1579525522932-2020-01-20T13:05:22.932Z/function.zip"
+          "S3Key": "serverless/test-http-api/dev/1579867017409-2020-01-24T11:56:57.409Z/function.zip"
         },
-        "FunctionName": "test-api-gw-dev-function",
+        "FunctionName": "test-http-api-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -165,133 +165,7 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "ApiGatewayRestApi": {
-      "Type": "AWS::ApiGateway::RestApi",
-      "Properties": {
-        "Name": "dev-test-api-gw",
-        "EndpointConfiguration": {
-          "Types": [
-            "EDGE"
-          ]
-        },
-        "Policy": ""
-      }
-    },
-    "ApiGatewayResourceFoo": {
-      "Type": "AWS::ApiGateway::Resource",
-      "Properties": {
-        "ParentId": {
-          "Fn::GetAtt": [
-            "ApiGatewayRestApi",
-            "RootResourceId"
-          ]
-        },
-        "PathPart": "foo",
-        "RestApiId": {
-          "Ref": "ApiGatewayRestApi"
-        }
-      }
-    },
-    "ApiGatewayMethodFooGet": {
-      "Type": "AWS::ApiGateway::Method",
-      "Properties": {
-        "HttpMethod": "GET",
-        "RequestParameters": {},
-        "ResourceId": {
-          "Ref": "ApiGatewayResourceFoo"
-        },
-        "RestApiId": {
-          "Ref": "ApiGatewayRestApi"
-        },
-        "ApiKeyRequired": false,
-        "AuthorizationType": "NONE",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region"
-                },
-                ":lambda:path/2015-03-31/functions/",
-                {
-                  "Fn::GetAtt": [
-                    "FunctionLambdaFunction",
-                    "Arn"
-                  ]
-                },
-                "/invocations"
-              ]
-            ]
-          }
-        },
-        "MethodResponses": []
-      }
-    },
-    "ApiGatewayMethodFooPost": {
-      "Type": "AWS::ApiGateway::Method",
-      "Properties": {
-        "HttpMethod": "POST",
-        "RequestParameters": {},
-        "ResourceId": {
-          "Ref": "ApiGatewayResourceFoo"
-        },
-        "RestApiId": {
-          "Ref": "ApiGatewayRestApi"
-        },
-        "ApiKeyRequired": false,
-        "AuthorizationType": "NONE",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition"
-                },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region"
-                },
-                ":lambda:path/2015-03-31/functions/",
-                {
-                  "Fn::GetAtt": [
-                    "FunctionLambdaFunction",
-                    "Arn"
-                  ]
-                },
-                "/invocations"
-              ]
-            ]
-          }
-        },
-        "MethodResponses": []
-      }
-    },
-    "ApiGatewayDeployment1579525521788": {
-      "Type": "AWS::ApiGateway::Deployment",
-      "Properties": {
-        "RestApiId": {
-          "Ref": "ApiGatewayRestApi"
-        },
-        "StageName": "dev"
-      },
-      "DependsOn": [
-        "ApiGatewayMethodFooGet",
-        "ApiGatewayMethodFooPost"
-      ]
-    },
-    "FunctionLambdaPermissionApiGateway": {
+    "FunctionLambdaPermission": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
@@ -302,30 +176,7 @@
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition"
-              },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region"
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId"
-              },
-              ":",
-              {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "/*/*"
-            ]
-          ]
-        }
+        "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:u4rze1xtf5/*/*/*"
       }
     }
   },
@@ -333,29 +184,6 @@
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
-      }
-    },
-    "ServiceEndpoint": {
-      "Description": "URL of the service endpoint",
-      "Value": {
-        "Fn::Join": [
-          "",
-          [
-            "https://",
-            {
-              "Ref": "ApiGatewayRestApi"
-            },
-            ".execute-api.",
-            {
-              "Ref": "AWS::Region"
-            },
-            ".",
-            {
-              "Ref": "AWS::URLSuffix"
-            },
-            "/dev"
-          ]
-        ]
       }
     }
   }

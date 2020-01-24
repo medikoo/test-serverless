@@ -1,4 +1,4 @@
-service: test-api-gw
+service: test-http-api
 
 provider:
   name: aws
@@ -13,13 +13,19 @@ package:
 functions:
   function:
     handler: index.handler
-    events:
-      - http:
-          path: foo
-          method: GET
-      - http:
-          path: foo
-          method: POST
+
+resources:
+  Resources:
+    FunctionLambdaPermission:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName:
+          Fn::GetAtt:
+            - FunctionLambdaFunction
+            - Arn
+        Action: lambda:InvokeFunction
+        Principal: apigateway.amazonaws.com
+        SourceArn: arn:aws:execute-api:us-east-1:992311060759:u4rze1xtf5/*/*/*
 
 plugins:
   - serverless-plugin-reducer

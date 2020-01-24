@@ -1,0 +1,44 @@
+service: http-api-example
+
+provider:
+  name: aws
+
+  # (optional) general API settings
+  httpApi:
+    cors: # can also be set to `true` which will apply below defaults
+      allowOrigins: "*"
+      allowCredentials: true
+      exposeHeaders: "*"
+      maxAge: 300
+      allowMethods: "*"
+      allowHeaders: "*"
+    authorizers:
+      # JWT authorizers
+      jwtAuthorizer:
+        identitySource: $request.header.Authorization
+        issuerUrl: <url>
+        audience:
+          - <audience1>
+          - <audience2>
+
+  # (optional) access logging for HTTP API
+  logs:
+    httpApi: # Can also be set to `true` which will apply below defaults
+      format: '{ "requestId":"$context.requestId", "ip": "$context.identity.sourceIp", "requestTime":"$context.requestTime", "httpMethod":"$context.httpMethod","routeKey":"$context.routeKey", "status":"$context.status","protocol":"$context.protocol", "responseLength":"$context.responseLength" }'
+
+functions:
+  # Individual HTTP route example
+  users:
+    handler: users.handler
+    events:
+      - httpApi:
+          path: /users
+          method: GET
+          authorizer: jwtAuthorizer # optional
+
+  # Catch all other routes example
+  api:
+    handler: api.handler
+    events:
+      - httpApi:
+          path: "*" # Once deployed, cannot be removed
