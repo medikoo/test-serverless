@@ -59,7 +59,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+        "LogGroupName": "/aws/lambda/test-lambda-destinations-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -88,7 +88,7 @@
                 "-",
                 [
                   "dev",
-                  "test-regular-lambda",
+                  "test-lambda-destinations",
                   "lambda"
                 ]
               ]
@@ -104,7 +104,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-destinations-dev*:*"
                     }
                   ]
                 },
@@ -115,9 +115,14 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-destinations-dev*:*:*"
                     }
                   ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": "lambda:InvokeFunction",
+                  "Resource": "arn:aws:lambda:us-east-1:992311060759:function:test-http-api-dev-function"
                 }
               ]
             }
@@ -128,7 +133,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-regular-lambda",
+              "test-lambda-destinations",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -146,9 +151,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1579878694244-2020-01-24T15:11:34.244Z/function.zip"
+          "S3Key": "serverless/test-lambda-destinations/dev/1579881862870-2020-01-24T16:04:22.870Z/function.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-function",
+        "FunctionName": "test-lambda-destinations-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -164,6 +169,20 @@
         "FunctionLogGroup",
         "IamRoleLambdaExecution"
       ]
+    },
+    "FunctionLambdaEvConf": {
+      "Type": "AWS::Lambda::EventInvokeConfig",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FunctionLambdaFunction"
+        },
+        "DestinationConfig": {
+          "OnSuccess": {
+            "Destination": "arn:aws:lambda:us-east-1:992311060759:function:test-http-api-dev-function"
+          }
+        },
+        "Qualifier": "$LATEST"
+      }
     }
   },
   "Outputs": {
