@@ -146,7 +146,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1579867017409-2020-01-24T11:56:57.409Z/function.zip"
+          "S3Key": "serverless/test-http-api/dev/1580310796980-2020-01-29T15:13:16.980Z/function.zip"
         },
         "FunctionName": "test-http-api-dev-function",
         "Handler": "index.handler",
@@ -176,7 +176,7 @@
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "apigateway.amazonaws.com",
-        "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:u4rze1xtf5/*/*/*"
+        "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:*/*/*/*"
       }
     }
   },

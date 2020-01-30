@@ -25,7 +25,7 @@ resources:
             - Arn
         Action: lambda:InvokeFunction
         Principal: apigateway.amazonaws.com
-        SourceArn: arn:aws:execute-api:us-east-1:992311060759:u4rze1xtf5/*/*/*
+        SourceArn: arn:aws:execute-api:us-east-1:992311060759:*/*/*/*
 
 plugins:
   - serverless-plugin-reducer

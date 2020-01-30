@@ -9,7 +9,7 @@
 				"ProtocolType": "HTTP"
 			}
 		},
-		"Integration1": {
+		"Integration": {
 			"Type": "AWS::ApiGatewayV2::Integration",
 			"Properties": {
 				"ApiId": { "Ref": "HttpApi" },
@@ -18,22 +18,18 @@
 				"PayloadFormatVersion": "1.0"
 			}
 		},
-		"Route1": {
+		"RouteFoo": {
 			"Type": "AWS::ApiGatewayV2::Route",
 			"Properties": {
 				"ApiId": { "Ref": "HttpApi" },
 				"RouteKey": "GET /foo",
-				"Target": { "Fn::Join": ["/", ["integrations", { "Ref": "Integration1" }]] }
+				"Target": { "Fn::Join": ["/", ["integrations", { "Ref": "Integration" }]] }
 			},
-			"DependsOn": "Integration1"
+			"DependsOn": "Integration"
 		},
 		"Stage": {
 			"Type": "AWS::ApiGatewayV2::Stage",
 			"Properties": { "ApiId": { "Ref": "HttpApi" }, "StageName": "dev", "AutoDeploy": true }
-		},
-		"Stage2": {
-			"Type": "AWS::ApiGatewayV2::Stage",
-			"Properties": { "ApiId": { "Ref": "HttpApi" }, "StageName": "dev2", "AutoDeploy": true }
 		}
 	}
 }
