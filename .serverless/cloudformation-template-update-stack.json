@@ -16,6 +16,46 @@
         }
       }
     },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
@@ -59,7 +99,8 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "logs:CreateLogStream"
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup"
                   ],
                   "Resource": [
                     {
@@ -105,7 +146,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-for-s3-events/dev/1566461282439-2019-08-22T08:08:02.439Z/function.zip"
+          "S3Key": "serverless/test-lambda-for-s3-events/dev/1580361718393-2020-01-30T05:21:58.393Z/function.zip"
         },
         "FunctionName": "test-lambda-for-s3-events-dev-function",
         "Handler": "index.handler",

@@ -6,7 +6,7 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
+      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
       "runtime": "nodejs10.x",
       "versionFunctions": false,
@@ -24,6 +24,46 @@
                   {
                     "ServerSideEncryptionByDefault": {
                       "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
                     }
                   }
                 ]
@@ -73,7 +113,8 @@
                       {
                         "Effect": "Allow",
                         "Action": [
-                          "logs:CreateLogStream"
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup"
                         ],
                         "Resource": [
                           {
@@ -119,7 +160,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-for-s3-events/dev/1566461282439-2019-08-22T08:08:02.439Z/function.zip"
+                "S3Key": "serverless/test-lambda-for-s3-events/dev/1580361718393-2020-01-30T05:21:58.393Z/function.zip"
               },
               "FunctionName": "test-lambda-for-s3-events-dev-function",
               "Handler": "index.handler",
@@ -211,6 +252,46 @@
                 ]
               }
             }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
           }
         },
         "Outputs": {
@@ -237,7 +318,7 @@
         ],
         "name": "test-lambda-for-s3-events-dev-function",
         "package": {
-          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/function.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
         "memory": 1024,
         "timeout": 6,
@@ -246,11 +327,12 @@
       }
     },
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "layers": {},
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda-for-s3-events/dev/1566461282439-2019-08-22T08:08:02.439Z",
+    "artifactDirectoryName": "serverless/test-lambda-for-s3-events/dev/1580361718393-2020-01-30T05:21:58.393Z",
     "artifact": ""
   }
 }
