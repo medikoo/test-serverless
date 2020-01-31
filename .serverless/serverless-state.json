@@ -166,7 +166,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1580381153036-2020-01-30T10:45:53.036Z/function.zip"
+                "S3Key": "serverless/test-http-api/dev/1580466957976-2020-01-31T10:35:57.976Z/function.zip"
               },
               "FunctionName": "test-http-api-dev-function",
               "Handler": "index.handler",
@@ -185,13 +185,13 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "FunctionLambdaVersionVhN0igmYWZMMKxJaiHtG156n5DuIKx944KyCEULI": {
+          "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk": {
             "Type": "AWS::Lambda::Version",
             "Properties": {
               "FunctionName": {
                 "Ref": "FunctionLambdaFunction"
               },
-              "CodeSha256": "teW+HgYP4OSvPbOtQwTy5KCWvZYozjH8O9h/Ca7M6rc="
+              "CodeSha256": "SHGkZNtkOuQw6mQIemilVHjllZS8kEIsCO+Ow6VDU/A="
             }
           },
           "FunctionProvConcLambdaAlias": {
@@ -202,7 +202,7 @@
               },
               "FunctionVersion": {
                 "Fn::GetAtt": [
-                  "FunctionLambdaVersionVhN0igmYWZMMKxJaiHtG156n5DuIKx944KyCEULI",
+                  "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk",
                   "Version"
                 ]
               },
@@ -220,7 +220,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1580381153036-2020-01-30T10:45:53.036Z/other.zip"
+                "S3Key": "serverless/test-http-api/dev/1580466957976-2020-01-31T10:35:57.976Z/other.zip"
               },
               "FunctionName": "test-http-api-dev-other",
               "Handler": "other.handler",
@@ -239,10 +239,31 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "FunctionLambdaPermission": {
-            "Type": "AWS::Lambda::Permission",
+          "HttpApi": {
+            "Type": "AWS::ApiGatewayV2::Api",
             "Properties": {
-              "FunctionName": {
+              "Name": "dev-test-http-api",
+              "ProtocolType": "HTTP"
+            }
+          },
+          "HttpApiStage": {
+            "Type": "AWS::ApiGatewayV2::Stage",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "StageName": "dev",
+              "AutoDeploy": true
+            }
+          },
+          "HttpApiIntegrationFunction": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
                 "Fn::Join": [
                   ":",
                   [
@@ -256,25 +277,155 @@
                   ]
                 ]
               },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "apigateway.amazonaws.com",
-              "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:*/*"
-            },
-            "DependsOn": "FunctionProvConcLambdaAlias"
+              "PayloadFormatVersion": "1.0"
+            }
           },
-          "OtherLambdaPermission": {
+          "FunctionLambdaPermissionHttpApi": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"HttpApiIntegrationFunction\"][\"Properties\"][\"IntegrationUri\"]"
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiRouteGetFoo": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /foo",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationFunction"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationFunction"
+          },
+          "HttpApiRoutePostSomeDashpost": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "POST /some-post",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationFunction"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationFunction"
+          },
+          "HttpApiIntegrationOther": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
                 "Fn::GetAtt": [
                   "OtherLambdaFunction",
                   "Arn"
                 ]
               },
+              "PayloadFormatVersion": "1.0"
+            }
+          },
+          "OtherLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"HttpApiIntegrationOther\"][\"Properties\"][\"IntegrationUri\"]"
+              },
               "Action": "lambda:InvokeFunction",
               "Principal": "apigateway.amazonaws.com",
-              "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:*/*"
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
             }
+          },
+          "HttpApiRouteGetBarMarkoVar": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /bar/{marko}",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationOther"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationOther"
           }
         },
         "Outputs": {
@@ -286,7 +437,30 @@
           "FunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FunctionLambdaVersionVhN0igmYWZMMKxJaiHtG156n5DuIKx944KyCEULI"
+              "Ref": "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk"
+            }
+          },
+          "HttpApiUrl": {
+            "Description": "URL of the HTTP API",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "HttpApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
             }
           }
         }
@@ -368,7 +542,20 @@
       "function": {
         "handler": "index.handler",
         "provisionedConcurrency": 1,
-        "events": [],
+        "events": [
+          {
+            "httpApi": {
+              "method": "GET",
+              "path": "/foo"
+            }
+          },
+          {
+            "httpApi": {
+              "method": "POST",
+              "path": "/some-post"
+            }
+          }
+        ],
         "name": "test-http-api-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
@@ -377,7 +564,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "FunctionLambdaVersionVhN0igmYWZMMKxJaiHtG156n5DuIKx944KyCEULI",
+        "versionLogicalId": "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk",
         "targetAlias": {
           "name": "provisioned",
           "logicalId": "FunctionProvConcLambdaAlias"
@@ -385,7 +572,14 @@
       },
       "other": {
         "handler": "other.handler",
-        "events": [],
+        "events": [
+          {
+            "httpApi": {
+              "method": "get",
+              "path": "/bar/{marko}"
+            }
+          }
+        ],
         "name": "test-http-api-dev-other",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/other.zip"
@@ -396,55 +590,13 @@
         "vpc": {}
       }
     },
-    "resources": {
-      "Resources": {
-        "FunctionLambdaPermission": {
-          "Type": "AWS::Lambda::Permission",
-          "Properties": {
-            "FunctionName": {
-              "Fn::Join": [
-                ":",
-                [
-                  {
-                    "Fn::GetAtt": [
-                      "FunctionLambdaFunction",
-                      "Arn"
-                    ]
-                  },
-                  "provisioned"
-                ]
-              ]
-            },
-            "Action": "lambda:InvokeFunction",
-            "Principal": "apigateway.amazonaws.com",
-            "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:*/*"
-          },
-          "DependsOn": "FunctionProvConcLambdaAlias"
-        },
-        "OtherLambdaPermission": {
-          "Type": "AWS::Lambda::Permission",
-          "Properties": {
-            "FunctionName": {
-              "Fn::GetAtt": [
-                "OtherLambdaFunction",
-                "Arn"
-              ]
-            },
-            "Action": "lambda:InvokeFunction",
-            "Principal": "apigateway.amazonaws.com",
-            "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:*/*"
-          }
-        }
-      },
-      "Outputs": {}
-    },
     "serviceFilename": "serverless.yml",
     "layers": {},
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-http-api/dev/1580381153036-2020-01-30T10:45:53.036Z",
+    "artifactDirectoryName": "serverless/test-http-api/dev/1580466957976-2020-01-31T10:35:57.976Z",
     "artifact": ""
   }
 }
