@@ -1,4 +1,4 @@
-service: test-http-api
+service: test-http-api-catch-all
 
 provider:
   name: aws
@@ -15,19 +15,14 @@ functions:
     handler: index.handler
     provisionedConcurrency: 1
     events:
-      - httpApi:
-          method: GET
-          path: /foo
-      - httpApi:
-          method: POST
-          path: /some-post
+      - httpApi: "*"
 
   other:
     handler: other.handler
     events:
       - httpApi:
-          method: get
-          path: /bar/{marko}
+          method: "*"
+          path: /foo
 
 plugins:
   - serverless-plugin-reducer

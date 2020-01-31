@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-http-api",
+    "service": "test-http-api-catch-all",
     "serviceObject": {
-      "name": "test-http-api"
+      "name": "test-http-api-catch-all"
     },
     "provider": {
       "stage": "dev",
@@ -73,13 +73,13 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-http-api-dev-function"
+              "LogGroupName": "/aws/lambda/test-http-api-catch-all-dev-function"
             }
           },
           "OtherLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-http-api-dev-other"
+              "LogGroupName": "/aws/lambda/test-http-api-catch-all-dev-other"
             }
           },
           "IamRoleLambdaExecution": {
@@ -108,7 +108,7 @@
                       "-",
                       [
                         "dev",
-                        "test-http-api",
+                        "test-http-api-catch-all",
                         "lambda"
                       ]
                     ]
@@ -124,7 +124,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-catch-all-dev*:*"
                           }
                         ]
                       },
@@ -135,7 +135,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-catch-all-dev*:*:*"
                           }
                         ]
                       }
@@ -148,7 +148,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-http-api",
+                    "test-http-api-catch-all",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -166,9 +166,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1580474959602-2020-01-31T12:49:19.602Z/function.zip"
+                "S3Key": "serverless/test-http-api-catch-all/dev/1580475796495-2020-01-31T13:03:16.495Z/function.zip"
               },
-              "FunctionName": "test-http-api-dev-function",
+              "FunctionName": "test-http-api-catch-all-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -185,7 +185,7 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk": {
+          "FunctionLambdaVersionjOeM0wVJJzGKridln7fSV6yqQwdkHVgSX30i4Xj9ic4": {
             "Type": "AWS::Lambda::Version",
             "Properties": {
               "FunctionName": {
@@ -202,7 +202,7 @@
               },
               "FunctionVersion": {
                 "Fn::GetAtt": [
-                  "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk",
+                  "FunctionLambdaVersionjOeM0wVJJzGKridln7fSV6yqQwdkHVgSX30i4Xj9ic4",
                   "Version"
                 ]
               },
@@ -220,9 +220,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1580474959602-2020-01-31T12:49:19.602Z/other.zip"
+                "S3Key": "serverless/test-http-api-catch-all/dev/1580475796495-2020-01-31T13:03:16.495Z/other.zip"
               },
-              "FunctionName": "test-http-api-dev-other",
+              "FunctionName": "test-http-api-catch-all-dev-other",
               "Handler": "other.handler",
               "MemorySize": 1024,
               "Role": {
@@ -242,28 +242,10 @@
           "HttpApi": {
             "Type": "AWS::ApiGatewayV2::Api",
             "Properties": {
-              "Name": "dev-test-http-api",
-              "ProtocolType": "HTTP"
-            }
-          },
-          "HttpApiStage": {
-            "Type": "AWS::ApiGatewayV2::Stage",
-            "Properties": {
-              "ApiId": {
-                "Ref": "HttpApi"
-              },
-              "StageName": "dev",
-              "AutoDeploy": true
-            }
-          },
-          "HttpApiIntegrationFunction": {
-            "Type": "AWS::ApiGatewayV2::Integration",
-            "Properties": {
-              "ApiId": {
-                "Ref": "HttpApi"
-              },
-              "IntegrationType": "AWS_PROXY",
-              "IntegrationUri": {
+              "Name": "dev-test-http-api-catch-all",
+              "ProtocolType": "HTTP",
+              "RouteKey": "$default",
+              "Target": {
                 "Fn::Join": [
                   ":",
                   [
@@ -276,15 +258,24 @@
                     "provisioned"
                   ]
                 ]
+              }
+            }
+          },
+          "HttpApiStage": {
+            "Type": "AWS::ApiGatewayV2::Stage",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
               },
-              "PayloadFormatVersion": "1.0"
+              "StageName": "dev",
+              "AutoDeploy": true
             }
           },
           "FunctionLambdaPermissionHttpApi": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
-                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"HttpApiIntegrationFunction\"][\"Properties\"][\"IntegrationUri\"]"
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"HttpApi\"][\"Properties\"][\"Target\"]"
               },
               "Action": "lambda:InvokeFunction",
               "Principal": "apigateway.amazonaws.com",
@@ -314,47 +305,42 @@
               }
             }
           },
-          "HttpApiRouteGetFoo": {
-            "Type": "AWS::ApiGatewayV2::Route",
+          "OtherLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
             "Properties": {
-              "ApiId": {
-                "Ref": "HttpApi"
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "OtherLambdaFunction",
+                  "Arn"
+                ]
               },
-              "RouteKey": "GET /foo",
-              "Target": {
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
                 "Fn::Join": [
-                  "/",
+                  "",
                   [
-                    "integrations",
+                    "arn:",
                     {
-                      "Ref": "HttpApiIntegrationFunction"
-                    }
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
                   ]
                 ]
               }
-            },
-            "DependsOn": "HttpApiIntegrationFunction"
-          },
-          "HttpApiRoutePostSomeDashpost": {
-            "Type": "AWS::ApiGatewayV2::Route",
-            "Properties": {
-              "ApiId": {
-                "Ref": "HttpApi"
-              },
-              "RouteKey": "POST /some-post",
-              "Target": {
-                "Fn::Join": [
-                  "/",
-                  [
-                    "integrations",
-                    {
-                      "Ref": "HttpApiIntegrationFunction"
-                    }
-                  ]
-                ]
-              }
-            },
-            "DependsOn": "HttpApiIntegrationFunction"
+            }
           },
           "HttpApiIntegrationOther": {
             "Type": "AWS::ApiGatewayV2::Integration",
@@ -364,55 +350,18 @@
               },
               "IntegrationType": "AWS_PROXY",
               "IntegrationUri": {
-                "Fn::GetAtt": [
-                  "OtherLambdaFunction",
-                  "Arn"
-                ]
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"OtherLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
               },
               "PayloadFormatVersion": "1.0"
             }
           },
-          "OtherLambdaPermissionHttpApi": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-              "FunctionName": {
-                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"HttpApiIntegrationOther\"][\"Properties\"][\"IntegrationUri\"]"
-              },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "apigateway.amazonaws.com",
-              "SourceArn": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition"
-                    },
-                    ":execute-api:",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId"
-                    },
-                    ":",
-                    {
-                      "Ref": "HttpApi"
-                    },
-                    "/*"
-                  ]
-                ]
-              }
-            }
-          },
-          "HttpApiRouteGetBarMarkoVar": {
+          "HttpApiRouteAnyFoo": {
             "Type": "AWS::ApiGatewayV2::Route",
             "Properties": {
               "ApiId": {
                 "Ref": "HttpApi"
               },
-              "RouteKey": "GET /bar/{marko}",
+              "RouteKey": "ANY /foo",
               "Target": {
                 "Fn::Join": [
                   "/",
@@ -437,7 +386,7 @@
           "FunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk"
+              "Ref": "FunctionLambdaVersionjOeM0wVJJzGKridln7fSV6yqQwdkHVgSX30i4Xj9ic4"
             }
           },
           "HttpApiUrl": {
@@ -544,23 +493,11 @@
         "provisionedConcurrency": 1,
         "events": [
           {
-            "httpApi": {
-              "method": "GET",
-              "path": "/foo"
-            },
-            "resolvedMethod": "GET",
-            "resolvedPath": "/foo"
-          },
-          {
-            "httpApi": {
-              "method": "POST",
-              "path": "/some-post"
-            },
-            "resolvedMethod": "POST",
-            "resolvedPath": "/some-post"
+            "httpApi": "*",
+            "resolvedMethod": "ANY"
           }
         ],
-        "name": "test-http-api-dev-function",
+        "name": "test-http-api-catch-all-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -568,7 +505,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk",
+        "versionLogicalId": "FunctionLambdaVersionjOeM0wVJJzGKridln7fSV6yqQwdkHVgSX30i4Xj9ic4",
         "targetAlias": {
           "name": "provisioned",
           "logicalId": "FunctionProvConcLambdaAlias"
@@ -579,14 +516,14 @@
         "events": [
           {
             "httpApi": {
-              "method": "get",
-              "path": "/bar/{marko}"
+              "method": "*",
+              "path": "/foo"
             },
-            "resolvedMethod": "GET",
-            "resolvedPath": "/bar/{marko}"
+            "resolvedMethod": "ANY",
+            "resolvedPath": "/foo"
           }
         ],
-        "name": "test-http-api-dev-other",
+        "name": "test-http-api-catch-all-dev-other",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/other.zip"
         },
@@ -602,7 +539,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-http-api/dev/1580474959602-2020-01-31T12:49:19.602Z",
+    "artifactDirectoryName": "serverless/test-http-api-catch-all/dev/1580475796495-2020-01-31T13:03:16.495Z",
     "artifact": ""
   }
 }

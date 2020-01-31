@@ -59,13 +59,13 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-http-api-dev-function"
+        "LogGroupName": "/aws/lambda/test-http-api-catch-all-dev-function"
       }
     },
     "OtherLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-http-api-dev-other"
+        "LogGroupName": "/aws/lambda/test-http-api-catch-all-dev-other"
       }
     },
     "IamRoleLambdaExecution": {
@@ -94,7 +94,7 @@
                 "-",
                 [
                   "dev",
-                  "test-http-api",
+                  "test-http-api-catch-all",
                   "lambda"
                 ]
               ]
@@ -110,7 +110,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-catch-all-dev*:*"
                     }
                   ]
                 },
@@ -121,7 +121,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-catch-all-dev*:*:*"
                     }
                   ]
                 }
@@ -134,7 +134,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-http-api",
+              "test-http-api-catch-all",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -152,9 +152,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1580474959602-2020-01-31T12:49:19.602Z/function.zip"
+          "S3Key": "serverless/test-http-api-catch-all/dev/1580475796495-2020-01-31T13:03:16.495Z/function.zip"
         },
-        "FunctionName": "test-http-api-dev-function",
+        "FunctionName": "test-http-api-catch-all-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -171,7 +171,7 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk": {
+    "FunctionLambdaVersionjOeM0wVJJzGKridln7fSV6yqQwdkHVgSX30i4Xj9ic4": {
       "Type": "AWS::Lambda::Version",
       "Properties": {
         "FunctionName": {
@@ -188,7 +188,7 @@
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk",
+            "FunctionLambdaVersionjOeM0wVJJzGKridln7fSV6yqQwdkHVgSX30i4Xj9ic4",
             "Version"
           ]
         },
@@ -206,9 +206,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1580474959602-2020-01-31T12:49:19.602Z/other.zip"
+          "S3Key": "serverless/test-http-api-catch-all/dev/1580475796495-2020-01-31T13:03:16.495Z/other.zip"
         },
-        "FunctionName": "test-http-api-dev-other",
+        "FunctionName": "test-http-api-catch-all-dev-other",
         "Handler": "other.handler",
         "MemorySize": 1024,
         "Role": {
@@ -228,28 +228,10 @@
     "HttpApi": {
       "Type": "AWS::ApiGatewayV2::Api",
       "Properties": {
-        "Name": "dev-test-http-api",
-        "ProtocolType": "HTTP"
-      }
-    },
-    "HttpApiStage": {
-      "Type": "AWS::ApiGatewayV2::Stage",
-      "Properties": {
-        "ApiId": {
-          "Ref": "HttpApi"
-        },
-        "StageName": "dev",
-        "AutoDeploy": true
-      }
-    },
-    "HttpApiIntegrationFunction": {
-      "Type": "AWS::ApiGatewayV2::Integration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "HttpApi"
-        },
-        "IntegrationType": "AWS_PROXY",
-        "IntegrationUri": {
+        "Name": "dev-test-http-api-catch-all",
+        "ProtocolType": "HTTP",
+        "RouteKey": "$default",
+        "Target": {
           "Fn::Join": [
             ":",
             [
@@ -262,8 +244,17 @@
               "provisioned"
             ]
           ]
+        }
+      }
+    },
+    "HttpApiStage": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
         },
-        "PayloadFormatVersion": "1.0"
+        "StageName": "dev",
+        "AutoDeploy": true
       }
     },
     "FunctionLambdaPermissionHttpApi": {
@@ -311,64 +302,6 @@
         }
       }
     },
-    "HttpApiRouteGetFoo": {
-      "Type": "AWS::ApiGatewayV2::Route",
-      "Properties": {
-        "ApiId": {
-          "Ref": "HttpApi"
-        },
-        "RouteKey": "GET /foo",
-        "Target": {
-          "Fn::Join": [
-            "/",
-            [
-              "integrations",
-              {
-                "Ref": "HttpApiIntegrationFunction"
-              }
-            ]
-          ]
-        }
-      },
-      "DependsOn": "HttpApiIntegrationFunction"
-    },
-    "HttpApiRoutePostSomeDashpost": {
-      "Type": "AWS::ApiGatewayV2::Route",
-      "Properties": {
-        "ApiId": {
-          "Ref": "HttpApi"
-        },
-        "RouteKey": "POST /some-post",
-        "Target": {
-          "Fn::Join": [
-            "/",
-            [
-              "integrations",
-              {
-                "Ref": "HttpApiIntegrationFunction"
-              }
-            ]
-          ]
-        }
-      },
-      "DependsOn": "HttpApiIntegrationFunction"
-    },
-    "HttpApiIntegrationOther": {
-      "Type": "AWS::ApiGatewayV2::Integration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "HttpApi"
-        },
-        "IntegrationType": "AWS_PROXY",
-        "IntegrationUri": {
-          "Fn::GetAtt": [
-            "OtherLambdaFunction",
-            "Arn"
-          ]
-        },
-        "PayloadFormatVersion": "1.0"
-      }
-    },
     "OtherLambdaPermissionHttpApi": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
@@ -406,13 +339,29 @@
         }
       }
     },
-    "HttpApiRouteGetBarMarkoVar": {
+    "HttpApiIntegrationOther": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "OtherLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "1.0"
+      }
+    },
+    "HttpApiRouteAnyFoo": {
       "Type": "AWS::ApiGatewayV2::Route",
       "Properties": {
         "ApiId": {
           "Ref": "HttpApi"
         },
-        "RouteKey": "GET /bar/{marko}",
+        "RouteKey": "ANY /foo",
         "Target": {
           "Fn::Join": [
             "/",
@@ -437,7 +386,7 @@
     "FunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk"
+        "Ref": "FunctionLambdaVersionjOeM0wVJJzGKridln7fSV6yqQwdkHVgSX30i4Xj9ic4"
       }
     },
     "HttpApiUrl": {
