@@ -166,7 +166,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1580466957976-2020-01-31T10:35:57.976Z/function.zip"
+                "S3Key": "serverless/test-http-api/dev/1580474959602-2020-01-31T12:49:19.602Z/function.zip"
               },
               "FunctionName": "test-http-api-dev-function",
               "Handler": "index.handler",
@@ -220,7 +220,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1580466957976-2020-01-31T10:35:57.976Z/other.zip"
+                "S3Key": "serverless/test-http-api/dev/1580474959602-2020-01-31T12:49:19.602Z/other.zip"
               },
               "FunctionName": "test-http-api-dev-other",
               "Handler": "other.handler",
@@ -547,13 +547,17 @@
             "httpApi": {
               "method": "GET",
               "path": "/foo"
-            }
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/foo"
           },
           {
             "httpApi": {
               "method": "POST",
               "path": "/some-post"
-            }
+            },
+            "resolvedMethod": "POST",
+            "resolvedPath": "/some-post"
           }
         ],
         "name": "test-http-api-dev-function",
@@ -577,7 +581,9 @@
             "httpApi": {
               "method": "get",
               "path": "/bar/{marko}"
-            }
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/bar/{marko}"
           }
         ],
         "name": "test-http-api-dev-other",
@@ -596,7 +602,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-http-api/dev/1580466957976-2020-01-31T10:35:57.976Z",
+    "artifactDirectoryName": "serverless/test-http-api/dev/1580474959602-2020-01-31T12:49:19.602Z",
     "artifact": ""
   }
 }
