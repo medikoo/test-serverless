@@ -76,6 +76,12 @@
               "LogGroupName": "/aws/lambda/test-http-api-dev-function"
             }
           },
+          "OtherLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-http-api-dev-other"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -160,7 +166,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1580310796980-2020-01-29T15:13:16.980Z/function.zip"
+                "S3Key": "serverless/test-http-api/dev/1580381153036-2020-01-30T10:45:53.036Z/function.zip"
               },
               "FunctionName": "test-http-api-dev-function",
               "Handler": "index.handler",
@@ -179,18 +185,95 @@
               "IamRoleLambdaExecution"
             ]
           },
+          "FunctionLambdaVersionVhN0igmYWZMMKxJaiHtG156n5DuIKx944KyCEULI": {
+            "Type": "AWS::Lambda::Version",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "CodeSha256": "teW+HgYP4OSvPbOtQwTy5KCWvZYozjH8O9h/Ca7M6rc="
+            }
+          },
+          "FunctionProvConcLambdaAlias": {
+            "Type": "AWS::Lambda::Alias",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "FunctionVersion": {
+                "Fn::GetAtt": [
+                  "FunctionLambdaVersionVhN0igmYWZMMKxJaiHtG156n5DuIKx944KyCEULI",
+                  "Version"
+                ]
+              },
+              "Name": "provisioned",
+              "ProvisionedConcurrencyConfig": {
+                "ProvisionedConcurrentExecutions": 1
+              }
+            },
+            "DependsOn": "FunctionLambdaFunction"
+          },
+          "OtherLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-http-api/dev/1580381153036-2020-01-30T10:45:53.036Z/other.zip"
+              },
+              "FunctionName": "test-http-api-dev-other",
+              "Handler": "other.handler",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs12.x",
+              "Timeout": 6
+            },
+            "DependsOn": [
+              "OtherLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
           "FunctionLambdaPermission": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
+                "Fn::Join": [
+                  ":",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "FunctionLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "provisioned"
+                  ]
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:*/*"
+            },
+            "DependsOn": "FunctionProvConcLambdaAlias"
+          },
+          "OtherLambdaPermission": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
                 "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
+                  "OtherLambdaFunction",
                   "Arn"
                 ]
               },
               "Action": "lambda:InvokeFunction",
               "Principal": "apigateway.amazonaws.com",
-              "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:*/*/*/*"
+              "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:*/*"
             }
           }
         },
@@ -198,6 +281,12 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "FunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "FunctionLambdaVersionVhN0igmYWZMMKxJaiHtG156n5DuIKx944KyCEULI"
             }
           }
         }
@@ -278,10 +367,28 @@
     "functions": {
       "function": {
         "handler": "index.handler",
+        "provisionedConcurrency": 1,
         "events": [],
         "name": "test-http-api-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {},
+        "versionLogicalId": "FunctionLambdaVersionVhN0igmYWZMMKxJaiHtG156n5DuIKx944KyCEULI",
+        "targetAlias": {
+          "name": "provisioned",
+          "logicalId": "FunctionProvConcLambdaAlias"
+        }
+      },
+      "other": {
+        "handler": "other.handler",
+        "events": [],
+        "name": "test-http-api-dev-other",
+        "package": {
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/other.zip"
         },
         "memory": 1024,
         "timeout": 6,
@@ -295,14 +402,37 @@
           "Type": "AWS::Lambda::Permission",
           "Properties": {
             "FunctionName": {
+              "Fn::Join": [
+                ":",
+                [
+                  {
+                    "Fn::GetAtt": [
+                      "FunctionLambdaFunction",
+                      "Arn"
+                    ]
+                  },
+                  "provisioned"
+                ]
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:*/*"
+          },
+          "DependsOn": "FunctionProvConcLambdaAlias"
+        },
+        "OtherLambdaPermission": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
               "Fn::GetAtt": [
-                "FunctionLambdaFunction",
+                "OtherLambdaFunction",
                 "Arn"
               ]
             },
             "Action": "lambda:InvokeFunction",
             "Principal": "apigateway.amazonaws.com",
-            "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:*/*/*/*"
+            "SourceArn": "arn:aws:execute-api:us-east-1:992311060759:*/*"
           }
         }
       },
@@ -314,7 +444,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-http-api/dev/1580310796980-2020-01-29T15:13:16.980Z",
+    "artifactDirectoryName": "serverless/test-http-api/dev/1580381153036-2020-01-30T10:45:53.036Z",
     "artifact": ""
   }
 }

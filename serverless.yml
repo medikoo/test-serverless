@@ -13,6 +13,9 @@ package:
 functions:
   function:
     handler: index.handler
+    provisionedConcurrency: 1
+  other:
+    handler: other.handler
 
 resources:
   Resources:
@@ -20,12 +23,26 @@ resources:
       Type: AWS::Lambda::Permission
       Properties:
         FunctionName:
+          Fn::Join:
+            - ":"
+            - - Fn::GetAtt:
+                  - FunctionLambdaFunction
+                  - Arn
+              - provisioned
+        Action: lambda:InvokeFunction
+        Principal: apigateway.amazonaws.com
+        SourceArn: arn:aws:execute-api:us-east-1:992311060759:*/*
+      DependsOn: FunctionProvConcLambdaAlias
+    OtherLambdaPermission:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName:
           Fn::GetAtt:
-            - FunctionLambdaFunction
+            - OtherLambdaFunction
             - Arn
         Action: lambda:InvokeFunction
         Principal: apigateway.amazonaws.com
-        SourceArn: arn:aws:execute-api:us-east-1:992311060759:*/*/*/*
+        SourceArn: arn:aws:execute-api:us-east-1:992311060759:*/*
 
 plugins:
   - serverless-plugin-reducer

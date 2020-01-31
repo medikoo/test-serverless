@@ -14,7 +14,16 @@
 			"Properties": {
 				"ApiId": { "Ref": "HttpApi" },
 				"IntegrationType": "AWS_PROXY",
-				"IntegrationUri": "arn:aws:lambda:us-east-1:992311060759:function:test-http-api-dev-function",
+				"IntegrationUri": "arn:aws:lambda:us-east-1:992311060759:function:test-http-api-dev-function:provisioned",
+				"PayloadFormatVersion": "1.0"
+			}
+		},
+		"IntegrationOther": {
+			"Type": "AWS::ApiGatewayV2::Integration",
+			"Properties": {
+				"ApiId": { "Ref": "HttpApi" },
+				"IntegrationType": "AWS_PROXY",
+				"IntegrationUri": "arn:aws:lambda:us-east-1:992311060759:function:test-http-api-dev-other",
 				"PayloadFormatVersion": "1.0"
 			}
 		},
@@ -24,6 +33,33 @@
 				"ApiId": { "Ref": "HttpApi" },
 				"RouteKey": "GET /foo",
 				"Target": { "Fn::Join": ["/", ["integrations", { "Ref": "Integration" }]] }
+			},
+			"DependsOn": "Integration"
+		},
+		"RouteBarParam": {
+			"Type": "AWS::ApiGatewayV2::Route",
+			"Properties": {
+				"ApiId": { "Ref": "HttpApi" },
+				"RouteKey": "GET /bar/{param}",
+				"Target": { "Fn::Join": ["/", ["integrations", { "Ref": "Integration" }]] }
+			},
+			"DependsOn": "Integration"
+		},
+		"RouteEloGet": {
+			"Type": "AWS::ApiGatewayV2::Route",
+			"Properties": {
+				"ApiId": { "Ref": "HttpApi" },
+				"RouteKey": "GET /elo",
+				"Target": { "Fn::Join": ["/", ["integrations", { "Ref": "Integration" }]] }
+			},
+			"DependsOn": "Integration"
+		},
+		"RouteElo": {
+			"Type": "AWS::ApiGatewayV2::Route",
+			"Properties": {
+				"ApiId": { "Ref": "HttpApi" },
+				"RouteKey": "ANY /elo",
+				"Target": { "Fn::Join": ["/", ["integrations", { "Ref": "IntegrationOther" }]] }
 			},
 			"DependsOn": "Integration"
 		},
