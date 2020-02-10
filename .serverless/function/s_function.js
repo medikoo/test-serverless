@@ -1,13 +1,13 @@
 var serverlessSDK = require('./serverless_sdk/index.js')
 serverlessSDK = new serverlessSDK({
-tenantId: 'medikoo',
+orgId: 'medikoo',
 applicationName: 'medikoo-test',
 appUid: 'GjXh77HjWzffv8X5SQ',
-tenantUid: '1sJrygBdcH5mNKPSp8',
-deploymentUid: 'e2d3814b-8ac2-4091-b67e-802a7d98d216',
+orgUid: '1sJrygBdcH5mNKPSp8',
+deploymentUid: '6f347a8b-c595-423f-867c-b168b672cd50',
 serviceName: 'test-dashboard',
 stageName: 'dev',
-pluginVersion: '3.2.6'})
+pluginVersion: '3.3.0'})
 const handlerWrapperArgs = { functionName: 'test-dashboard-dev-function', timeout: 6}
 try {
   const userHandler = require('./index.js')
