@@ -1,9 +1,7 @@
 "use strict";
 
-module.exports.handler = (event, context, callback) => {
-	console.log("INPUT EVENT", event);
+module.exports.handler = (event, context, callback) =>
 	callback(null, {
 		statusCode: 200,
-		body: JSON.stringify({ message: "HTTP API TEST MAIN", event }, null, 2)
+		body: JSON.stringify({ path: event.path, method: event.httpMethod })
 	});
-};

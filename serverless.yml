@@ -13,7 +13,7 @@ package:
 functions:
   function:
     handler: index.handler
-    provisionedConcurrency: 1
+    # provisionedConcurrency: 1 # Increases significantly test time
     events:
       - httpApi:
           method: GET

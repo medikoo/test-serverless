@@ -152,7 +152,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1580474959602-2020-01-31T12:49:19.602Z/function.zip"
+          "S3Key": "serverless/test-http-api/dev/1581309322915-2020-02-10T04:35:22.915Z/function.zip"
         },
         "FunctionName": "test-http-api-dev-function",
         "Handler": "index.handler",
@@ -171,34 +171,6 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk": {
-      "Type": "AWS::Lambda::Version",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "FunctionLambdaFunction"
-        },
-        "CodeSha256": "SHGkZNtkOuQw6mQIemilVHjllZS8kEIsCO+Ow6VDU/A="
-      }
-    },
-    "FunctionProvConcLambdaAlias": {
-      "Type": "AWS::Lambda::Alias",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "FunctionLambdaFunction"
-        },
-        "FunctionVersion": {
-          "Fn::GetAtt": [
-            "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk",
-            "Version"
-          ]
-        },
-        "Name": "provisioned",
-        "ProvisionedConcurrencyConfig": {
-          "ProvisionedConcurrentExecutions": 1
-        }
-      },
-      "DependsOn": "FunctionLambdaFunction"
-    },
     "OtherLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -206,7 +178,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1580474959602-2020-01-31T12:49:19.602Z/other.zip"
+          "S3Key": "serverless/test-http-api/dev/1581309322915-2020-02-10T04:35:22.915Z/other.zip"
         },
         "FunctionName": "test-http-api-dev-other",
         "Handler": "other.handler",
@@ -242,45 +214,13 @@
         "AutoDeploy": true
       }
     },
-    "HttpApiIntegrationFunction": {
-      "Type": "AWS::ApiGatewayV2::Integration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "HttpApi"
-        },
-        "IntegrationType": "AWS_PROXY",
-        "IntegrationUri": {
-          "Fn::Join": [
-            ":",
-            [
-              {
-                "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "provisioned"
-            ]
-          ]
-        },
-        "PayloadFormatVersion": "1.0"
-      }
-    },
     "FunctionLambdaPermissionHttpApi": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Fn::Join": [
-            ":",
-            [
-              {
-                "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "provisioned"
-            ]
+          "Fn::GetAtt": [
+            "FunctionLambdaFunction",
+            "Arn"
           ]
         },
         "Action": "lambda:InvokeFunction",
@@ -309,6 +249,22 @@
             ]
           ]
         }
+      }
+    },
+    "HttpApiIntegrationFunction": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "FunctionLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "1.0"
       }
     },
     "HttpApiRouteGetFoo": {
@@ -353,22 +309,6 @@
       },
       "DependsOn": "HttpApiIntegrationFunction"
     },
-    "HttpApiIntegrationOther": {
-      "Type": "AWS::ApiGatewayV2::Integration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "HttpApi"
-        },
-        "IntegrationType": "AWS_PROXY",
-        "IntegrationUri": {
-          "Fn::GetAtt": [
-            "OtherLambdaFunction",
-            "Arn"
-          ]
-        },
-        "PayloadFormatVersion": "1.0"
-      }
-    },
     "OtherLambdaPermissionHttpApi": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
@@ -406,6 +346,22 @@
         }
       }
     },
+    "HttpApiIntegrationOther": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "OtherLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "1.0"
+      }
+    },
     "HttpApiRouteGetBarMarkoVar": {
       "Type": "AWS::ApiGatewayV2::Route",
       "Properties": {
@@ -432,12 +388,6 @@
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
-      }
-    },
-    "FunctionLambdaFunctionQualifiedArn": {
-      "Description": "Current Lambda function version",
-      "Value": {
-        "Ref": "FunctionLambdaVersionUbnVbbdKGZHgIlaAzDj0fauSxFebw36h46ZjqNrqbpk"
       }
     },
     "HttpApiUrl": {
