@@ -4,11 +4,11 @@ orgId: 'medikoo',
 applicationName: 'medikoo-test',
 appUid: 'GjXh77HjWzffv8X5SQ',
 orgUid: '1sJrygBdcH5mNKPSp8',
-deploymentUid: 'e0157b95-1d3c-45db-833d-3ce625a3591b',
+deploymentUid: 'bc26ba49-0a01-4ebc-8916-581d530a3dd6',
 serviceName: 'test-dashboard',
-stageName: 'dev',
+stageName: 'many-params',
 pluginVersion: '3.3.0'})
-const handlerWrapperArgs = { functionName: 'test-dashboard-dev-function', timeout: 6}
+const handlerWrapperArgs = { functionName: 'test-dashboard-many-params-function', timeout: 6}
 try {
   const userHandler = require('./index.js')
   module.exports.handler = serverlessSDK.handler(userHandler.handler, handlerWrapperArgs)

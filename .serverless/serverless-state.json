@@ -5,7 +5,7 @@
       "name": "test-dashboard"
     },
     "provider": {
-      "stage": "dev",
+      "stage": "many-params",
       "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
@@ -73,7 +73,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-dashboard-dev-function"
+              "LogGroupName": "/aws/lambda/test-dashboard-many-params-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -101,7 +101,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "dev",
+                        "many-params",
                         "test-dashboard",
                         "lambda"
                       ]
@@ -118,7 +118,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-many-params*:*"
                           }
                         ]
                       },
@@ -129,7 +129,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-many-params*:*:*"
                           }
                         ]
                       }
@@ -143,7 +143,7 @@
                   "-",
                   [
                     "test-dashboard",
-                    "dev",
+                    "many-params",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -206,9 +206,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard/dev/1581382200310-2020-02-11T00:50:00.310Z/function.zip"
+                "S3Key": "serverless/test-dashboard/many-params/1581382386268-2020-02-11T00:53:06.268Z/function.zip"
               },
-              "FunctionName": "test-dashboard-dev-function",
+              "FunctionName": "test-dashboard-many-params-function",
               "Handler": "s_function.handler",
               "MemorySize": 1024,
               "Role": {
@@ -228,7 +228,7 @@
           "CloudWatchLogsSubscriptionFilterFunctionLogGroup": {
             "Type": "AWS::Logs::SubscriptionFilter",
             "Properties": {
-              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard#dev",
+              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard#many-params",
               "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
               "LogGroupName": {
                 "Ref": "FunctionLogGroup"
@@ -334,7 +334,7 @@
       "function": {
         "handler": "s_function.handler",
         "events": [],
-        "name": "test-dashboard-dev-function",
+        "name": "test-dashboard-many-params-function",
         "package": {
           "include": [
             "s_function.js",
@@ -359,7 +359,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard/dev/1581382200310-2020-02-11T00:50:00.310Z",
+    "artifactDirectoryName": "serverless/test-dashboard/many-params/1581382386268-2020-02-11T00:53:06.268Z",
     "artifact": ""
   }
 }
