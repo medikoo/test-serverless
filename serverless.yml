@@ -3,6 +3,19 @@ service: test-dashboard
 tenant: medikoo
 app: medikoo-test
 
+custom:
+  marko2: ${param:5}
+  marko: ${param:three}
+  marko10: ${param:5}
+  marko3: ${param:5}
+  marko4: ${param:5}
+  marko5: ${param:5}
+  marko6: ${param:5}
+  marko7: ${param:5}
+  marko8: ${param:5}
+  marko9: ${param:5}
+  elo: ${param:two}
+
 provider:
   name: aws
   runtime: nodejs12.x
