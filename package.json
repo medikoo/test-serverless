@@ -9,8 +9,11 @@
 		"serverless-plugin-reducer": "^3.2.3"
 	},
 	"eslintConfig": {
-		"extends": "medikoo",
-		"root": true
+		"extends": "medikoo/node",
+		"root": true,
+		"rules": {
+			"no-console": "off"
+		}
 	},
 	"prettier": {
 		"printWidth": 100,

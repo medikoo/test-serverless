@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-variables-custom",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-variables-custom"
     },
     "provider": {
       "stage": "dev",
@@ -69,115 +69,6 @@
                 ]
               }
             }
-          },
-          "FunctionLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
-            }
-          },
-          "IamRoleLambdaExecution": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": {
-                    "Fn::Join": [
-                      "-",
-                      [
-                        "dev",
-                        "test-regular-lambda",
-                        "lambda"
-                      ]
-                    ]
-                  },
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:CreateLogStream",
-                          "logs:CreateLogGroup"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
-                          }
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:PutLogEvents"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ],
-              "Path": "/",
-              "RoleName": {
-                "Fn::Join": [
-                  "-",
-                  [
-                    "test-regular-lambda",
-                    "dev",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    "lambdaRole"
-                  ]
-                ]
-              }
-            }
-          },
-          "FunctionLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/test-regular-lambda/dev/1579878694244-2020-01-24T15:11:34.244Z/function.zip"
-              },
-              "FunctionName": "test-regular-lambda-dev-function",
-              "Handler": "index.handler",
-              "MemorySize": 1024,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              },
-              "Runtime": "nodejs12.x",
-              "Timeout": 6
-            },
-            "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
-            ]
           }
         },
         "Outputs": {
@@ -254,34 +145,24 @@
             }
           }
         }
-      },
-      "vpc": {}
-    },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
-    "pluginsData": {},
-    "functions": {
-      "function": {
-        "handler": "index.handler",
-        "events": [],
-        "name": "test-regular-lambda-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
-        "memory": 1024,
-        "timeout": 6,
-        "runtime": "nodejs12.x",
-        "vpc": {}
       }
     },
+    "custom": {
+      "var1": "foobar1",
+      "var2": "echo:\"foo bar2",
+      "var3": "echo:'foo bar3"
+    },
+    "plugins": [
+      "./plugin"
+    ],
+    "pluginsData": {},
+    "functions": {},
     "serviceFilename": "serverless.yml",
     "layers": {},
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1579878694244-2020-01-24T15:11:34.244Z",
+    "artifactDirectoryName": "serverless/test-variables-custom/dev/1581390871127-2020-02-11T03:14:31.127Z",
     "artifact": ""
   }
 }

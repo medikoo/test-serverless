@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-variables-custom
 
 provider:
   name: aws
@@ -7,12 +7,10 @@ provider:
   stage: dev
   versionFunctions: false
 
-package:
-  individually: true
-
-functions:
-  function:
-    handler: index.handler
-
 plugins:
-  - serverless-plugin-reducer
+  - ./plugin
+
+custom:
+  var1: ${echo:foo bar1}
+  var2: ${echo:"foo bar2"}
+  var3: ${echo:'foo bar3'}
