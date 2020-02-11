@@ -160,10 +160,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1581387269137-2020-02-11T02:14:29.137Z/function.zip"
+                "S3Key": "serverless/test-regular-lambda/dev/1581464524101-2020-02-11T23:42:04.101Z/function.zip"
               },
               "FunctionName": "test-regular-lambda-dev-function",
-              "Handler": "index.handler",
+              "Handler": "foo/index.handler",
               "MemorySize": 1024,
               "Role": {
                 "Fn::GetAtt": [
@@ -260,7 +260,7 @@
     "pluginsData": {},
     "functions": {
       "function": {
-        "handler": "index.handler",
+        "handler": "foo/index.handler",
         "package": {
           "individually": true,
           "exclude": [
@@ -284,7 +284,7 @@
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1581387269137-2020-02-11T02:14:29.137Z",
+    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1581464524101-2020-02-11T23:42:04.101Z",
     "artifact": ""
   }
 }

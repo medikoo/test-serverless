@@ -9,7 +9,7 @@ provider:
 
 functions:
   function:
-    handler: index.handler
+    handler: foo/index.handler
     package:
       individually: true
       exclude:
