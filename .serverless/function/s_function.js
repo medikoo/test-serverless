@@ -4,7 +4,7 @@ orgId: 'medikoo',
 applicationName: 'medikoo-test',
 appUid: 'GjXh77HjWzffv8X5SQ',
 orgUid: '1sJrygBdcH5mNKPSp8',
-deploymentUid: '6f347a8b-c595-423f-867c-b168b672cd50',
+deploymentUid: 'e0157b95-1d3c-45db-833d-3ce625a3591b',
 serviceName: 'test-dashboard',
 stageName: 'dev',
 pluginVersion: '3.3.0'})
