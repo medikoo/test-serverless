@@ -160,7 +160,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1579878694244-2020-01-24T15:11:34.244Z/function.zip"
+                "S3Key": "serverless/test-regular-lambda/dev/1581387269137-2020-02-11T02:14:29.137Z/function.zip"
               },
               "FunctionName": "test-regular-lambda-dev-function",
               "Handler": "index.handler",
@@ -257,18 +257,22 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
     "pluginsData": {},
     "functions": {
       "function": {
         "handler": "index.handler",
-        "events": [],
-        "name": "test-regular-lambda-dev-function",
         "package": {
+          "individually": true,
+          "exclude": [
+            "**"
+          ],
+          "include": [
+            "foo/**"
+          ],
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
+        "events": [],
+        "name": "test-regular-lambda-dev-function",
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
@@ -280,8 +284,7 @@
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1579878694244-2020-01-24T15:11:34.244Z",
+    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1581387269137-2020-02-11T02:14:29.137Z",
     "artifact": ""
   }
 }
