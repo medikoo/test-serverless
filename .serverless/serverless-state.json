@@ -166,7 +166,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1581309322915-2020-02-10T04:35:22.915Z/function.zip"
+                "S3Key": "serverless/test-http-api/dev/1581551206460-2020-02-12T23:46:46.460Z/function.zip"
               },
               "FunctionName": "test-http-api-dev-function",
               "Handler": "index.handler",
@@ -192,7 +192,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1581309322915-2020-02-10T04:35:22.915Z/other.zip"
+                "S3Key": "serverless/test-http-api/dev/1581551206460-2020-02-12T23:46:46.460Z/other.zip"
               },
               "FunctionName": "test-http-api-dev-other",
               "Handler": "other.handler",
@@ -224,7 +224,7 @@
               "ApiId": {
                 "Ref": "HttpApi"
               },
-              "StageName": "dev",
+              "StageName": "$default",
               "AutoDeploy": true
             }
           },
@@ -415,8 +415,7 @@
                   ".",
                   {
                     "Ref": "AWS::URLSuffix"
-                  },
-                  "/dev"
+                  }
                 ]
               ]
             }
@@ -554,7 +553,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-http-api/dev/1581309322915-2020-02-10T04:35:22.915Z",
+    "artifactDirectoryName": "serverless/test-http-api/dev/1581551206460-2020-02-12T23:46:46.460Z",
     "artifact": ""
   }
 }
