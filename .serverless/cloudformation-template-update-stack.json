@@ -152,7 +152,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api-catch-all/dev/1580475796495-2020-01-31T13:03:16.495Z/function.zip"
+          "S3Key": "serverless/test-http-api-catch-all/dev/1581553336998-2020-02-13T00:22:16.998Z/function.zip"
         },
         "FunctionName": "test-http-api-catch-all-dev-function",
         "Handler": "index.handler",
@@ -171,34 +171,6 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "FunctionLambdaVersionjOeM0wVJJzGKridln7fSV6yqQwdkHVgSX30i4Xj9ic4": {
-      "Type": "AWS::Lambda::Version",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "FunctionLambdaFunction"
-        },
-        "CodeSha256": "SHGkZNtkOuQw6mQIemilVHjllZS8kEIsCO+Ow6VDU/A="
-      }
-    },
-    "FunctionProvConcLambdaAlias": {
-      "Type": "AWS::Lambda::Alias",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "FunctionLambdaFunction"
-        },
-        "FunctionVersion": {
-          "Fn::GetAtt": [
-            "FunctionLambdaVersionjOeM0wVJJzGKridln7fSV6yqQwdkHVgSX30i4Xj9ic4",
-            "Version"
-          ]
-        },
-        "Name": "provisioned",
-        "ProvisionedConcurrencyConfig": {
-          "ProvisionedConcurrentExecutions": 1
-        }
-      },
-      "DependsOn": "FunctionLambdaFunction"
-    },
     "OtherLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -206,7 +178,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api-catch-all/dev/1580475796495-2020-01-31T13:03:16.495Z/other.zip"
+          "S3Key": "serverless/test-http-api-catch-all/dev/1581553336998-2020-02-13T00:22:16.998Z/other.zip"
         },
         "FunctionName": "test-http-api-catch-all-dev-other",
         "Handler": "other.handler",
@@ -232,17 +204,9 @@
         "ProtocolType": "HTTP",
         "RouteKey": "$default",
         "Target": {
-          "Fn::Join": [
-            ":",
-            [
-              {
-                "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "provisioned"
-            ]
+          "Fn::GetAtt": [
+            "FunctionLambdaFunction",
+            "Arn"
           ]
         }
       }
@@ -253,7 +217,7 @@
         "ApiId": {
           "Ref": "HttpApi"
         },
-        "StageName": "dev",
+        "StageName": "$default",
         "AutoDeploy": true
       }
     },
@@ -261,17 +225,9 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Fn::Join": [
-            ":",
-            [
-              {
-                "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "provisioned"
-            ]
+          "Fn::GetAtt": [
+            "FunctionLambdaFunction",
+            "Arn"
           ]
         },
         "Action": "lambda:InvokeFunction",
@@ -383,12 +339,6 @@
         "Ref": "ServerlessDeploymentBucket"
       }
     },
-    "FunctionLambdaFunctionQualifiedArn": {
-      "Description": "Current Lambda function version",
-      "Value": {
-        "Ref": "FunctionLambdaVersionjOeM0wVJJzGKridln7fSV6yqQwdkHVgSX30i4Xj9ic4"
-      }
-    },
     "HttpApiUrl": {
       "Description": "URL of the HTTP API",
       "Value": {
@@ -406,8 +356,7 @@
             ".",
             {
               "Ref": "AWS::URLSuffix"
-            },
-            "/dev"
+            }
           ]
         ]
       }
