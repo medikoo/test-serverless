@@ -166,7 +166,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api-catch-all/dev/1581553336998-2020-02-13T00:22:16.998Z/function.zip"
+                "S3Key": "serverless/test-http-api-catch-all/dev/1581553617055-2020-02-13T00:26:57.055Z/function.zip"
               },
               "FunctionName": "test-http-api-catch-all-dev-function",
               "Handler": "index.handler",
@@ -192,7 +192,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api-catch-all/dev/1581553336998-2020-02-13T00:22:16.998Z/other.zip"
+                "S3Key": "serverless/test-http-api-catch-all/dev/1581553617055-2020-02-13T00:26:57.055Z/other.zip"
               },
               "FunctionName": "test-http-api-catch-all-dev-other",
               "Handler": "other.handler",
@@ -223,16 +223,6 @@
                   "Arn"
                 ]
               }
-            }
-          },
-          "HttpApiStage": {
-            "Type": "AWS::ApiGatewayV2::Stage",
-            "Properties": {
-              "ApiId": {
-                "Ref": "HttpApi"
-              },
-              "StageName": "$default",
-              "AutoDeploy": true
             }
           },
           "FunctionLambdaPermissionHttpApi": {
@@ -490,7 +480,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-http-api-catch-all/dev/1581553336998-2020-02-13T00:22:16.998Z",
+    "artifactDirectoryName": "serverless/test-http-api-catch-all/dev/1581553617055-2020-02-13T00:26:57.055Z",
     "artifact": ""
   }
 }
