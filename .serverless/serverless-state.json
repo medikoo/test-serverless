@@ -11,6 +11,13 @@
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
+      "httpApi": {
+        "cors": {
+          "allowedOrigins": "https://medikoo.com",
+          "exposedResponseHeaders": "X-Amz-Date",
+          "maxAge": 60
+        }
+      },
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -166,7 +173,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1581551206460-2020-02-12T23:46:46.460Z/function.zip"
+                "S3Key": "serverless/test-http-api/dev/1581641662788-2020-02-14T00:54:22.788Z/function.zip"
               },
               "FunctionName": "test-http-api-dev-function",
               "Handler": "index.handler",
@@ -192,7 +199,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1581551206460-2020-02-12T23:46:46.460Z/other.zip"
+                "S3Key": "serverless/test-http-api/dev/1581641662788-2020-02-14T00:54:22.788Z/other.zip"
               },
               "FunctionName": "test-http-api-dev-other",
               "Handler": "other.handler",
@@ -215,7 +222,29 @@
             "Type": "AWS::ApiGatewayV2::Api",
             "Properties": {
               "Name": "dev-test-http-api",
-              "ProtocolType": "HTTP"
+              "ProtocolType": "HTTP",
+              "CorsConfiguration": {
+                "AllowHeaders": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "AllowMethods": [
+                  "OPTIONS",
+                  "GET",
+                  "POST"
+                ],
+                "AllowOrigins": [
+                  "https://medikoo.com"
+                ],
+                "ExposeHeaders": [
+                  "X-Amz-Date"
+                ],
+                "MaxAge": 60
+              }
             }
           },
           "HttpApiStage": {
@@ -553,7 +582,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-http-api/dev/1581551206460-2020-02-12T23:46:46.460Z",
+    "artifactDirectoryName": "serverless/test-http-api/dev/1581641662788-2020-02-14T00:54:22.788Z",
     "artifact": ""
   }
 }
