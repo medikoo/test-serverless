@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-http-api",
+    "service": "test-http-api-authorizer",
     "serviceObject": {
-      "name": "test-http-api"
+      "name": "test-http-api-authorizer"
     },
     "provider": {
       "stage": "dev",
@@ -16,6 +16,13 @@
           "allowedOrigins": "https://medikoo.com",
           "exposedResponseHeaders": "X-Amz-Date",
           "maxAge": 60
+        },
+        "authorizers": {
+          "someAuthorizer": {
+            "identitySource": "$request.header.Authorization",
+            "issuerUrl": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_Vx8SkSqD9",
+            "audience": "6closm6qthugjsuanu1mk1s62i"
+          }
         }
       },
       "remoteFunctionData": null,
@@ -80,13 +87,13 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-http-api-dev-function"
+              "LogGroupName": "/aws/lambda/test-http-api-authorizer-dev-function"
             }
           },
           "OtherLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-http-api-dev-other"
+              "LogGroupName": "/aws/lambda/test-http-api-authorizer-dev-other"
             }
           },
           "IamRoleLambdaExecution": {
@@ -115,7 +122,7 @@
                       "-",
                       [
                         "dev",
-                        "test-http-api",
+                        "test-http-api-authorizer",
                         "lambda"
                       ]
                     ]
@@ -131,7 +138,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-authorizer-dev*:*"
                           }
                         ]
                       },
@@ -142,7 +149,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-authorizer-dev*:*:*"
                           }
                         ]
                       }
@@ -155,7 +162,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-http-api",
+                    "test-http-api-authorizer",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -173,9 +180,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1581641662788-2020-02-14T00:54:22.788Z/function.zip"
+                "S3Key": "serverless/test-http-api-authorizer/dev/1581912443445-2020-02-17T04:07:23.445Z/function.zip"
               },
-              "FunctionName": "test-http-api-dev-function",
+              "FunctionName": "test-http-api-authorizer-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -199,9 +206,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1581641662788-2020-02-14T00:54:22.788Z/other.zip"
+                "S3Key": "serverless/test-http-api-authorizer/dev/1581912443445-2020-02-17T04:07:23.445Z/other.zip"
               },
-              "FunctionName": "test-http-api-dev-other",
+              "FunctionName": "test-http-api-authorizer-dev-other",
               "Handler": "other.handler",
               "MemorySize": 1024,
               "Role": {
@@ -221,7 +228,7 @@
           "HttpApi": {
             "Type": "AWS::ApiGatewayV2::Api",
             "Properties": {
-              "Name": "dev-test-http-api",
+              "Name": "dev-test-http-api-authorizer",
               "ProtocolType": "HTTP",
               "CorsConfiguration": {
                 "AllowHeaders": [
@@ -255,6 +262,25 @@
               },
               "StageName": "$default",
               "AutoDeploy": true
+            }
+          },
+          "HttpApiAuthorizerSomeAuthorizer": {
+            "Type": "AWS::ApiGatewayV2::Authorizer",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "AuthorizerType": "JWT",
+              "IdentitySource": [
+                "$request.header.Authorization"
+              ],
+              "JwtConfiguration": {
+                "Audience": [
+                  "6closm6qthugjsuanu1mk1s62i"
+                ],
+                "Issuer": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_Vx8SkSqD9"
+              },
+              "Name": "someAuthorizer"
             }
           },
           "FunctionLambdaPermissionHttpApi": {
@@ -345,6 +371,10 @@
                     }
                   ]
                 ]
+              },
+              "AuthorizationType": "JWT",
+              "AuthorizerId": {
+                "Ref": "HttpApiAuthorizerSomeAuthorizer"
               }
             },
             "DependsOn": "HttpApiIntegrationFunction"
@@ -539,13 +569,14 @@
           {
             "httpApi": {
               "method": "POST",
-              "path": "/some-post"
+              "path": "/some-post",
+              "authorizer": "someAuthorizer"
             },
             "resolvedMethod": "POST",
             "resolvedPath": "/some-post"
           }
         ],
-        "name": "test-http-api-dev-function",
+        "name": "test-http-api-authorizer-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -566,7 +597,7 @@
             "resolvedPath": "/bar/{marko}"
           }
         ],
-        "name": "test-http-api-dev-other",
+        "name": "test-http-api-authorizer-dev-other",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/other.zip"
         },
@@ -582,7 +613,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-http-api/dev/1581641662788-2020-02-14T00:54:22.788Z",
+    "artifactDirectoryName": "serverless/test-http-api-authorizer/dev/1581912443445-2020-02-17T04:07:23.445Z",
     "artifact": ""
   }
 }

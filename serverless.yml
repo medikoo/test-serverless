@@ -1,4 +1,4 @@
-service: test-http-api
+service: test-http-api-authorizer
 
 provider:
   name: aws
@@ -11,6 +11,11 @@ provider:
       allowedOrigins: "https://medikoo.com"
       exposedResponseHeaders: "X-Amz-Date"
       maxAge: 60
+    authorizers:
+      someAuthorizer:
+        identitySource: $request.header.Authorization
+        issuerUrl: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_Vx8SkSqD9
+        audience: 6closm6qthugjsuanu1mk1s62i
 
 package:
   individually: true
@@ -26,6 +31,7 @@ functions:
       - httpApi:
           method: POST
           path: /some-post
+          authorizer: someAuthorizer
 
   other:
     handler: other.handler
