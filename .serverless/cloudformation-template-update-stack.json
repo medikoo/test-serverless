@@ -93,8 +93,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "dev",
-                  "test-http-api-catch-all",
+                  "test-http-api-catch-all-dev",
                   "lambda"
                 ]
               ]
@@ -134,8 +133,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-http-api-catch-all",
-              "dev",
+              "test-http-api-catch-all-dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -152,7 +150,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api-catch-all/dev/1581553617055-2020-02-13T00:26:57.055Z/function.zip"
+          "S3Key": "serverless/test-http-api-catch-all/dev/1582525676560-2020-02-24T06:27:56.560Z/function.zip"
         },
         "FunctionName": "test-http-api-catch-all-dev-function",
         "Handler": "index.handler",
@@ -178,7 +176,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api-catch-all/dev/1581553617055-2020-02-13T00:26:57.055Z/other.zip"
+          "S3Key": "serverless/test-http-api-catch-all/dev/1582525676560-2020-02-24T06:27:56.560Z/other.zip"
         },
         "FunctionName": "test-http-api-catch-all-dev-other",
         "Handler": "other.handler",
