@@ -1,4 +1,4 @@
-service: test-http-api
+service: test-http-api-shared
 
 provider:
   name: aws
@@ -7,10 +7,7 @@ provider:
   stage: dev
   versionFunctions: false
   httpApi:
-    cors:
-      allowedOrigins: "https://medikoo.com"
-      exposedResponseHeaders: "X-Amz-Date"
-      maxAge: 60
+    id: odpcs1ujgl
 
 package:
   individually: true

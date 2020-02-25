@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-http-api",
+    "service": "test-http-api-shared",
     "serviceObject": {
-      "name": "test-http-api"
+      "name": "test-http-api-shared"
     },
     "provider": {
       "stage": "dev",
@@ -12,11 +12,7 @@
       "region": "us-east-1",
       "versionFunctions": false,
       "httpApi": {
-        "cors": {
-          "allowedOrigins": "https://medikoo.com",
-          "exposedResponseHeaders": "X-Amz-Date",
-          "maxAge": 60
-        }
+        "id": "odpcs1ujgl"
       },
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
@@ -80,13 +76,13 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-http-api-dev-function"
+              "LogGroupName": "/aws/lambda/test-http-api-shared-dev-function"
             }
           },
           "OtherLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-http-api-dev-other"
+              "LogGroupName": "/aws/lambda/test-http-api-shared-dev-other"
             }
           },
           "IamRoleLambdaExecution": {
@@ -114,7 +110,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-http-api-dev",
+                        "test-http-api-shared-dev",
                         "lambda"
                       ]
                     ]
@@ -130,7 +126,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-shared-dev*:*"
                           }
                         ]
                       },
@@ -141,7 +137,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-shared-dev*:*:*"
                           }
                         ]
                       }
@@ -154,7 +150,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-http-api-dev",
+                    "test-http-api-shared-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -171,9 +167,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1582599855161-2020-02-25T03:04:15.161Z/function.zip"
+                "S3Key": "serverless/test-http-api-shared/dev/1582610282983-2020-02-25T05:58:02.983Z/function.zip"
               },
-              "FunctionName": "test-http-api-dev-function",
+              "FunctionName": "test-http-api-shared-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -197,9 +193,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1582599855161-2020-02-25T03:04:15.161Z/other.zip"
+                "S3Key": "serverless/test-http-api-shared/dev/1582610282983-2020-02-25T05:58:02.983Z/other.zip"
               },
-              "FunctionName": "test-http-api-dev-other",
+              "FunctionName": "test-http-api-shared-dev-other",
               "Handler": "other.handler",
               "MemorySize": 1024,
               "Role": {
@@ -215,45 +211,6 @@
               "OtherLogGroup",
               "IamRoleLambdaExecution"
             ]
-          },
-          "HttpApi": {
-            "Type": "AWS::ApiGatewayV2::Api",
-            "Properties": {
-              "Name": "dev-test-http-api",
-              "ProtocolType": "HTTP",
-              "CorsConfiguration": {
-                "AllowHeaders": [
-                  "Content-Type",
-                  "X-Amz-Date",
-                  "Authorization",
-                  "X-Api-Key",
-                  "X-Amz-Security-Token",
-                  "X-Amz-User-Agent"
-                ],
-                "AllowMethods": [
-                  "OPTIONS",
-                  "GET",
-                  "POST"
-                ],
-                "AllowOrigins": [
-                  "https://medikoo.com"
-                ],
-                "ExposeHeaders": [
-                  "X-Amz-Date"
-                ],
-                "MaxAge": 60
-              }
-            }
-          },
-          "HttpApiStage": {
-            "Type": "AWS::ApiGatewayV2::Stage",
-            "Properties": {
-              "ApiId": {
-                "Ref": "HttpApi"
-              },
-              "StageName": "$default",
-              "AutoDeploy": true
-            }
           },
           "FunctionLambdaPermissionHttpApi": {
             "Type": "AWS::Lambda::Permission",
@@ -283,9 +240,7 @@
                       "Ref": "AWS::AccountId"
                     },
                     ":",
-                    {
-                      "Ref": "HttpApi"
-                    },
+                    "odpcs1ujgl",
                     "/*"
                   ]
                 ]
@@ -295,9 +250,7 @@
           "HttpApiIntegrationFunction": {
             "Type": "AWS::ApiGatewayV2::Integration",
             "Properties": {
-              "ApiId": {
-                "Ref": "HttpApi"
-              },
+              "ApiId": "odpcs1ujgl",
               "IntegrationType": "AWS_PROXY",
               "IntegrationUri": {
                 "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"FunctionLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
@@ -308,9 +261,7 @@
           "HttpApiRouteGetFoo": {
             "Type": "AWS::ApiGatewayV2::Route",
             "Properties": {
-              "ApiId": {
-                "Ref": "HttpApi"
-              },
+              "ApiId": "odpcs1ujgl",
               "RouteKey": "GET /foo",
               "Target": {
                 "Fn::Join": [
@@ -329,9 +280,7 @@
           "HttpApiRoutePostSomeDashpost": {
             "Type": "AWS::ApiGatewayV2::Route",
             "Properties": {
-              "ApiId": {
-                "Ref": "HttpApi"
-              },
+              "ApiId": "odpcs1ujgl",
               "RouteKey": "POST /some-post",
               "Target": {
                 "Fn::Join": [
@@ -375,9 +324,7 @@
                       "Ref": "AWS::AccountId"
                     },
                     ":",
-                    {
-                      "Ref": "HttpApi"
-                    },
+                    "odpcs1ujgl",
                     "/*"
                   ]
                 ]
@@ -387,9 +334,7 @@
           "HttpApiIntegrationOther": {
             "Type": "AWS::ApiGatewayV2::Integration",
             "Properties": {
-              "ApiId": {
-                "Ref": "HttpApi"
-              },
+              "ApiId": "odpcs1ujgl",
               "IntegrationType": "AWS_PROXY",
               "IntegrationUri": {
                 "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"OtherLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
@@ -400,9 +345,7 @@
           "HttpApiRouteGetBarMarkoVar": {
             "Type": "AWS::ApiGatewayV2::Route",
             "Properties": {
-              "ApiId": {
-                "Ref": "HttpApi"
-              },
+              "ApiId": "odpcs1ujgl",
               "RouteKey": "GET /bar/{marko}",
               "Target": {
                 "Fn::Join": [
@@ -423,28 +366,6 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
-            }
-          },
-          "HttpApiUrl": {
-            "Description": "URL of the HTTP API",
-            "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "https://",
-                  {
-                    "Ref": "HttpApi"
-                  },
-                  ".execute-api.",
-                  {
-                    "Ref": "AWS::Region"
-                  },
-                  ".",
-                  {
-                    "Ref": "AWS::URLSuffix"
-                  }
-                ]
-              ]
             }
           }
         }
@@ -543,7 +464,7 @@
             "resolvedPath": "/some-post"
           }
         ],
-        "name": "test-http-api-dev-function",
+        "name": "test-http-api-shared-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -564,7 +485,7 @@
             "resolvedPath": "/bar/{marko}"
           }
         ],
-        "name": "test-http-api-dev-other",
+        "name": "test-http-api-shared-dev-other",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/other.zip"
         },
@@ -580,7 +501,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-http-api/dev/1582599855161-2020-02-25T03:04:15.161Z",
+    "artifactDirectoryName": "serverless/test-http-api-shared/dev/1582610282983-2020-02-25T05:58:02.983Z",
     "artifact": ""
   }
 }
