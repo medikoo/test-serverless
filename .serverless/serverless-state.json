@@ -114,8 +114,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "dev",
-                        "test-http-api",
+                        "test-http-api-dev",
                         "lambda"
                       ]
                     ]
@@ -155,8 +154,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-http-api",
-                    "dev",
+                    "test-http-api-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -173,7 +171,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1581641662788-2020-02-14T00:54:22.788Z/function.zip"
+                "S3Key": "serverless/test-http-api/dev/1582599855161-2020-02-25T03:04:15.161Z/function.zip"
               },
               "FunctionName": "test-http-api-dev-function",
               "Handler": "index.handler",
@@ -199,7 +197,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1581641662788-2020-02-14T00:54:22.788Z/other.zip"
+                "S3Key": "serverless/test-http-api/dev/1582599855161-2020-02-25T03:04:15.161Z/other.zip"
               },
               "FunctionName": "test-http-api-dev-other",
               "Handler": "other.handler",
@@ -582,7 +580,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-http-api/dev/1581641662788-2020-02-14T00:54:22.788Z",
+    "artifactDirectoryName": "serverless/test-http-api/dev/1582599855161-2020-02-25T03:04:15.161Z",
     "artifact": ""
   }
 }
