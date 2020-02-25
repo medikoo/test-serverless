@@ -150,7 +150,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api-catch-all/dev/1582525676560-2020-02-24T06:27:56.560Z/function.zip"
+          "S3Key": "serverless/test-http-api-catch-all/dev/1582596148298-2020-02-25T02:02:28.298Z/function.zip"
         },
         "FunctionName": "test-http-api-catch-all-dev-function",
         "Handler": "index.handler",
@@ -176,7 +176,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api-catch-all/dev/1582525676560-2020-02-24T06:27:56.560Z/other.zip"
+          "S3Key": "serverless/test-http-api-catch-all/dev/1582596148298-2020-02-25T02:02:28.298Z/other.zip"
         },
         "FunctionName": "test-http-api-catch-all-dev-other",
         "Handler": "other.handler",
@@ -199,14 +199,17 @@
       "Type": "AWS::ApiGatewayV2::Api",
       "Properties": {
         "Name": "dev-test-http-api-catch-all",
-        "ProtocolType": "HTTP",
-        "RouteKey": "$default",
-        "Target": {
-          "Fn::GetAtt": [
-            "FunctionLambdaFunction",
-            "Arn"
-          ]
-        }
+        "ProtocolType": "HTTP"
+      }
+    },
+    "HttpApiStage": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "StageName": "$default",
+        "AutoDeploy": true
       }
     },
     "FunctionLambdaPermissionHttpApi": {
@@ -245,6 +248,43 @@
           ]
         }
       }
+    },
+    "HttpApiIntegrationFunction": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "FunctionLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "1.0"
+      }
+    },
+    "HttpApiRouteDefault": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "$default",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationFunction"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationFunction"
     },
     "OtherLambdaPermissionHttpApi": {
       "Type": "AWS::Lambda::Permission",
