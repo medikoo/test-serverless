@@ -6,7 +6,7 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
+      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
       "runtime": "nodejs10.x",
       "region": "us-east-1",
@@ -28,6 +28,46 @@
                   {
                     "ServerSideEncryptionByDefault": {
                       "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
                     }
                   }
                 ]
@@ -65,8 +105,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "dev",
-                        "test-api-gw-shared",
+                        "test-api-gw-shared-dev",
                         "lambda"
                       ]
                     ]
@@ -77,7 +116,8 @@
                       {
                         "Effect": "Allow",
                         "Action": [
-                          "logs:CreateLogStream"
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup"
                         ],
                         "Resource": [
                           {
@@ -105,8 +145,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw-shared",
-                    "dev",
+                    "test-api-gw-shared-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -123,7 +162,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-shared/dev/1566919384671-2019-08-27T15:23:04.671Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw-shared/dev/1582610489873-2020-02-25T06:01:29.873Z/myFunction.zip"
               },
               "FunctionName": "test-api-gw-shared-dev-myFunction",
               "Handler": "index.handler",
@@ -191,7 +230,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1566919383859": {
+          "ApiGatewayDeployment1582610488671": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": "pkhriceyzl",
@@ -283,6 +322,46 @@
                 ]
               }
             }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
           }
         },
         "Outputs": {
@@ -313,7 +392,7 @@
         ],
         "name": "test-api-gw-shared-dev-myFunction",
         "package": {
-          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
         },
         "memory": 1024,
         "timeout": 6,
@@ -322,11 +401,12 @@
       }
     },
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "layers": {},
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-shared/dev/1566919384671-2019-08-27T15:23:04.671Z",
+    "artifactDirectoryName": "serverless/test-api-gw-shared/dev/1582610489873-2020-02-25T06:01:29.873Z",
     "artifact": ""
   }
 }
