@@ -12,7 +12,7 @@ resources:
     HttpApi:
       Type: AWS::ApiGatewayV2::Api
       Properties:
-        Name: dev-test-http-api-export
+        Name: dev-${self:service}
         ProtocolType: HTTP
     HttpApiStage:
       Type: AWS::ApiGatewayV2::Stage
