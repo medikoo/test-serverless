@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-tagged-lambda",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-tagged-lambda"
     },
     "provider": {
       "stage": "dev",
@@ -11,6 +11,9 @@
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
+      "tags": {
+        "foo": "bar"
+      },
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -73,7 +76,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-tagged-lambda-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -101,7 +104,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-regular-lambda-dev",
+                        "test-tagged-lambda-dev",
                         "lambda"
                       ]
                     ]
@@ -117,7 +120,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-tagged-lambda-dev*:*"
                           }
                         ]
                       },
@@ -128,7 +131,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-tagged-lambda-dev*:*:*"
                           }
                         ]
                       }
@@ -141,7 +144,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda-dev",
+                    "test-tagged-lambda-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -158,9 +161,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1583354549492-2020-03-04T20:42:29.492Z/function.zip"
+                "S3Key": "serverless/test-tagged-lambda/dev/1583354733302-2020-03-04T20:45:33.302Z/function.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-function",
+              "FunctionName": "test-tagged-lambda-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -170,7 +173,13 @@
                 ]
               },
               "Runtime": "nodejs12.x",
-              "Timeout": 6
+              "Timeout": 6,
+              "Tags": [
+                {
+                  "Key": "foo",
+                  "Value": "bar"
+                }
+              ]
             },
             "DependsOn": [
               "FunctionLogGroup",
@@ -263,7 +272,7 @@
       "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-regular-lambda-dev-function",
+        "name": "test-tagged-lambda-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -279,7 +288,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1583354549492-2020-03-04T20:42:29.492Z",
+    "artifactDirectoryName": "serverless/test-tagged-lambda/dev/1583354733302-2020-03-04T20:45:33.302Z",
     "artifact": ""
   }
 }

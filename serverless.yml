@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-tagged-lambda
 
 provider:
   name: aws
@@ -6,6 +6,8 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
+  tags:
+    foo: bar
 
 package:
   individually: true
