@@ -101,8 +101,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "dev",
-                        "test-regular-lambda",
+                        "test-regular-lambda-dev",
                         "lambda"
                       ]
                     ]
@@ -142,8 +141,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda",
-                    "dev",
+                    "test-regular-lambda-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -160,7 +158,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1579878694244-2020-01-24T15:11:34.244Z/function.zip"
+                "S3Key": "serverless/test-regular-lambda/dev/1583354549492-2020-03-04T20:42:29.492Z/function.zip"
               },
               "FunctionName": "test-regular-lambda-dev-function",
               "Handler": "index.handler",
@@ -281,7 +279,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1579878694244-2020-01-24T15:11:34.244Z",
+    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1583354549492-2020-03-04T20:42:29.492Z",
     "artifact": ""
   }
 }
