@@ -150,7 +150,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1582599855161-2020-02-25T03:04:15.161Z/function.zip"
+          "S3Key": "serverless/test-http-api/dev/1583614160843-2020-03-07T20:49:20.843Z/function.zip"
         },
         "FunctionName": "test-http-api-dev-function",
         "Handler": "index.handler",
@@ -176,7 +176,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1582599855161-2020-02-25T03:04:15.161Z/other.zip"
+          "S3Key": "serverless/test-http-api/dev/1583614160843-2020-03-07T20:49:20.843Z/other.zip"
         },
         "FunctionName": "test-http-api-dev-other",
         "Handler": "other.handler",
@@ -284,7 +284,8 @@
             "Arn"
           ]
         },
-        "PayloadFormatVersion": "1.0"
+        "PayloadFormatVersion": "1.0",
+        "TimeoutInMillis": 6500
       }
     },
     "HttpApiRouteGetFoo": {
@@ -379,7 +380,8 @@
             "Arn"
           ]
         },
-        "PayloadFormatVersion": "1.0"
+        "PayloadFormatVersion": "1.0",
+        "TimeoutInMillis": 6500
       }
     },
     "HttpApiRouteGetBarMarkoVar": {
