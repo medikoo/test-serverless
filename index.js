@@ -8,8 +8,7 @@ module.exports.handler = async event =>
 					statusCode: 200,
 					body: JSON.stringify(
 						{
-							message:
-								"Go Serverless v1.0! Your function executed successfully (again2)!",
+							message: "Go Serverless v1.0! Your function executed successfully! v2",
 							input: event,
 							env: process.env
 						},
