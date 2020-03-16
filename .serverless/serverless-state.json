@@ -1,14 +1,14 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-python-lambda",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-python-lambda"
     },
     "provider": {
       "stage": "dev",
       "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
-      "runtime": "nodejs12.x",
+      "runtime": "python3.8",
       "region": "us-east-1",
       "versionFunctions": false,
       "remoteFunctionData": null,
@@ -73,7 +73,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-python-lambda-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -101,7 +101,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-regular-lambda-dev",
+                        "test-python-lambda-dev",
                         "lambda"
                       ]
                     ]
@@ -117,7 +117,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-python-lambda-dev*:*"
                           }
                         ]
                       },
@@ -128,7 +128,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-python-lambda-dev*:*:*"
                           }
                         ]
                       }
@@ -141,7 +141,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda-dev",
+                    "test-python-lambda-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -158,10 +158,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1584317359683-2020-03-16T00:09:19.683Z/function.zip"
+                "S3Key": "serverless/test-python-lambda/dev/1584317629957-2020-03-16T00:13:49.957Z/test-python-lambda.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-function",
-              "Handler": "index.handler",
+              "FunctionName": "test-python-lambda-dev-function",
+              "Handler": "handler.hello",
               "MemorySize": 1024,
               "Role": {
                 "Fn::GetAtt": [
@@ -169,7 +169,7 @@
                   "Arn"
                 ]
               },
-              "Runtime": "nodejs12.x",
+              "Runtime": "python3.8",
               "Timeout": 6
             },
             "DependsOn": [
@@ -255,31 +255,26 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
     "pluginsData": {},
     "functions": {
       "function": {
-        "handler": "index.handler",
+        "handler": "handler.hello",
         "events": [],
-        "name": "test-regular-lambda-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
+        "name": "test-python-lambda-dev-function",
+        "package": {},
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs12.x",
+        "runtime": "python3.8",
         "vpc": {}
       }
     },
     "serviceFilename": "serverless.yml",
     "layers": {},
-    "isDashboardMonitoringPreconfigured": false
+    "isDashboardMonitoringPreconfigured": false,
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-python-lambda.zip"
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1584317359683-2020-03-16T00:09:19.683Z",
-    "artifact": ""
+    "artifactDirectoryName": "serverless/test-python-lambda/dev/1584317629957-2020-03-16T00:13:49.957Z",
+    "artifact": "test-python-lambda.zip"
   }
 }

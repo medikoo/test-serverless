@@ -1,18 +1,12 @@
-service: test-regular-lambda
+service: test-python-lambda
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: python3.8
   region: us-east-1
   stage: dev
   versionFunctions: false
 
-package:
-  individually: true
-
 functions:
   function:
-    handler: index.handler
-
-plugins:
-  - serverless-plugin-reducer
+    handler: handler.hello
