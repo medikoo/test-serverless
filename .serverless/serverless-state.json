@@ -158,7 +158,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-python-lambda/dev/1584317629957-2020-03-16T00:13:49.957Z/test-python-lambda.zip"
+                "S3Key": "serverless/test-python-lambda/dev/1584317736654-2020-03-16T00:15:36.654Z/test-python-lambda.zip"
               },
               "FunctionName": "test-python-lambda-dev-function",
               "Handler": "handler.hello",
@@ -274,7 +274,7 @@
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-python-lambda.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-python-lambda/dev/1584317629957-2020-03-16T00:13:49.957Z",
+    "artifactDirectoryName": "serverless/test-python-lambda/dev/1584317736654-2020-03-16T00:15:36.654Z",
     "artifact": "test-python-lambda.zip"
   }
 }
