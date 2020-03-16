@@ -87,8 +87,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "dev",
-                  "test-api-gw",
+                  "test-api-gw-dev",
                   "lambda"
                 ]
               ]
@@ -128,8 +127,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-api-gw",
-              "dev",
+              "test-api-gw-dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -146,7 +144,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1579525522932-2020-01-20T13:05:22.932Z/function.zip"
+          "S3Key": "serverless/test-api-gw/dev/1584402582428-2020-03-16T23:49:42.428Z/function.zip"
         },
         "FunctionName": "test-api-gw-dev-function",
         "Handler": "index.handler",
@@ -278,7 +276,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1579525521788": {
+    "ApiGatewayDeployment1584402580899": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
