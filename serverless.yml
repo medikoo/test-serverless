@@ -17,6 +17,7 @@ functions:
       - http:
           path: foo
           method: GET
+          cors: true
       - http:
           path: foo
           method: POST
