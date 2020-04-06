@@ -10,6 +10,14 @@
       "name": "aws",
       "runtime": "nodejs12.x",
       "versionFunctions": false,
+      "s3": {
+        "testCustomBucket": {
+          "name": "test-custom-bucket",
+          "versioningConfiguration": {
+            "Status": "Enabled"
+          }
+        }
+      },
       "region": "us-east-1",
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
@@ -158,7 +166,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-s3-custom/dev/1586137332260-2020-04-06T01:42:12.260Z/function.zip"
+                "S3Key": "serverless/test-lambda-s3-custom/dev/1586137419840-2020-04-06T01:43:39.840Z/function.zip"
               },
               "FunctionName": "test-lambda-s3-custom-dev-function",
               "Handler": "index.handler",
@@ -176,6 +184,59 @@
               "FunctionLogGroup",
               "IamRoleLambdaExecution"
             ]
+          },
+          "S3BucketTestCustomBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketName": "test-custom-bucket",
+              "NotificationConfiguration": {
+                "LambdaConfigurations": [
+                  {
+                    "Event": "s3:ObjectCreated:*",
+                    "Function": {
+                      "Fn::GetAtt": [
+                        "FunctionLambdaFunction",
+                        "Arn"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "VersioningConfiguration": {
+                "Status": "Enabled"
+              }
+            },
+            "DependsOn": [
+              "FunctionLambdaPermissionTestCustomBucketS3"
+            ]
+          },
+          "FunctionLambdaPermissionTestCustomBucketS3": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "FunctionLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "s3.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":s3:::test-custom-bucket"
+                  ]
+                ]
+              },
+              "SourceAccount": {
+                "Ref": "AWS::AccountId"
+              }
+            }
           }
         },
         "Outputs": {
@@ -262,7 +323,11 @@
     "functions": {
       "function": {
         "handler": "index.handler",
-        "events": [],
+        "events": [
+          {
+            "s3": "testCustomBucket"
+          }
+        ],
         "name": "test-lambda-s3-custom-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
@@ -279,7 +344,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda-s3-custom/dev/1586137332260-2020-04-06T01:42:12.260Z",
+    "artifactDirectoryName": "serverless/test-lambda-s3-custom/dev/1586137419840-2020-04-06T01:43:39.840Z",
     "artifact": ""
   }
 }
