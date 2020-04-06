@@ -1,8 +1,8 @@
-service: test-lambda-for-s3-events
+service: test-lambda-s3-custom
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   versionFunctions: false
 
 package:
@@ -11,28 +11,6 @@ package:
 functions:
   function:
     handler: index.handler
-    events:
-      - s3: test-for-s3-events
-
-resources:
-  Resources:
-    S3BucketTestfors3events:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: test-for-s3-events
-
-    FunctionLambdaPermissionTestfors3eventsS3:
-      Type: "AWS::Lambda::Permission"
-      Properties:
-        FunctionName:
-          "Fn::GetAtt":
-            - FunctionLambdaFunction
-            - Arn
-        Principal: s3.amazonaws.com
-        Action: lambda:InvokeFunction
-        SourceAccount:
-          Ref: AWS::AccountId
-        SourceArn: arn:aws:s3:::test-for-s3-events
 
 plugins:
   - serverless-plugin-reducer

@@ -1,14 +1,14 @@
 {
   "service": {
-    "service": "test-lambda-for-s3-events",
+    "service": "test-lambda-s3-custom",
     "serviceObject": {
-      "name": "test-lambda-for-s3-events"
+      "name": "test-lambda-s3-custom"
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
+      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
-      "runtime": "nodejs10.x",
+      "runtime": "nodejs12.x",
       "versionFunctions": false,
       "region": "us-east-1",
       "remoteFunctionData": null,
@@ -30,10 +30,50 @@
               }
             }
           },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-lambda-for-s3-events-dev-function"
+              "LogGroupName": "/aws/lambda/test-lambda-s3-custom-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -61,8 +101,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "dev",
-                        "test-lambda-for-s3-events",
+                        "test-lambda-s3-custom-dev",
                         "lambda"
                       ]
                     ]
@@ -73,11 +112,12 @@
                       {
                         "Effect": "Allow",
                         "Action": [
-                          "logs:CreateLogStream"
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup"
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-for-s3-events-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-s3-custom-dev*:*"
                           }
                         ]
                       },
@@ -88,7 +128,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-for-s3-events-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-s3-custom-dev*:*:*"
                           }
                         ]
                       }
@@ -101,8 +141,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-lambda-for-s3-events",
-                    "dev",
+                    "test-lambda-s3-custom-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -119,9 +158,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-for-s3-events/dev/1566461479242-2019-08-22T08:11:19.242Z/function.zip"
+                "S3Key": "serverless/test-lambda-s3-custom/dev/1586137332260-2020-04-06T01:42:12.260Z/function.zip"
               },
-              "FunctionName": "test-lambda-for-s3-events-dev-function",
+              "FunctionName": "test-lambda-s3-custom-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -130,52 +169,13 @@
                   "Arn"
                 ]
               },
-              "Runtime": "nodejs10.x",
+              "Runtime": "nodejs12.x",
               "Timeout": 6
             },
             "DependsOn": [
               "FunctionLogGroup",
               "IamRoleLambdaExecution"
             ]
-          },
-          "S3BucketTestfors3events": {
-            "Type": "AWS::S3::Bucket",
-            "Properties": {
-              "BucketName": "test-for-s3-events",
-              "NotificationConfiguration": {
-                "LambdaConfigurations": [
-                  {
-                    "Event": "s3:ObjectCreated:*",
-                    "Function": {
-                      "Fn::GetAtt": [
-                        "FunctionLambdaFunction",
-                        "Arn"
-                      ]
-                    }
-                  }
-                ]
-              }
-            },
-            "DependsOn": [
-              "FunctionLambdaPermissionTestfors3eventsS3"
-            ]
-          },
-          "FunctionLambdaPermissionTestfors3eventsS3": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-              "FunctionName": {
-                "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "s3.amazonaws.com",
-              "SourceArn": "arn:aws:s3:::test-for-s3-events",
-              "SourceAccount": {
-                "Ref": "AWS::AccountId"
-              }
-            }
           }
         },
         "Outputs": {
@@ -203,6 +203,46 @@
                 ]
               }
             }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
           }
         },
         "Outputs": {
@@ -222,55 +262,24 @@
     "functions": {
       "function": {
         "handler": "index.handler",
-        "events": [
-          {
-            "s3": "test-for-s3-events"
-          }
-        ],
-        "name": "test-lambda-for-s3-events-dev-function",
+        "events": [],
+        "name": "test-lambda-s3-custom-dev-function",
         "package": {
-          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/function.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs10.x",
+        "runtime": "nodejs12.x",
         "vpc": {}
       }
     },
-    "resources": {
-      "Resources": {
-        "S3BucketTestfors3events": {
-          "Type": "AWS::S3::Bucket",
-          "Properties": {
-            "BucketName": "test-for-s3-events"
-          }
-        },
-        "FunctionLambdaPermissionTestfors3eventsS3": {
-          "Type": "AWS::Lambda::Permission",
-          "Properties": {
-            "FunctionName": {
-              "Fn::GetAtt": [
-                "FunctionLambdaFunction",
-                "Arn"
-              ]
-            },
-            "Principal": "s3.amazonaws.com",
-            "Action": "lambda:InvokeFunction",
-            "SourceAccount": {
-              "Ref": "AWS::AccountId"
-            },
-            "SourceArn": "arn:aws:s3:::test-for-s3-events"
-          }
-        }
-      },
-      "Outputs": {}
-    },
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "layers": {},
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda-for-s3-events/dev/1566461479242-2019-08-22T08:11:19.242Z",
+    "artifactDirectoryName": "serverless/test-lambda-s3-custom/dev/1586137332260-2020-04-06T01:42:12.260Z",
     "artifact": ""
   }
 }
