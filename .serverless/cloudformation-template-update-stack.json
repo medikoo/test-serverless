@@ -59,13 +59,13 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-http-api-dev-function"
+        "LogGroupName": "/aws/lambda/test-http-api-logs-2-dev-function"
       }
     },
     "OtherLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-http-api-dev-other"
+        "LogGroupName": "/aws/lambda/test-http-api-logs-2-dev-other"
       }
     },
     "IamRoleLambdaExecution": {
@@ -93,7 +93,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-http-api-dev",
+                  "test-http-api-logs-2-dev",
                   "lambda"
                 ]
               ]
@@ -109,7 +109,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-logs-2-dev*:*"
                     }
                   ]
                 },
@@ -120,7 +120,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-logs-2-dev*:*:*"
                     }
                   ]
                 }
@@ -133,7 +133,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-http-api-dev",
+              "test-http-api-logs-2-dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -150,9 +150,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1583614160843-2020-03-07T20:49:20.843Z/function.zip"
+          "S3Key": "serverless/test-http-api-logs-2/dev/1586306603257-2020-04-08T00:43:23.257Z/function.zip"
         },
-        "FunctionName": "test-http-api-dev-function",
+        "FunctionName": "test-http-api-logs-2-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -176,9 +176,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1583614160843-2020-03-07T20:49:20.843Z/other.zip"
+          "S3Key": "serverless/test-http-api-logs-2/dev/1586306603257-2020-04-08T00:43:23.257Z/other.zip"
         },
-        "FunctionName": "test-http-api-dev-other",
+        "FunctionName": "test-http-api-logs-2-dev-other",
         "Handler": "other.handler",
         "MemorySize": 1024,
         "Role": {
@@ -198,30 +198,14 @@
     "HttpApi": {
       "Type": "AWS::ApiGatewayV2::Api",
       "Properties": {
-        "Name": "dev-test-http-api",
-        "ProtocolType": "HTTP",
-        "CorsConfiguration": {
-          "AllowHeaders": [
-            "Content-Type",
-            "X-Amz-Date",
-            "Authorization",
-            "X-Api-Key",
-            "X-Amz-Security-Token",
-            "X-Amz-User-Agent"
-          ],
-          "AllowMethods": [
-            "OPTIONS",
-            "GET",
-            "POST"
-          ],
-          "AllowOrigins": [
-            "https://medikoo.com"
-          ],
-          "ExposeHeaders": [
-            "X-Amz-Date"
-          ],
-          "MaxAge": 60
-        }
+        "Name": "dev-test-http-api-logs-2",
+        "ProtocolType": "HTTP"
+      }
+    },
+    "HttpApiLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/http-api/test-http-api-logs-2-dev"
       }
     },
     "HttpApiStage": {
@@ -231,8 +215,18 @@
           "Ref": "HttpApi"
         },
         "StageName": "$default",
-        "AutoDeploy": true
-      }
+        "AutoDeploy": true,
+        "AccessLogSettings": {
+          "DestinationArn": {
+            "Fn::GetAtt": [
+              "HttpApiLogGroup",
+              "Arn"
+            ]
+          },
+          "Format": "{{\"requestId\":\"$context.requestId\",\"ip\":\"$context.identity.sourceIp\",\"requestTime\":\"$context.requestTime\",\"httpMethod\":\"$context.httpMethod\",\"routeKey\":\"$context.routeKey\",\"status\":\"$context.status\",\"protocol\":\"$context.protocol\",\"responseLength\":\"$context.responseLength\"}}"
+        }
+      },
+      "DependsOn": "HttpApiLogGroup"
     },
     "FunctionLambdaPermissionHttpApi": {
       "Type": "AWS::Lambda::Permission",
