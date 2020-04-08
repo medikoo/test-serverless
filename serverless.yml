@@ -7,6 +7,10 @@ provider:
   stage: dev
   versionFunctions: false
 
+custom:
+  user:
+    with_yaml_password: ${file(./config/example.yml):user.password2,"abcdefg"}
+
 package:
   individually: true
 
