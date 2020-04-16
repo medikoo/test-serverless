@@ -6,7 +6,7 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
+      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
@@ -101,8 +101,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "dev",
-                        "test-dashboard",
+                        "test-dashboard-dev",
                         "lambda"
                       ]
                     ]
@@ -142,8 +141,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-dashboard",
-                    "dev",
+                    "test-dashboard-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -206,7 +204,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard/dev/1581382200310-2020-02-11T00:50:00.310Z/function.zip"
+                "S3Key": "serverless/test-dashboard/dev/1587040100442-2020-04-16T12:28:20.442Z/function.zip"
               },
               "FunctionName": "test-dashboard-dev-function",
               "Handler": "s_function.handler",
@@ -322,6 +320,9 @@
       "logs": {
         "restApi": {
           "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourceId\":\"$context.resourceId\",\"resourcePath\":\"$context.resourcePath\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"status\":\"$context.status\",\"authLatency\":\"$context.authorizer.integrationLatency\",\"integrationLatency\":\"$context.integrationLatency\",\"integrationStatus\":\"$context.integrationStatus\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_ACCESS_LOG\",\"version\":\"1.0.0\"}"
+        },
+        "httpApi": {
+          "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourcePath\":\"$context.routeKey\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"stage\":\"$context.stage\",\"status\":\"$context.status\",\"integrationStatus\":\"$context.integrationStatus\",\"integrationLatency\":\"$context.integrationLatency\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_HTTP_API_LOG\",\"version\":\"1.0.0\"}"
         }
       },
       "vpc": {}
@@ -359,7 +360,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard/dev/1581382200310-2020-02-11T00:50:00.310Z",
+    "artifactDirectoryName": "serverless/test-dashboard/dev/1587040100442-2020-04-16T12:28:20.442Z",
     "artifact": ""
   }
 }
