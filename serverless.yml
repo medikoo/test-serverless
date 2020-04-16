@@ -1,4 +1,4 @@
-service: test-http-api
+service: test-http-api-logs
 
 provider:
   name: aws
@@ -6,11 +6,8 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
-  httpApi:
-    cors:
-      allowedOrigins: "https://medikoo.com"
-      exposedResponseHeaders: "X-Amz-Date"
-      maxAge: 60
+  logs:
+    httpApi: true
 
 package:
   individually: true
