@@ -190,7 +190,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-dashboard/dev/1587040100442-2020-04-16T12:28:20.442Z/function.zip"
+          "S3Key": "serverless/test-dashboard/dev/1587040550855-2020-04-16T12:35:50.855Z/function.zip"
         },
         "FunctionName": "test-dashboard-dev-function",
         "Handler": "s_function.handler",

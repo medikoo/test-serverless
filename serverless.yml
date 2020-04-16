@@ -1,6 +1,6 @@
 service: test-dashboard
 
-tenant: medikoo
+org: medikoo
 app: medikoo-test
 
 provider:

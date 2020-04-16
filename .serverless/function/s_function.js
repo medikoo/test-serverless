@@ -5,7 +5,7 @@ serverlessSDK = new serverlessSDK({
   applicationName: 'medikoo-test',
   appUid: 'GjXh77HjWzffv8X5SQ',
   orgUid: '1sJrygBdcH5mNKPSp8',
-  deploymentUid: '66220a62-c35d-42cc-b50f-d826c46ab348',
+  deploymentUid: 'b640e4c8-67f3-40a6-b754-2c4eafc29c89',
   serviceName: 'test-dashboard',
   shouldLogMeta: true,
   disableAwsSpans: false,
