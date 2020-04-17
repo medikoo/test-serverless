@@ -1,21 +1,28 @@
-var serverlessSDK = require('./serverless_sdk/index.js')
+
+var serverlessSDK = require('./serverless_sdk/index.js');
 serverlessSDK = new serverlessSDK({
-orgId: 'medikoo2',
-applicationName: 'test',
-appUid: 'GNJhWcBZ54LDjvC2rD',
-orgUid: 'LWm4RQRZwxcB9mNFf2',
-deploymentUid: '5ac879e8-a6ae-41b4-b4ce-ef6a8b73a0ed',
-serviceName: 'test-dashboard-outputs',
-shouldLogMeta: true,
-disableAwsSpans: false,
-disableHttpSpans: false,
-stageName: 'dev',
-pluginVersion: '3.5.0',
-disableFrameworksInstrumentation: false})
-const handlerWrapperArgs = { functionName: 'test-dashboard-outputs-dev-function', timeout: 6}
+  orgId: 'medikoo2',
+  applicationName: 'test',
+  appUid: 'GNJhWcBZ54LDjvC2rD',
+  orgUid: 'LWm4RQRZwxcB9mNFf2',
+  deploymentUid: 'fc413104-a248-415b-88c6-0d97eae6eca8',
+  serviceName: 'test-dashboard-outputs',
+  shouldLogMeta: true,
+  disableAwsSpans: false,
+  disableHttpSpans: false,
+  stageName: 'dev',
+  serverlessPlatformStage: 'prod',
+  devModeEnabled: false,
+  accessKey: null,
+  pluginVersion: '3.6.6',
+  disableFrameworksInstrumentation: false
+});
+
+const handlerWrapperArgs = { functionName: 'test-dashboard-outputs-dev-function', timeout: 6 };
+
 try {
-  const userHandler = require('./index.js')
-  module.exports.handler = serverlessSDK.handler(userHandler.handler, handlerWrapperArgs)
+  const userHandler = require('./index.js');
+  module.exports.handler = serverlessSDK.handler(userHandler.handler, handlerWrapperArgs);
 } catch (error) {
-  module.exports.handler = serverlessSDK.handler(() => { throw error }, handlerWrapperArgs)
+  module.exports.handler = serverlessSDK.handler(() => { throw error }, handlerWrapperArgs);
 }
