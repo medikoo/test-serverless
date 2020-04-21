@@ -15,8 +15,6 @@ functions:
     handler: index.handler
     events:
       - schedule:
-          rate: cron(0 12 * * ? *)
-      - schedule:
           rate: rate(30 days)
 
 plugins:

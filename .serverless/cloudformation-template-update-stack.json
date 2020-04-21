@@ -144,7 +144,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-scheduled-lambda/dev/1587464146712-2020-04-21T10:15:46.712Z/function.zip"
+          "S3Key": "serverless/test-scheduled-lambda/dev/1587478958053-2020-04-21T14:22:38.053Z/function.zip"
         },
         "FunctionName": "test-scheduled-lambda-dev-function",
         "Handler": "index.handler",
@@ -166,7 +166,7 @@
     "FunctionEventsRuleSchedule1": {
       "Type": "AWS::Events::Rule",
       "Properties": {
-        "ScheduleExpression": "cron(0 12 * * ? *)",
+        "ScheduleExpression": "rate(30 days)",
         "State": "ENABLED",
         "Targets": [
           {
@@ -195,43 +195,6 @@
         "SourceArn": {
           "Fn::GetAtt": [
             "FunctionEventsRuleSchedule1",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "FunctionEventsRuleSchedule2": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "ScheduleExpression": "rate(30 days)",
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "FunctionLambdaFunction",
-                "Arn"
-              ]
-            },
-            "Id": "functionSchedule"
-          }
-        ]
-      }
-    },
-    "FunctionLambdaPermissionEventsRuleSchedule2": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "FunctionLambdaFunction",
-            "Arn"
-          ]
-        },
-        "Action": "lambda:InvokeFunction",
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "FunctionEventsRuleSchedule2",
             "Arn"
           ]
         }
