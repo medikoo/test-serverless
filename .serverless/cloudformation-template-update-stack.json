@@ -144,7 +144,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-scheduled-lambda/dev/1587463189413-2020-04-21T09:59:49.413Z/function.zip"
+          "S3Key": "serverless/test-scheduled-lambda/dev/1587463413471-2020-04-21T10:03:33.471Z/function.zip"
         },
         "FunctionName": "test-scheduled-lambda-dev-function",
         "Handler": "index.handler",
@@ -162,80 +162,6 @@
         "FunctionLogGroup",
         "IamRoleLambdaExecution"
       ]
-    },
-    "FunctionEventsRuleSchedule1": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "ScheduleExpression": "rate(30 days)",
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "FunctionLambdaFunction",
-                "Arn"
-              ]
-            },
-            "Id": "functionSchedule"
-          }
-        ]
-      }
-    },
-    "FunctionLambdaPermissionEventsRuleSchedule1": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "FunctionLambdaFunction",
-            "Arn"
-          ]
-        },
-        "Action": "lambda:InvokeFunction",
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "FunctionEventsRuleSchedule1",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "FunctionEventsRuleSchedule2": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "ScheduleExpression": "cron(0 12 * * ? *)",
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "FunctionLambdaFunction",
-                "Arn"
-              ]
-            },
-            "Id": "functionSchedule"
-          }
-        ]
-      }
-    },
-    "FunctionLambdaPermissionEventsRuleSchedule2": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "FunctionLambdaFunction",
-            "Arn"
-          ]
-        },
-        "Action": "lambda:InvokeFunction",
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "FunctionEventsRuleSchedule2",
-            "Arn"
-          ]
-        }
-      }
     }
   },
   "Outputs": {

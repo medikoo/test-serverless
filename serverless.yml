@@ -14,8 +14,12 @@ functions:
   function:
     handler: index.handler
     events:
-      - schedule: rate(30 days)
-      - schedule: cron(0 12 * * ? *)
+      - schedule:
+        name: foo
+        rate: cron(0 12 * * ? *)
+      - schedule:
+        name: bar
+        rate: rate(30 days)
 
 plugins:
   - serverless-plugin-reducer
