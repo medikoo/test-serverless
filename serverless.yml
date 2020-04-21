@@ -1,11 +1,21 @@
-service: test-scheduled-lambda
+service: test-7357
 
 provider:
   name: aws
   runtime: nodejs12.x
   region: us-east-1
+  stackName: test-7357-${self:provider.stage}
   stage: dev
   versionFunctions: false
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+      Resource:
+        Fn::Join:
+          - ""
+          - - "arn:aws:s3:::"
+            - Ref: ServerlessDeploymentBucket
 
 package:
   individually: true
@@ -13,9 +23,6 @@ package:
 functions:
   function:
     handler: index.handler
-    events:
-      - schedule:
-          rate: rate(30 days)
 
 plugins:
   - serverless-plugin-reducer

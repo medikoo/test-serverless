@@ -1,16 +1,36 @@
 {
   "service": {
-    "service": "test-scheduled-lambda",
+    "service": "test-7357",
     "serviceObject": {
-      "name": "test-scheduled-lambda"
+      "name": "test-7357"
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
+      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
+      "stackName": "test-7357-dev",
       "versionFunctions": false,
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "s3:ListBucket"
+          ],
+          "Resource": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:s3:::",
+                {
+                  "Ref": "ServerlessDeploymentBucket"
+                }
+              ]
+            ]
+          }
+        }
+      ],
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -73,7 +93,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-scheduled-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-7357-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -101,7 +121,8 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-scheduled-lambda-dev",
+                        "dev",
+                        "test-7357",
                         "lambda"
                       ]
                     ]
@@ -117,7 +138,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-scheduled-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7357-dev*:*"
                           }
                         ]
                       },
@@ -128,9 +149,12 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-scheduled-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7357-dev*:*:*"
                           }
                         ]
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iamRoleStatements\"][0]"
                       }
                     ]
                   }
@@ -141,7 +165,8 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-scheduled-lambda-dev",
+                    "test-7357",
+                    "dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -158,9 +183,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-scheduled-lambda/dev/1587478958053-2020-04-21T14:22:38.053Z/function.zip"
+                "S3Key": "serverless/test-7357/dev/1587479383313-2020-04-21T14:29:43.313Z/function.zip"
               },
-              "FunctionName": "test-scheduled-lambda-dev-function",
+              "FunctionName": "test-7357-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -176,43 +201,6 @@
               "FunctionLogGroup",
               "IamRoleLambdaExecution"
             ]
-          },
-          "FunctionEventsRuleSchedule1": {
-            "Type": "AWS::Events::Rule",
-            "Properties": {
-              "ScheduleExpression": "rate(30 days)",
-              "State": "ENABLED",
-              "Targets": [
-                {
-                  "Arn": {
-                    "Fn::GetAtt": [
-                      "FunctionLambdaFunction",
-                      "Arn"
-                    ]
-                  },
-                  "Id": "functionSchedule"
-                }
-              ]
-            }
-          },
-          "FunctionLambdaPermissionEventsRuleSchedule1": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-              "FunctionName": {
-                "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "events.amazonaws.com",
-              "SourceArn": {
-                "Fn::GetAtt": [
-                  "FunctionEventsRuleSchedule1",
-                  "Arn"
-                ]
-              }
-            }
           }
         },
         "Outputs": {
@@ -299,14 +287,8 @@
     "functions": {
       "function": {
         "handler": "index.handler",
-        "events": [
-          {
-            "schedule": {
-              "rate": "rate(30 days)"
-            }
-          }
-        ],
-        "name": "test-scheduled-lambda-dev-function",
+        "events": [],
+        "name": "test-7357-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -322,7 +304,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-scheduled-lambda/dev/1587478958053-2020-04-21T14:22:38.053Z",
+    "artifactDirectoryName": "serverless/test-7357/dev/1587479383313-2020-04-21T14:29:43.313Z",
     "artifact": ""
   }
 }
