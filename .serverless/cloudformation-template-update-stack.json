@@ -56,10 +56,10 @@
         }
       }
     },
-    "FunctionLogGroup": {
+    "HelloLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-7357-dev-function"
+        "LogGroupName": "/aws/lambda/test-7357-test-stage-hello"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,7 +87,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "dev",
+                  "test-stage",
                   "test-7357",
                   "lambda"
                 ]
@@ -104,7 +104,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7357-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7357-test-stage*:*"
                     }
                   ]
                 },
@@ -115,7 +115,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7357-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7357-test-stage*:*:*"
                     }
                   ]
                 },
@@ -146,7 +146,7 @@
             "-",
             [
               "test-7357",
-              "dev",
+              "test-stage",
               {
                 "Ref": "AWS::Region"
               },
@@ -156,17 +156,17 @@
         }
       }
     },
-    "FunctionLambdaFunction": {
+    "HelloLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-7357/dev/1587479383313-2020-04-21T14:29:43.313Z/function.zip"
+          "S3Key": "serverless/test-7357/test-stage/1587480937573-2020-04-21T14:55:37.573Z/test-7357.zip"
         },
-        "FunctionName": "test-7357-dev-function",
-        "Handler": "index.handler",
+        "FunctionName": "test-7357-test-stage-hello",
+        "Handler": "handler.hello",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -178,15 +178,31 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "FunctionLogGroup",
+        "HelloLogGroup",
         "IamRoleLambdaExecution"
       ]
+    },
+    "HelloLambdaVersionLl9ArzlRrAR2G2PEsYQEsc0Qgl2v0K6Q9qQYr9gQIgw": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "HelloLambdaFunction"
+        },
+        "CodeSha256": "R2Y9HzVb2wXCqEbHnrPquvIwOupSe8I5Osom9AqAs5k="
+      }
     }
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "HelloLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "HelloLambdaVersionLl9ArzlRrAR2G2PEsYQEsc0Qgl2v0K6Q9qQYr9gQIgw"
       }
     }
   }

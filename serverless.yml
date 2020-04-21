@@ -3,10 +3,9 @@ service: test-7357
 provider:
   name: aws
   runtime: nodejs12.x
-  region: us-east-1
-  stackName: test-7357-${self:provider.stage}
-  stage: dev
-  versionFunctions: false
+  region: eu-central-1
+  stackName: SlsV165BreakingChange-${self:provider.stage}
+  stage: test-stage
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -18,11 +17,13 @@ provider:
             - Ref: ServerlessDeploymentBucket
 
 package:
-  individually: true
+  exclude:
+    - .gitignore
+    - package-lock.json
+    - package.json
+    - README.md
+    - serverless.yml
 
 functions:
-  function:
-    handler: index.handler
-
-plugins:
-  - serverless-plugin-reducer
+  hello:
+    handler: handler.hello
