@@ -59,7 +59,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+        "LogGroupName": "/aws/lambda/test-scheduled-lambda-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,7 +87,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-regular-lambda-dev",
+                  "test-scheduled-lambda-dev",
                   "lambda"
                 ]
               ]
@@ -103,7 +103,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-scheduled-lambda-dev*:*"
                     }
                   ]
                 },
@@ -114,7 +114,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-scheduled-lambda-dev*:*:*"
                     }
                   ]
                 }
@@ -127,7 +127,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-regular-lambda-dev",
+              "test-scheduled-lambda-dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -144,9 +144,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1584317359683-2020-03-16T00:09:19.683Z/function.zip"
+          "S3Key": "serverless/test-scheduled-lambda/dev/1587462403858-2020-04-21T09:46:43.858Z/function.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-function",
+        "FunctionName": "test-scheduled-lambda-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -162,6 +162,43 @@
         "FunctionLogGroup",
         "IamRoleLambdaExecution"
       ]
+    },
+    "FunctionEventsRuleSchedule1": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "ScheduleExpression": "rate(30 days)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "FunctionLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": "functionSchedule"
+          }
+        ]
+      }
+    },
+    "FunctionLambdaPermissionEventsRuleSchedule1": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "FunctionLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "FunctionEventsRuleSchedule1",
+            "Arn"
+          ]
+        }
+      }
     }
   },
   "Outputs": {
