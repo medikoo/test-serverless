@@ -56,10 +56,10 @@
         }
       }
     },
-    "HelloLogGroup": {
+    "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/slsV165BreakingChange-test-stage-hello"
+        "LogGroupName": "/aws/lambda/test-7357-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,8 +87,8 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-stage",
-                  "slsV165BreakingChange",
+                  "dev",
+                  "test-7357",
                   "lambda"
                 ]
               ]
@@ -104,7 +104,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/slsV165BreakingChange-test-stage*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7357-dev*:*"
                     }
                   ]
                 },
@@ -115,26 +115,9 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/slsV165BreakingChange-test-stage*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7357-dev*:*:*"
                     }
                   ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "s3:ListBucket"
-                  ],
-                  "Resource": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:aws:s3:::",
-                        {
-                          "Ref": "ServerlessDeploymentBucket"
-                        }
-                      ]
-                    ]
-                  }
                 }
               ]
             }
@@ -145,8 +128,8 @@
           "Fn::Join": [
             "-",
             [
-              "slsV165BreakingChange",
-              "test-stage",
+              "test-7357",
+              "dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -156,17 +139,17 @@
         }
       }
     },
-    "HelloLambdaFunction": {
+    "FunctionLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/slsV165BreakingChange/test-stage/1587481401601-2020-04-21T15:03:21.601Z/slsV165BreakingChange.zip"
+          "S3Key": "serverless/test-7357/dev/1587481873642-2020-04-21T15:11:13.642Z/function.zip"
         },
-        "FunctionName": "slsV165BreakingChange-test-stage-hello",
-        "Handler": "handler.hello",
+        "FunctionName": "test-7357-dev-function",
+        "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -178,31 +161,15 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "HelloLogGroup",
+        "FunctionLogGroup",
         "IamRoleLambdaExecution"
       ]
-    },
-    "HelloLambdaVersionZt9XdCa3NkNxbz5QzZV9KW6Hj1TIo5LxClllN6rgi2U": {
-      "Type": "AWS::Lambda::Version",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "HelloLambdaFunction"
-        },
-        "CodeSha256": "R2Y9HzVb2wXCqEbHnrPquvIwOupSe8I5Osom9AqAs5k="
-      }
     }
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
-      }
-    },
-    "HelloLambdaFunctionQualifiedArn": {
-      "Description": "Current Lambda function version",
-      "Value": {
-        "Ref": "HelloLambdaVersionZt9XdCa3NkNxbz5QzZV9KW6Hj1TIo5LxClllN6rgi2U"
       }
     }
   }

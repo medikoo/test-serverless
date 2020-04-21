@@ -1,29 +1,19 @@
-service: slsV165BreakingChange
+service: test-7357
 
 provider:
   name: aws
   runtime: nodejs12.x
-  region: eu-central-1
-  stackName: SlsV165BreakingChange-${self:provider.stage}
-  stage: test-stage
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - "s3:ListBucket"
-      Resource:
-        Fn::Join:
-          - ""
-          - - "arn:aws:s3:::"
-            - Ref: ServerlessDeploymentBucket
+  region: us-east-1
+  stage: dev
+  stackName: Test-7357-${self:provider.stage}
+  versionFunctions: false
 
 package:
-  exclude:
-    - .gitignore
-    - package-lock.json
-    - package.json
-    - README.md
-    - serverless.yml
+  individually: true
 
 functions:
-  hello:
-    handler: handler.hello
+  function:
+    handler: index.handler
+
+plugins:
+  - serverless-plugin-reducer
