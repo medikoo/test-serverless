@@ -144,7 +144,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-scheduled-lambda/dev/1587463625087-2020-04-21T10:07:05.087Z/function.zip"
+          "S3Key": "serverless/test-scheduled-lambda/dev/1587464146712-2020-04-21T10:15:46.712Z/function.zip"
         },
         "FunctionName": "test-scheduled-lambda-dev-function",
         "Handler": "index.handler",
@@ -168,7 +168,6 @@
       "Properties": {
         "ScheduleExpression": "cron(0 12 * * ? *)",
         "State": "ENABLED",
-        "Name": "foo",
         "Targets": [
           {
             "Arn": {
@@ -206,7 +205,6 @@
       "Properties": {
         "ScheduleExpression": "rate(30 days)",
         "State": "ENABLED",
-        "Name": "bar",
         "Targets": [
           {
             "Arn": {
