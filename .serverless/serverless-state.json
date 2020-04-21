@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-7357",
+    "service": "slsV165BreakingChange",
     "serviceObject": {
-      "name": "test-7357"
+      "name": "slsV165BreakingChange"
     },
     "provider": {
       "stage": "test-stage",
@@ -93,7 +93,7 @@
           "HelloLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-7357-test-stage-hello"
+              "LogGroupName": "/aws/lambda/slsV165BreakingChange-test-stage-hello"
             }
           },
           "IamRoleLambdaExecution": {
@@ -122,7 +122,7 @@
                       "-",
                       [
                         "test-stage",
-                        "test-7357",
+                        "slsV165BreakingChange",
                         "lambda"
                       ]
                     ]
@@ -138,7 +138,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7357-test-stage*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/slsV165BreakingChange-test-stage*:*"
                           }
                         ]
                       },
@@ -149,7 +149,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7357-test-stage*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/slsV165BreakingChange-test-stage*:*:*"
                           }
                         ]
                       },
@@ -165,7 +165,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-7357",
+                    "slsV165BreakingChange",
                     "test-stage",
                     {
                       "Ref": "AWS::Region"
@@ -183,9 +183,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-7357/test-stage/1587480937573-2020-04-21T14:55:37.573Z/test-7357.zip"
+                "S3Key": "serverless/slsV165BreakingChange/test-stage/1587481401601-2020-04-21T15:03:21.601Z/slsV165BreakingChange.zip"
               },
-              "FunctionName": "test-7357-test-stage-hello",
+              "FunctionName": "slsV165BreakingChange-test-stage-hello",
               "Handler": "handler.hello",
               "MemorySize": 1024,
               "Role": {
@@ -202,7 +202,7 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "HelloLambdaVersionLl9ArzlRrAR2G2PEsYQEsc0Qgl2v0K6Q9qQYr9gQIgw": {
+          "HelloLambdaVersionZt9XdCa3NkNxbz5QzZV9KW6Hj1TIo5LxClllN6rgi2U": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
@@ -222,7 +222,7 @@
           "HelloLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersionLl9ArzlRrAR2G2PEsYQEsc0Qgl2v0K6Q9qQYr9gQIgw"
+              "Ref": "HelloLambdaVersionZt9XdCa3NkNxbz5QzZV9KW6Hj1TIo5LxClllN6rgi2U"
             }
           }
         }
@@ -301,22 +301,22 @@
       "hello": {
         "handler": "handler.hello",
         "events": [],
-        "name": "test-7357-test-stage-hello",
+        "name": "slsV165BreakingChange-test-stage-hello",
         "package": {},
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "HelloLambdaVersionLl9ArzlRrAR2G2PEsYQEsc0Qgl2v0K6Q9qQYr9gQIgw"
+        "versionLogicalId": "HelloLambdaVersionZt9XdCa3NkNxbz5QzZV9KW6Hj1TIo5LxClllN6rgi2U"
       }
     },
     "serviceFilename": "serverless.yml",
     "layers": {},
     "isDashboardMonitoringPreconfigured": false,
-    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-7357.zip"
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/slsV165BreakingChange.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-7357/test-stage/1587480937573-2020-04-21T14:55:37.573Z",
-    "artifact": "test-7357.zip"
+    "artifactDirectoryName": "serverless/slsV165BreakingChange/test-stage/1587481401601-2020-04-21T15:03:21.601Z",
+    "artifact": "slsV165BreakingChange.zip"
   }
 }
