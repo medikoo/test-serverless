@@ -7,12 +7,11 @@ provider:
   stage: dev
   versionFunctions: false
 
-package:
-  individually: true
-
 functions:
   function:
     handler: index.handler
-
-plugins:
-  - serverless-plugin-reducer
+    events:
+      - cloudFront:
+          eventType: viewer-response
+          # TODO: Change with valid one
+          origin: s3://bucketname.s3.amazonaws.com/files

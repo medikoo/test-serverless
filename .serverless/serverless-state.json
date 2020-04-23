@@ -86,7 +86,8 @@
                     "Effect": "Allow",
                     "Principal": {
                       "Service": [
-                        "lambda.amazonaws.com"
+                        "lambda.amazonaws.com",
+                        "edgelambda.amazonaws.com"
                       ]
                     },
                     "Action": [
@@ -131,6 +132,19 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
                           }
                         ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogGroup",
+                          "logs:CreateLogStream",
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:*:*:*"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -158,11 +172,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1584317359683-2020-03-16T00:09:19.683Z/function.zip"
+                "S3Key": "serverless/test-regular-lambda/dev/1587646555514-2020-04-23T12:55:55.514Z/test-regular-lambda.zip"
               },
               "FunctionName": "test-regular-lambda-dev-function",
               "Handler": "index.handler",
-              "MemorySize": 1024,
+              "MemorySize": 128,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -170,18 +184,112 @@
                 ]
               },
               "Runtime": "nodejs12.x",
-              "Timeout": 6
+              "Timeout": 5
             },
             "DependsOn": [
               "FunctionLogGroup",
               "IamRoleLambdaExecution"
-            ]
+            ],
+            "DeletionPolicy": "Retain"
+          },
+          "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "CodeSha256": "EcrM7/Qa97G73Ln+NYc9l780tzDZ9yBWPw4gpcgOuaE="
+            }
+          },
+          "FunctionLambdaFunctionInvokePermission": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "edgelambda.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "",
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":cloudfront::",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":distribution/",
+                    {
+                      "Ref": "CloudFrontDistribution"
+                    }
+                  ]
+                ]
+              }
+            }
+          },
+          "CloudFrontDistribution": {
+            "Type": "AWS::CloudFront::Distribution",
+            "Properties": {
+              "DistributionConfig": {
+                "Comment": "test-regular-lambda dev",
+                "Enabled": true,
+                "DefaultCacheBehavior": {
+                  "ViewerProtocolPolicy": "allow-all",
+                  "ForwardedValues": {
+                    "QueryString": false
+                  },
+                  "TargetOriginId": "s3/bucketname.s3.amazonaws.com/files",
+                  "LambdaFunctionAssociations": [
+                    {
+                      "EventType": "viewer-response",
+                      "LambdaFunctionARN": {
+                        "Ref": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
+                      }
+                    }
+                  ]
+                },
+                "Origins": [
+                  {
+                    "DomainName": "bucketname.s3.amazonaws.com",
+                    "OriginPath": "/files",
+                    "S3OriginConfig": {},
+                    "Id": "s3/bucketname.s3.amazonaws.com/files"
+                  }
+                ]
+              }
+            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "FunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
+            }
+          },
+          "CloudFrontDistribution": {
+            "Description": "CloudFront Distribution Id",
+            "Value": {
+              "Ref": "CloudFrontDistribution"
+            }
+          },
+          "CloudFrontDistributionDomainName": {
+            "Description": "CloudFront Distribution Domain Name",
+            "Value": {
+              "Fn::GetAtt": [
+                "CloudFrontDistribution",
+                "DomainName"
+              ]
             }
           }
         }
@@ -255,31 +363,36 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
     "pluginsData": {},
     "functions": {
       "function": {
         "handler": "index.handler",
-        "events": [],
+        "events": [
+          {
+            "cloudFront": {
+              "eventType": "viewer-response",
+              "origin": "s3://bucketname.s3.amazonaws.com/files"
+            }
+          }
+        ],
         "name": "test-regular-lambda-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
-        "memory": 1024,
-        "timeout": 6,
+        "package": {},
+        "versionFunction": true,
+        "memorySize": 128,
+        "timeout": 5,
+        "memory": 128,
         "runtime": "nodejs12.x",
-        "vpc": {}
+        "vpc": {},
+        "versionLogicalId": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
       }
     },
     "serviceFilename": "serverless.yml",
     "layers": {},
-    "isDashboardMonitoringPreconfigured": false
+    "isDashboardMonitoringPreconfigured": false,
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-regular-lambda.zip"
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1584317359683-2020-03-16T00:09:19.683Z",
-    "artifact": ""
+    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1587646555514-2020-04-23T12:55:55.514Z",
+    "artifact": "test-regular-lambda.zip"
   }
 }
