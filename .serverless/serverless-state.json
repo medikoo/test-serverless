@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-7551",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-7551"
     },
     "provider": {
       "stage": "dev",
@@ -70,112 +70,44 @@
               }
             }
           },
-          "FunctionLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
+          "EventHandlingEventBridgeRuleDataProviderError": {
+            "Type": "AWS::Events::Rule",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
-            }
-          },
-          "IamRoleLambdaExecution": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
+              "Description": "Rule to handle the data provider errors from SSI",
+              "EventBusName": {
+                "Ref": "EventHandlingEventBridgeBus"
+              },
+              "EventPattern": {
+                "source": [
                   {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": {
-                    "Fn::Join": [
-                      "-",
-                      [
-                        "test-regular-lambda-dev",
-                        "lambda"
-                      ]
-                    ]
+                    "prefix": "inflection.searchservice."
                   },
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:CreateLogStream",
-                          "logs:CreateLogGroup"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
-                          }
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:PutLogEvents"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
-                          }
-                        ]
-                      }
-                    ]
+                  {
+                    "prefix": "inflection.hiringtask."
+                  },
+                  {
+                    "prefix": "inflection.safedecisionasync."
                   }
-                }
-              ],
-              "Path": "/",
-              "RoleName": {
-                "Fn::Join": [
-                  "-",
-                  [
-                    "test-regular-lambda-dev",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    "lambdaRole"
+                ],
+                "detail-type": [
+                  "DataProviderResponseLog"
+                ],
+                "detail": {
+                  "IsError": [
+                    true
                   ]
-                ]
-              }
+                }
+              },
+              "Name": {
+                "Fn::Sub": "data-provider-error-rule-dev"
+              },
+              "Targets": [
+                {
+                  "Arn": "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:process-data-provider-error",
+                  "Id": "process-data-provider-error"
+                }
+              ]
             }
-          },
-          "FunctionLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/test-regular-lambda/dev/1584317359683-2020-03-16T00:09:19.683Z/function.zip"
-              },
-              "FunctionName": "test-regular-lambda-dev-function",
-              "Handler": "index.handler",
-              "MemorySize": 1024,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              },
-              "Runtime": "nodejs12.x",
-              "Timeout": 6
-            },
-            "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
-            ]
           }
         },
         "Outputs": {
@@ -252,34 +184,60 @@
             }
           }
         }
-      },
-      "vpc": {}
-    },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
-    "pluginsData": {},
-    "functions": {
-      "function": {
-        "handler": "index.handler",
-        "events": [],
-        "name": "test-regular-lambda-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
-        "memory": 1024,
-        "timeout": 6,
-        "runtime": "nodejs12.x",
-        "vpc": {}
       }
+    },
+    "pluginsData": {},
+    "functions": {},
+    "resources": {
+      "Resources": {
+        "EventHandlingEventBridgeRuleDataProviderError": {
+          "Type": "AWS::Events::Rule",
+          "Properties": {
+            "Description": "Rule to handle the data provider errors from SSI",
+            "EventBusName": {
+              "Ref": "EventHandlingEventBridgeBus"
+            },
+            "EventPattern": {
+              "source": [
+                {
+                  "prefix": "inflection.searchservice."
+                },
+                {
+                  "prefix": "inflection.hiringtask."
+                },
+                {
+                  "prefix": "inflection.safedecisionasync."
+                }
+              ],
+              "detail-type": [
+                "DataProviderResponseLog"
+              ],
+              "detail": {
+                "IsError": [
+                  true
+                ]
+              }
+            },
+            "Name": {
+              "Fn::Sub": "data-provider-error-rule-dev"
+            },
+            "Targets": [
+              {
+                "Arn": "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:process-data-provider-error",
+                "Id": "process-data-provider-error"
+              }
+            ]
+          }
+        }
+      },
+      "Outputs": {}
     },
     "serviceFilename": "serverless.yml",
     "layers": {},
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1584317359683-2020-03-16T00:09:19.683Z",
+    "artifactDirectoryName": "serverless/test-7551/dev/1587624325201-2020-04-23T06:45:25.201Z",
     "artifact": ""
   }
 }

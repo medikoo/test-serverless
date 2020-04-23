@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-7551
 
 provider:
   name: aws
@@ -7,12 +7,25 @@ provider:
   stage: dev
   versionFunctions: false
 
-package:
-  individually: true
-
-functions:
-  function:
-    handler: index.handler
-
-plugins:
-  - serverless-plugin-reducer
+resources:
+  Resources:
+    EventHandlingEventBridgeRuleDataProviderError:
+      Type: AWS::Events::Rule
+      Properties:
+        Description: "Rule to handle the data provider errors from SSI"
+        EventBusName: !Ref EventHandlingEventBridgeBus
+        EventPattern:
+          {
+            "source":
+              [
+                { "prefix": "inflection.searchservice." },
+                { "prefix": "inflection.hiringtask." },
+                { "prefix": "inflection.safedecisionasync." },
+              ],
+            "detail-type": ["DataProviderResponseLog"],
+            "detail": { "IsError": [true] },
+          }
+        Name: !Sub data-provider-error-rule-${opt:stage, self:provider.stage}
+        Targets:
+          - Arn: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:process-data-provider-error
+            Id: process-data-provider-error
