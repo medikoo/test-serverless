@@ -1,4 +1,4 @@
-service: test-deployment-bucket-ecnryption
+service: test-custom-deployment-bucket
 
 provider:
   name: aws
@@ -7,7 +7,7 @@ provider:
   stage: dev
   versionFunctions: false
   deploymentBucket:
-    serverSideEncryption: AES256
+    name: test-custom-bucket
 
 package:
   individually: true

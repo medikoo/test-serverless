@@ -2,64 +2,10 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "The AWS CloudFormation template for this Serverless application",
   "Resources": {
-    "ServerlessDeploymentBucket": {
-      "Type": "AWS::S3::Bucket",
-      "Properties": {
-        "BucketEncryption": {
-          "ServerSideEncryptionConfiguration": [
-            {
-              "ServerSideEncryptionByDefault": {
-                "SSEAlgorithm": "AES256"
-              }
-            }
-          ]
-        }
-      }
-    },
-    "ServerlessDeploymentBucketPolicy": {
-      "Type": "AWS::S3::BucketPolicy",
-      "Properties": {
-        "Bucket": {
-          "Ref": "ServerlessDeploymentBucket"
-        },
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:*",
-              "Effect": "Deny",
-              "Principal": "*",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":s3:::",
-                      {
-                        "Ref": "ServerlessDeploymentBucket"
-                      },
-                      "/*"
-                    ]
-                  ]
-                }
-              ],
-              "Condition": {
-                "Bool": {
-                  "aws:SecureTransport": false
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-deployment-bucket-ecnryption-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-custom-deployment-bucket-dev-myFunction"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,8 +33,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "dev",
-                  "test-deployment-bucket-ecnryption",
+                  "test-custom-deployment-bucket-dev",
                   "lambda"
                 ]
               ]
@@ -99,11 +44,12 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "logs:CreateLogStream"
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup"
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-deployment-bucket-ecnryption-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-custom-deployment-bucket-dev*:*"
                     }
                   ]
                 },
@@ -114,7 +60,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-deployment-bucket-ecnryption-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-custom-deployment-bucket-dev*:*:*"
                     }
                   ]
                 }
@@ -127,8 +73,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-deployment-bucket-ecnryption",
-              "dev",
+              "test-custom-deployment-bucket-dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -142,12 +87,10 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "S3Bucket": {
-            "Ref": "ServerlessDeploymentBucket"
-          },
-          "S3Key": "serverless/test-deployment-bucket-ecnryption/dev/1574683992958-2019-11-25T12:13:12.958Z/myFunction.zip"
+          "S3Bucket": "test-custom-bucket",
+          "S3Key": "serverless/test-custom-deployment-bucket/dev/1587628005423-2020-04-23T07:46:45.423Z/myFunction.zip"
         },
-        "FunctionName": "test-deployment-bucket-ecnryption-dev-myFunction",
+        "FunctionName": "test-custom-deployment-bucket-dev-myFunction",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -167,9 +110,7 @@
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
-      "Value": {
-        "Ref": "ServerlessDeploymentBucket"
-      }
+      "Value": "test-custom-bucket"
     }
   }
 }
