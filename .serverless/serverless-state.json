@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-sqs-lambda",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-sqs-lambda"
     },
     "provider": {
       "stage": "dev",
@@ -73,7 +73,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-sqs-lambda-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -86,8 +86,7 @@
                     "Effect": "Allow",
                     "Principal": {
                       "Service": [
-                        "lambda.amazonaws.com",
-                        "edgelambda.amazonaws.com"
+                        "lambda.amazonaws.com"
                       ]
                     },
                     "Action": [
@@ -102,7 +101,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-regular-lambda-dev",
+                        "test-sqs-lambda-dev",
                         "lambda"
                       ]
                     ]
@@ -118,7 +117,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-sqs-lambda-dev*:*"
                           }
                         ]
                       },
@@ -129,21 +128,20 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-sqs-lambda-dev*:*:*"
                           }
                         ]
                       },
                       {
                         "Effect": "Allow",
                         "Action": [
-                          "logs:CreateLogGroup",
-                          "logs:CreateLogStream",
-                          "logs:PutLogEvents"
+                          "sqs:ReceiveMessage",
+                          "sqs:DeleteMessage",
+                          "sqs:GetQueueAttributes"
                         ],
                         "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:*:*:*"
-                          }
+                          "arn:aws:sqs:us-east-1:992311060759:test-queue-1",
+                          "arn:aws:sqs:us-east-1:992311060759:test-queue-2"
                         ]
                       }
                     ]
@@ -155,7 +153,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda-dev",
+                    "test-sqs-lambda-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -172,11 +170,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1587646555514-2020-04-23T12:55:55.514Z/test-regular-lambda.zip"
+                "S3Key": "serverless/test-sqs-lambda/dev/1587996005476-2020-04-27T14:00:05.476Z/test-sqs-lambda.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-function",
+              "FunctionName": "test-sqs-lambda-dev-function",
               "Handler": "index.handler",
-              "MemorySize": 128,
+              "MemorySize": 1024,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -184,84 +182,41 @@
                 ]
               },
               "Runtime": "nodejs12.x",
-              "Timeout": 5
+              "Timeout": 6
             },
             "DependsOn": [
               "FunctionLogGroup",
               "IamRoleLambdaExecution"
-            ],
-            "DeletionPolicy": "Retain"
+            ]
           },
-          "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k": {
-            "Type": "AWS::Lambda::Version",
-            "DeletionPolicy": "Retain",
+          "FunctionEventSourceMappingSQSTestqueue1": {
+            "Type": "AWS::Lambda::EventSourceMapping",
+            "DependsOn": "IamRoleLambdaExecution",
             "Properties": {
+              "BatchSize": 10,
+              "EventSourceArn": "arn:aws:sqs:us-east-1:992311060759:test-queue-1",
               "FunctionName": {
-                "Ref": "FunctionLambdaFunction"
+                "Fn::GetAtt": [
+                  "FunctionLambdaFunction",
+                  "Arn"
+                ]
               },
-              "CodeSha256": "EcrM7/Qa97G73Ln+NYc9l780tzDZ9yBWPw4gpcgOuaE="
+              "Enabled": true
             }
           },
-          "FunctionLambdaFunctionInvokePermission": {
-            "Type": "AWS::Lambda::Permission",
+          "FunctionEventSourceMappingSQSTestqueue2": {
+            "Type": "AWS::Lambda::EventSourceMapping",
+            "DependsOn": "IamRoleLambdaExecution",
             "Properties": {
+              "BatchSize": 10,
+              "EventSourceArn": "arn:aws:sqs:us-east-1:992311060759:test-queue-2",
               "FunctionName": {
-                "Ref": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
+                "Fn::GetAtt": [
+                  "FunctionLambdaFunction",
+                  "Arn"
+                ]
               },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "edgelambda.amazonaws.com",
-              "SourceArn": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "",
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition"
-                    },
-                    ":cloudfront::",
-                    {
-                      "Ref": "AWS::AccountId"
-                    },
-                    ":distribution/",
-                    {
-                      "Ref": "CloudFrontDistribution"
-                    }
-                  ]
-                ]
-              }
-            }
-          },
-          "CloudFrontDistribution": {
-            "Type": "AWS::CloudFront::Distribution",
-            "Properties": {
-              "DistributionConfig": {
-                "Comment": "test-regular-lambda dev",
-                "Enabled": true,
-                "DefaultCacheBehavior": {
-                  "ViewerProtocolPolicy": "allow-all",
-                  "ForwardedValues": {
-                    "QueryString": false
-                  },
-                  "TargetOriginId": "s3/bucketname.s3.amazonaws.com/files",
-                  "LambdaFunctionAssociations": [
-                    {
-                      "EventType": "viewer-response",
-                      "LambdaFunctionARN": {
-                        "Ref": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
-                      }
-                    }
-                  ]
-                },
-                "Origins": [
-                  {
-                    "DomainName": "bucketname.s3.amazonaws.com",
-                    "OriginPath": "/files",
-                    "S3OriginConfig": {},
-                    "Id": "s3/bucketname.s3.amazonaws.com/files"
-                  }
-                ]
-              }
+              "Enabled": true
             }
           }
         },
@@ -269,27 +224,6 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
-            }
-          },
-          "FunctionLambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
-            }
-          },
-          "CloudFrontDistribution": {
-            "Description": "CloudFront Distribution Id",
-            "Value": {
-              "Ref": "CloudFrontDistribution"
-            }
-          },
-          "CloudFrontDistributionDomainName": {
-            "Description": "CloudFront Distribution Domain Name",
-            "Value": {
-              "Fn::GetAtt": [
-                "CloudFrontDistribution",
-                "DomainName"
-              ]
             }
           }
         }
@@ -369,30 +303,31 @@
         "handler": "index.handler",
         "events": [
           {
-            "cloudFront": {
-              "eventType": "viewer-response",
-              "origin": "s3://bucketname.s3.amazonaws.com/files"
+            "sqs": {
+              "arn": "arn:aws:sqs:us-east-1:992311060759:test-queue-1"
+            }
+          },
+          {
+            "sqs": {
+              "arn": "arn:aws:sqs:us-east-1:992311060759:test-queue-2"
             }
           }
         ],
-        "name": "test-regular-lambda-dev-function",
+        "name": "test-sqs-lambda-dev-function",
         "package": {},
-        "versionFunction": true,
-        "memorySize": 128,
-        "timeout": 5,
-        "memory": 128,
+        "memory": 1024,
+        "timeout": 6,
         "runtime": "nodejs12.x",
-        "vpc": {},
-        "versionLogicalId": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
+        "vpc": {}
       }
     },
     "serviceFilename": "serverless.yml",
     "layers": {},
     "isDashboardMonitoringPreconfigured": false,
-    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-regular-lambda.zip"
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-sqs-lambda.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1587646555514-2020-04-23T12:55:55.514Z",
-    "artifact": "test-regular-lambda.zip"
+    "artifactDirectoryName": "serverless/test-sqs-lambda/dev/1587996005476-2020-04-27T14:00:05.476Z",
+    "artifact": "test-sqs-lambda.zip"
   }
 }

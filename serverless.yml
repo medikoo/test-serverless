@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-sqs-lambda
 
 provider:
   name: aws
@@ -11,7 +11,7 @@ functions:
   function:
     handler: index.handler
     events:
-      - cloudFront:
-          eventType: viewer-response
-          # TODO: Change with valid one
-          origin: s3://bucketname.s3.amazonaws.com/files
+      - sqs:
+          arn: arn:aws:sqs:us-east-1:992311060759:test-queue-1
+      - sqs:
+          arn: arn:aws:sqs:us-east-1:992311060759:test-queue-2
