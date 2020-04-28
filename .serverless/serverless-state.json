@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw",
+    "service": "test-api-gw-api-keys",
     "serviceObject": {
-      "name": "test-api-gw"
+      "name": "test-api-gw-api-keys"
     },
     "provider": {
       "stage": "dev",
@@ -11,6 +11,12 @@
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
+      "apiKeys": [
+        {
+          "name": "someKey",
+          "value": "someKey"
+        }
+      ],
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -73,7 +79,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-dev-function"
+              "LogGroupName": "/aws/lambda/test-api-gw-api-keys-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -101,7 +107,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-api-gw-dev",
+                        "test-api-gw-api-keys-dev",
                         "lambda"
                       ]
                     ]
@@ -117,7 +123,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-api-keys-dev*:*"
                           }
                         ]
                       },
@@ -128,7 +134,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-api-keys-dev*:*:*"
                           }
                         ]
                       }
@@ -141,7 +147,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw-dev",
+                    "test-api-gw-api-keys-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -158,9 +164,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1588062745208-2020-04-28T08:32:25.208Z/function.zip"
+                "S3Key": "serverless/test-api-gw-api-keys/dev/1588062884360-2020-04-28T08:34:44.360Z/function.zip"
               },
-              "FunctionName": "test-api-gw-dev-function",
+              "FunctionName": "test-api-gw-api-keys-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -180,7 +186,7 @@
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "dev-test-api-gw",
+              "Name": "dev-test-api-gw-api-keys",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -290,7 +296,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1588062743598": {
+          "ApiGatewayDeployment1588062883268": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -302,6 +308,51 @@
               "ApiGatewayMethodFooGet",
               "ApiGatewayMethodFooPost"
             ]
+          },
+          "ApiGatewayApiKey1": {
+            "Type": "AWS::ApiGateway::ApiKey",
+            "Properties": {
+              "Enabled": true,
+              "Name": "someKey",
+              "Value": "someKey",
+              "StageKeys": [
+                {
+                  "RestApiId": {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "StageName": "dev"
+                }
+              ]
+            },
+            "DependsOn": "ApiGatewayDeployment1588062883268"
+          },
+          "ApiGatewayUsagePlan": {
+            "Type": "AWS::ApiGateway::UsagePlan",
+            "DependsOn": "ApiGatewayDeployment1588062883268",
+            "Properties": {
+              "ApiStages": [
+                {
+                  "ApiId": {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "Stage": "dev"
+                }
+              ],
+              "Description": "Usage plan for test-api-gw-api-keys dev stage",
+              "UsagePlanName": "test-api-gw-api-keys-dev"
+            }
+          },
+          "ApiGatewayUsagePlanKey1": {
+            "Type": "AWS::ApiGateway::UsagePlanKey",
+            "Properties": {
+              "KeyId": {
+                "Ref": "ApiGatewayApiKey1"
+              },
+              "KeyType": "API_KEY",
+              "UsagePlanId": {
+                "Ref": "ApiGatewayUsagePlan"
+              }
+            }
           },
           "FunctionLambdaPermissionApiGateway": {
             "Type": "AWS::Lambda::Permission",
@@ -464,7 +515,7 @@
             }
           }
         ],
-        "name": "test-api-gw-dev-function",
+        "name": "test-api-gw-api-keys-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -480,7 +531,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1588062745208-2020-04-28T08:32:25.208Z",
+    "artifactDirectoryName": "serverless/test-api-gw-api-keys/dev/1588062884360-2020-04-28T08:34:44.360Z",
     "artifact": ""
   }
 }

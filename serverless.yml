@@ -1,4 +1,4 @@
-service: test-api-gw
+service: test-api-gw-api-keys
 
 provider:
   name: aws
@@ -6,6 +6,10 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
+  apiKeys:
+    # TODO: Replace with valid one
+    - name: someKey
+      value: someKey
 
 package:
   individually: true
