@@ -20,6 +20,3 @@ functions:
       - http:
           path: foo
           method: POST
-
-plugins:
-  - serverless-plugin-reducer
