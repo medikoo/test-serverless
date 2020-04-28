@@ -3,7 +3,7 @@ service: test-lambda-dynamodb
 provider:
   name: aws
   runtime: nodejs12.x
-  region: eu-west-1
+  region: us-east-1
   stage: dev
   versionFunctions: false
 
@@ -17,6 +17,7 @@ functions:
       - stream:
           type: dynamodb
           arn: arn:aws:dynamodb:us-east-1:992311060759:table/test/stream/2020-04-28T11:44:21.697
+          batchWindow: 200
 
 plugins:
   - serverless-plugin-reducer
