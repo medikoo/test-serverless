@@ -144,7 +144,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1588062303081-2020-04-28T08:25:03.081Z/function.zip"
+          "S3Key": "serverless/test-api-gw/dev/1588062745208-2020-04-28T08:32:25.208Z/function.zip"
         },
         "FunctionName": "test-api-gw-dev-function",
         "Handler": "index.handler",
@@ -276,7 +276,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1588062293474": {
+    "ApiGatewayDeployment1588062743598": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {

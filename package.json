@@ -4,7 +4,8 @@
 	"devDependencies": {
 		"eslint": "^6.8.0",
 		"eslint-config-medikoo": "^3.0.1",
-		"prettier-elastic": "^1.18.2"
+		"prettier-elastic": "^1.18.2",
+		"serverless-plugin-reducer": "^3.2.3"
 	},
 	"eslintConfig": {
 		"extends": "medikoo",
