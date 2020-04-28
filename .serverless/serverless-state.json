@@ -6,7 +6,7 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
+      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "eu-west-1",
@@ -101,8 +101,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "dev",
-                        "test-lambda-kinesis",
+                        "test-lambda-kinesis-dev",
                         "lambda"
                       ]
                     ]
@@ -113,7 +112,8 @@
                       {
                         "Effect": "Allow",
                         "Action": [
-                          "logs:CreateLogStream"
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup"
                         ],
                         "Resource": [
                           {
@@ -153,8 +153,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-lambda-kinesis",
-                    "dev",
+                    "test-lambda-kinesis-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -171,7 +170,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-kinesis/dev/1575641018323-2019-12-06T14:03:38.323Z/function.zip"
+                "S3Key": "serverless/test-lambda-kinesis/dev/1588074027285-2020-04-28T11:40:27.285Z/function.zip"
               },
               "FunctionName": "test-lambda-kinesis-dev-function",
               "Handler": "index.handler",
@@ -203,7 +202,7 @@
                 ]
               },
               "StartingPosition": "TRIM_HORIZON",
-              "Enabled": "True"
+              "Enabled": true
             }
           }
         },
@@ -310,11 +309,12 @@
       }
     },
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "layers": {},
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda-kinesis/dev/1575641018323-2019-12-06T14:03:38.323Z",
+    "artifactDirectoryName": "serverless/test-lambda-kinesis/dev/1588074027285-2020-04-28T11:40:27.285Z",
     "artifact": ""
   }
 }
