@@ -18,6 +18,7 @@ functions:
           type: dynamodb
           arn: arn:aws:dynamodb:us-east-1:992311060759:table/test/stream/2020-04-28T11:44:21.697
           batchWindow: 200
+          maximumRetryAttempts: 10
 
 plugins:
   - serverless-plugin-reducer

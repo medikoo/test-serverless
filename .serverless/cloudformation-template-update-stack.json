@@ -156,7 +156,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-dynamodb/dev/1588074521469-2020-04-28T11:48:41.469Z/function.zip"
+          "S3Key": "serverless/test-lambda-dynamodb/dev/1588074722150-2020-04-28T11:52:02.150Z/function.zip"
         },
         "FunctionName": "test-lambda-dynamodb-dev-function",
         "Handler": "index.handler",
@@ -189,7 +189,8 @@
         },
         "StartingPosition": "TRIM_HORIZON",
         "Enabled": true,
-        "MaximumBatchingWindowInSeconds": 200
+        "MaximumBatchingWindowInSeconds": 200,
+        "MaximumRetryAttempts": 10
       }
     }
   },
