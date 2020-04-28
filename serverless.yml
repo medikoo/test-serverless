@@ -1,4 +1,4 @@
-service: test-lambda-kinesis
+service: test-lambda-dynamodb
 
 provider:
   name: aws
@@ -15,8 +15,8 @@ functions:
     handler: index.handler
     events:
       - stream:
-          type: kinesis
-          arn: arn:aws:kinesis:eu-west-1:992311060759:stream/test
+          type: dynamodb
+          arn: arn:aws:dynamodb:us-east-1:992311060759:table/test/stream/2020-04-28T11:44:21.697
 
 plugins:
   - serverless-plugin-reducer

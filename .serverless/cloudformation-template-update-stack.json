@@ -59,7 +59,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-lambda-kinesis-dev-function"
+        "LogGroupName": "/aws/lambda/test-lambda-dynamodb-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,7 +87,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-lambda-kinesis-dev",
+                  "test-lambda-dynamodb-dev",
                   "lambda"
                 ]
               ]
@@ -103,7 +103,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-kinesis-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dynamodb-dev*:*"
                     }
                   ]
                 },
@@ -114,20 +114,20 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-kinesis-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dynamodb-dev*:*:*"
                     }
                   ]
                 },
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "kinesis:GetRecords",
-                    "kinesis:GetShardIterator",
-                    "kinesis:DescribeStream",
-                    "kinesis:ListStreams"
+                    "dynamodb:GetRecords",
+                    "dynamodb:GetShardIterator",
+                    "dynamodb:DescribeStream",
+                    "dynamodb:ListStreams"
                   ],
                   "Resource": [
-                    "arn:aws:kinesis:eu-west-1:992311060759:stream/test"
+                    "arn:aws:dynamodb:us-east-1:992311060759:table/test/stream/2020-04-28T11:44:21.697"
                   ]
                 }
               ]
@@ -139,7 +139,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-lambda-kinesis-dev",
+              "test-lambda-dynamodb-dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -156,9 +156,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-kinesis/dev/1588074027285-2020-04-28T11:40:27.285Z/function.zip"
+          "S3Key": "serverless/test-lambda-dynamodb/dev/1588074281599-2020-04-28T11:44:41.599Z/function.zip"
         },
-        "FunctionName": "test-lambda-kinesis-dev-function",
+        "FunctionName": "test-lambda-dynamodb-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -175,12 +175,12 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "FunctionEventSourceMappingKinesisTest": {
+    "FunctionEventSourceMappingDynamodbTest": {
       "Type": "AWS::Lambda::EventSourceMapping",
       "DependsOn": "IamRoleLambdaExecution",
       "Properties": {
         "BatchSize": 10,
-        "EventSourceArn": "arn:aws:kinesis:eu-west-1:992311060759:stream/test",
+        "EventSourceArn": "arn:aws:dynamodb:us-east-1:992311060759:table/test/stream/2020-04-28T11:44:21.697",
         "FunctionName": {
           "Fn::GetAtt": [
             "FunctionLambdaFunction",
