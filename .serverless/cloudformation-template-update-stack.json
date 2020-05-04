@@ -56,10 +56,10 @@
         }
       }
     },
-    "CfExportedApiGw": {
+    "CfExportedDashboardApiGw": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "CfExportedApiGw"
+        "Name": "CfExportedDashboardApiGw"
       }
     }
   },
@@ -71,21 +71,21 @@
     },
     "apiGatewayRestApiId": {
       "Value": {
-        "Ref": "CfExportedApiGw"
+        "Ref": "CfExportedDashboardApiGw"
       },
       "Export": {
-        "Name": "CfExportedApiGw-restApiId"
+        "Name": "CfExportedDashboardApiGw-restApiId"
       }
     },
     "apiGatewayRestApiRootResourceId": {
       "Value": {
         "Fn::GetAtt": [
-          "CfExportedApiGw",
+          "CfExportedDashboardApiGw",
           "RootResourceId"
         ]
       },
       "Export": {
-        "Name": "CfExportedApiGw-rootResourceId"
+        "Name": "CfExportedDashboardApiGw-rootResourceId"
       }
     }
   }

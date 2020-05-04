@@ -70,10 +70,10 @@
               }
             }
           },
-          "CfExportedApiGw": {
+          "CfExportedDashboardApiGw": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "CfExportedApiGw"
+              "Name": "CfExportedDashboardApiGw"
             }
           }
         },
@@ -85,21 +85,21 @@
           },
           "apiGatewayRestApiId": {
             "Value": {
-              "Ref": "CfExportedApiGw"
+              "Ref": "CfExportedDashboardApiGw"
             },
             "Export": {
-              "Name": "CfExportedApiGw-restApiId"
+              "Name": "CfExportedDashboardApiGw-restApiId"
             }
           },
           "apiGatewayRestApiRootResourceId": {
             "Value": {
               "Fn::GetAtt": [
-                "CfExportedApiGw",
+                "CfExportedDashboardApiGw",
                 "RootResourceId"
               ]
             },
             "Export": {
-              "Name": "CfExportedApiGw-rootResourceId"
+              "Name": "CfExportedDashboardApiGw-rootResourceId"
             }
           }
         }
@@ -184,31 +184,31 @@
     "functions": {},
     "resources": {
       "Resources": {
-        "CfExportedApiGw": {
+        "CfExportedDashboardApiGw": {
           "Type": "AWS::ApiGateway::RestApi",
           "Properties": {
-            "Name": "CfExportedApiGw"
+            "Name": "CfExportedDashboardApiGw"
           }
         }
       },
       "Outputs": {
         "apiGatewayRestApiId": {
           "Value": {
-            "Ref": "CfExportedApiGw"
+            "Ref": "CfExportedDashboardApiGw"
           },
           "Export": {
-            "Name": "CfExportedApiGw-restApiId"
+            "Name": "CfExportedDashboardApiGw-restApiId"
           }
         },
         "apiGatewayRestApiRootResourceId": {
           "Value": {
             "Fn::GetAtt": [
-              "CfExportedApiGw",
+              "CfExportedDashboardApiGw",
               "RootResourceId"
             ]
           },
           "Export": {
-            "Name": "CfExportedApiGw-rootResourceId"
+            "Name": "CfExportedDashboardApiGw-rootResourceId"
           }
         }
       }
@@ -223,7 +223,7 @@
     "orgUid": "1sJrygBdcH5mNKPSp8"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-dashboard-api-gateway-export/dev/1588581967143-2020-05-04T08:46:07.143Z",
+    "artifactDirectoryName": "serverless/test-dashboard-api-gateway-export/dev/1588582218264-2020-05-04T08:50:18.264Z",
     "artifact": ""
   }
 }
