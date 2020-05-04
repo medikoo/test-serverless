@@ -1,6 +1,6 @@
-service: test-dashboard-api-gateway
+service: test-dashboard-api-gateway-export
 
-tenant: medikoo
+org: medikoo
 app: medikoo-test
 
 provider:
@@ -8,18 +8,24 @@ provider:
   runtime: nodejs12.x
   region: us-east-1
   stage: dev
-  versionFunctions: false
 
-package:
-  individually: true
+resources:
+  Resources:
+    CfExportedApiGw:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: CfExportedApiGw
 
-functions:
-  function:
-    handler: index.handler
-    events:
-      - http:
-          path: foo
-          method: GET
-
-plugins:
-  - serverless-plugin-reducer
+  Outputs:
+    apiGatewayRestApiId:
+      Value:
+        Ref: CfExportedApiGw
+      Export:
+        Name: CfExportedApiGw-restApiId
+    apiGatewayRestApiRootResourceId:
+      Value:
+        Fn::GetAtt:
+          - CfExportedApiGw
+          - RootResourceId
+      Export:
+        Name: CfExportedApiGw-rootResourceId
