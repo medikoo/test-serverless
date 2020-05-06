@@ -59,13 +59,13 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-http-api-shared-dev-function"
+        "LogGroupName": "/aws/lambda/test-dashboard-http-api-shared-dev-function"
       }
     },
     "OtherLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-http-api-shared-dev-other"
+        "LogGroupName": "/aws/lambda/test-dashboard-http-api-shared-dev-other"
       }
     },
     "IamRoleLambdaExecution": {
@@ -93,7 +93,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-http-api-shared-dev",
+                  "test-dashboard-http-api-shared-dev",
                   "lambda"
                 ]
               ]
@@ -109,7 +109,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-shared-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-http-api-shared-dev*:*"
                     }
                   ]
                 },
@@ -120,7 +120,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-http-api-shared-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-http-api-shared-dev*:*:*"
                     }
                   ]
                 }
@@ -133,7 +133,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-http-api-shared-dev",
+              "test-dashboard-http-api-shared-dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -143,6 +143,58 @@
         }
       }
     },
+    "EnterpriseLogAccessIamRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::802587217904:root"
+              },
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": "ServerlessEnterprise-1sJrygBdcH5mNKPSp8"
+                }
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "LogFilterAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:FilterLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "FunctionLogGroup",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "OtherLogGroup",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
     "FunctionLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -150,10 +202,10 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api-shared/dev/1588575998854-2020-05-04T07:06:38.854Z/function.zip"
+          "S3Key": "serverless/test-dashboard-http-api-shared/dev/1588767800427-2020-05-06T12:23:20.427Z/function.zip"
         },
-        "FunctionName": "test-http-api-shared-dev-function",
-        "Handler": "index.handler",
+        "FunctionName": "test-dashboard-http-api-shared-dev-function",
+        "Handler": "s_function.handler",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -176,10 +228,10 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api-shared/dev/1588575998854-2020-05-04T07:06:38.854Z/other.zip"
+          "S3Key": "serverless/test-dashboard-http-api-shared/dev/1588767800427-2020-05-06T12:23:20.427Z/other.zip"
         },
-        "FunctionName": "test-http-api-shared-dev-other",
-        "Handler": "other.handler",
+        "FunctionName": "test-dashboard-http-api-shared-dev-other",
+        "Handler": "s_other.handler",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -351,12 +403,40 @@
         }
       },
       "DependsOn": "HttpApiIntegrationOther"
+    },
+    "CloudWatchLogsSubscriptionFilterFunctionLogGroup": {
+      "Type": "AWS::Logs::SubscriptionFilter",
+      "Properties": {
+        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard-http-api-shared#dev",
+        "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
+        "LogGroupName": {
+          "Ref": "FunctionLogGroup"
+        }
+      }
+    },
+    "CloudWatchLogsSubscriptionFilterOtherLogGroup": {
+      "Type": "AWS::Logs::SubscriptionFilter",
+      "Properties": {
+        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard-http-api-shared#dev",
+        "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
+        "LogGroupName": {
+          "Ref": "OtherLogGroup"
+        }
+      }
     }
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "EnterpriseLogAccessIamRole": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EnterpriseLogAccessIamRole",
+          "Arn"
+        ]
       }
     }
   }

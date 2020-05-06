@@ -1,4 +1,7 @@
-service: test-http-api-shared
+service: test-dashboard-http-api-shared
+
+org: medikoo
+app: medikoo-test
 
 provider:
   name: aws
