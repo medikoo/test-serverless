@@ -6,7 +6,7 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
+      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
@@ -101,8 +101,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "dev",
-                        "test-dashboard-api-gateway",
+                        "test-dashboard-api-gateway-dev",
                         "lambda"
                       ]
                     ]
@@ -142,8 +141,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-dashboard-api-gateway",
-                    "dev",
+                    "test-dashboard-api-gateway-dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -206,7 +204,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard-api-gateway/dev/1577111706486-2019-12-23T14:35:06.486Z/function.zip"
+                "S3Key": "serverless/test-dashboard-api-gateway/dev/1588840264121-2020-05-07T08:31:04.121Z/function.zip"
               },
               "FunctionName": "test-dashboard-api-gateway-dev-function",
               "Handler": "s_function.handler",
@@ -233,7 +231,8 @@
                 "Types": [
                   "EDGE"
                 ]
-              }
+              },
+              "Policy": ""
             }
           },
           "ApiGatewayResourceFoo": {
@@ -294,7 +293,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1577111703249": {
+          "ApiGatewayDeployment1588840259771": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -310,16 +309,9 @@
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
-                "Fn::Join": [
-                  ":",
-                  [
-                    {
-                      "Fn::GetAtt": [
-                        "FunctionLambdaFunction",
-                        "Arn"
-                      ]
-                    }
-                  ]
+                "Fn::GetAtt": [
+                  "FunctionLambdaFunction",
+                  "Arn"
                 ]
               },
               "Action": "lambda:InvokeFunction",
@@ -459,7 +451,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard-api-gateway/dev/1577111706486-2019-12-23T14:35:06.486Z/custom-resources.zip"
+                "S3Key": "serverless/test-dashboard-api-gateway/dev/1588840264121-2020-05-07T08:31:04.121Z/custom-resources.zip"
               },
               "FunctionName": "test-dashboard-api-gateway-dev-custom-resource-apigw-cw-role",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -607,6 +599,9 @@
       "logs": {
         "restApi": {
           "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourceId\":\"$context.resourceId\",\"resourcePath\":\"$context.resourcePath\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"status\":\"$context.status\",\"authLatency\":\"$context.authorizer.integrationLatency\",\"integrationLatency\":\"$context.integrationLatency\",\"integrationStatus\":\"$context.integrationStatus\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_ACCESS_LOG\",\"version\":\"1.0.0\"}"
+        },
+        "httpApi": {
+          "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourcePath\":\"$context.routeKey\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"stage\":\"$context.stage\",\"status\":\"$context.status\",\"integrationStatus\":\"$context.integrationStatus\",\"integrationLatency\":\"$context.integrationLatency\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_HTTP_API_LOG\",\"version\":\"1.0.0\"}"
         }
       },
       "vpc": {}
@@ -643,14 +638,16 @@
     },
     "serviceFilename": "serverless.yml",
     "app": "medikoo-test",
-    "tenant": "medikoo",
+    "org": "medikoo",
     "layers": {},
+    "isDashboardMonitoringPreconfigured": true,
+    "isDashboardAppPreconfigured": true,
     "appUid": "GjXh77HjWzffv8X5SQ",
-    "tenantUid": "1sJrygBdcH5mNKPSp8"
+    "orgUid": "1sJrygBdcH5mNKPSp8"
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard-api-gateway/dev/1577111706486-2019-12-23T14:35:06.486Z",
+    "artifactDirectoryName": "serverless/test-dashboard-api-gateway/dev/1588840264121-2020-05-07T08:31:04.121Z",
     "artifact": ""
   }
 }
