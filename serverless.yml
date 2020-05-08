@@ -1,4 +1,7 @@
-service: test-python-lambda
+service: test-dashboard-python-lambda
+
+org: medikoo
+app: medikoo-test
 
 provider:
   name: aws
