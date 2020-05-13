@@ -59,13 +59,13 @@
     "AuthorizeLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/authorize-foo"
+        "LogGroupName": "/aws/lambda/test-api-lambda-authorizer-dev-authorize"
       }
     },
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/function-foo"
+        "LogGroupName": "/aws/lambda/test-api-lambda-authorizer-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -93,8 +93,8 @@
               "Fn::Join": [
                 "-",
                 [
+                  "test-api-lambda-authorizer",
                   "dev",
-                  "test-api-lambda-authorizer-foo",
                   "lambda"
                 ]
               ]
@@ -110,10 +110,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/authorize-foo:*"
-                    },
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/function-foo:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-lambda-authorizer-dev*:*"
                     }
                   ]
                 },
@@ -124,10 +121,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/authorize-foo:*:*"
-                    },
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/function-foo:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-lambda-authorizer-dev*:*:*"
                     }
                   ]
                 }
@@ -140,7 +134,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-api-lambda-authorizer-foo",
+              "test-api-lambda-authorizer",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -158,9 +152,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer-foo/dev/1578997279530-2020-01-14T10:21:19.530Z/authorize.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1589401491000-2020-05-13T20:24:51.000Z/authorize.zip"
         },
-        "FunctionName": "authorize-foo",
+        "FunctionName": "test-api-lambda-authorizer-dev-authorize",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -184,9 +178,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer-foo/dev/1578997279530-2020-01-14T10:21:19.530Z/function.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1589401491000-2020-05-13T20:24:51.000Z/function.zip"
         },
-        "FunctionName": "function-foo",
+        "FunctionName": "test-api-lambda-authorizer-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -206,36 +200,16 @@
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-test-api-lambda-authorizer-foo",
+        "Name": "dev-test-api-lambda-authorizer",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
           ]
         },
-        "Policy": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": "*",
-              "Action": "execute-api:Invoke",
-              "Resource": [
-                "execute-api:/*/*/*"
-              ],
-              "Condition": {
-                "IpAddress": {
-                  "aws:SourceIp": [
-                    "0.0.0.0/0",
-                    "::/0"
-                  ]
-                }
-              }
-            }
-          ]
-        }
+        "Policy": ""
       }
     },
-    "ApiGatewayResourceFoo": {
+    "ApiGatewayResourceTest": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
@@ -244,31 +218,19 @@
             "RootResourceId"
           ]
         },
-        "PathPart": "foo",
-        "RestApiId": {
-          "Ref": "ApiGatewayRestApi"
-        }
-      }
-    },
-    "ApiGatewayResourceFooTest": {
-      "Type": "AWS::ApiGateway::Resource",
-      "Properties": {
-        "ParentId": {
-          "Ref": "ApiGatewayResourceFoo"
-        },
         "PathPart": "test",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
       }
     },
-    "ApiGatewayMethodFooTestGet": {
+    "ApiGatewayMethodTestGet": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourceFooTest"
+          "Ref": "ApiGatewayResourceTest"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -343,7 +305,7 @@
         "Type": "TOKEN"
       }
     },
-    "ApiGatewayDeployment1578997277668": {
+    "ApiGatewayDeployment1589401490310": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -352,7 +314,7 @@
         "StageName": "dev"
       },
       "DependsOn": [
-        "ApiGatewayMethodFooTestGet"
+        "ApiGatewayMethodTestGet"
       ]
     },
     "FunctionLambdaPermissionApiGateway": {
@@ -402,7 +364,31 @@
           ]
         },
         "Action": "lambda:InvokeFunction",
-        "Principal": "apigateway.amazonaws.com"
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
       }
     }
   },

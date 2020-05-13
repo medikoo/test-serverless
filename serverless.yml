@@ -1,4 +1,4 @@
-service: test-api-lambda-authorizer-${opt:prefix}
+service: test-api-lambda-authorizer
 
 provider:
   name: aws
@@ -12,14 +12,12 @@ package:
 
 functions:
   authorize:
-    name: authorize-${opt:prefix}
     handler: index.handler
   function:
-    name: function-${opt:prefix}
     handler: index.handler
     events:
       - http:
-          path: /${opt:prefix}/test
+          path: /test
           method: GET
           authorizer: authorize
 
