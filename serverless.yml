@@ -1,18 +1,44 @@
-service: test-regular-lambda
+service: issue-7711
 
 provider:
   name: aws
   runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
-
-package:
-  individually: true
-
+  region: eu-west-1
+  stage: ${opt:stage, 'dev'}
 functions:
-  function:
-    handler: index.handler
-
-plugins:
-  - serverless-plugin-reducer
+  preSignUp:
+    handler: confirm.preSignUp
+    events:
+      - cognitoUserPool:
+          pool: CoverUserPool
+          trigger: PreSignUp
+          existing: true
+resources:
+  Resources:
+    CognitoUserPoolCoverUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        MfaConfiguration: OFF
+        UserPoolName: ${self:custom.userPoolName}
+        UsernameAttributes:
+          - email
+        AutoVerifiedAttributes:
+          - email
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 6
+            RequireLowercase: False
+            RequireNumbers: True
+            RequireSymbols: False
+            RequireUppercase: False
+        Schema:
+          - AttributeDataType: String
+            Mutable: true
+            Name: role
+            Required: false
+            DeveloperOnlyAttribute: true
+          - AttributeDataType: String
+            Mutable: true
+            Name: providerId
+            Required: false
+            DeveloperOnlyAttribute: true

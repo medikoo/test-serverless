@@ -56,10 +56,10 @@
         }
       }
     },
-    "FunctionLogGroup": {
+    "PreSignUpLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+        "LogGroupName": "/aws/lambda/issue-7711-dev-preSignUp"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,7 +87,8 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-regular-lambda-dev",
+                  "issue-7711",
+                  "dev",
                   "lambda"
                 ]
               ]
@@ -103,7 +104,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/issue-7711-dev*:*"
                     }
                   ]
                 },
@@ -114,7 +115,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/issue-7711-dev*:*:*"
                     }
                   ]
                 }
@@ -127,7 +128,8 @@
           "Fn::Join": [
             "-",
             [
-              "test-regular-lambda-dev",
+              "issue-7711",
+              "dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -137,17 +139,17 @@
         }
       }
     },
-    "FunctionLambdaFunction": {
+    "PreSignUpLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1584317359683-2020-03-16T00:09:19.683Z/function.zip"
+          "S3Key": "serverless/issue-7711/dev/1589376336765-2020-05-13T13:25:36.765Z/issue-7711.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-function",
-        "Handler": "index.handler",
+        "FunctionName": "issue-7711-dev-preSignUp",
+        "Handler": "confirm.preSignUp",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -159,15 +161,185 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "FunctionLogGroup",
+        "PreSignUpLogGroup",
         "IamRoleLambdaExecution"
       ]
+    },
+    "PreSignUpLambdaVersion50HtroW6st5pSHO4Rgb30dsaZTwsM4pXUFhqz7AU": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "PreSignUpLambdaFunction"
+        },
+        "CodeSha256": "aS+DSCoMw8Dul5q1kBgiNRf18/97iiaNMGB81ogOkB0="
+      }
+    },
+    "PreSignUpCustomCognitoUserPool1": {
+      "Type": "Custom::CognitoUserPool",
+      "Version": 1,
+      "DependsOn": [
+        "PreSignUpLambdaFunction",
+        "CustomDashresourceDashexistingDashcupLambdaFunction"
+      ],
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomDashresourceDashexistingDashcupLambdaFunction",
+            "Arn"
+          ]
+        },
+        "FunctionName": "issue-7711-dev-preSignUp",
+        "UserPoolName": "CoverUserPool",
+        "UserPoolConfigs": [
+          {
+            "Trigger": "PreSignUp"
+          }
+        ]
+      }
+    },
+    "IamRoleCustomResourcesLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "dev",
+                  "issue-7711",
+                  "custom-resources-lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Resource": "*",
+                  "Action": [
+                    "cognito-idp:ListUserPools",
+                    "cognito-idp:DescribeUserPool",
+                    "cognito-idp:UpdateUserPool"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:lambda:*:*:function:issue-7711-dev-preSignUp"
+                  },
+                  "Action": [
+                    "lambda:AddPermission",
+                    "lambda:RemovePermission"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:iam::*:role/*"
+                  },
+                  "Action": [
+                    "iam:PassRole"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "CustomDashresourceDashexistingDashcupLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/issue-7711/dev/1589376336765-2020-05-13T13:25:36.765Z/custom-resources.zip"
+        },
+        "FunctionName": "issue-7711-dev-custom-resource-existing-cup",
+        "Handler": "cognitoUserPool/handler.handler",
+        "MemorySize": 1024,
+        "Runtime": "nodejs12.x",
+        "Timeout": 180,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleCustomResourcesLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "IamRoleCustomResourcesLambdaExecution"
+      ]
+    },
+    "CognitoUserPoolCoverUserPool": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "MfaConfiguration": "OFF",
+        "UserPoolName": {},
+        "UsernameAttributes": [
+          "email"
+        ],
+        "AutoVerifiedAttributes": [
+          "email"
+        ],
+        "Policies": {
+          "PasswordPolicy": {
+            "MinimumLength": 6,
+            "RequireLowercase": false,
+            "RequireNumbers": true,
+            "RequireSymbols": false,
+            "RequireUppercase": false
+          }
+        },
+        "Schema": [
+          {
+            "AttributeDataType": "String",
+            "Mutable": true,
+            "Name": "role",
+            "Required": false,
+            "DeveloperOnlyAttribute": true
+          },
+          {
+            "AttributeDataType": "String",
+            "Mutable": true,
+            "Name": "providerId",
+            "Required": false,
+            "DeveloperOnlyAttribute": true
+          }
+        ]
+      }
     }
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "PreSignUpLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "PreSignUpLambdaVersion50HtroW6st5pSHO4Rgb30dsaZTwsM4pXUFhqz7AU"
       }
     }
   }
