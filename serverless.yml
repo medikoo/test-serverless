@@ -13,8 +13,10 @@ package:
 functions:
   authorize:
     handler: index.handler
+    provisionedConcurrency: 1
   function:
     handler: index.handler
+    provisionedConcurrency: 1
     events:
       - http:
           path: /test
