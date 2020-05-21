@@ -49,7 +49,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+        "LogGroupName": "/aws/lambda/test-decrypted-bucket-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -77,7 +77,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-regular-lambda",
+                  "test-decrypted-bucket",
                   "dev",
                   "lambda"
                 ]
@@ -94,7 +94,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-decrypted-bucket-dev*:*"
                     }
                   ]
                 },
@@ -105,7 +105,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-decrypted-bucket-dev*:*:*"
                     }
                   ]
                 }
@@ -118,7 +118,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-regular-lambda",
+              "test-decrypted-bucket",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -136,9 +136,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1590089126563-2020-05-21T19:25:26.563Z/function.zip"
+          "S3Key": "serverless/test-decrypted-bucket/dev/1590089195105-2020-05-21T19:26:35.105Z/function.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-function",
+        "FunctionName": "test-decrypted-bucket-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
