@@ -18,17 +18,7 @@
         "Resources": {
           "ServerlessDeploymentBucket": {
             "Type": "AWS::S3::Bucket",
-            "Properties": {
-              "BucketEncryption": {
-                "ServerSideEncryptionConfiguration": [
-                  {
-                    "ServerSideEncryptionByDefault": {
-                      "SSEAlgorithm": "AES256"
-                    }
-                  }
-                ]
-              }
-            }
+            "Properties": {}
           },
           "ServerlessDeploymentBucketPolicy": {
             "Type": "AWS::S3::BucketPolicy",
@@ -160,7 +150,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1589988600190-2020-05-20T15:30:00.190Z/function.zip"
+                "S3Key": "serverless/test-regular-lambda/dev/1590089126563-2020-05-21T19:25:26.563Z/function.zip"
               },
               "FunctionName": "test-regular-lambda-dev-function",
               "Handler": "index.handler",
@@ -274,13 +264,17 @@
         "vpc": {}
       }
     },
+    "resources": {
+      "Resources": {},
+      "Outputs": {}
+    },
     "serviceFilename": "serverless.yml",
     "layers": {},
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1589988600190-2020-05-20T15:30:00.190Z",
+    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1590089126563-2020-05-21T19:25:26.563Z",
     "artifact": ""
   }
 }

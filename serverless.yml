@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-decrypted-bucket
 
 provider:
   name: aws
@@ -16,3 +16,8 @@ functions:
 
 plugins:
   - serverless-plugin-reducer
+
+resources:
+  extensions:
+    ServerlessDeploymentBucket:
+      Properties: ${file(./deployment-bucket-extension.js):disableEncryption}
