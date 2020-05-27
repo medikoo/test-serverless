@@ -1,5 +1,8 @@
 service: issue-7788
 
+org: medikoo
+app: test
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -12,6 +15,7 @@ package:
 
 functions:
   function:
+    name: issue-7788-dev-function
     handler: index.handler
     provisionedConcurrency: 1
     events:
