@@ -87,8 +87,8 @@
               "Fn::Join": [
                 "-",
                 [
-                  "dev",
                   "test-provisioned-concurrency",
+                  "dev",
                   "lambda"
                 ]
               ]
@@ -99,7 +99,8 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "logs:CreateLogStream"
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup"
                   ],
                   "Resource": [
                     {
@@ -145,7 +146,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-provisioned-concurrency/dev/1576847379751-2019-12-20T13:09:39.751Z/function.zip"
+          "S3Key": "serverless/test-provisioned-concurrency/dev/1590594082899-2020-05-27T15:41:22.899Z/function.zip"
         },
         "FunctionName": "test-provisioned-concurrency-dev-function",
         "Handler": "index.handler",
@@ -160,17 +161,16 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "FunctionLogGroup",
-        "IamRoleLambdaExecution"
+        "FunctionLogGroup"
       ]
     },
-    "FunctionLambdaVersionEdEdsBElQcADc3H6qXBZ6kNNEejyVcRYSfS0J8KVgM": {
+    "FunctionLambdaVersionEm0s62lgGiedqfGCLjAwMgwdeSmueNVZEGuWnQmQY": {
       "Type": "AWS::Lambda::Version",
       "Properties": {
         "FunctionName": {
           "Ref": "FunctionLambdaFunction"
         },
-        "CodeSha256": "ZnXGAWDZp/u2g7ZZQzpioILTNC8wVFMF2Fq+3AQSDgc="
+        "CodeSha256": "VHRlFdN2bJC5D8HOiiSM1ISmL7KOEC0VomoPEQ9Zees="
       }
     },
     "FunctionProvConcLambdaAlias": {
@@ -181,90 +181,16 @@
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "FunctionLambdaVersionEdEdsBElQcADc3H6qXBZ6kNNEejyVcRYSfS0J8KVgM",
+            "FunctionLambdaVersionEm0s62lgGiedqfGCLjAwMgwdeSmueNVZEGuWnQmQY",
             "Version"
           ]
         },
         "Name": "provisioned",
         "ProvisionedConcurrencyConfig": {
-          "ProvisionedConcurrentExecutions": 5
+          "ProvisionedConcurrentExecutions": 1
         }
       },
-      "DependsOn": "FunctionLambdaFunction",
-      "UpdatePolicy": {
-        "CodeDeployLambdaAliasUpdate": {
-          "ApplicationName": {
-            "Ref": "CodeDeployApplication"
-          },
-          "DeploymentGroupName": {
-            "Ref": "CodeDeployDeploymentGroup"
-          }
-        }
-      }
-    },
-    "CodeDeployApplication": {
-      "Type": "AWS::CodeDeploy::Application",
-      "Properties": {
-        "ComputePlatform": "Lambda"
-      }
-    },
-    "CodeDeployDeploymentGroup": {
-      "Type": "AWS::CodeDeploy::DeploymentGroup",
-      "Properties": {
-        "ApplicationName": {
-          "Ref": "CodeDeployApplication"
-        },
-        "AutoRollbackConfiguration": {
-          "Enabled": true,
-          "Events": [
-            "DEPLOYMENT_FAILURE",
-            "DEPLOYMENT_STOP_ON_ALARM",
-            "DEPLOYMENT_STOP_ON_REQUEST"
-          ]
-        },
-        "DeploymentConfigName": {
-          "Fn::Sub": [
-            "CodeDeployDefault.Lambda${ConfigName}",
-            {
-              "ConfigName": "AllAtOnce"
-            }
-          ]
-        },
-        "DeploymentStyle": {
-          "DeploymentType": "BLUE_GREEN",
-          "DeploymentOption": "WITH_TRAFFIC_CONTROL"
-        },
-        "ServiceRoleArn": {
-          "Fn::GetAtt": [
-            "CodeDeployRole",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "CodeDeployRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "ManagedPolicyArns": [
-          "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForLambda"
-        ],
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Action": [
-                "sts:AssumeRole"
-              ],
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "codedeploy.amazonaws.com"
-                ]
-              }
-            }
-          ]
-        }
-      }
+      "DependsOn": "FunctionLambdaFunction"
     }
   },
   "Outputs": {
@@ -276,7 +202,7 @@
     "FunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "FunctionLambdaVersionEdEdsBElQcADc3H6qXBZ6kNNEejyVcRYSfS0J8KVgM"
+        "Ref": "FunctionLambdaVersionEm0s62lgGiedqfGCLjAwMgwdeSmueNVZEGuWnQmQY"
       }
     }
   }
