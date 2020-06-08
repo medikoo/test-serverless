@@ -146,7 +146,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-7822/dev/1591601976656-2020-06-08T07:39:36.656Z/function.zip"
+          "S3Key": "serverless/test-7822/dev/1591602047320-2020-06-08T07:40:47.320Z/function.zip"
         },
         "FunctionName": "test-7822-dev-function",
         "Handler": "index.handler",
