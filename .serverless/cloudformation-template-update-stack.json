@@ -59,7 +59,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+        "LogGroupName": "/aws/lambda/test-7822-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,7 +87,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-regular-lambda",
+                  "test-7822",
                   "dev",
                   "lambda"
                 ]
@@ -104,7 +104,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7822-dev*:*"
                     }
                   ]
                 },
@@ -115,7 +115,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7822-dev*:*:*"
                     }
                   ]
                 }
@@ -128,7 +128,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-regular-lambda",
+              "test-7822",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -146,9 +146,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1589988600190-2020-05-20T15:30:00.190Z/function.zip"
+          "S3Key": "serverless/test-7822/dev/1591601976656-2020-06-08T07:39:36.656Z/function.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-function",
+        "FunctionName": "test-7822-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -163,12 +163,28 @@
       "DependsOn": [
         "FunctionLogGroup"
       ]
+    },
+    "FunctionLambdaVersionx56W9mwlvYfSDBe22Hq6B7sIyKLgSJbmCup7kPwewo8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FunctionLambdaFunction"
+        },
+        "CodeSha256": "Sb8ixaQjka7kO0ypSfBwyCxRGhJz3Lkn4NLmbozErYU="
+      }
     }
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "FunctionLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "FunctionLambdaVersionx56W9mwlvYfSDBe22Hq6B7sIyKLgSJbmCup7kPwewo8"
       }
     }
   }

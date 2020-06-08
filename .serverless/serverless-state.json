@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-7822",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-7822"
     },
     "provider": {
       "stage": "dev",
@@ -10,7 +10,7 @@
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
-      "versionFunctions": false,
+      "versionFunctions": true,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -73,7 +73,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-7822-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -101,7 +101,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-regular-lambda",
+                        "test-7822",
                         "dev",
                         "lambda"
                       ]
@@ -118,7 +118,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7822-dev*:*"
                           }
                         ]
                       },
@@ -129,7 +129,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-7822-dev*:*:*"
                           }
                         ]
                       }
@@ -142,7 +142,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda",
+                    "test-7822",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -160,9 +160,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1589988600190-2020-05-20T15:30:00.190Z/function.zip"
+                "S3Key": "serverless/test-7822/dev/1591601976656-2020-06-08T07:39:36.656Z/function.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-function",
+              "FunctionName": "test-7822-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -177,12 +177,28 @@
             "DependsOn": [
               "FunctionLogGroup"
             ]
+          },
+          "FunctionLambdaVersionx56W9mwlvYfSDBe22Hq6B7sIyKLgSJbmCup7kPwewo8": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "CodeSha256": "Sb8ixaQjka7kO0ypSfBwyCxRGhJz3Lkn4NLmbozErYU="
+            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "FunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "FunctionLambdaVersionx56W9mwlvYfSDBe22Hq6B7sIyKLgSJbmCup7kPwewo8"
             }
           }
         }
@@ -264,14 +280,15 @@
       "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-regular-lambda-dev-function",
+        "name": "test-7822-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
-        "vpc": {}
+        "vpc": {},
+        "versionLogicalId": "FunctionLambdaVersionx56W9mwlvYfSDBe22Hq6B7sIyKLgSJbmCup7kPwewo8"
       }
     },
     "serviceFilename": "serverless.yml",
@@ -280,7 +297,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1589988600190-2020-05-20T15:30:00.190Z",
+    "artifactDirectoryName": "serverless/test-7822/dev/1591601976656-2020-06-08T07:39:36.656Z",
     "artifact": ""
   }
 }
