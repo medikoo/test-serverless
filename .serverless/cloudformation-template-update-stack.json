@@ -118,6 +118,24 @@
                       "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
                     }
                   ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "lambda:InvokeFunction"
+                  ],
+                  "Resource": [
+                    "arn:aws:lambda:us-east-1:*:function:*"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:*"
+                  ],
+                  "Resource": [
+                    "arn:aws:dynamodb:us-east-1:*:table/*"
+                  ]
                 }
               ]
             }
@@ -146,7 +164,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1589988600190-2020-05-20T15:30:00.190Z/function.zip"
+          "S3Key": "serverless/test-regular-lambda/dev/1592315463513-2020-06-16T13:51:03.513Z/function.zip"
         },
         "FunctionName": "test-regular-lambda-dev-function",
         "Handler": "index.handler",

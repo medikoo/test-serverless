@@ -6,6 +6,17 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'lambda:InvokeFunction'
+      Resource:
+        - 'arn:aws:lambda:${self:provider.region}:*:function:*'
+    - Effect: 'Allow'
+      Action:
+        - 'dynamodb:*'
+      Resource:
+        - 'arn:aws:dynamodb:${self:provider.region}:*:table/*'
 
 package:
   individually: true
