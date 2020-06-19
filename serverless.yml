@@ -1,11 +1,7 @@
-service: test-regular-lambda
+service: test-custom-provider
 
 provider:
-  name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
+  name: custom
 
 package:
   individually: true
@@ -13,6 +9,10 @@ package:
 functions:
   function:
     handler: index.handler
+    events:
+      - http:
+          foo: bar
 
 plugins:
+  - ./provider-plugin
   - serverless-plugin-reducer
