@@ -1,16 +1,17 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "my-service",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "my-service"
     },
     "provider": {
       "stage": "dev",
       "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
+      "stackName": "my-app-dev-my-service",
       "region": "us-east-1",
-      "versionFunctions": false,
+      "versionFunctions": true,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -70,10 +71,10 @@
               }
             }
           },
-          "FunctionLogGroup": {
+          "HelloLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/my-service-dev-hello"
             }
           },
           "IamRoleLambdaExecution": {
@@ -101,7 +102,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-regular-lambda",
+                        "my-service",
                         "dev",
                         "lambda"
                       ]
@@ -118,7 +119,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/my-service-dev*:*"
                           }
                         ]
                       },
@@ -129,7 +130,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/my-service-dev*:*:*"
                           }
                         ]
                       }
@@ -142,7 +143,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda",
+                    "my-service",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -153,16 +154,16 @@
               }
             }
           },
-          "FunctionLambdaFunction": {
+          "HelloLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1589988600190-2020-05-20T15:30:00.190Z/function.zip"
+                "S3Key": "serverless/my-service/dev/1592985800728-2020-06-24T08:03:20.728Z/hello.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-function",
+              "FunctionName": "my-service-dev-hello",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -175,14 +176,38 @@
               "Timeout": 6
             },
             "DependsOn": [
-              "FunctionLogGroup"
+              "HelloLogGroup"
             ]
+          },
+          "HelloLambdaVersion8DI7pUSuyTw7TdKwXITNCuwlaBYunYDLI1Q0cZ6j3M": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "HelloLambdaFunction"
+              },
+              "CodeSha256": "Sb8ixaQjka7kO0ypSfBwyCxRGhJz3Lkn4NLmbozErYU="
+            }
+          },
+          "Bucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketName": {
+                "bar": "foo"
+              }
+            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "HelloLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "HelloLambdaVersion8DI7pUSuyTw7TdKwXITNCuwlaBYunYDLI1Q0cZ6j3M"
             }
           }
         }
@@ -257,30 +282,46 @@
       "vpc": {}
     },
     "plugins": [
+      "./my-plugin",
       "serverless-plugin-reducer"
     ],
     "pluginsData": {},
     "functions": {
-      "function": {
+      "hello": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-regular-lambda-dev-function",
+        "name": "my-service-dev-hello",
         "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/hello.zip"
         },
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
-        "vpc": {}
+        "vpc": {},
+        "versionLogicalId": "HelloLambdaVersion8DI7pUSuyTw7TdKwXITNCuwlaBYunYDLI1Q0cZ6j3M"
       }
     },
+    "resources": {
+      "Resources": {
+        "Bucket": {
+          "Type": "AWS::S3::Bucket",
+          "Properties": {
+            "BucketName": {
+              "bar": "foo"
+            }
+          }
+        }
+      },
+      "Outputs": {}
+    },
     "serviceFilename": "serverless.yml",
+    "app": "my-app",
     "layers": {},
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1589988600190-2020-05-20T15:30:00.190Z",
+    "artifactDirectoryName": "serverless/my-service/dev/1592985800728-2020-06-24T08:03:20.728Z",
     "artifact": ""
   }
 }

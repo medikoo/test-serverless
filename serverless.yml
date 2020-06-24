@@ -1,18 +1,24 @@
-service: test-regular-lambda
-
+app: my-app
+service: my-service
+plugins:
+  - ./my-plugin
+  - serverless-plugin-reducer
+  
+package:
+  individually: true
+  
 provider:
   name: aws
   runtime: nodejs12.x
-  region: us-east-1
+  stackName: ${self:app}-${self:provider.stage}-${self:service}
   stage: dev
-  versionFunctions: false
-
-package:
-  individually: true
-
 functions:
-  function:
+  hello:
     handler: index.handler
 
-plugins:
-  - serverless-plugin-reducer
+resources:
+  Resources:
+    Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${foo:bar}
