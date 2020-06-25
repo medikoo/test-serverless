@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-lambda-with-layer
 
 provider:
   name: aws
@@ -8,11 +8,15 @@ provider:
   versionFunctions: false
 
 package:
-  individually: true
+  excludeDevDependencies: false
 
 functions:
   function:
     handler: index.handler
+    layers:
+      - { Ref: LayerLambdaLayer }
 
-plugins:
-  - serverless-plugin-reducer
+layers:
+  layer:
+    path: layer
+
