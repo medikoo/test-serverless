@@ -2,6 +2,8 @@ service: test-custom-provider
 
 provider:
   name: custom
+  foo: bar
+  elo: mar
 
 package:
   individually: true
@@ -10,8 +12,8 @@ functions:
   function:
     handler: index.handler
     events:
-      - http:
-          foo: bar
+      - alb:
+          test: 'fsdf'
 
 plugins:
   - ./provider-plugin

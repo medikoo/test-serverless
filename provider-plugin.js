@@ -6,17 +6,17 @@ module.exports = class CustomProvider {
     serverless.configSchemaHandler.defineProvider("custom", {
       provider: {
         properties: {
-					stage: { type: "string" },
-					variableSyntax: { type: "string" },
-					versionFunctions: { type: "boolean" },
-					remoteFunctionData: { type: "null" }
         }
       },
       function: {
         properties: {
           handler: { type: "string" }
         }
-      }
+      },
+			functionEvents: [
+				{ name: "alb", schema: { anyOf: [{ type: "string" }, { type: "object", properties: { foo: { type: "string" } }, additionalProperties: false }] } },
+				{ name: "other", schema: { type: "string" } }
+			]
     });
   }
 };
