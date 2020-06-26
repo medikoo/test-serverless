@@ -6,7 +6,7 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
+      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
@@ -104,8 +104,8 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "dev",
                         "test-stack-tags",
+                        "dev",
                         "lambda"
                       ]
                     ]
@@ -163,7 +163,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-stack-tags/dev/1578495798838-2020-01-08T15:03:18.838Z/function.zip"
+                "S3Key": "serverless/test-stack-tags/dev/1593177368440-2020-06-26T13:16:08.440Z/function.zip"
               },
               "FunctionName": "test-stack-tags-dev-function",
               "Handler": "index.handler",
@@ -178,8 +178,7 @@
               "Timeout": 6
             },
             "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "FunctionLogGroup"
             ]
           }
         },
@@ -279,11 +278,12 @@
       }
     },
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "layers": {},
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-stack-tags/dev/1578495798838-2020-01-08T15:03:18.838Z",
+    "artifactDirectoryName": "serverless/test-stack-tags/dev/1593177368440-2020-06-26T13:16:08.440Z",
     "artifact": ""
   }
 }
