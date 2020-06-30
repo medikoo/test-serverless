@@ -160,7 +160,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1591799025492-2020-06-10T14:23:45.492Z/function.zip"
+                "S3Key": "serverless/test-api-gw/dev/1593502744121-2020-06-30T07:39:04.121Z/function.zip"
               },
               "FunctionName": "test-api-gw-dev-function",
               "Handler": "index.handler",
@@ -220,7 +220,7 @@
               "AuthorizationType": "NONE",
               "Integration": {
                 "IntegrationHttpMethod": "POST",
-                "Type": "AWS_PROXY",
+                "Type": "AWS",
                 "Uri": {
                   "Fn::Join": [
                     "",
@@ -243,55 +243,70 @@
                       "/invocations"
                     ]
                   ]
-                }
+                },
+                "PassthroughBehavior": "NEVER",
+                "RequestTemplates": {
+                  "application/json": "\n    #set( $body = $input.json(\"$\") )\n\n    \n  #define( $loop )\n    {\n    #foreach($key in $map.keySet())\n        #set( $k = $util.escapeJavaScript($key) )\n        #set( $v = $util.escapeJavaScript($map.get($key)).replaceAll(\"\\\\'\", \"'\") )\n        \"$k\":\n          \"$v\"\n          #if( $foreach.hasNext ) , #end\n    #end\n    }\n  #end\n\n  {\n    \"body\": $body,\n    \"method\": \"$context.httpMethod\",\n    \"principalId\": \"$context.authorizer.principalId\",\n    \"stage\": \"$context.stage\",\n\n    \"cognitoPoolClaims\" : {\n       \n       \"sub\": \"$context.authorizer.claims.sub\"\n    },\n\n    #set( $map = $context.authorizer )\n    \"enhancedAuthContext\": $loop,\n\n    #set( $map = $input.params().header )\n    \"headers\": $loop,\n\n    #set( $map = $input.params().querystring )\n    \"query\": $loop,\n\n    #set( $map = $input.params().path )\n    \"path\": $loop,\n\n    #set( $map = $context.identity )\n    \"identity\": $loop,\n\n    #set( $map = $stageVariables )\n    \"stageVariables\": $loop,\n\n    \"requestPath\": \"$context.resourcePath\"\n  }\n\n  ",
+                  "application/x-www-form-urlencoded": "\n    #define( $body )\n      {\n      #foreach( $token in $input.path('$').split('&') )\n        #set( $keyVal = $token.split('=') )\n        #set( $keyValSize = $keyVal.size() )\n        #if( $keyValSize >= 1 )\n          #set( $key = $util.escapeJavaScript($util.urlDecode($keyVal[0])) )\n          #if( $keyValSize >= 2 )\n            #set($val = $util.escapeJavaScript($util.urlDecode($keyVal[1])).replaceAll(\"\\\\'\",\"'\"))\n          #else\n            #set( $val = '' )\n          #end\n          \"$key\": \"$val\"#if($foreach.hasNext),#end\n        #end\n      #end\n      }\n    #end\n\n    \n  #define( $loop )\n    {\n    #foreach($key in $map.keySet())\n        #set( $k = $util.escapeJavaScript($key) )\n        #set( $v = $util.escapeJavaScript($map.get($key)).replaceAll(\"\\\\'\", \"'\") )\n        \"$k\":\n          \"$v\"\n          #if( $foreach.hasNext ) , #end\n    #end\n    }\n  #end\n\n  {\n    \"body\": $body,\n    \"method\": \"$context.httpMethod\",\n    \"principalId\": \"$context.authorizer.principalId\",\n    \"stage\": \"$context.stage\",\n\n    \"cognitoPoolClaims\" : {\n       \n       \"sub\": \"$context.authorizer.claims.sub\"\n    },\n\n    #set( $map = $context.authorizer )\n    \"enhancedAuthContext\": $loop,\n\n    #set( $map = $input.params().header )\n    \"headers\": $loop,\n\n    #set( $map = $input.params().querystring )\n    \"query\": $loop,\n\n    #set( $map = $input.params().path )\n    \"path\": $loop,\n\n    #set( $map = $context.identity )\n    \"identity\": $loop,\n\n    #set( $map = $stageVariables )\n    \"stageVariables\": $loop,\n\n    \"requestPath\": \"$context.resourcePath\"\n  }\n\n  "
+                },
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": 200,
+                    "SelectionPattern": "",
+                    "ResponseParameters": {},
+                    "ResponseTemplates": {}
+                  },
+                  {
+                    "StatusCode": 400,
+                    "SelectionPattern": ".*\"statusCode\":400,.*",
+                    "ResponseParameters": {},
+                    "ResponseTemplates": {
+                      "application/json": "$input.path(\"$.errorMessage\")"
+                    }
+                  },
+                  {
+                    "StatusCode": 404,
+                    "SelectionPattern": ".*\"statusCode\":404,.*",
+                    "ResponseParameters": {},
+                    "ResponseTemplates": {
+                      "application/json": "$input.path(\"$.errorMessage\")"
+                    }
+                  },
+                  {
+                    "StatusCode": 500,
+                    "SelectionPattern": ".*\"statusCode\":500,.*",
+                    "ResponseParameters": {},
+                    "ResponseTemplates": {
+                      "application/json": "$input.path(\"$.errorMessage\")"
+                    }
+                  }
+                ]
               },
-              "MethodResponses": []
+              "MethodResponses": [
+                {
+                  "ResponseParameters": {},
+                  "ResponseModels": {},
+                  "StatusCode": 200
+                },
+                {
+                  "ResponseParameters": {},
+                  "ResponseModels": {},
+                  "StatusCode": 400
+                },
+                {
+                  "ResponseParameters": {},
+                  "ResponseModels": {},
+                  "StatusCode": 404
+                },
+                {
+                  "ResponseParameters": {},
+                  "ResponseModels": {},
+                  "StatusCode": 500
+                }
+              ]
             }
           },
-          "ApiGatewayMethodFooPost": {
-            "Type": "AWS::ApiGateway::Method",
-            "Properties": {
-              "HttpMethod": "POST",
-              "RequestParameters": {},
-              "ResourceId": {
-                "Ref": "ApiGatewayResourceFoo"
-              },
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "ApiKeyRequired": false,
-              "AuthorizationType": "NONE",
-              "Integration": {
-                "IntegrationHttpMethod": "POST",
-                "Type": "AWS_PROXY",
-                "Uri": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":apigateway:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":lambda:path/2015-03-31/functions/",
-                      {
-                        "Fn::GetAtt": [
-                          "FunctionLambdaFunction",
-                          "Arn"
-                        ]
-                      },
-                      "/invocations"
-                    ]
-                  ]
-                }
-              },
-              "MethodResponses": []
-            }
-          },
-          "ApiGatewayDeployment1591799024254": {
+          "ApiGatewayDeployment1593502743699": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -300,8 +315,7 @@
               "StageName": "dev"
             },
             "DependsOn": [
-              "ApiGatewayMethodFooGet",
-              "ApiGatewayMethodFooPost"
+              "ApiGatewayMethodFooGet"
             ]
           },
           "FunctionLambdaPermissionApiGateway": {
@@ -454,14 +468,29 @@
             "http": {
               "path": "foo",
               "method": "get",
-              "integration": "AWS_PROXY"
-            }
-          },
-          {
-            "http": {
-              "path": "foo",
-              "method": "post",
-              "integration": "AWS_PROXY"
+              "integration": "AWS",
+              "response": {
+                "statusCodes": {
+                  "200": {
+                    "pattern": ""
+                  },
+                  "400": {
+                    "pattern": ".*\"statusCode\":400,.*",
+                    "template": "$input.path(\"$.errorMessage\")"
+                  },
+                  "404": {
+                    "pattern": ".*\"statusCode\":404,.*",
+                    "template": "$input.path(\"$.errorMessage\")"
+                  },
+                  "500": {
+                    "pattern": ".*\"statusCode\":500,.*",
+                    "template": "$input.path(\"$.errorMessage\")"
+                  }
+                }
+              },
+              "request": {
+                "passThrough": "NEVER"
+              }
             }
           }
         ],
@@ -481,7 +510,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1591799025492-2020-06-10T14:23:45.492Z",
+    "artifactDirectoryName": "serverless/test-api-gw/dev/1593502744121-2020-06-30T07:39:04.121Z",
     "artifact": ""
   }
 }
