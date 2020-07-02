@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw",
+    "service": "test-api-gw-templates",
     "serviceObject": {
-      "name": "test-api-gw"
+      "name": "test-api-gw-templates"
     },
     "provider": {
       "stage": "dev",
@@ -73,7 +73,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-dev-function"
+              "LogGroupName": "/aws/lambda/test-api-gw-templates-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -101,7 +101,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-api-gw",
+                        "test-api-gw-templates",
                         "dev",
                         "lambda"
                       ]
@@ -118,7 +118,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-templates-dev*:*"
                           }
                         ]
                       },
@@ -129,7 +129,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-templates-dev*:*:*"
                           }
                         ]
                       }
@@ -142,7 +142,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw",
+                    "test-api-gw-templates",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -160,9 +160,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1593684131621-2020-07-02T10:02:11.621Z/function.zip"
+                "S3Key": "serverless/test-api-gw-templates/dev/1593684193623-2020-07-02T10:03:13.623Z/function.zip"
               },
-              "FunctionName": "test-api-gw-dev-function",
+              "FunctionName": "test-api-gw-templates-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -181,7 +181,7 @@
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "dev-test-api-gw",
+              "Name": "dev-test-api-gw-templates",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -308,7 +308,7 @@
               ]
             }
           },
-          "ApiGatewayDeployment1593684130133": {
+          "ApiGatewayDeployment1593684192753": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -497,7 +497,7 @@
             }
           }
         ],
-        "name": "test-api-gw-dev-function",
+        "name": "test-api-gw-templates-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -513,7 +513,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1593684131621-2020-07-02T10:02:11.621Z",
+    "artifactDirectoryName": "serverless/test-api-gw-templates/dev/1593684193623-2020-07-02T10:03:13.623Z",
     "artifact": ""
   }
 }
