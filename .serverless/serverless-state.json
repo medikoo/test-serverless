@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw-api-keys",
+    "service": "test-issue-7635",
     "serviceObject": {
-      "name": "test-api-gw-api-keys"
+      "name": "test-issue-7635"
     },
     "provider": {
       "stage": "dev",
@@ -11,471 +11,21 @@
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
-      "apiKeys": [
-        {
-          "name": "someKey",
-          "value": "someKey"
-        }
-      ],
+      "deploymentBucket": "serverless-custom-bucket",
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
         "Resources": {
-          "ServerlessDeploymentBucket": {
+          "TestBucket": {
             "Type": "AWS::S3::Bucket",
             "Properties": {
-              "BucketEncryption": {
-                "ServerSideEncryptionConfiguration": [
+              "LifecycleConfiguration": {
+                "Rules": [
                   {
-                    "ServerSideEncryptionByDefault": {
-                      "SSEAlgorithm": "AES256"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "ServerlessDeploymentBucketPolicy": {
-            "Type": "AWS::S3::BucketPolicy",
-            "Properties": {
-              "Bucket": {
-                "Ref": "ServerlessDeploymentBucket"
-              },
-              "PolicyDocument": {
-                "Statement": [
-                  {
-                    "Action": "s3:*",
-                    "Effect": "Deny",
-                    "Principal": "*",
-                    "Resource": [
-                      {
-                        "Fn::Join": [
-                          "",
-                          [
-                            "arn:",
-                            {
-                              "Ref": "AWS::Partition"
-                            },
-                            ":s3:::",
-                            {
-                              "Ref": "ServerlessDeploymentBucket"
-                            },
-                            "/*"
-                          ]
-                        ]
-                      }
-                    ],
-                    "Condition": {
-                      "Bool": {
-                        "aws:SecureTransport": false
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "FunctionLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-api-keys-dev-function"
-            }
-          },
-          "IamRoleLambdaExecution": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": {
-                    "Fn::Join": [
-                      "-",
-                      [
-                        "test-api-gw-api-keys-dev",
-                        "lambda"
-                      ]
-                    ]
-                  },
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:CreateLogStream",
-                          "logs:CreateLogGroup"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-api-keys-dev*:*"
-                          }
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:PutLogEvents"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-api-keys-dev*:*:*"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ],
-              "Path": "/",
-              "RoleName": {
-                "Fn::Join": [
-                  "-",
-                  [
-                    "test-api-gw-api-keys-dev",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    "lambdaRole"
-                  ]
-                ]
-              }
-            }
-          },
-          "FunctionLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/test-api-gw-api-keys/dev/1588062884360-2020-04-28T08:34:44.360Z/function.zip"
-              },
-              "FunctionName": "test-api-gw-api-keys-dev-function",
-              "Handler": "index.handler",
-              "MemorySize": 1024,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              },
-              "Runtime": "nodejs12.x",
-              "Timeout": 6
-            },
-            "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
-            ]
-          },
-          "ApiGatewayRestApi": {
-            "Type": "AWS::ApiGateway::RestApi",
-            "Properties": {
-              "Name": "dev-test-api-gw-api-keys",
-              "EndpointConfiguration": {
-                "Types": [
-                  "EDGE"
-                ]
-              },
-              "Policy": ""
-            }
-          },
-          "ApiGatewayResourceFoo": {
-            "Type": "AWS::ApiGateway::Resource",
-            "Properties": {
-              "ParentId": {
-                "Fn::GetAtt": [
-                  "ApiGatewayRestApi",
-                  "RootResourceId"
-                ]
-              },
-              "PathPart": "foo",
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
-          "ApiGatewayMethodFooGet": {
-            "Type": "AWS::ApiGateway::Method",
-            "Properties": {
-              "HttpMethod": "GET",
-              "RequestParameters": {},
-              "ResourceId": {
-                "Ref": "ApiGatewayResourceFoo"
-              },
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "ApiKeyRequired": false,
-              "AuthorizationType": "NONE",
-              "Integration": {
-                "IntegrationHttpMethod": "POST",
-                "Type": "AWS_PROXY",
-                "Uri": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":apigateway:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":lambda:path/2015-03-31/functions/",
-                      {
-                        "Fn::GetAtt": [
-                          "FunctionLambdaFunction",
-                          "Arn"
-                        ]
-                      },
-                      "/invocations"
-                    ]
-                  ]
-                }
-              },
-              "MethodResponses": []
-            }
-          },
-          "ApiGatewayMethodFooPost": {
-            "Type": "AWS::ApiGateway::Method",
-            "Properties": {
-              "HttpMethod": "POST",
-              "RequestParameters": {},
-              "ResourceId": {
-                "Ref": "ApiGatewayResourceFoo"
-              },
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "ApiKeyRequired": false,
-              "AuthorizationType": "NONE",
-              "Integration": {
-                "IntegrationHttpMethod": "POST",
-                "Type": "AWS_PROXY",
-                "Uri": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":apigateway:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":lambda:path/2015-03-31/functions/",
-                      {
-                        "Fn::GetAtt": [
-                          "FunctionLambdaFunction",
-                          "Arn"
-                        ]
-                      },
-                      "/invocations"
-                    ]
-                  ]
-                }
-              },
-              "MethodResponses": []
-            }
-          },
-          "ApiGatewayDeployment1588062883268": {
-            "Type": "AWS::ApiGateway::Deployment",
-            "Properties": {
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "StageName": "dev"
-            },
-            "DependsOn": [
-              "ApiGatewayMethodFooGet",
-              "ApiGatewayMethodFooPost"
-            ]
-          },
-          "ApiGatewayApiKey1": {
-            "Type": "AWS::ApiGateway::ApiKey",
-            "Properties": {
-              "Enabled": true,
-              "Name": "someKey",
-              "Value": "someKey",
-              "StageKeys": [
-                {
-                  "RestApiId": {
-                    "Ref": "ApiGatewayRestApi"
-                  },
-                  "StageName": "dev"
-                }
-              ]
-            },
-            "DependsOn": "ApiGatewayDeployment1588062883268"
-          },
-          "ApiGatewayUsagePlan": {
-            "Type": "AWS::ApiGateway::UsagePlan",
-            "DependsOn": "ApiGatewayDeployment1588062883268",
-            "Properties": {
-              "ApiStages": [
-                {
-                  "ApiId": {
-                    "Ref": "ApiGatewayRestApi"
-                  },
-                  "Stage": "dev"
-                }
-              ],
-              "Description": "Usage plan for test-api-gw-api-keys dev stage",
-              "UsagePlanName": "test-api-gw-api-keys-dev"
-            }
-          },
-          "ApiGatewayUsagePlanKey1": {
-            "Type": "AWS::ApiGateway::UsagePlanKey",
-            "Properties": {
-              "KeyId": {
-                "Ref": "ApiGatewayApiKey1"
-              },
-              "KeyType": "API_KEY",
-              "UsagePlanId": {
-                "Ref": "ApiGatewayUsagePlan"
-              }
-            }
-          },
-          "FunctionLambdaPermissionApiGateway": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-              "FunctionName": {
-                "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "apigateway.amazonaws.com",
-              "SourceArn": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition"
-                    },
-                    ":execute-api:",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId"
-                    },
-                    ":",
-                    {
-                      "Ref": "ApiGatewayRestApi"
-                    },
-                    "/*/*"
-                  ]
-                ]
-              }
-            }
-          }
-        },
-        "Outputs": {
-          "ServerlessDeploymentBucketName": {
-            "Value": {
-              "Ref": "ServerlessDeploymentBucket"
-            }
-          },
-          "ServiceEndpoint": {
-            "Description": "URL of the service endpoint",
-            "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "https://",
-                  {
-                    "Ref": "ApiGatewayRestApi"
-                  },
-                  ".execute-api.",
-                  {
-                    "Ref": "AWS::Region"
-                  },
-                  ".",
-                  {
-                    "Ref": "AWS::URLSuffix"
-                  },
-                  "/dev"
-                ]
-              ]
-            }
-          }
-        }
-      },
-      "coreCloudFormationTemplate": {
-        "AWSTemplateFormatVersion": "2010-09-09",
-        "Description": "The AWS CloudFormation template for this Serverless application",
-        "Resources": {
-          "ServerlessDeploymentBucket": {
-            "Type": "AWS::S3::Bucket",
-            "Properties": {
-              "BucketEncryption": {
-                "ServerSideEncryptionConfiguration": [
-                  {
-                    "ServerSideEncryptionByDefault": {
-                      "SSEAlgorithm": "AES256"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "ServerlessDeploymentBucketPolicy": {
-            "Type": "AWS::S3::BucketPolicy",
-            "Properties": {
-              "Bucket": {
-                "Ref": "ServerlessDeploymentBucket"
-              },
-              "PolicyDocument": {
-                "Statement": [
-                  {
-                    "Action": "s3:*",
-                    "Effect": "Deny",
-                    "Principal": "*",
-                    "Resource": [
-                      {
-                        "Fn::Join": [
-                          "",
-                          [
-                            "arn:",
-                            {
-                              "Ref": "AWS::Partition"
-                            },
-                            ":s3:::",
-                            {
-                              "Ref": "ServerlessDeploymentBucket"
-                            },
-                            "/*"
-                          ]
-                        ]
-                      }
-                    ],
-                    "Condition": {
-                      "Bool": {
-                        "aws:SecureTransport": false
-                      }
-                    }
+                    "ExpirationInDays": "three",
+                    "Prefix": "/",
+                    "Status": "Enabled"
                   }
                 ]
               }
@@ -484,46 +34,34 @@
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
-            "Value": {
-              "Ref": "ServerlessDeploymentBucket"
-            }
+            "Value": "serverless-custom-bucket"
           }
         }
-      },
-      "vpc": {}
+      }
     },
     "plugins": [
       "serverless-plugin-reducer"
     ],
     "pluginsData": {},
-    "functions": {
-      "function": {
-        "handler": "index.handler",
-        "events": [
-          {
-            "http": {
-              "path": "foo",
-              "method": "get",
-              "integration": "AWS_PROXY"
-            }
-          },
-          {
-            "http": {
-              "path": "foo",
-              "method": "post",
-              "integration": "AWS_PROXY"
+    "functions": {},
+    "resources": {
+      "Resources": {
+        "TestBucket": {
+          "Type": "AWS::S3::Bucket",
+          "Properties": {
+            "LifecycleConfiguration": {
+              "Rules": [
+                {
+                  "ExpirationInDays": "three",
+                  "Prefix": "/",
+                  "Status": "Enabled"
+                }
+              ]
             }
           }
-        ],
-        "name": "test-api-gw-api-keys-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
-        "memory": 1024,
-        "timeout": 6,
-        "runtime": "nodejs12.x",
-        "vpc": {}
-      }
+        }
+      },
+      "Outputs": {}
     },
     "serviceFilename": "serverless.yml",
     "layers": {},
@@ -531,7 +69,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-api-keys/dev/1588062884360-2020-04-28T08:34:44.360Z",
+    "artifactDirectoryName": "serverless/test-issue-7635/dev/1594118072996-2020-07-07T10:34:32.996Z",
     "artifact": ""
   }
 }
