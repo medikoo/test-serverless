@@ -93,7 +93,8 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-http-api-dev",
+                  "test-http-api",
+                  "dev",
                   "lambda"
                 ]
               ]
@@ -133,7 +134,8 @@
           "Fn::Join": [
             "-",
             [
-              "test-http-api-dev",
+              "test-http-api",
+              "dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -150,7 +152,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1583614160843-2020-03-07T20:49:20.843Z/function.zip"
+          "S3Key": "serverless/test-http-api/dev/1594120421776-2020-07-07T11:13:41.776Z/function.zip"
         },
         "FunctionName": "test-http-api-dev-function",
         "Handler": "index.handler",
@@ -165,8 +167,7 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "FunctionLogGroup",
-        "IamRoleLambdaExecution"
+        "FunctionLogGroup"
       ]
     },
     "OtherLambdaFunction": {
@@ -176,7 +177,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1583614160843-2020-03-07T20:49:20.843Z/other.zip"
+          "S3Key": "serverless/test-http-api/dev/1594120421776-2020-07-07T11:13:41.776Z/other.zip"
         },
         "FunctionName": "test-http-api-dev-other",
         "Handler": "other.handler",
@@ -191,8 +192,7 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "OtherLogGroup",
-        "IamRoleLambdaExecution"
+        "OtherLogGroup"
       ]
     },
     "HttpApi": {
