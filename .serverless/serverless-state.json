@@ -160,7 +160,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-python-lambda/dev/1595417042773-2020-07-22T11:24:02.773Z/test-python-lambda.zip"
+                "S3Key": "serverless/test-python-lambda/dev/1595599275009-2020-07-24T14:01:15.009Z/test-python-lambda.zip"
               },
               "FunctionName": "test-python-lambda-dev-function",
               "Handler": "handler.hello",
@@ -253,10 +253,10 @@
             }
           }
         }
-      }
+      },
+      "vpc": {}
     },
     "pluginsData": {},
-<<<<<<< HEAD
     "functions": {
       "function": {
         "handler": "handler.hello",
@@ -269,22 +269,13 @@
         "vpc": {}
       }
     },
-=======
-    "functions": {},
->>>>>>> master
     "serviceFilename": "serverless.yml",
     "layers": {},
     "isDashboardMonitoringPreconfigured": false,
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-python-lambda.zip"
   },
   "package": {
-<<<<<<< HEAD
-    "artifactDirectoryName": "serverless/test-python-lambda/dev/1595417042773-2020-07-22T11:24:02.773Z",
+    "artifactDirectoryName": "serverless/test-python-lambda/dev/1595599275009-2020-07-24T14:01:15.009Z",
     "artifact": "test-python-lambda.zip"
-=======
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1595588004839-2020-07-24T10:53:24.839Z",
-    "artifact": ""
->>>>>>> master
   }
 }
