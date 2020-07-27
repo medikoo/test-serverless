@@ -56,10 +56,10 @@
         }
       }
     },
-    "FunctionLogGroup": {
+    "MainLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-python-lambda-dev-function"
+        "LogGroupName": "/aws/lambda/test-issue-7994-dev-main"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,7 +87,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-python-lambda",
+                  "test-issue-7994",
                   "dev",
                   "lambda"
                 ]
@@ -104,7 +104,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-python-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-7994-dev*:*"
                     }
                   ]
                 },
@@ -115,7 +115,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-python-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-7994-dev*:*:*"
                     }
                   ]
                 }
@@ -128,7 +128,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-python-lambda",
+              "test-issue-7994",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -139,18 +139,18 @@
         }
       }
     },
-    "FunctionLambdaFunction": {
+    "MainLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-python-lambda/dev/1595599275009-2020-07-24T14:01:15.009Z/test-python-lambda.zip"
+          "S3Key": "serverless/test-issue-7994/dev/1595857083355-2020-07-27T13:38:03.355Z/test-issue-7994.zip"
         },
-        "FunctionName": "test-python-lambda-dev-function",
+        "FunctionName": "test-issue-7994-dev-main",
         "Handler": "handler.hello",
-        "MemorySize": 1024,
+        "MemorySize": 256,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
@@ -158,10 +158,184 @@
           ]
         },
         "Runtime": "python3.8",
-        "Timeout": 6
+        "Timeout": 30
       },
       "DependsOn": [
-        "FunctionLogGroup"
+        "MainLogGroup"
+      ]
+    },
+    "MainCustomEventBridge1": {
+      "Type": "Custom::EventBridge",
+      "Version": 1,
+      "DependsOn": [
+        "MainLambdaFunction",
+        "CustomDashresourceDasheventDashbridgeLambdaFunction"
+      ],
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomDashresourceDasheventDashbridgeLambdaFunction",
+            "Arn"
+          ]
+        },
+        "FunctionName": "test-issue-7994-dev-main",
+        "EventBridgeConfig": {
+          "RuleName": "test-issue-7994-dev-main-rule-1",
+          "EventBus": "arn:aws:events:us-east-1:992311060759:event-bus/dev",
+          "Pattern": {
+            "detail": {
+              "test": [
+                "arst"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "IamRoleCustomResourcesLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "dev",
+                  "test-issue-7994",
+                  "custom-resources-lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      ":",
+                      [
+                        "arn",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        "events",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        "event-bus/dev"
+                      ]
+                    ]
+                  },
+                  "Action": [
+                    "events:CreateEventBus",
+                    "events:DeleteEventBus"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      ":",
+                      [
+                        "arn",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        "events",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        "rule/dev/test-issue-7994-dev-main-rule-1"
+                      ]
+                    ]
+                  },
+                  "Action": [
+                    "events:PutRule",
+                    "events:RemoveTargets",
+                    "events:PutTargets",
+                    "events:DeleteRule"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      ":",
+                      [
+                        "arn",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        "lambda",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        "function",
+                        "test-issue-7994-dev-main"
+                      ]
+                    ]
+                  },
+                  "Action": [
+                    "lambda:AddPermission",
+                    "lambda:RemovePermission"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "CustomDashresourceDasheventDashbridgeLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/test-issue-7994/dev/1595857083355-2020-07-27T13:38:03.355Z/custom-resources.zip"
+        },
+        "FunctionName": "test-issue-7994-dev-custom-resource-event-bridge",
+        "Handler": "eventBridge/handler.handler",
+        "MemorySize": 1024,
+        "Runtime": "nodejs12.x",
+        "Timeout": 180,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleCustomResourcesLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "IamRoleCustomResourcesLambdaExecution"
       ]
     }
   },

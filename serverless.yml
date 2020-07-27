@@ -1,4 +1,9 @@
-service: test-python-lambda
+service: test-issue-7994
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  accountId: 992311060759
+  eventBus: arn:aws:events:${self:provider.region}:${self:custom.accountId}:event-bus/${self:custom.stage}
 
 provider:
   name: aws
@@ -8,5 +13,14 @@ provider:
   versionFunctions: false
 
 functions:
-  function:
+  main:
     handler: handler.hello
+    timeout: 30
+    memorySize: 256
+    events:
+      - eventBridge:
+          eventBus: ${self:custom.eventBus}
+          pattern:
+            detail:
+              test:
+                - arst
