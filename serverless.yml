@@ -13,7 +13,7 @@ functions:
     handler: index.handler
     events:
       - alb:
-          test: 'fsdf'
+          test: "fsdf"
 
 plugins:
   - ./provider-plugin
