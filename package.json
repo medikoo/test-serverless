@@ -9,7 +9,10 @@
 	},
 	"eslintConfig": {
 		"extends": "medikoo",
-		"root": true
+		"root": true,
+		"rules": {
+			"no-console": "off"
+		}
 	},
 	"prettier": {
 		"printWidth": 100,
