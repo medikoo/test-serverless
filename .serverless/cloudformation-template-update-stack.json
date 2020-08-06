@@ -152,7 +152,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1596720039427-2020-08-06T13:20:39.427Z/authorize.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1596720250372-2020-08-06T13:24:10.372Z/authorize.zip"
         },
         "FunctionName": "test-api-lambda-authorizer-dev-authorize",
         "Handler": "authorize.handler",
@@ -205,7 +205,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1596720039427-2020-08-06T13:20:39.427Z/function.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1596720250372-2020-08-06T13:24:10.372Z/function.zip"
         },
         "FunctionName": "test-api-lambda-authorizer-dev-function",
         "Handler": "index.handler",
@@ -319,9 +319,17 @@
               },
               ":lambda:path/2015-03-31/functions/",
               {
-                "Fn::GetAtt": [
-                  "AuthorizeLambdaFunction",
-                  "Arn"
+                "Fn::Join": [
+                  ":",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "AuthorizeLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "provisioned"
+                  ]
                 ]
               },
               "/invocations"
@@ -331,7 +339,7 @@
         "Type": "TOKEN"
       }
     },
-    "ApiGatewayDeployment1596720038575": {
+    "ApiGatewayDeployment1596720249449": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -384,10 +392,7 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Fn::GetAtt": [
-            "AuthorizeLambdaFunction",
-            "Arn"
-          ]
+          "Ref": "AuthorizeProvConcLambdaAlias"
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "apigateway.amazonaws.com",
