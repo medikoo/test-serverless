@@ -16,6 +16,7 @@ plugins:
 functions:
   authorize:
     handler: authorize.handler
+    provisionedConcurrency: 1
   function:
     handler: index.handler
     events:

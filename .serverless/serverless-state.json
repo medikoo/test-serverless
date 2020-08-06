@@ -165,7 +165,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-lambda-authorizer/dev/1596718393703-2020-08-06T12:53:13.703Z/authorize.zip"
+                "S3Key": "serverless/test-api-lambda-authorizer/dev/1596720039427-2020-08-06T13:20:39.427Z/authorize.zip"
               },
               "FunctionName": "test-api-lambda-authorizer-dev-authorize",
               "Handler": "authorize.handler",
@@ -183,6 +183,34 @@
               "AuthorizeLogGroup"
             ]
           },
+          "AuthorizeLambdaVersionBjAaCcPPXCDI6SoUS5humxs6SSnwuAEEOZD5W1VHobk": {
+            "Type": "AWS::Lambda::Version",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "AuthorizeLambdaFunction"
+              },
+              "CodeSha256": "K+SmheygUKbsy1XKcGbmXzKgwCDHFN2w2awkkUNCwOI="
+            }
+          },
+          "AuthorizeProvConcLambdaAlias": {
+            "Type": "AWS::Lambda::Alias",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "AuthorizeLambdaFunction"
+              },
+              "FunctionVersion": {
+                "Fn::GetAtt": [
+                  "AuthorizeLambdaVersionBjAaCcPPXCDI6SoUS5humxs6SSnwuAEEOZD5W1VHobk",
+                  "Version"
+                ]
+              },
+              "Name": "provisioned",
+              "ProvisionedConcurrencyConfig": {
+                "ProvisionedConcurrentExecutions": 1
+              }
+            },
+            "DependsOn": "AuthorizeLambdaFunction"
+          },
           "FunctionLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -190,7 +218,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-lambda-authorizer/dev/1596718393703-2020-08-06T12:53:13.703Z/function.zip"
+                "S3Key": "serverless/test-api-lambda-authorizer/dev/1596720039427-2020-08-06T13:20:39.427Z/function.zip"
               },
               "FunctionName": "test-api-lambda-authorizer-dev-function",
               "Handler": "index.handler",
@@ -316,7 +344,7 @@
               "Type": "TOKEN"
             }
           },
-          "ApiGatewayDeployment1596718392277": {
+          "ApiGatewayDeployment1596720038575": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -407,6 +435,12 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "AuthorizeLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "AuthorizeLambdaVersionBjAaCcPPXCDI6SoUS5humxs6SSnwuAEEOZD5W1VHobk"
             }
           },
           "ServiceEndpoint": {
@@ -510,6 +544,7 @@
     "functions": {
       "authorize": {
         "handler": "authorize.handler",
+        "provisionedConcurrency": 1,
         "events": [],
         "name": "test-api-lambda-authorizer-dev-authorize",
         "package": {
@@ -518,7 +553,12 @@
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
-        "vpc": {}
+        "vpc": {},
+        "versionLogicalId": "AuthorizeLambdaVersionBjAaCcPPXCDI6SoUS5humxs6SSnwuAEEOZD5W1VHobk",
+        "targetAlias": {
+          "name": "provisioned",
+          "logicalId": "AuthorizeProvConcLambdaAlias"
+        }
       },
       "function": {
         "handler": "index.handler",
@@ -561,7 +601,7 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1596718393703-2020-08-06T12:53:13.703Z"
+        "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1596720039427-2020-08-06T13:20:39.427Z"
       },
       "plugins": {
         "$ref": "$[\"service\"][\"plugins\"]"
@@ -578,7 +618,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1596718393703-2020-08-06T12:53:13.703Z",
+    "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1596720039427-2020-08-06T13:20:39.427Z",
     "artifact": ""
   }
 }
