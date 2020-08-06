@@ -8,10 +8,10 @@
 		"serverless-plugin-reducer": "^3.2.3"
 	},
 	"eslintConfig": {
-		"extends": "medikoo/node",
+		"extends": "medikoo",
 		"root": true,
-		"env": {
-			"node": true
+		"rules": {
+			"no-console": "off"
 		}
 	},
 	"prettier": {
