@@ -125,12 +125,7 @@
                     }
                   ]
                 }
-              ],
-              "Condition": {
-                "Bool": {
-                  "aws:SecureTransport": false
-                }
-              }
+              ]
             }
           }
         ],
@@ -157,7 +152,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1589401491000-2020-05-13T20:24:51.000Z/authorize.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1596715130817-2020-08-06T11:58:50.817Z/authorize.zip"
         },
         "FunctionName": "test-api-lambda-authorizer-dev-authorize",
         "Handler": "index.handler",
@@ -172,8 +167,7 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "AuthorizeLogGroup",
-        "IamRoleLambdaExecution"
+        "AuthorizeLogGroup"
       ]
     },
     "FunctionLambdaFunction": {
@@ -183,7 +177,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1589401491000-2020-05-13T20:24:51.000Z/function.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1596715130817-2020-08-06T11:58:50.817Z/function.zip"
         },
         "FunctionName": "test-api-lambda-authorizer-dev-function",
         "Handler": "index.handler",
@@ -198,8 +192,7 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "FunctionLogGroup",
-        "IamRoleLambdaExecution"
+        "FunctionLogGroup"
       ]
     },
     "ApiGatewayRestApi": {
@@ -310,7 +303,7 @@
         "Type": "TOKEN"
       }
     },
-    "ApiGatewayDeployment1589401490310": {
+    "ApiGatewayDeployment1596715129920": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {

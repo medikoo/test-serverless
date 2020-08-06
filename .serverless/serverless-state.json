@@ -11,7 +11,6 @@
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -85,10 +84,8 @@
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
-              "Bucket": {
-                "Ref": "ServerlessDeploymentBucket"
-              },
-              "PolicyDocument": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
                 "Statement": [
                   {
                     "Effect": "Allow",
@@ -141,12 +138,7 @@
                           }
                         ]
                       }
-                    ],
-                    "Condition": {
-                      "Bool": {
-                        "aws:SecureTransport": false
-                      }
-                    }
+                    ]
                   }
                 }
               ],
@@ -173,7 +165,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-lambda-authorizer/dev/1589401491000-2020-05-13T20:24:51.000Z/authorize.zip"
+                "S3Key": "serverless/test-api-lambda-authorizer/dev/1596715130817-2020-08-06T11:58:50.817Z/authorize.zip"
               },
               "FunctionName": "test-api-lambda-authorizer-dev-authorize",
               "Handler": "index.handler",
@@ -188,8 +180,7 @@
               "Timeout": 6
             },
             "DependsOn": [
-              "AuthorizeLogGroup",
-              "IamRoleLambdaExecution"
+              "AuthorizeLogGroup"
             ]
           },
           "FunctionLambdaFunction": {
@@ -199,7 +190,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-lambda-authorizer/dev/1589401491000-2020-05-13T20:24:51.000Z/function.zip"
+                "S3Key": "serverless/test-api-lambda-authorizer/dev/1596715130817-2020-08-06T11:58:50.817Z/function.zip"
               },
               "FunctionName": "test-api-lambda-authorizer-dev-function",
               "Handler": "index.handler",
@@ -214,8 +205,7 @@
               "Timeout": 6
             },
             "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "FunctionLogGroup"
             ]
           },
           "ApiGatewayRestApi": {
@@ -326,7 +316,7 @@
               "Type": "TOKEN"
             }
           },
-          "ApiGatewayDeployment1589401490310": {
+          "ApiGatewayDeployment1596715129920": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -559,13 +549,36 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "layers": {},
+    "initialServerlessConfig": {
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1596715130817-2020-08-06T11:58:50.817Z"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "layers": {
+        "$ref": "$[\"service\"][\"layers\"]"
+      },
+      "configValidationMode": "warn"
+    },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1589401491000-2020-05-13T20:24:51.000Z",
+    "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1596715130817-2020-08-06T11:58:50.817Z",
     "artifact": ""
   }
 }
