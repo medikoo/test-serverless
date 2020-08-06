@@ -19,5 +19,3 @@ functions:
     events:
       - sqs:
           arn: arn:aws:sqs:us-east-1:992311060759:test-queue-1
-      - sqs:
-          arn: arn:aws:sqs:us-east-1:992311060759:test-queue-2

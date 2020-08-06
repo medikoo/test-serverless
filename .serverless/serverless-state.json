@@ -140,8 +140,7 @@
                           "sqs:GetQueueAttributes"
                         ],
                         "Resource": [
-                          "arn:aws:sqs:us-east-1:992311060759:test-queue-1",
-                          "arn:aws:sqs:us-east-1:992311060759:test-queue-2"
+                          "arn:aws:sqs:us-east-1:992311060759:test-queue-1"
                         ]
                       }
                     ]
@@ -171,7 +170,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-sqs-lambda/dev/1596714413630-2020-08-06T11:46:53.630Z/function.zip"
+                "S3Key": "serverless/test-sqs-lambda/dev/1596714471687-2020-08-06T11:47:51.687Z/function.zip"
               },
               "FunctionName": "test-sqs-lambda-dev-function",
               "Handler": "index.handler",
@@ -195,21 +194,6 @@
             "Properties": {
               "BatchSize": 10,
               "EventSourceArn": "arn:aws:sqs:us-east-1:992311060759:test-queue-1",
-              "FunctionName": {
-                "Fn::GetAtt": [
-                  "FunctionLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "Enabled": true
-            }
-          },
-          "FunctionEventSourceMappingSQSTestqueue2": {
-            "Type": "AWS::Lambda::EventSourceMapping",
-            "DependsOn": "IamRoleLambdaExecution",
-            "Properties": {
-              "BatchSize": 10,
-              "EventSourceArn": "arn:aws:sqs:us-east-1:992311060759:test-queue-2",
               "FunctionName": {
                 "Fn::GetAtt": [
                   "FunctionLambdaFunction",
@@ -309,11 +293,6 @@
             "sqs": {
               "arn": "arn:aws:sqs:us-east-1:992311060759:test-queue-1"
             }
-          },
-          {
-            "sqs": {
-              "arn": "arn:aws:sqs:us-east-1:992311060759:test-queue-2"
-            }
           }
         ],
         "name": "test-sqs-lambda-dev-function",
@@ -338,7 +317,7 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-sqs-lambda/dev/1596714413630-2020-08-06T11:46:53.630Z"
+        "artifactDirectoryName": "serverless/test-sqs-lambda/dev/1596714471687-2020-08-06T11:47:51.687Z"
       },
       "plugins": {
         "$ref": "$[\"service\"][\"plugins\"]"
@@ -355,7 +334,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-sqs-lambda/dev/1596714413630-2020-08-06T11:46:53.630Z",
+    "artifactDirectoryName": "serverless/test-sqs-lambda/dev/1596714471687-2020-08-06T11:47:51.687Z",
     "artifact": ""
   }
 }
