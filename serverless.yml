@@ -13,10 +13,9 @@ package:
 plugins:
   - serverless-plugin-reducer
 
-
 functions:
   authorize:
-    handler: index.handler
+    handler: authorize.handler
   function:
     handler: index.handler
     events:

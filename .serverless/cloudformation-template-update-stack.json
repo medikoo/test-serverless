@@ -152,10 +152,10 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1596715130817-2020-08-06T11:58:50.817Z/authorize.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1596718393703-2020-08-06T12:53:13.703Z/authorize.zip"
         },
         "FunctionName": "test-api-lambda-authorizer-dev-authorize",
-        "Handler": "index.handler",
+        "Handler": "authorize.handler",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -177,7 +177,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-lambda-authorizer/dev/1596715130817-2020-08-06T11:58:50.817Z/function.zip"
+          "S3Key": "serverless/test-api-lambda-authorizer/dev/1596718393703-2020-08-06T12:53:13.703Z/function.zip"
         },
         "FunctionName": "test-api-lambda-authorizer-dev-function",
         "Handler": "index.handler",
@@ -303,7 +303,7 @@
         "Type": "TOKEN"
       }
     },
-    "ApiGatewayDeployment1596715129920": {
+    "ApiGatewayDeployment1596718392277": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
