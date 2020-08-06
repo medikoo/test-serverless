@@ -7,6 +7,12 @@ provider:
   stage: dev
   versionFunctions: false
 
+package:
+  individually: true
+
+plugins:
+  - serverless-plugin-reducer
+
 functions:
   function:
     handler: index.handler

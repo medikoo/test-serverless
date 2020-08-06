@@ -1,216 +1,146 @@
 {
-  "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "The AWS CloudFormation template for this Serverless application",
-  "Resources": {
-    "ServerlessDeploymentBucket": {
-      "Type": "AWS::S3::Bucket",
-      "Properties": {
-        "BucketEncryption": {
-          "ServerSideEncryptionConfiguration": [
-            {
-              "ServerSideEncryptionByDefault": {
-                "SSEAlgorithm": "AES256"
-              }
-            }
-          ]
-        }
-      }
-    },
-    "ServerlessDeploymentBucketPolicy": {
-      "Type": "AWS::S3::BucketPolicy",
-      "Properties": {
-        "Bucket": {
-          "Ref": "ServerlessDeploymentBucket"
-        },
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:*",
-              "Effect": "Deny",
-              "Principal": "*",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":s3:::",
-                      {
-                        "Ref": "ServerlessDeploymentBucket"
-                      },
-                      "/*"
-                    ]
-                  ]
-                }
-              ],
-              "Condition": {
-                "Bool": {
-                  "aws:SecureTransport": false
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
-    "FunctionLogGroup": {
-      "Type": "AWS::Logs::LogGroup",
-      "Properties": {
-        "LogGroupName": "/aws/lambda/test-sqs-lambda-dev-function"
-      }
-    },
-    "IamRoleLambdaExecution": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
-              },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-        },
-        "Policies": [
-          {
-            "PolicyName": {
-              "Fn::Join": [
-                "-",
-                [
-                  "test-sqs-lambda-dev",
-                  "lambda"
-                ]
-              ]
-            },
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:CreateLogStream",
-                    "logs:CreateLogGroup"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-sqs-lambda-dev*:*"
-                    }
-                  ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:PutLogEvents"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-sqs-lambda-dev*:*:*"
-                    }
-                  ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "sqs:ReceiveMessage",
-                    "sqs:DeleteMessage",
-                    "sqs:GetQueueAttributes"
-                  ],
-                  "Resource": [
-                    "arn:aws:sqs:us-east-1:992311060759:test-queue-1",
-                    "arn:aws:sqs:us-east-1:992311060759:test-queue-2"
-                  ]
-                }
-              ]
-            }
-          }
-        ],
-        "Path": "/",
-        "RoleName": {
-          "Fn::Join": [
-            "-",
-            [
-              "test-sqs-lambda-dev",
-              {
-                "Ref": "AWS::Region"
-              },
-              "lambdaRole"
-            ]
-          ]
-        }
-      }
-    },
-    "FunctionLambdaFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "ServerlessDeploymentBucket"
-          },
-          "S3Key": "serverless/test-sqs-lambda/dev/1587996005476-2020-04-27T14:00:05.476Z/test-sqs-lambda.zip"
-        },
-        "FunctionName": "test-sqs-lambda-dev-function",
-        "Handler": "index.handler",
-        "MemorySize": 1024,
-        "Role": {
-          "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
-            "Arn"
-          ]
-        },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6
-      },
-      "DependsOn": [
-        "FunctionLogGroup",
-        "IamRoleLambdaExecution"
-      ]
-    },
-    "FunctionEventSourceMappingSQSTestqueue1": {
-      "Type": "AWS::Lambda::EventSourceMapping",
-      "DependsOn": "IamRoleLambdaExecution",
-      "Properties": {
-        "BatchSize": 10,
-        "EventSourceArn": "arn:aws:sqs:us-east-1:992311060759:test-queue-1",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "FunctionLambdaFunction",
-            "Arn"
-          ]
-        },
-        "Enabled": true
-      }
-    },
-    "FunctionEventSourceMappingSQSTestqueue2": {
-      "Type": "AWS::Lambda::EventSourceMapping",
-      "DependsOn": "IamRoleLambdaExecution",
-      "Properties": {
-        "BatchSize": 10,
-        "EventSourceArn": "arn:aws:sqs:us-east-1:992311060759:test-queue-2",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "FunctionLambdaFunction",
-            "Arn"
-          ]
-        },
-        "Enabled": true
-      }
-    }
-  },
-  "Outputs": {
-    "ServerlessDeploymentBucketName": {
-      "Value": {
-        "Ref": "ServerlessDeploymentBucket"
-      }
-    }
-  }
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "The AWS CloudFormation template for this Serverless application",
+	"Resources": {
+		"ServerlessDeploymentBucket": {
+			"Type": "AWS::S3::Bucket",
+			"Properties": {
+				"BucketEncryption": {
+					"ServerSideEncryptionConfiguration": [
+						{ "ServerSideEncryptionByDefault": { "SSEAlgorithm": "AES256" } }
+					]
+				}
+			}
+		},
+		"ServerlessDeploymentBucketPolicy": {
+			"Type": "AWS::S3::BucketPolicy",
+			"Properties": {
+				"Bucket": { "Ref": "ServerlessDeploymentBucket" },
+				"PolicyDocument": {
+					"Statement": [
+						{
+							"Action": "s3:*",
+							"Effect": "Deny",
+							"Principal": "*",
+							"Resource": [
+								{
+									"Fn::Join": [
+										"",
+										[
+											"arn:", { "Ref": "AWS::Partition" }, ":s3:::",
+											{ "Ref": "ServerlessDeploymentBucket" }, "/*"
+										]
+									]
+								}
+							],
+							"Condition": { "Bool": { "aws:SecureTransport": false } }
+						}
+					]
+				}
+			}
+		},
+		"FunctionLogGroup": {
+			"Type": "AWS::Logs::LogGroup",
+			"Properties": { "LogGroupName": "/aws/lambda/test-sqs-lambda-dev-function" }
+		},
+		"IamRoleLambdaExecution": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": { "Service": ["lambda.amazonaws.com"] },
+							"Action": ["sts:AssumeRole"]
+						}
+					]
+				},
+				"Policies": [
+					{
+						"PolicyName": { "Fn::Join": ["-", ["test-sqs-lambda-dev", "lambda"]] },
+						"PolicyDocument": {
+							"Version": "2012-10-17",
+							"Statement": [
+								{
+									"Effect": "Allow",
+									"Action": ["logs:CreateLogStream", "logs:CreateLogGroup"],
+									"Resource": [
+										{
+											"Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-sqs-lambda-dev*:*"
+										}
+									]
+								},
+								{
+									"Effect": "Allow",
+									"Action": ["logs:PutLogEvents"],
+									"Resource": [
+										{
+											"Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-sqs-lambda-dev*:*:*"
+										}
+									]
+								},
+								{
+									"Effect": "Allow",
+									"Action": [
+										"sqs:ReceiveMessage", "sqs:DeleteMessage",
+										"sqs:GetQueueAttributes"
+									],
+									"Resource": [
+										"arn:aws:sqs:us-east-1:992311060759:test-queue-1",
+										"arn:aws:sqs:us-east-1:992311060759:test-queue-2"
+									]
+								}
+							]
+						}
+					}
+				],
+				"Path": "/",
+				"RoleName": {
+					"Fn::Join": [
+						"-", ["test-sqs-lambda-dev", { "Ref": "AWS::Region" }, "lambdaRole"]
+					]
+				}
+			}
+		},
+		"FunctionLambdaFunction": {
+			"Type": "AWS::Lambda::Function",
+			"Properties": {
+				"Code": {
+					"S3Bucket": { "Ref": "ServerlessDeploymentBucket" },
+					"S3Key": "serverless/test-sqs-lambda/dev/1587996005476-2020-04-27T14:00:05.476Z/test-sqs-lambda.zip"
+				},
+				"FunctionName": "test-sqs-lambda-dev-function",
+				"Handler": "index.handler",
+				"MemorySize": 1024,
+				"Role": { "Fn::GetAtt": ["IamRoleLambdaExecution", "Arn"] },
+				"Runtime": "nodejs12.x",
+				"Timeout": 6
+			},
+			"DependsOn": ["FunctionLogGroup", "IamRoleLambdaExecution"]
+		},
+		"FunctionEventSourceMappingSQSTestqueue1": {
+			"Type": "AWS::Lambda::EventSourceMapping",
+			"DependsOn": "IamRoleLambdaExecution",
+			"Properties": {
+				"BatchSize": 10,
+				"EventSourceArn": "arn:aws:sqs:us-east-1:992311060759:test-queue-1",
+				"FunctionName": { "Fn::GetAtt": ["FunctionLambdaFunction", "Arn"] },
+				"Enabled": true
+			}
+		},
+		"FunctionEventSourceMappingSQSTestqueue2": {
+			"Type": "AWS::Lambda::EventSourceMapping",
+			"DependsOn": "IamRoleLambdaExecution",
+			"Properties": {
+				"BatchSize": 10,
+				"EventSourceArn": "arn:aws:sqs:us-east-1:992311060759:test-queue-2",
+				"FunctionName": { "Fn::GetAtt": ["FunctionLambdaFunction", "Arn"] },
+				"Enabled": true
+			}
+		}
+	},
+	"Outputs": {
+		"ServerlessDeploymentBucketName": { "Value": { "Ref": "ServerlessDeploymentBucket" } }
+	}
 }
