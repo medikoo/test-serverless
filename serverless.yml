@@ -10,6 +10,10 @@ provider:
 package:
   individually: true
 
+plugins:
+  - serverless-plugin-reducer
+
+
 functions:
   authorize:
     handler: index.handler
@@ -20,6 +24,3 @@ functions:
           path: /test
           method: GET
           authorizer: authorize
-
-plugins:
-  - serverless-plugin-reducer

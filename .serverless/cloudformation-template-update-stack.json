@@ -125,7 +125,12 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
             }
           }
         ],
