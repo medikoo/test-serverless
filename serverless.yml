@@ -1,12 +1,18 @@
 service: test-knative
 provider:
   name: knative
+  docker:
+    username: foo
+    password: foo
 
-functionTwo:
-  events:
-    - cron:
-        schedule: "* * * * *"
-        data: '{"message": "Hello world from a Cron event source!"}'
+functions:
+  function:
+    handler: hello-world.dockerfile
+    context: ./code
+    events:
+      - cron:
+          schedule: "* * * * *"
+          data: '{"message": "Hello world from a Cron event source!"}'
 
 plugins:
   - serverless-knative
