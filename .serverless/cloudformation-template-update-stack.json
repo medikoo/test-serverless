@@ -59,7 +59,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-dashboard-dev-function"
+        "LogGroupName": "/aws/lambda/dev-issue-8076-pre-sign-up"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,7 +87,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-dashboard",
+                  "issue-8076",
                   "dev",
                   "lambda"
                 ]
@@ -104,7 +104,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/dev-issue-8076-pre-sign-up:*"
                     }
                   ]
                 },
@@ -115,7 +115,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/dev-issue-8076-pre-sign-up:*:*"
                     }
                   ]
                 }
@@ -128,7 +128,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-dashboard",
+              "issue-8076",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -192,9 +192,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-dashboard/dev/1596801989758-2020-08-07T12:06:29.758Z/function.zip"
+          "S3Key": "serverless/issue-8076/dev/1597735403959-2020-08-18T07:23:23.959Z/function.zip"
         },
-        "FunctionName": "test-dashboard-dev-function",
+        "FunctionName": "dev-issue-8076-pre-sign-up",
         "Handler": "s_function.handler",
         "MemorySize": 1024,
         "Role": {
@@ -203,17 +203,89 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6
+        "Runtime": "python3.8",
+        "Timeout": 6,
+        "Description": "Cognito Pre SignUp Trigger to link Connect with Google account to existing Cognito User",
+        "Tags": [
+          {
+            "Key": "LinkedApp",
+            "Value": "api-company"
+          },
+          {
+            "Key": "CreationMode",
+            "Value": "auto"
+          },
+          {
+            "Key": "Stage",
+            "Value": "dev"
+          }
+        ],
+        "Environment": {
+          "Variables": {
+            "STAGE": "dev"
+          }
+        }
       },
       "DependsOn": [
         "FunctionLogGroup"
       ]
     },
+    "FunctionLambdaVersionLsWK8hJ7843KdTxqTJCnFqbEsjS7l7N3wnwF9ul0": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FunctionLambdaFunction"
+        },
+        "CodeSha256": "8MbaqquFnSJkpQR6w90h/lwiW6W9pYZSOVPKmYxk4qA=",
+        "Description": "Cognito Pre SignUp Trigger to link Connect with Google account to existing Cognito User"
+      }
+    },
+    "FunctionCustomCognitoUserPool1": {
+      "Type": "Custom::CognitoUserPool",
+      "Version": 1,
+      "DependsOn": [
+        "FunctionLambdaFunction",
+        "CustomDashresourceDashexistingDashcupLambdaFunction"
+      ],
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomDashresourceDashexistingDashcupLambdaFunction",
+            "Arn"
+          ]
+        },
+        "FunctionName": "dev-issue-8076-pre-sign-up",
+        "UserPoolName": "test-pool",
+        "UserPoolConfigs": [
+          {
+            "Trigger": "PreSignUp"
+          }
+        ]
+      }
+    },
+    "CustomDashresourceDashexistingDashcupLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/issue-8076/dev/1597735403959-2020-08-18T07:23:23.959Z/custom-resources.zip"
+        },
+        "FunctionName": "issue-8076-dev-custom-resource-existing-cup",
+        "Handler": "cognitoUserPool/handler.handler",
+        "MemorySize": 1024,
+        "Runtime": "nodejs12.x",
+        "Timeout": 180,
+        "Role": "foo"
+      },
+      "DependsOn": []
+    },
     "CloudWatchLogsSubscriptionFilterFunctionLogGroup": {
       "Type": "AWS::Logs::SubscriptionFilter",
       "Properties": {
-        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard#dev",
+        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#issue-8076#dev",
         "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
         "LogGroupName": {
           "Ref": "FunctionLogGroup"
@@ -233,6 +305,12 @@
           "EnterpriseLogAccessIamRole",
           "Arn"
         ]
+      }
+    },
+    "FunctionLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "FunctionLambdaVersionLsWK8hJ7843KdTxqTJCnFqbEsjS7l7N3wnwF9ul0"
       }
     }
   }

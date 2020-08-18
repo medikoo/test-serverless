@@ -1,21 +1,40 @@
-service: test-dashboard
+service: issue-8076
 
 org: medikoo
 app: medikoo-test
 
-provider:
-  name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
-
 package:
   individually: true
+  exclude:
+    - "/**"
+
+plugins:
+  - "@serverless/safeguards-plugin"
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: us-east-1
+  stackName: ${self:provider.stage}-${self:service}
+  stackTags:
+    LinkedApp: "api-company"
+    CreationMode: "auto"
+  cfnRole: foo
 
 functions:
   function:
-    handler: index.handler
-
-plugins:
-  - serverless-plugin-reducer
+    handler: handler.hello
+    name: ${self:provider.stackName}-pre-sign-up
+    description: "Cognito Pre SignUp Trigger to link Connect with Google account to existing Cognito User"
+    environment:
+      STAGE: ${self:provider.stage}
+    tags:
+      LinkedApp: api-company
+      CreationMode: auto
+      Stage: ${self:provider.stage}
+    events:
+      - cognitoUserPool:
+          pool: test-pool
+          trigger: PreSignUp
+          existing: true
