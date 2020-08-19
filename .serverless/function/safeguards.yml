@@ -1,0 +1,55 @@
+safeguards:
+  - title: No "*" in IAM Role statements
+    safeguard: no-wild-iam-role-statements
+    description: >
+      This policy performs a simple check to prevent "*" permissions
+      being used in AWS IAM Roles by checking for wildcards on
+      Actions and Resources in grant statements.
+    enforcementLevel: warning
+  - title: Forbid S3 HTTP Access
+    safeguard: forbid-s3-http-access
+    description: >
+      This policy requires that you have a BucketPolicy
+      forbidding access over HTTP for each bucket.
+    enforcementLevel: warning
+  - title: Framework Version
+    safeguard: framework-version
+    description: >
+      This policy limits which versions of the Serverless Framework can be used.
+    enforcementLevel: warning
+    config: ">=1.78.0"
+  - title: Require Cloudformation Deployment Role
+    safeguard: require-cfn-role
+    description: >
+      This rule requires you to specify the cfnRole option
+    enforcementLevel: warning
+  - title: Require Description
+    safeguard: require-description
+    description: >
+      This rule requires that all functions have a description of
+      minimum or maximum length.
+    enforcementLevel: warning
+  - title: Required stack tags
+    safeguard: required-stack-tags
+    enforcementLevel: warning
+    description: >
+      This rule requires you to specify certain tags in the stackTags option.
+    config:
+      LinkedApp: ".*-company"
+      CreationMode: "auto"
+  - title: Restrict regions
+    safeguard: allowed-regions
+    description: >
+      This rule restrict the regions to which a service may be deployed.
+    enforcementLevel: error
+    config:
+      - us-east-1
+  - title: Allowed stages
+    safeguard: allowed-stages
+    description: >
+      This limits the stages that can be used in services.
+    enforcementLevel: error
+    config:
+      - dev
+      - staging
+      - prod

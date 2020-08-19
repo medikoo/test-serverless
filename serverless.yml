@@ -3,6 +3,9 @@ service: issue-8076
 org: medikoo
 app: medikoo-test
 
+custom:
+  safeguards: ${file(safeguards.yml):safeguards}
+
 package:
   individually: true
   exclude:

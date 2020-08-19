@@ -211,7 +211,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/issue-8076/dev/1597735403959-2020-08-18T07:23:23.959Z/function.zip"
+                "S3Key": "serverless/issue-8076/dev/1597765446446-2020-08-18T15:44:06.446Z/function.zip"
               },
               "FunctionName": "dev-issue-8076-pre-sign-up",
               "Handler": "s_function.handler",
@@ -249,14 +249,14 @@
               "FunctionLogGroup"
             ]
           },
-          "FunctionLambdaVersionLsWK8hJ7843KdTxqTJCnFqbEsjS7l7N3wnwF9ul0": {
+          "FunctionLambdaVersionyYyW8lTUGxRy5kNGzkH7E5IugrlgJbKqCM5Q6cLw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "FunctionLambdaFunction"
               },
-              "CodeSha256": "8MbaqquFnSJkpQR6w90h/lwiW6W9pYZSOVPKmYxk4qA=",
+              "CodeSha256": "3+bFzejlirNPX3FZdRHP3qeksYB5gzsB86jyWeAJ+Oc=",
               "Description": "Cognito Pre SignUp Trigger to link Connect with Google account to existing Cognito User"
             }
           },
@@ -290,7 +290,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/issue-8076/dev/1597735403959-2020-08-18T07:23:23.959Z/custom-resources.zip"
+                "S3Key": "serverless/issue-8076/dev/1597765446446-2020-08-18T15:44:06.446Z/custom-resources.zip"
               },
               "FunctionName": "issue-8076-dev-custom-resource-existing-cup",
               "Handler": "cognitoUserPool/handler.handler",
@@ -329,7 +329,7 @@
           "FunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FunctionLambdaVersionLsWK8hJ7843KdTxqTJCnFqbEsjS7l7N3wnwF9ul0"
+              "Ref": "FunctionLambdaVersionyYyW8lTUGxRy5kNGzkH7E5IugrlgJbKqCM5Q6cLw"
             }
           }
         }
@@ -403,6 +403,71 @@
       },
       "vpc": {}
     },
+    "custom": {
+      "safeguards": [
+        {
+          "title": "No \"*\" in IAM Role statements",
+          "safeguard": "no-wild-iam-role-statements",
+          "description": "This policy performs a simple check to prevent \"*\" permissions being used in AWS IAM Roles by checking for wildcards on Actions and Resources in grant statements.\n",
+          "enforcementLevel": "warning"
+        },
+        {
+          "title": "Forbid S3 HTTP Access",
+          "safeguard": "forbid-s3-http-access",
+          "description": "This policy requires that you have a BucketPolicy forbidding access over HTTP for each bucket.\n",
+          "enforcementLevel": "warning"
+        },
+        {
+          "title": "Framework Version",
+          "safeguard": "framework-version",
+          "description": "This policy limits which versions of the Serverless Framework can be used.\n",
+          "enforcementLevel": "warning",
+          "config": ">=1.78.0"
+        },
+        {
+          "title": "Require Cloudformation Deployment Role",
+          "safeguard": "require-cfn-role",
+          "description": "This rule requires you to specify the cfnRole option\n",
+          "enforcementLevel": "warning"
+        },
+        {
+          "title": "Require Description",
+          "safeguard": "require-description",
+          "description": "This rule requires that all functions have a description of minimum or maximum length.\n",
+          "enforcementLevel": "warning"
+        },
+        {
+          "title": "Required stack tags",
+          "safeguard": "required-stack-tags",
+          "enforcementLevel": "warning",
+          "description": "This rule requires you to specify certain tags in the stackTags option.\n",
+          "config": {
+            "LinkedApp": ".*-company",
+            "CreationMode": "auto"
+          }
+        },
+        {
+          "title": "Restrict regions",
+          "safeguard": "allowed-regions",
+          "description": "This rule restrict the regions to which a service may be deployed.\n",
+          "enforcementLevel": "error",
+          "config": [
+            "us-east-1"
+          ]
+        },
+        {
+          "title": "Allowed stages",
+          "safeguard": "allowed-stages",
+          "description": "This limits the stages that can be used in services.\n",
+          "enforcementLevel": "error",
+          "config": [
+            "dev",
+            "staging",
+            "prod"
+          ]
+        }
+      ]
+    },
     "plugins": [
       "@serverless/safeguards-plugin"
     ],
@@ -440,7 +505,7 @@
         "timeout": 6,
         "runtime": "python3.8",
         "vpc": {},
-        "versionLogicalId": "FunctionLambdaVersionLsWK8hJ7843KdTxqTJCnFqbEsjS7l7N3wnwF9ul0"
+        "versionLogicalId": "FunctionLambdaVersionyYyW8lTUGxRy5kNGzkH7E5IugrlgJbKqCM5Q6cLw"
       }
     },
     "configValidationMode": "warn",
@@ -454,12 +519,15 @@
       },
       "org": "medikoo",
       "app": "medikoo-test",
+      "custom": {
+        "$ref": "$[\"service\"][\"custom\"]"
+      },
       "package": {
         "individually": true,
         "exclude": [
           "/**"
         ],
-        "artifactDirectoryName": "serverless/issue-8076/dev/1597735403959-2020-08-18T07:23:23.959Z"
+        "artifactDirectoryName": "serverless/issue-8076/dev/1597765446446-2020-08-18T15:44:06.446Z"
       },
       "plugins": {
         "$ref": "$[\"service\"][\"plugins\"]"
@@ -482,7 +550,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/issue-8076/dev/1597735403959-2020-08-18T07:23:23.959Z",
+    "artifactDirectoryName": "serverless/issue-8076/dev/1597765446446-2020-08-18T15:44:06.446Z",
     "artifact": ""
   }
 }

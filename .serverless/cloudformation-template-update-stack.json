@@ -192,7 +192,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/issue-8076/dev/1597735403959-2020-08-18T07:23:23.959Z/function.zip"
+          "S3Key": "serverless/issue-8076/dev/1597765446446-2020-08-18T15:44:06.446Z/function.zip"
         },
         "FunctionName": "dev-issue-8076-pre-sign-up",
         "Handler": "s_function.handler",
@@ -230,14 +230,14 @@
         "FunctionLogGroup"
       ]
     },
-    "FunctionLambdaVersionLsWK8hJ7843KdTxqTJCnFqbEsjS7l7N3wnwF9ul0": {
+    "FunctionLambdaVersionyYyW8lTUGxRy5kNGzkH7E5IugrlgJbKqCM5Q6cLw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "FunctionLambdaFunction"
         },
-        "CodeSha256": "8MbaqquFnSJkpQR6w90h/lwiW6W9pYZSOVPKmYxk4qA=",
+        "CodeSha256": "3+bFzejlirNPX3FZdRHP3qeksYB5gzsB86jyWeAJ+Oc=",
         "Description": "Cognito Pre SignUp Trigger to link Connect with Google account to existing Cognito User"
       }
     },
@@ -271,7 +271,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/issue-8076/dev/1597735403959-2020-08-18T07:23:23.959Z/custom-resources.zip"
+          "S3Key": "serverless/issue-8076/dev/1597765446446-2020-08-18T15:44:06.446Z/custom-resources.zip"
         },
         "FunctionName": "issue-8076-dev-custom-resource-existing-cup",
         "Handler": "cognitoUserPool/handler.handler",
@@ -310,7 +310,7 @@
     "FunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "FunctionLambdaVersionLsWK8hJ7843KdTxqTJCnFqbEsjS7l7N3wnwF9ul0"
+        "Ref": "FunctionLambdaVersionyYyW8lTUGxRy5kNGzkH7E5IugrlgJbKqCM5Q6cLw"
       }
     }
   }
