@@ -1,11 +1,11 @@
-service: test-lambda
+service: test-lambda-versioned
 
 provider:
   name: aws
   runtime: nodejs12.x
   region: us-east-1
   stage: dev
-  versionFunctions: false
+  versionFunctions: true
 
 package:
   individually: true

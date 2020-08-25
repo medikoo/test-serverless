@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-lambda",
+    "service": "test-lambda-versioned",
     "serviceObject": {
-      "name": "test-lambda"
+      "name": "test-lambda-versioned"
     },
     "provider": {
       "stage": "dev",
@@ -10,7 +10,7 @@
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
-      "versionFunctions": false,
+      "versionFunctions": true,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -72,7 +72,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-lambda-versioned-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -100,7 +100,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-lambda",
+                        "test-lambda-versioned",
                         "dev",
                         "lambda"
                       ]
@@ -117,7 +117,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-versioned-dev*:*"
                           }
                         ]
                       },
@@ -128,7 +128,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-versioned-dev*:*:*"
                           }
                         ]
                       }
@@ -141,7 +141,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-lambda",
+                    "test-lambda-versioned",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -159,9 +159,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda/dev/1596617148907-2020-08-05T08:45:48.907Z/function.zip"
+                "S3Key": "serverless/test-lambda-versioned/dev/1598360406876-2020-08-25T13:00:06.876Z/function.zip"
               },
-              "FunctionName": "test-lambda-dev-function",
+              "FunctionName": "test-lambda-versioned-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -176,12 +176,28 @@
             "DependsOn": [
               "FunctionLogGroup"
             ]
+          },
+          "FunctionLambdaVersionopHadfuagF1QyvOKPJ0VCEKWq08xumKy438TGVeG7mQ": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "CodeSha256": "vSGbEdwBlL5AL9knAGohw1dJRRDdfisw1JBQg+bRonE="
+            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "FunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "FunctionLambdaVersionopHadfuagF1QyvOKPJ0VCEKWq08xumKy438TGVeG7mQ"
             }
           }
         }
@@ -263,14 +279,15 @@
       "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-lambda-dev-function",
+        "name": "test-lambda-versioned-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
-        "vpc": {}
+        "vpc": {},
+        "versionLogicalId": "FunctionLambdaVersionopHadfuagF1QyvOKPJ0VCEKWq08xumKy438TGVeG7mQ"
       }
     },
     "configValidationMode": "warn",
@@ -285,7 +302,7 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-lambda/dev/1596617148907-2020-08-05T08:45:48.907Z"
+        "artifactDirectoryName": "serverless/test-lambda-versioned/dev/1598360406876-2020-08-25T13:00:06.876Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -302,7 +319,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda/dev/1596617148907-2020-08-05T08:45:48.907Z",
+    "artifactDirectoryName": "serverless/test-lambda-versioned/dev/1598360406876-2020-08-25T13:00:06.876Z",
     "artifact": ""
   }
 }
