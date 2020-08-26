@@ -11,7 +11,6 @@
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -160,7 +159,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-provisioned-concurrency/dev/1590594082899-2020-05-27T15:41:22.899Z/function.zip"
+                "S3Key": "serverless/test-provisioned-concurrency/dev/1598431279917-2020-08-26T08:41:19.917Z/function.zip"
               },
               "FunctionName": "test-provisioned-concurrency-dev-function",
               "Handler": "index.handler",
@@ -178,13 +177,13 @@
               "FunctionLogGroup"
             ]
           },
-          "FunctionLambdaVersionEm0s62lgGiedqfGCLjAwMgwdeSmueNVZEGuWnQmQY": {
+          "FunctionLambdaVersion0WLkLj153C6Xjkso7uKDv2rg5kBDaGVw3oVqYy3Xo": {
             "Type": "AWS::Lambda::Version",
             "Properties": {
               "FunctionName": {
                 "Ref": "FunctionLambdaFunction"
               },
-              "CodeSha256": "VHRlFdN2bJC5D8HOiiSM1ISmL7KOEC0VomoPEQ9Zees="
+              "CodeSha256": "slPRHFoR899cI+XTbq+1rZTbYmjghbyIdp5tgec+WcE="
             }
           },
           "FunctionProvConcLambdaAlias": {
@@ -195,7 +194,7 @@
               },
               "FunctionVersion": {
                 "Fn::GetAtt": [
-                  "FunctionLambdaVersionEm0s62lgGiedqfGCLjAwMgwdeSmueNVZEGuWnQmQY",
+                  "FunctionLambdaVersion0WLkLj153C6Xjkso7uKDv2rg5kBDaGVw3oVqYy3Xo",
                   "Version"
                 ]
               },
@@ -216,7 +215,7 @@
           "FunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FunctionLambdaVersionEm0s62lgGiedqfGCLjAwMgwdeSmueNVZEGuWnQmQY"
+              "Ref": "FunctionLambdaVersion0WLkLj153C6Xjkso7uKDv2rg5kBDaGVw3oVqYy3Xo"
             }
           }
         }
@@ -287,7 +286,8 @@
             }
           }
         }
-      }
+      },
+      "vpc": {}
     },
     "plugins": [
       "serverless-plugin-reducer"
@@ -306,20 +306,43 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "FunctionLambdaVersionEm0s62lgGiedqfGCLjAwMgwdeSmueNVZEGuWnQmQY",
+        "versionLogicalId": "FunctionLambdaVersion0WLkLj153C6Xjkso7uKDv2rg5kBDaGVw3oVqYy3Xo",
         "targetAlias": {
           "name": "provisioned",
           "logicalId": "FunctionProvConcLambdaAlias"
         }
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "layers": {},
+    "initialServerlessConfig": {
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-provisioned-concurrency/dev/1598431279917-2020-08-26T08:41:19.917Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      },
+      "layers": {
+        "$ref": "$[\"service\"][\"layers\"]"
+      },
+      "configValidationMode": "warn"
+    },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-provisioned-concurrency/dev/1590594082899-2020-05-27T15:41:22.899Z",
+    "artifactDirectoryName": "serverless/test-provisioned-concurrency/dev/1598431279917-2020-08-26T08:41:19.917Z",
     "artifact": ""
   }
 }
