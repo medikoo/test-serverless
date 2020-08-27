@@ -284,8 +284,7 @@
             }
           }
         }
-      },
-      "vpc": {}
+      }
     },
     "pluginsData": {},
     "functions": {
