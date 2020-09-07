@@ -360,8 +360,7 @@
             }
           }
         }
-      },
-      "vpc": {}
+      }
     },
     "pluginsData": {},
     "functions": {

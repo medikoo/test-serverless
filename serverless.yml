@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-cloud-front
 
 provider:
   name: aws
@@ -6,6 +6,12 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
+
+  package:
+    individually: true
+
+  plugins:
+    - serverless-plugin-reducer
 
 functions:
   function:
