@@ -1,14 +1,21 @@
-service: test-
+service: issue-8191
+frameworkVersion: ">=1.0.0 <2.0.0"
 
 provider:
   name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
+  runtime: python3.8
+  region: eu-west-1
 
-package:
-  individually: true
-
-plugins:
-  - serverless-plugin-reducer
+functions:
+  example:
+    handler: function.handler
+    events:
+      - http:
+          path: example
+          method: post
+          cors: true
+          integration: lambda
+          request:
+            schema:
+              # This bit blows up, how can i set the content-type to this without it blowing up?
+              "application/x-www-form-urlencoded": ${file(url-encoded-schema.json)}

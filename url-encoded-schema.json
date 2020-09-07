@@ -1,0 +1,54 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Standard event wrapper for the Events API",
+	"description": "Adapted from auto-generated content",
+	"type": "object",
+	"additionalProperties": true,
+	"required": [
+		"token", "team_id", "api_app_id", "event", "type", "event_id", "event_time", "authed_users"
+	],
+	"properties": {
+		"token": {
+			"title": "A verification token to validate the event originated from Slack",
+			"type": "string"
+		},
+		"team_id": {
+			"title": "The unique identifier of the workspace where the event occurred",
+			"type": "string"
+		},
+		"api_app_id": {
+			"title": "The unique identifier your installed Slack application.",
+			"description": " Use this to distinguish which app the event belongs to if you use multiple apps with the same Request URL.",
+			"type": "string"
+		},
+		"event": {
+			"title": "The actual event, an object, that happened. You'll find the most variance in properties beneath this node.",
+			"type": "object",
+			"additionalProperties": true,
+			"required": ["type", "event_ts"],
+			"properties": {
+				"type": { "title": "The specific name of the event", "type": "string" },
+				"event_ts": { "title": "When the event was dispatched", "type": "string" }
+			}
+		},
+		"type": {
+			"title": "Indicates which kind of event dispatch this is, usually `event_callback`",
+			"type": "string"
+		},
+		"event_id": {
+			"title": "A unique identifier for this specific event, globally unique across all workspaces.",
+			"type": "string"
+		},
+		"event_time": {
+			"title": "The epoch timestamp in seconds indicating when this event was dispatched.",
+			"type": "integer"
+		},
+		"authed_users": {
+			"title": "An array of string-based User IDs. Each member of the collection represents a user that has installed your application/bot and indicates the described event would be visible to those users.",
+			"type": "array",
+			"minItems": 1,
+			"uniqueItems": true,
+			"items": { "type": "string" }
+		}
+	}
+}
