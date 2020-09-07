@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-cloud-front",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-cloud-front"
     },
     "provider": {
       "stage": "dev",
@@ -11,7 +11,6 @@
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -73,7 +72,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-cloud-front-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -102,7 +101,8 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-regular-lambda-dev",
+                        "test-cloud-front",
+                        "dev",
                         "lambda"
                       ]
                     ]
@@ -118,7 +118,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-cloud-front-dev*:*"
                           }
                         ]
                       },
@@ -129,7 +129,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-cloud-front-dev*:*:*"
                           }
                         ]
                       },
@@ -155,7 +155,8 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda-dev",
+                    "test-cloud-front",
+                    "dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -172,9 +173,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1587646555514-2020-04-23T12:55:55.514Z/test-regular-lambda.zip"
+                "S3Key": "serverless/test-cloud-front/dev/1599469067077-2020-09-07T08:57:47.077Z/function.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-function",
+              "FunctionName": "test-cloud-front-dev-function",
               "Handler": "index.handler",
               "MemorySize": 128,
               "Role": {
@@ -187,26 +188,25 @@
               "Timeout": 5
             },
             "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "FunctionLogGroup"
             ],
             "DeletionPolicy": "Retain"
           },
-          "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k": {
+          "FunctionLambdaVersionZcJxSrKMH15qkdOMY4LtdFE15kRtShEaEt2eQxKIk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "FunctionLambdaFunction"
               },
-              "CodeSha256": "EcrM7/Qa97G73Ln+NYc9l780tzDZ9yBWPw4gpcgOuaE="
+              "CodeSha256": "sZLDHKuA9CUYzXLZCzAknQ45W4cMZczj/+BJwS/5pIk="
             }
           },
           "FunctionLambdaFunctionInvokePermission": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
-                "Ref": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
+                "Ref": "FunctionLambdaVersionZcJxSrKMH15qkdOMY4LtdFE15kRtShEaEt2eQxKIk"
               },
               "Action": "lambda:InvokeFunction",
               "Principal": "edgelambda.amazonaws.com",
@@ -236,7 +236,7 @@
             "Type": "AWS::CloudFront::Distribution",
             "Properties": {
               "DistributionConfig": {
-                "Comment": "test-regular-lambda dev",
+                "Comment": "test-cloud-front dev",
                 "Enabled": true,
                 "DefaultCacheBehavior": {
                   "ViewerProtocolPolicy": "allow-all",
@@ -248,7 +248,7 @@
                     {
                       "EventType": "viewer-response",
                       "LambdaFunctionARN": {
-                        "Ref": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
+                        "Ref": "FunctionLambdaVersionZcJxSrKMH15qkdOMY4LtdFE15kRtShEaEt2eQxKIk"
                       }
                     }
                   ]
@@ -274,7 +274,7 @@
           "FunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
+              "Ref": "FunctionLambdaVersionZcJxSrKMH15qkdOMY4LtdFE15kRtShEaEt2eQxKIk"
             }
           },
           "CloudFrontDistribution": {
@@ -360,8 +360,12 @@
             }
           }
         }
-      }
+      },
+      "vpc": {}
     },
+    "plugins": [
+      "serverless-plugin-reducer"
+    ],
     "pluginsData": {},
     "functions": {
       "function": {
@@ -374,24 +378,47 @@
             }
           }
         ],
-        "name": "test-regular-lambda-dev-function",
-        "package": {},
+        "name": "test-cloud-front-dev-function",
+        "package": {
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
+        },
         "versionFunction": true,
         "memorySize": 128,
         "timeout": 5,
         "memory": 128,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "FunctionLambdaVersiontuvDfWTO53ghnzk5cYomsNIms7DHFdtVGeQspfg3k"
+        "versionLogicalId": "FunctionLambdaVersionZcJxSrKMH15qkdOMY4LtdFE15kRtShEaEt2eQxKIk"
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "layers": {},
-    "isDashboardMonitoringPreconfigured": false,
-    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-regular-lambda.zip"
+    "initialServerlessConfig": {
+      "service": "test-cloud-front",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs12.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": false
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-cloud-front/dev/1599469067077-2020-09-07T08:57:47.077Z"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      }
+    },
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1587646555514-2020-04-23T12:55:55.514Z",
-    "artifact": "test-regular-lambda.zip"
+    "individually": true,
+    "artifactDirectoryName": "serverless/test-cloud-front/dev/1599469067077-2020-09-07T08:57:47.077Z",
+    "artifact": ""
   }
 }

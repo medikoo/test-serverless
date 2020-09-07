@@ -7,11 +7,11 @@ provider:
   stage: dev
   versionFunctions: false
 
-  package:
-    individually: true
+package:
+  individually: true
 
-  plugins:
-    - serverless-plugin-reducer
+plugins:
+  - serverless-plugin-reducer
 
 functions:
   function:
