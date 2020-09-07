@@ -59,7 +59,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-cloud-front-dev-function"
+        "LogGroupName": "/aws/lambda/test-cloud-front-prod-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -89,7 +89,7 @@
                 "-",
                 [
                   "test-cloud-front",
-                  "dev",
+                  "prod",
                   "lambda"
                 ]
               ]
@@ -105,7 +105,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-cloud-front-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-cloud-front-prod*:*"
                     }
                   ]
                 },
@@ -116,7 +116,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-cloud-front-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-cloud-front-prod*:*:*"
                     }
                   ]
                 },
@@ -143,7 +143,7 @@
             "-",
             [
               "test-cloud-front",
-              "dev",
+              "prod",
               {
                 "Ref": "AWS::Region"
               },
@@ -160,9 +160,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-cloud-front/dev/1599469067077-2020-09-07T08:57:47.077Z/function.zip"
+          "S3Key": "serverless/test-cloud-front/prod/1599472950732-2020-09-07T10:02:30.732Z/function.zip"
         },
-        "FunctionName": "test-cloud-front-dev-function",
+        "FunctionName": "test-cloud-front-prod-function",
         "Handler": "index.handler",
         "MemorySize": 128,
         "Role": {
@@ -179,7 +179,7 @@
       ],
       "DeletionPolicy": "Retain"
     },
-    "FunctionLambdaVersionZcJxSrKMH15qkdOMY4LtdFE15kRtShEaEt2eQxKIk": {
+    "FunctionLambdaVersionMm9SnR520tj2rk8b5QoC8nQnE03bF2IOJ6Zn21BSq8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -193,7 +193,7 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Ref": "FunctionLambdaVersionZcJxSrKMH15qkdOMY4LtdFE15kRtShEaEt2eQxKIk"
+          "Ref": "FunctionLambdaVersionMm9SnR520tj2rk8b5QoC8nQnE03bF2IOJ6Zn21BSq8"
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "edgelambda.amazonaws.com",
@@ -223,29 +223,28 @@
       "Type": "AWS::CloudFront::Distribution",
       "Properties": {
         "DistributionConfig": {
-          "Comment": "test-cloud-front dev",
+          "Comment": "test-cloud-front prod",
           "Enabled": true,
           "DefaultCacheBehavior": {
             "ViewerProtocolPolicy": "allow-all",
             "ForwardedValues": {
               "QueryString": false
             },
-            "TargetOriginId": "s3/bucketname.s3.amazonaws.com/files",
+            "TargetOriginId": "s3/55n6dms-htscgkj.s3.amazonaws.com",
             "LambdaFunctionAssociations": [
               {
                 "EventType": "viewer-response",
                 "LambdaFunctionARN": {
-                  "Ref": "FunctionLambdaVersionZcJxSrKMH15qkdOMY4LtdFE15kRtShEaEt2eQxKIk"
+                  "Ref": "FunctionLambdaVersionMm9SnR520tj2rk8b5QoC8nQnE03bF2IOJ6Zn21BSq8"
                 }
               }
             ]
           },
           "Origins": [
             {
-              "DomainName": "bucketname.s3.amazonaws.com",
-              "OriginPath": "/files",
+              "DomainName": "55n6dms-htscgkj.s3.amazonaws.com",
               "S3OriginConfig": {},
-              "Id": "s3/bucketname.s3.amazonaws.com/files"
+              "Id": "s3/55n6dms-htscgkj.s3.amazonaws.com"
             }
           ]
         }
@@ -261,7 +260,7 @@
     "FunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "FunctionLambdaVersionZcJxSrKMH15qkdOMY4LtdFE15kRtShEaEt2eQxKIk"
+        "Ref": "FunctionLambdaVersionMm9SnR520tj2rk8b5QoC8nQnE03bF2IOJ6Zn21BSq8"
       }
     },
     "CloudFrontDistribution": {

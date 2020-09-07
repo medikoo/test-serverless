@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: us-east-1
-  stage: dev
+  stage: prod
   versionFunctions: false
 
 package:
@@ -20,4 +20,4 @@ functions:
       - cloudFront:
           eventType: viewer-response
           # TODO: Change with valid one
-          origin: s3://bucketname.s3.amazonaws.com/files
+          origin: s3://55n6dms-htscgkj.s3.amazonaws.com/
