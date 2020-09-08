@@ -8,8 +8,10 @@ provider:
   versionFunctions: false
   apiKeys:
     # TODO: Replace with valid one
-    - name: someKey
-      value: someKey
+    - name: full-key
+      value: full-key-asdf-asdf-asdf-adfafdadfadfadfadfafafdafadf
+    - no-value-key
+    - value: no-name-key-asdf-asdf-asdf-adfafdadfadfadfadfafafdafadf
 
 package:
   individually: true

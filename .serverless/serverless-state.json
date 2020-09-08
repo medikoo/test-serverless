@@ -13,8 +13,12 @@
       "versionFunctions": false,
       "apiKeys": [
         {
-          "name": "someKey",
-          "value": "someKey"
+          "name": "full-key",
+          "value": "full-key-asdf-asdf-asdf-adfafdadfadfadfadfafafdafadf"
+        },
+        "no-value-key",
+        {
+          "value": "no-name-key-asdf-asdf-asdf-adfafdadfadfadfadfafafdafadf"
         }
       ],
       "compiledCloudFormationTemplate": {
@@ -165,7 +169,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-api-keys/dev/1599551995426-2020-09-08T07:59:55.426Z/function.zip"
+                "S3Key": "serverless/test-api-gw-api-keys/dev/1599554383943-2020-09-08T08:39:43.943Z/function.zip"
               },
               "FunctionName": "test-api-gw-api-keys-dev-function",
               "Handler": "index.handler",
@@ -296,7 +300,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1599551994622": {
+          "ApiGatewayDeployment1599554383151": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -313,8 +317,8 @@
             "Type": "AWS::ApiGateway::ApiKey",
             "Properties": {
               "Enabled": true,
-              "Name": "someKey",
-              "Value": "someKey",
+              "Name": "full-key",
+              "Value": "full-key-asdf-asdf-asdf-adfafdadfadfadfadfafafdafadf",
               "StageKeys": [
                 {
                   "RestApiId": {
@@ -324,11 +328,43 @@
                 }
               ]
             },
-            "DependsOn": "ApiGatewayDeployment1599551994622"
+            "DependsOn": "ApiGatewayDeployment1599554383151"
+          },
+          "ApiGatewayApiKey2": {
+            "Type": "AWS::ApiGateway::ApiKey",
+            "Properties": {
+              "Enabled": true,
+              "Name": "no-value-key",
+              "StageKeys": [
+                {
+                  "RestApiId": {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "StageName": "dev"
+                }
+              ]
+            },
+            "DependsOn": "ApiGatewayDeployment1599554383151"
+          },
+          "ApiGatewayApiKey3": {
+            "Type": "AWS::ApiGateway::ApiKey",
+            "Properties": {
+              "Enabled": true,
+              "Value": "no-name-key-asdf-asdf-asdf-adfafdadfadfadfadfafafdafadf",
+              "StageKeys": [
+                {
+                  "RestApiId": {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "StageName": "dev"
+                }
+              ]
+            },
+            "DependsOn": "ApiGatewayDeployment1599554383151"
           },
           "ApiGatewayUsagePlan": {
             "Type": "AWS::ApiGateway::UsagePlan",
-            "DependsOn": "ApiGatewayDeployment1599551994622",
+            "DependsOn": "ApiGatewayDeployment1599554383151",
             "Properties": {
               "ApiStages": [
                 {
@@ -347,6 +383,30 @@
             "Properties": {
               "KeyId": {
                 "Ref": "ApiGatewayApiKey1"
+              },
+              "KeyType": "API_KEY",
+              "UsagePlanId": {
+                "Ref": "ApiGatewayUsagePlan"
+              }
+            }
+          },
+          "ApiGatewayUsagePlanKey2": {
+            "Type": "AWS::ApiGateway::UsagePlanKey",
+            "Properties": {
+              "KeyId": {
+                "Ref": "ApiGatewayApiKey2"
+              },
+              "KeyType": "API_KEY",
+              "UsagePlanId": {
+                "Ref": "ApiGatewayUsagePlan"
+              }
+            }
+          },
+          "ApiGatewayUsagePlanKey3": {
+            "Type": "AWS::ApiGateway::UsagePlanKey",
+            "Properties": {
+              "KeyId": {
+                "Ref": "ApiGatewayApiKey3"
               },
               "KeyType": "API_KEY",
               "UsagePlanId": {
@@ -538,14 +598,18 @@
         "versionFunctions": false,
         "apiKeys": [
           {
-            "name": "someKey",
-            "value": "someKey"
+            "name": "full-key",
+            "value": "full-key-asdf-asdf-asdf-adfafdadfadfadfadfafafdafadf"
+          },
+          "no-value-key",
+          {
+            "value": "no-name-key-asdf-asdf-asdf-adfafdadfadfadfadfafafdafadf"
           }
         ]
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-api-gw-api-keys/dev/1599551995426-2020-09-08T07:59:55.426Z"
+        "artifactDirectoryName": "serverless/test-api-gw-api-keys/dev/1599554383943-2020-09-08T08:39:43.943Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -558,7 +622,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-api-keys/dev/1599551995426-2020-09-08T07:59:55.426Z",
+    "artifactDirectoryName": "serverless/test-api-gw-api-keys/dev/1599554383943-2020-09-08T08:39:43.943Z",
     "artifact": ""
   }
 }
