@@ -11,7 +11,6 @@
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -101,7 +100,8 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-dashboard-api-gateway-dev",
+                        "test-dashboard-api-gateway",
+                        "dev",
                         "lambda"
                       ]
                     ]
@@ -141,7 +141,8 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-dashboard-api-gateway-dev",
+                    "test-dashboard-api-gateway",
+                    "dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -164,8 +165,8 @@
                     },
                     "Action": "sts:AssumeRole",
                     "Condition": {
-                      "Bool": {
-                        "aws:SecureTransport": false
+                      "StringEquals": {
+                        "sts:ExternalId": "ServerlessEnterprise-1sJrygBdcH5mNKPSp8"
                       }
                     }
                   }
@@ -204,7 +205,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard-api-gateway/dev/1588840264121-2020-05-07T08:31:04.121Z/function.zip"
+                "S3Key": "serverless/test-dashboard-api-gateway/dev/1599650317596-2020-09-09T11:18:37.596Z/function.zip"
               },
               "FunctionName": "test-dashboard-api-gateway-dev-function",
               "Handler": "s_function.handler",
@@ -219,8 +220,7 @@
               "Timeout": 6
             },
             "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "FunctionLogGroup"
             ]
           },
           "ApiGatewayRestApi": {
@@ -293,7 +293,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1588840259771": {
+          "ApiGatewayDeployment1599650314855": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -451,7 +451,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard-api-gateway/dev/1588840264121-2020-05-07T08:31:04.121Z/custom-resources.zip"
+                "S3Key": "serverless/test-dashboard-api-gateway/dev/1599650317596-2020-09-09T11:18:37.596Z/custom-resources.zip"
               },
               "FunctionName": "test-dashboard-api-gateway-dev-custom-resource-apigw-cw-role",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -599,9 +599,6 @@
       "logs": {
         "restApi": {
           "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourceId\":\"$context.resourceId\",\"resourcePath\":\"$context.resourcePath\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"status\":\"$context.status\",\"authLatency\":\"$context.authorizer.integrationLatency\",\"integrationLatency\":\"$context.integrationLatency\",\"integrationStatus\":\"$context.integrationStatus\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_ACCESS_LOG\",\"version\":\"1.0.0\"}"
-        },
-        "httpApi": {
-          "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourcePath\":\"$context.routeKey\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"stage\":\"$context.stage\",\"status\":\"$context.status\",\"integrationStatus\":\"$context.integrationStatus\",\"integrationLatency\":\"$context.integrationLatency\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_HTTP_API_LOG\",\"version\":\"1.0.0\"}"
         }
       },
       "vpc": {}
@@ -636,10 +633,33 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "app": "medikoo-test",
     "org": "medikoo",
     "layers": {},
+    "initialServerlessConfig": {
+      "service": "test-dashboard-api-gateway",
+      "org": "medikoo",
+      "app": "medikoo-test",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs12.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": false
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-dashboard-api-gateway/dev/1599650317596-2020-09-09T11:18:37.596Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      }
+    },
     "isDashboardMonitoringPreconfigured": true,
     "isDashboardAppPreconfigured": true,
     "appUid": "GjXh77HjWzffv8X5SQ",
@@ -647,7 +667,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard-api-gateway/dev/1588840264121-2020-05-07T08:31:04.121Z",
+    "artifactDirectoryName": "serverless/test-dashboard-api-gateway/dev/1599650317596-2020-09-09T11:18:37.596Z",
     "artifact": ""
   }
 }
