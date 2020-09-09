@@ -5,7 +5,7 @@ serverlessSDK = new serverlessSDK({
   applicationName: 'medikoo-test',
   appUid: 'GjXh77HjWzffv8X5SQ',
   orgUid: '1sJrygBdcH5mNKPSp8',
-  deploymentUid: 'fb0a63a0-f047-417c-984f-864820221e11',
+  deploymentUid: '7805ec83-1965-4ca2-be20-028dcc461f89',
   serviceName: 'test-dashboard-api-gateway',
   shouldLogMeta: true,
   shouldCompressLogs: true,

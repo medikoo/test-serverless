@@ -30,7 +30,7 @@
 		]
 	},
 	"scripts": {
-		"lint": "eslint --ignore-path=.gitignore .",
+		"lint": "eslint .",
 		"prettify": "prettier --write '**/*.{css,html,js,json,md,yaml,yml}'"
 	},
 	"license": "ISC"
