@@ -252,8 +252,7 @@
             }
           }
         }
-      },
-      "vpc": {}
+      }
     },
     "custom": {
       "user": {
@@ -264,20 +263,7 @@
       "serverless-plugin-reducer"
     ],
     "pluginsData": {},
-    "functions": {
-      "function": {
-        "handler": "index.handler",
-        "events": [],
-        "name": "test-regular-lambda-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
-        "memory": 1024,
-        "timeout": 6,
-        "runtime": "nodejs12.x",
-        "vpc": {}
-      }
-    },
+    "functions": {},
     "serviceFilename": "serverless.yml",
     "layers": {},
     "isDashboardMonitoringPreconfigured": false
