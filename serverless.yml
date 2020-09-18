@@ -1,4 +1,4 @@
-service: test-variables
+service: test-variables-ssm
 
 provider:
   name: aws
@@ -9,7 +9,7 @@ provider:
 
 custom:
   user:
-    with_yaml_password: ${file(./config/example.yml):user.password2,"abcdefg"}
+    myArrayVar: ${ssm:stringList~split}
 
 package:
   individually: true

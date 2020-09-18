@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-variables",
+    "service": "test-variables-ssm",
     "serviceObject": {
-      "name": "test-variables"
+      "name": "test-variables-ssm"
     },
     "provider": {
       "stage": "dev",
@@ -148,7 +148,11 @@
     },
     "custom": {
       "user": {
-        "with_yaml_password": "abcdefg"
+        "myArrayVar": [
+          "marko",
+          "valo",
+          "elo"
+        ]
       }
     },
     "plugins": [
@@ -160,7 +164,7 @@
     "serviceFilename": "serverless.yml",
     "layers": {},
     "initialServerlessConfig": {
-      "service": "test-variables",
+      "service": "test-variables-ssm",
       "provider": {
         "name": "aws",
         "runtime": "nodejs12.x",
@@ -173,7 +177,7 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-variables/dev/1600416212272-2020-09-18T08:03:32.272Z"
+        "artifactDirectoryName": "serverless/test-variables-ssm/dev/1600416485120-2020-09-18T08:08:05.120Z"
       },
       "plugins": {
         "$ref": "$[\"service\"][\"plugins\"]"
@@ -183,7 +187,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-variables/dev/1600416212272-2020-09-18T08:03:32.272Z",
+    "artifactDirectoryName": "serverless/test-variables-ssm/dev/1600416485120-2020-09-18T08:08:05.120Z",
     "artifact": ""
   }
 }
