@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-",
+    "service": "test-variables",
     "serviceObject": {
-      "name": "test-"
+      "name": "test-variables"
     },
     "provider": {
       "stage": "dev",
@@ -160,7 +160,7 @@
     "serviceFilename": "serverless.yml",
     "layers": {},
     "initialServerlessConfig": {
-      "service": "test-",
+      "service": "test-variables",
       "provider": {
         "name": "aws",
         "runtime": "nodejs12.x",
@@ -173,7 +173,7 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-/dev/1600416177918-2020-09-18T08:02:57.918Z"
+        "artifactDirectoryName": "serverless/test-variables/dev/1600416212272-2020-09-18T08:03:32.272Z"
       },
       "plugins": {
         "$ref": "$[\"service\"][\"plugins\"]"
@@ -183,7 +183,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-/dev/1600416177918-2020-09-18T08:02:57.918Z",
+    "artifactDirectoryName": "serverless/test-variables/dev/1600416212272-2020-09-18T08:03:32.272Z",
     "artifact": ""
   }
 }

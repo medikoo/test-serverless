@@ -1,4 +1,4 @@
-service: test-
+service: test-variables
 
 provider:
   name: aws
