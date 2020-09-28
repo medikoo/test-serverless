@@ -6,12 +6,11 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)[^:{}][^{}]*?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": true,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -160,7 +159,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-7822/dev/1591602047320-2020-06-08T07:40:47.320Z/function.zip"
+                "S3Key": "serverless/test-7822/dev/1601291145818-2020-09-28T11:05:45.818Z/function.zip"
               },
               "FunctionName": "test-7822-dev-function",
               "Handler": "index.handler",
@@ -178,14 +177,14 @@
               "FunctionLogGroup"
             ]
           },
-          "FunctionLambdaVersionx56W9mwlvYfSDBe22Hq6B7sIyKLgSJbmCup7kPwewo8": {
+          "FunctionLambdaVersion4xE57zzEqlPVCb66ZyygihYRPZfSl3n9sBFFJ4tp0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "FunctionLambdaFunction"
               },
-              "CodeSha256": "Sb8ixaQjka7kO0ypSfBwyCxRGhJz3Lkn4NLmbozErYU="
+              "CodeSha256": "sZLDHKuA9CUYzXLZCzAknQ45W4cMZczj/+BJwS/5pIk="
             }
           }
         },
@@ -198,7 +197,7 @@
           "FunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FunctionLambdaVersionx56W9mwlvYfSDBe22Hq6B7sIyKLgSJbmCup7kPwewo8"
+              "Ref": "FunctionLambdaVersion4xE57zzEqlPVCb66ZyygihYRPZfSl3n9sBFFJ4tp0"
             }
           }
         }
@@ -288,16 +287,36 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "FunctionLambdaVersionx56W9mwlvYfSDBe22Hq6B7sIyKLgSJbmCup7kPwewo8"
+        "versionLogicalId": "FunctionLambdaVersion4xE57zzEqlPVCb66ZyygihYRPZfSl3n9sBFFJ4tp0"
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "layers": {},
+    "initialServerlessConfig": {
+      "service": "test-7822",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs12.x",
+        "region": "us-east-1",
+        "stage": "dev"
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-7822/dev/1601291145818-2020-09-28T11:05:45.818Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      }
+    },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-7822/dev/1591602047320-2020-06-08T07:40:47.320Z",
+    "artifactDirectoryName": "serverless/test-7822/dev/1601291145818-2020-09-28T11:05:45.818Z",
     "artifact": ""
   }
 }
