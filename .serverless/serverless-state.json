@@ -6,12 +6,11 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)[^:{}][^{}]*?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -79,10 +78,8 @@
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
-              "Bucket": {
-                "Ref": "ServerlessDeploymentBucket"
-              },
-              "PolicyDocument": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
                 "Statement": [
                   {
                     "Effect": "Allow",
@@ -135,12 +132,7 @@
                           }
                         ]
                       }
-                    ],
-                    "Condition": {
-                      "Bool": {
-                        "aws:SecureTransport": false
-                      }
-                    }
+                    ]
                   }
                 }
               ],
@@ -167,7 +159,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1591799025492-2020-06-10T14:23:45.492Z/function.zip"
+                "S3Key": "serverless/test-api-gw/dev/1601557522017-2020-10-01T13:05:22.017Z/function.zip"
               },
               "FunctionName": "test-api-gw-dev-function",
               "Handler": "index.handler",
@@ -298,7 +290,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1591799024254": {
+          "ApiGatewayDeployment1601557521105": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -482,13 +474,34 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "layers": {},
+    "initialServerlessConfig": {
+      "service": "test-api-gw",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs12.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": false
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-api-gw/dev/1601557522017-2020-10-01T13:05:22.017Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      }
+    },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1591799025492-2020-06-10T14:23:45.492Z",
+    "artifactDirectoryName": "serverless/test-api-gw/dev/1601557522017-2020-10-01T13:05:22.017Z",
     "artifact": ""
   }
 }

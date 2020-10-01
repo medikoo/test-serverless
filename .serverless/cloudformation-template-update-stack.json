@@ -119,12 +119,7 @@
                     }
                   ]
                 }
-              ],
-              "Condition": {
-                "Bool": {
-                  "aws:SecureTransport": false
-                }
-              }
+              ]
             }
           }
         ],
@@ -151,7 +146,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1591799025492-2020-06-10T14:23:45.492Z/function.zip"
+          "S3Key": "serverless/test-api-gw/dev/1601557522017-2020-10-01T13:05:22.017Z/function.zip"
         },
         "FunctionName": "test-api-gw-dev-function",
         "Handler": "index.handler",
@@ -282,7 +277,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1591799024254": {
+    "ApiGatewayDeployment1601557521105": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
