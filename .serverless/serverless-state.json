@@ -79,8 +79,10 @@
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
                 "Statement": [
                   {
                     "Effect": "Allow",
@@ -133,7 +135,12 @@
                           }
                         ]
                       }
-                    ]
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
                   }
                 }
               ],
