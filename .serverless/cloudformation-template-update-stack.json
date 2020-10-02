@@ -160,7 +160,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-cloud-front/prod/1599472950732-2020-09-07T10:02:30.732Z/function.zip"
+          "S3Key": "serverless/test-cloud-front/prod/1601627473432-2020-10-02T08:31:13.432Z/function.zip"
         },
         "FunctionName": "test-cloud-front-prod-function",
         "Handler": "index.handler",
@@ -179,21 +179,21 @@
       ],
       "DeletionPolicy": "Retain"
     },
-    "FunctionLambdaVersionMm9SnR520tj2rk8b5QoC8nQnE03bF2IOJ6Zn21BSq8": {
+    "FunctionLambdaVersionqckNPnVSGG3eLwaemX6lESsLrdUNaohmavnLCzjM0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "FunctionLambdaFunction"
         },
-        "CodeSha256": "sZLDHKuA9CUYzXLZCzAknQ45W4cMZczj/+BJwS/5pIk="
+        "CodeSha256": "ckvSL4oYf+g3NaMPxjNfr9IXy7oRVRV3JXsl4fJuwnY="
       }
     },
     "FunctionLambdaFunctionInvokePermission": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
-          "Ref": "FunctionLambdaVersionMm9SnR520tj2rk8b5QoC8nQnE03bF2IOJ6Zn21BSq8"
+          "Ref": "FunctionLambdaVersionqckNPnVSGG3eLwaemX6lESsLrdUNaohmavnLCzjM0"
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "edgelambda.amazonaws.com",
@@ -235,7 +235,7 @@
               {
                 "EventType": "viewer-response",
                 "LambdaFunctionARN": {
-                  "Ref": "FunctionLambdaVersionMm9SnR520tj2rk8b5QoC8nQnE03bF2IOJ6Zn21BSq8"
+                  "Ref": "FunctionLambdaVersionqckNPnVSGG3eLwaemX6lESsLrdUNaohmavnLCzjM0"
                 }
               }
             ]
@@ -260,7 +260,7 @@
     "FunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "FunctionLambdaVersionMm9SnR520tj2rk8b5QoC8nQnE03bF2IOJ6Zn21BSq8"
+        "Ref": "FunctionLambdaVersionqckNPnVSGG3eLwaemX6lESsLrdUNaohmavnLCzjM0"
       }
     },
     "CloudFrontDistribution": {
