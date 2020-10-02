@@ -146,7 +146,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-versioned/dev/1598360406876-2020-08-25T13:00:06.876Z/function.zip"
+          "S3Key": "serverless/test-lambda-versioned/dev/1601627383230-2020-10-02T08:29:43.230Z/function.zip"
         },
         "FunctionName": "test-lambda-versioned-dev-function",
         "Handler": "index.handler",
@@ -158,20 +158,25 @@
           ]
         },
         "Runtime": "nodejs12.x",
-        "Timeout": 6
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SLS_LAMBDA_VERSION_DIGEST": "vzUa2qv58yHmeuTP9wGj8tKXP6yu+TyCtlHQY487IU0="
+          }
+        }
       },
       "DependsOn": [
         "FunctionLogGroup"
       ]
     },
-    "FunctionLambdaVersionopHadfuagF1QyvOKPJ0VCEKWq08xumKy438TGVeG7mQ": {
+    "FunctionLambdaVersionvzUa2qv58yHmeuTP9wGj8tKXP6yuTyCtlHQY487IU0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "FunctionLambdaFunction"
         },
-        "CodeSha256": "vSGbEdwBlL5AL9knAGohw1dJRRDdfisw1JBQg+bRonE="
+        "CodeSha256": "2s5ZXL3DvzdBuxP2L4CBYyPRH+CQ55qfQhgW3AFZw7M="
       }
     }
   },
@@ -184,7 +189,7 @@
     "FunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "FunctionLambdaVersionopHadfuagF1QyvOKPJ0VCEKWq08xumKy438TGVeG7mQ"
+        "Ref": "FunctionLambdaVersionvzUa2qv58yHmeuTP9wGj8tKXP6yuTyCtlHQY487IU0"
       }
     }
   }
