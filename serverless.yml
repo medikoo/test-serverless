@@ -1,4 +1,4 @@
-service: test-regular-lambda
+service: test-
 
 provider:
   name: aws
@@ -9,10 +9,6 @@ provider:
 
 package:
   individually: true
-
-functions:
-  function:
-    handler: index.handler
 
 plugins:
   - serverless-plugin-reducer
