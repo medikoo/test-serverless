@@ -1,17 +1,16 @@
 {
   "service": {
-    "service": "test-regular-lambda",
+    "service": "test-package-option",
     "serviceObject": {
-      "name": "test-regular-lambda"
+      "name": "test-package-option"
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)[^:{}][^{}]*?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -73,7 +72,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-package-option-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -101,7 +100,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-regular-lambda",
+                        "test-package-option",
                         "dev",
                         "lambda"
                       ]
@@ -118,7 +117,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-package-option-dev*:*"
                           }
                         ]
                       },
@@ -129,7 +128,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-package-option-dev*:*:*"
                           }
                         ]
                       }
@@ -142,7 +141,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-regular-lambda",
+                    "test-package-option",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -160,9 +159,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-regular-lambda/dev/1590999658327-2020-06-01T08:20:58.327Z/function.zip"
+                "S3Key": "serverless/test-package-option/dev/1601901160126-2020-10-05T12:32:40.126Z/function.zip"
               },
-              "FunctionName": "test-regular-lambda-dev-function",
+              "FunctionName": "test-package-option-dev-function",
               "Handler": "index.handler",
               "MemorySize": 1024,
               "Role": {
@@ -264,7 +263,7 @@
       "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-regular-lambda-dev-function",
+        "name": "test-package-option-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -274,13 +273,34 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "layers": {},
+    "initialServerlessConfig": {
+      "service": "test-package-option",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs12.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": false
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-package-option/dev/1601901160126-2020-10-05T12:32:40.126Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      }
+    },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-regular-lambda/dev/1590999658327-2020-06-01T08:20:58.327Z",
+    "artifactDirectoryName": "serverless/test-package-option/dev/1601901160126-2020-10-05T12:32:40.126Z",
     "artifact": ""
   }
 }

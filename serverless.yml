@@ -1,4 +1,4 @@
-service: test-
+service: test-package-option
 
 provider:
   name: aws
