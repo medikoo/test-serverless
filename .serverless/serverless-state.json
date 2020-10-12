@@ -6,7 +6,7 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
@@ -15,7 +15,6 @@
       "deploymentBucketObject": {
         "name": "test-custom-bucket"
       },
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -51,7 +50,8 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-custom-deployment-bucket-dev",
+                        "test-custom-deployment-bucket",
+                        "dev",
                         "lambda"
                       ]
                     ]
@@ -91,7 +91,8 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-custom-deployment-bucket-dev",
+                    "test-custom-deployment-bucket",
+                    "dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -106,7 +107,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "test-custom-bucket",
-                "S3Key": "serverless/test-custom-deployment-bucket/dev/1587628005423-2020-04-23T07:46:45.423Z/myFunction.zip"
+                "S3Key": "serverless/test-custom-deployment-bucket/dev/1602489293400-2020-10-12T07:54:53.400Z/myFunction.zip"
               },
               "FunctionName": "test-custom-deployment-bucket-dev-myFunction",
               "Handler": "index.handler",
@@ -121,8 +122,7 @@
               "Timeout": 6
             },
             "DependsOn": [
-              "MyFunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "MyFunctionLogGroup"
             ]
           }
         },
@@ -152,13 +152,38 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "layers": {},
+    "initialServerlessConfig": {
+      "service": "test-custom-deployment-bucket",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs12.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": false,
+        "deploymentBucket": {
+          "name": "test-custom-bucket"
+        }
+      },
+      "package": {
+        "individually": true,
+        "deploymentBucket": "test-custom-bucket",
+        "artifactDirectoryName": "serverless/test-custom-deployment-bucket/dev/1602489293400-2020-10-12T07:54:53.400Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      }
+    },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-custom-deployment-bucket/dev/1587628005423-2020-04-23T07:46:45.423Z",
+    "artifactDirectoryName": "serverless/test-custom-deployment-bucket/dev/1602489293400-2020-10-12T07:54:53.400Z",
     "artifact": ""
   }
 }

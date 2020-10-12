@@ -12,5 +12,9 @@ provider:
 package:
   individually: true
 
+functions:
+  myFunction:
+    handler: index.handler
+
 plugins:
   - serverless-plugin-reducer
