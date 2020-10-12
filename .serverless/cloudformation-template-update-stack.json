@@ -87,7 +87,8 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-dashboard-outputs-dev",
+                  "test-dashboard-outputs",
+                  "dev",
                   "lambda"
                 ]
               ]
@@ -127,7 +128,8 @@
           "Fn::Join": [
             "-",
             [
-              "test-dashboard-outputs-dev",
+              "test-dashboard-outputs",
+              "dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -151,7 +153,7 @@
               "Action": "sts:AssumeRole",
               "Condition": {
                 "StringEquals": {
-                  "sts:ExternalId": "ServerlessEnterprise-LWm4RQRZwxcB9mNFf2"
+                  "sts:ExternalId": "ServerlessEnterprise-1sJrygBdcH5mNKPSp8"
                 }
               }
             }
@@ -190,7 +192,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-dashboard-outputs/dev/1587119226049-2020-04-17T10:27:06.049Z/function.zip"
+          "S3Key": "serverless/test-dashboard-outputs/dev/1602499076597-2020-10-12T10:37:56.597Z/function.zip"
         },
         "FunctionName": "test-dashboard-outputs-dev-function",
         "Handler": "s_function.handler",
@@ -205,14 +207,13 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "FunctionLogGroup",
-        "IamRoleLambdaExecution"
+        "FunctionLogGroup"
       ]
     },
     "CloudWatchLogsSubscriptionFilterFunctionLogGroup": {
       "Type": "AWS::Logs::SubscriptionFilter",
       "Properties": {
-        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:LWm4RQRZwxcB9mNFf2#GNJhWcBZ54LDjvC2rD#test-dashboard-outputs#dev",
+        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard-outputs#dev",
         "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
         "LogGroupName": {
           "Ref": "FunctionLogGroup"

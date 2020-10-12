@@ -1,7 +1,7 @@
 service: test-dashboard-outputs
 
-tenant: medikoo2
-app: test
+org: medikoo
+app: medikoo-test
 
 outputs:
   my-key: my-value

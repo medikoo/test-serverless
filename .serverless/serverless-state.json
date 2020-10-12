@@ -6,12 +6,11 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -101,7 +100,8 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-dashboard-outputs-dev",
+                        "test-dashboard-outputs",
+                        "dev",
                         "lambda"
                       ]
                     ]
@@ -141,7 +141,8 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-dashboard-outputs-dev",
+                    "test-dashboard-outputs",
+                    "dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -165,7 +166,7 @@
                     "Action": "sts:AssumeRole",
                     "Condition": {
                       "StringEquals": {
-                        "sts:ExternalId": "ServerlessEnterprise-LWm4RQRZwxcB9mNFf2"
+                        "sts:ExternalId": "ServerlessEnterprise-1sJrygBdcH5mNKPSp8"
                       }
                     }
                   }
@@ -204,7 +205,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard-outputs/dev/1587119226049-2020-04-17T10:27:06.049Z/function.zip"
+                "S3Key": "serverless/test-dashboard-outputs/dev/1602499076597-2020-10-12T10:37:56.597Z/function.zip"
               },
               "FunctionName": "test-dashboard-outputs-dev-function",
               "Handler": "s_function.handler",
@@ -219,14 +220,13 @@
               "Timeout": 6
             },
             "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "FunctionLogGroup"
             ]
           },
           "CloudWatchLogsSubscriptionFilterFunctionLogGroup": {
             "Type": "AWS::Logs::SubscriptionFilter",
             "Properties": {
-              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:LWm4RQRZwxcB9mNFf2#GNJhWcBZ54LDjvC2rD#test-dashboard-outputs#dev",
+              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard-outputs#dev",
               "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
               "LogGroupName": {
                 "Ref": "FunctionLogGroup"
@@ -317,14 +317,6 @@
           }
         }
       },
-      "logs": {
-        "restApi": {
-          "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourceId\":\"$context.resourceId\",\"resourcePath\":\"$context.resourcePath\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"status\":\"$context.status\",\"authLatency\":\"$context.authorizer.integrationLatency\",\"integrationLatency\":\"$context.integrationLatency\",\"integrationStatus\":\"$context.integrationStatus\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_ACCESS_LOG\",\"version\":\"1.0.0\"}"
-        },
-        "httpApi": {
-          "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourcePath\":\"$context.routeKey\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"stage\":\"$context.stage\",\"status\":\"$context.status\",\"integrationStatus\":\"$context.integrationStatus\",\"integrationLatency\":\"$context.integrationLatency\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_HTTP_API_LOG\",\"version\":\"1.0.0\"}"
-        }
-      },
       "vpc": {}
     },
     "plugins": [
@@ -349,9 +341,10 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "app": "test",
-    "org": "medikoo2",
+    "app": "medikoo-test",
+    "org": "medikoo",
     "layers": {},
     "outputs": {
       "my-key": "my-value",
@@ -372,14 +365,39 @@
         "us-east-1b"
       ]
     },
+    "initialServerlessConfig": {
+      "service": "test-dashboard-outputs",
+      "org": "medikoo",
+      "app": "medikoo-test",
+      "outputs": {
+        "$ref": "$[\"service\"][\"outputs\"]"
+      },
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs12.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": false
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-dashboard-outputs/dev/1602499076597-2020-10-12T10:37:56.597Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      }
+    },
     "isDashboardMonitoringPreconfigured": true,
     "isDashboardAppPreconfigured": true,
-    "appUid": "GNJhWcBZ54LDjvC2rD",
-    "orgUid": "LWm4RQRZwxcB9mNFf2"
+    "orgUid": "1sJrygBdcH5mNKPSp8",
+    "appUid": "GjXh77HjWzffv8X5SQ"
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard-outputs/dev/1587119226049-2020-04-17T10:27:06.049Z",
+    "artifactDirectoryName": "serverless/test-dashboard-outputs/dev/1602499076597-2020-10-12T10:37:56.597Z",
     "artifact": ""
   }
 }

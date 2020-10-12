@@ -1,20 +1,21 @@
 
 var serverlessSDK = require('./serverless_sdk/index.js');
 serverlessSDK = new serverlessSDK({
-  orgId: 'medikoo2',
-  applicationName: 'test',
-  appUid: 'GNJhWcBZ54LDjvC2rD',
-  orgUid: 'LWm4RQRZwxcB9mNFf2',
-  deploymentUid: 'fc413104-a248-415b-88c6-0d97eae6eca8',
+  orgId: 'medikoo',
+  applicationName: 'medikoo-test',
+  appUid: 'GjXh77HjWzffv8X5SQ',
+  orgUid: '1sJrygBdcH5mNKPSp8',
+  deploymentUid: '1b9c8a10-8462-47c5-8dba-3957f8577311',
   serviceName: 'test-dashboard-outputs',
   shouldLogMeta: true,
+  shouldCompressLogs: true,
   disableAwsSpans: false,
   disableHttpSpans: false,
   stageName: 'dev',
   serverlessPlatformStage: 'prod',
   devModeEnabled: false,
   accessKey: null,
-  pluginVersion: '3.6.6',
+  pluginVersion: '4.0.4',
   disableFrameworksInstrumentation: false
 });
 
