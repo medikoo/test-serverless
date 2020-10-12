@@ -2,10 +2,10 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "The AWS CloudFormation template for this Serverless application",
   "Resources": {
-    "MyFunctionLogGroup": {
+    "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-custom-deployment-bucket-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-custom-deployment-bucket-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -85,14 +85,14 @@
         }
       }
     },
-    "MyFunctionLambdaFunction": {
+    "FunctionLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": "test-custom-bucket",
-          "S3Key": "serverless/test-custom-deployment-bucket/dev/1602489293400-2020-10-12T07:54:53.400Z/myFunction.zip"
+          "S3Key": "serverless/test-custom-deployment-bucket/dev/1602491097767-2020-10-12T08:24:57.767Z/function.zip"
         },
-        "FunctionName": "test-custom-deployment-bucket-dev-myFunction",
+        "FunctionName": "test-custom-deployment-bucket-dev-function",
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -105,7 +105,7 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "MyFunctionLogGroup"
+        "FunctionLogGroup"
       ]
     }
   },
