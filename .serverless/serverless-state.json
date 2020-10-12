@@ -6,7 +6,7 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
@@ -165,7 +165,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-lambda-authorizer/dev/1596720991675-2020-08-06T13:36:31.675Z/authorize.zip"
+                "S3Key": "serverless/test-api-lambda-authorizer/dev/1602506550407-2020-10-12T12:42:30.407Z/authorize.zip"
               },
               "FunctionName": "test-api-lambda-authorizer-dev-authorize",
               "Handler": "authorize.handler",
@@ -190,7 +190,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-lambda-authorizer/dev/1596720991675-2020-08-06T13:36:31.675Z/function.zip"
+                "S3Key": "serverless/test-api-lambda-authorizer/dev/1602506550407-2020-10-12T12:42:30.407Z/function.zip"
               },
               "FunctionName": "test-api-lambda-authorizer-dev-function",
               "Handler": "index.handler",
@@ -316,7 +316,7 @@
               "Type": "TOKEN"
             }
           },
-          "ApiGatewayDeployment1596720990826": {
+          "ApiGatewayDeployment1602506549483": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -553,32 +553,30 @@
     "serviceFilename": "serverless.yml",
     "layers": {},
     "initialServerlessConfig": {
-      "service": {
-        "$ref": "$[\"service\"][\"serviceObject\"]"
-      },
+      "service": "test-api-lambda-authorizer",
       "provider": {
-        "$ref": "$[\"service\"][\"provider\"]"
+        "name": "aws",
+        "runtime": "nodejs12.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": false
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1596720991675-2020-08-06T13:36:31.675Z"
+        "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1602506550407-2020-10-12T12:42:30.407Z"
       },
       "plugins": {
         "$ref": "$[\"service\"][\"plugins\"]"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
-      },
-      "layers": {
-        "$ref": "$[\"service\"][\"layers\"]"
-      },
-      "configValidationMode": "warn"
+      }
     },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1596720991675-2020-08-06T13:36:31.675Z",
+    "artifactDirectoryName": "serverless/test-api-lambda-authorizer/dev/1602506550407-2020-10-12T12:42:30.407Z",
     "artifact": ""
   }
 }
