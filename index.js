@@ -18,3 +18,4 @@ module.exports.handler = async event =>
 			2000
 		);
 	});
+
