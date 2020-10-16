@@ -3,6 +3,8 @@ service: test-lambda-s3-custom
 provider:
   name: aws
   runtime: nodejs12.x
+  region: us-east-1
+  stage: dev
   versionFunctions: false
   s3:
     testCustomBucket:
