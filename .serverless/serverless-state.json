@@ -6,9 +6,10 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
+      "region": "us-east-1",
       "versionFunctions": false,
       "s3": {
         "testCustomBucket": {
@@ -18,8 +19,6 @@
           }
         }
       },
-      "region": "us-east-1",
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -109,7 +108,8 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-lambda-s3-custom-dev",
+                        "test-lambda-s3-custom",
+                        "dev",
                         "lambda"
                       ]
                     ]
@@ -149,7 +149,8 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-lambda-s3-custom-dev",
+                    "test-lambda-s3-custom",
+                    "dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -166,7 +167,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-s3-custom/dev/1586137419840-2020-04-06T01:43:39.840Z/function.zip"
+                "S3Key": "serverless/test-lambda-s3-custom/dev/1602839399435-2020-10-16T09:09:59.435Z/function.zip"
               },
               "FunctionName": "test-lambda-s3-custom-dev-function",
               "Handler": "index.handler",
@@ -181,8 +182,7 @@
               "Timeout": 6
             },
             "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "FunctionLogGroup"
             ]
           },
           "S3BucketTestCustomBucket": {
@@ -338,13 +338,42 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "layers": {},
+    "initialServerlessConfig": {
+      "service": "test-lambda-s3-custom",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs12.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": false,
+        "s3": {
+          "testCustomBucket": {
+            "name": "test-custom-bucket",
+            "versioningConfiguration": {
+              "Status": "Enabled"
+            }
+          }
+        }
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-lambda-s3-custom/dev/1602839399435-2020-10-16T09:09:59.435Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      }
+    },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda-s3-custom/dev/1586137419840-2020-04-06T01:43:39.840Z",
+    "artifactDirectoryName": "serverless/test-lambda-s3-custom/dev/1602839399435-2020-10-16T09:09:59.435Z",
     "artifact": ""
   }
 }

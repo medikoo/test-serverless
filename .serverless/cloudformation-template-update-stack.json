@@ -87,7 +87,8 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-lambda-s3-custom-dev",
+                  "test-lambda-s3-custom",
+                  "dev",
                   "lambda"
                 ]
               ]
@@ -127,7 +128,8 @@
           "Fn::Join": [
             "-",
             [
-              "test-lambda-s3-custom-dev",
+              "test-lambda-s3-custom",
+              "dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -144,7 +146,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-s3-custom/dev/1586137419840-2020-04-06T01:43:39.840Z/function.zip"
+          "S3Key": "serverless/test-lambda-s3-custom/dev/1602839399435-2020-10-16T09:09:59.435Z/function.zip"
         },
         "FunctionName": "test-lambda-s3-custom-dev-function",
         "Handler": "index.handler",
@@ -159,8 +161,7 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "FunctionLogGroup",
-        "IamRoleLambdaExecution"
+        "FunctionLogGroup"
       ]
     },
     "S3BucketTestCustomBucket": {
