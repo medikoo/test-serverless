@@ -6,16 +6,15 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
       "versionFunctions": false,
-      "deploymentBucket": null,
       "deploymentBucketObject": {
         "serverSideEncryption": "AES256"
       },
-      "remoteFunctionData": null,
+      "deploymentBucket": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -73,114 +72,6 @@
                 ]
               }
             }
-          },
-          "MyFunctionLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/lambda/test-deployment-bucket-ecnryption-dev-myFunction"
-            }
-          },
-          "IamRoleLambdaExecution": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
-                    },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
-                ]
-              },
-              "Policies": [
-                {
-                  "PolicyName": {
-                    "Fn::Join": [
-                      "-",
-                      [
-                        "dev",
-                        "test-deployment-bucket-ecnryption",
-                        "lambda"
-                      ]
-                    ]
-                  },
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:CreateLogStream"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-deployment-bucket-ecnryption-dev*:*"
-                          }
-                        ]
-                      },
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:PutLogEvents"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-deployment-bucket-ecnryption-dev*:*:*"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ],
-              "Path": "/",
-              "RoleName": {
-                "Fn::Join": [
-                  "-",
-                  [
-                    "test-deployment-bucket-ecnryption",
-                    "dev",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    "lambdaRole"
-                  ]
-                ]
-              }
-            }
-          },
-          "MyFunctionLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/test-deployment-bucket-ecnryption/dev/1574683992958-2019-11-25T12:13:12.958Z/myFunction.zip"
-              },
-              "FunctionName": "test-deployment-bucket-ecnryption-dev-myFunction",
-              "Handler": "index.handler",
-              "MemorySize": 1024,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              },
-              "Runtime": "nodejs12.x",
-              "Timeout": 6
-            },
-            "DependsOn": [
-              "MyFunctionLogGroup",
-              "IamRoleLambdaExecution"
-            ]
           }
         },
         "Outputs": {
@@ -257,33 +148,41 @@
             }
           }
         }
-      },
-      "vpc": {}
+      }
     },
     "plugins": [
       "serverless-plugin-reducer"
     ],
     "pluginsData": {},
-    "functions": {
-      "myFunction": {
-        "handler": "index.handler",
-        "events": [],
-        "name": "test-deployment-bucket-ecnryption-dev-myFunction",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
-        },
-        "memory": 1024,
-        "timeout": 6,
+    "functions": {},
+    "configValidationMode": "warn",
+    "serviceFilename": "serverless.yml",
+    "layers": {},
+    "initialServerlessConfig": {
+      "service": "test-deployment-bucket-ecnryption",
+      "provider": {
+        "name": "aws",
         "runtime": "nodejs12.x",
-        "vpc": {}
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": false,
+        "deploymentBucket": {
+          "serverSideEncryption": "AES256"
+        }
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-deployment-bucket-ecnryption/dev/1603899034604-2020-10-28T15:30:34.604Z"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
-    "serviceFilename": "serverless.yml",
-    "layers": {}
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-deployment-bucket-ecnryption/dev/1574683992958-2019-11-25T12:13:12.958Z",
+    "artifactDirectoryName": "serverless/test-deployment-bucket-ecnryption/dev/1603899034604-2020-10-28T15:30:34.604Z",
     "artifact": ""
   }
 }
