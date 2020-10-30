@@ -1,16 +1,20 @@
 {
   "service": {
-    "service": "test-python-lambda",
+    "service": "test-issue-8459",
     "serviceObject": {
-      "name": "test-python-lambda"
+      "name": "test-issue-8459"
     },
     "provider": {
       "stage": "dev",
       "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "name": "aws",
-      "runtime": "python3.8",
+      "runtime": "python3.6",
       "region": "us-east-1",
       "versionFunctions": false,
+      "tracing": {
+        "lambda": false,
+        "apiGateway": false
+      },
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -72,7 +76,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-python-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-issue-8459-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -100,7 +104,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-python-lambda",
+                        "test-issue-8459",
                         "dev",
                         "lambda"
                       ]
@@ -117,7 +121,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-python-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-8459-dev*:*"
                           }
                         ]
                       },
@@ -128,7 +132,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-python-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-8459-dev*:*:*"
                           }
                         ]
                       }
@@ -141,7 +145,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-python-lambda",
+                    "test-issue-8459",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -159,9 +163,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-python-lambda/dev/1604072769124-2020-10-30T15:46:09.124Z/test-python-lambda.zip"
+                "S3Key": "serverless/test-issue-8459/dev/1604076853371-2020-10-30T16:54:13.371Z/test-issue-8459.zip"
               },
-              "FunctionName": "test-python-lambda-dev-function",
+              "FunctionName": "test-issue-8459-dev-function",
               "Handler": "handler.hello",
               "MemorySize": 1024,
               "Role": {
@@ -170,12 +174,49 @@
                   "Arn"
                 ]
               },
-              "Runtime": "python3.8",
-              "Timeout": 6
+              "Runtime": "python3.6",
+              "Timeout": 900
             },
             "DependsOn": [
               "FunctionLogGroup"
             ]
+          },
+          "FunctionEventsRuleSchedule1": {
+            "Type": "AWS::Events::Rule",
+            "Properties": {
+              "ScheduleExpression": "cron(0 8 * * ? *)",
+              "State": "ENABLED",
+              "Targets": [
+                {
+                  "Arn": {
+                    "Fn::GetAtt": [
+                      "FunctionLambdaFunction",
+                      "Arn"
+                    ]
+                  },
+                  "Id": "functionSchedule"
+                }
+              ]
+            }
+          },
+          "FunctionLambdaPermissionEventsRuleSchedule1": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "FunctionLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "events.amazonaws.com",
+              "SourceArn": {
+                "Fn::GetAtt": [
+                  "FunctionEventsRuleSchedule1",
+                  "Arn"
+                ]
+              }
+            }
           }
         },
         "Outputs": {
@@ -259,12 +300,16 @@
     "functions": {
       "function": {
         "handler": "handler.hello",
-        "events": [],
-        "name": "test-python-lambda-dev-function",
+        "timeout": 900,
+        "events": [
+          {
+            "schedule": "cron(0 8 * * ? *)"
+          }
+        ],
+        "name": "test-issue-8459-dev-function",
         "package": {},
         "memory": 1024,
-        "timeout": 6,
-        "runtime": "python3.8",
+        "runtime": "python3.6",
         "vpc": {}
       }
     },
@@ -272,23 +317,27 @@
     "serviceFilename": "serverless.yml",
     "layers": {},
     "initialServerlessConfig": {
-      "service": "test-python-lambda",
+      "service": "test-issue-8459",
       "provider": {
         "name": "aws",
-        "runtime": "python3.8",
+        "runtime": "python3.6",
         "region": "us-east-1",
         "stage": "dev",
-        "versionFunctions": false
+        "versionFunctions": false,
+        "tracing": {
+          "lambda": false,
+          "apiGateway": false
+        }
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       }
     },
     "isDashboardMonitoringPreconfigured": false,
-    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-python-lambda.zip"
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-issue-8459.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-python-lambda/dev/1604072769124-2020-10-30T15:46:09.124Z",
-    "artifact": "test-python-lambda.zip"
+    "artifactDirectoryName": "serverless/test-issue-8459/dev/1604076853371-2020-10-30T16:54:13.371Z",
+    "artifact": "test-issue-8459.zip"
   }
 }

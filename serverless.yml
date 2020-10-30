@@ -1,12 +1,18 @@
-service: test-python-lambda
+service: test-issue-8459
 
 provider:
   name: aws
-  runtime: python3.8
+  runtime: python3.6
   region: us-east-1
   stage: dev
   versionFunctions: false
+  tracing:
+    lambda: false
+    apiGateway: false
 
 functions:
   function:
     handler: handler.hello
+    timeout: 900
+    events:
+      - schedule: cron(0 8 * * ? *)
