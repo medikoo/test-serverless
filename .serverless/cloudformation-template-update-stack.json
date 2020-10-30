@@ -87,7 +87,8 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-scheduled-lambda-dev",
+                  "test-scheduled-lambda",
+                  "dev",
                   "lambda"
                 ]
               ]
@@ -127,7 +128,8 @@
           "Fn::Join": [
             "-",
             [
-              "test-scheduled-lambda-dev",
+              "test-scheduled-lambda",
+              "dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -144,7 +146,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-scheduled-lambda/dev/1587478958053-2020-04-21T14:22:38.053Z/function.zip"
+          "S3Key": "serverless/test-scheduled-lambda/dev/1604072254173-2020-10-30T15:37:34.173Z/function.zip"
         },
         "FunctionName": "test-scheduled-lambda-dev-function",
         "Handler": "index.handler",
@@ -159,8 +161,7 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "FunctionLogGroup",
-        "IamRoleLambdaExecution"
+        "FunctionLogGroup"
       ]
     },
     "FunctionEventsRuleSchedule1": {
