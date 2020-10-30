@@ -6,12 +6,11 @@
     },
     "provider": {
       "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "name": "aws",
       "runtime": "python3.8",
       "region": "us-east-1",
       "versionFunctions": false,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -160,7 +159,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-python-lambda/dev/1595599275009-2020-07-24T14:01:15.009Z/test-python-lambda.zip"
+                "S3Key": "serverless/test-python-lambda/dev/1604072769124-2020-10-30T15:46:09.124Z/test-python-lambda.zip"
               },
               "FunctionName": "test-python-lambda-dev-function",
               "Handler": "handler.hello",
@@ -269,13 +268,27 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "layers": {},
+    "initialServerlessConfig": {
+      "service": "test-python-lambda",
+      "provider": {
+        "name": "aws",
+        "runtime": "python3.8",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": false
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      }
+    },
     "isDashboardMonitoringPreconfigured": false,
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-python-lambda.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-python-lambda/dev/1595599275009-2020-07-24T14:01:15.009Z",
+    "artifactDirectoryName": "serverless/test-python-lambda/dev/1604072769124-2020-10-30T15:46:09.124Z",
     "artifact": "test-python-lambda.zip"
   }
 }
