@@ -5,12 +5,12 @@
       "name": "test-lambda"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)[^:{}][^{}]*?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
+      "stage": "dev",
       "versionFunctions": false,
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -159,7 +159,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda/dev/1601636058606-2020-10-02T10:54:18.606Z/function.zip"
+                "S3Key": "serverless/test-lambda/dev/1604912261708-2020-11-09T08:57:41.708Z/function.zip"
               },
               "FunctionName": "test-lambda-dev-function",
               "Handler": "index.handler",
@@ -277,17 +277,15 @@
     "serviceFilename": "serverless.yml",
     "layers": {},
     "initialServerlessConfig": {
-      "service": "test-lambda",
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
       "provider": {
-        "name": "aws",
-        "runtime": "nodejs12.x",
-        "region": "us-east-1",
-        "stage": "dev",
-        "versionFunctions": false
+        "$ref": "$[\"service\"][\"provider\"]"
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-lambda/dev/1601636058606-2020-10-02T10:54:18.606Z"
+        "artifactDirectoryName": "serverless/test-lambda/dev/1604912261708-2020-11-09T08:57:41.708Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -300,7 +298,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda/dev/1601636058606-2020-10-02T10:54:18.606Z",
+    "artifactDirectoryName": "serverless/test-lambda/dev/1604912261708-2020-11-09T08:57:41.708Z",
     "artifact": ""
   }
 }
