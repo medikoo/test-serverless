@@ -5,19 +5,23 @@
       "name": "test-http-api"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
+      "stage": "dev",
       "versionFunctions": false,
       "httpApi": {
         "cors": {
-          "allowedOrigins": "https://medikoo.com",
-          "exposedResponseHeaders": "X-Amz-Date",
+          "allowedOrigins": [
+            "https://medikoo.com"
+          ],
+          "exposedResponseHeaders": [
+            "X-Amz-Date"
+          ],
           "maxAge": 60
         }
       },
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -172,7 +176,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1598005378938-2020-08-21T10:22:58.938Z/function.zip"
+                "S3Key": "serverless/test-http-api/dev/1604912228466-2020-11-09T08:57:08.466Z/function.zip"
               },
               "FunctionName": "test-http-api-dev-function",
               "Handler": "index.handler",
@@ -197,7 +201,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-http-api/dev/1598005378938-2020-08-21T10:22:58.938Z/other.zip"
+                "S3Key": "serverless/test-http-api/dev/1604912228466-2020-11-09T08:57:08.466Z/other.zip"
               },
               "FunctionName": "test-http-api-dev-other",
               "Handler": "other.handler",
@@ -301,7 +305,7 @@
               "IntegrationUri": {
                 "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"FunctionLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
               },
-              "PayloadFormatVersion": "1.0",
+              "PayloadFormatVersion": "2.0",
               "TimeoutInMillis": 6500
             }
           },
@@ -394,7 +398,7 @@
               "IntegrationUri": {
                 "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"OtherLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
               },
-              "PayloadFormatVersion": "1.0",
+              "PayloadFormatVersion": "2.0",
               "TimeoutInMillis": 6500
             }
           },
@@ -587,24 +591,20 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-http-api/dev/1598005378938-2020-08-21T10:22:58.938Z"
+        "artifactDirectoryName": "serverless/test-http-api/dev/1604912228466-2020-11-09T08:57:08.466Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       },
       "plugins": {
         "$ref": "$[\"service\"][\"plugins\"]"
-      },
-      "layers": {
-        "$ref": "$[\"service\"][\"layers\"]"
-      },
-      "configValidationMode": "warn"
+      }
     },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-http-api/dev/1598005378938-2020-08-21T10:22:58.938Z",
+    "artifactDirectoryName": "serverless/test-http-api/dev/1604912228466-2020-11-09T08:57:08.466Z",
     "artifact": ""
   }
 }
