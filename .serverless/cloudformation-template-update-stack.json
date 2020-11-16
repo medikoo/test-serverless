@@ -160,7 +160,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-cloud-front/prod/1601627473432-2020-10-02T08:31:13.432Z/function.zip"
+          "S3Key": "serverless/test-cloud-front/prod/1605514238649-2020-11-16T08:10:38.649Z/function.zip"
         },
         "FunctionName": "test-cloud-front-prod-function",
         "Handler": "index.handler",
@@ -227,9 +227,7 @@
           "Enabled": true,
           "DefaultCacheBehavior": {
             "ViewerProtocolPolicy": "allow-all",
-            "ForwardedValues": {
-              "QueryString": false
-            },
+            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
             "TargetOriginId": "s3/55n6dms-htscgkj.s3.amazonaws.com",
             "LambdaFunctionAssociations": [
               {
