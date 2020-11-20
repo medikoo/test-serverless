@@ -5,13 +5,12 @@
       "name": "test-api-gw-export-shared"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
-      "runtime": "nodejs10.x",
+      "runtime": "nodejs12.x",
       "region": "us-east-1",
-      "versionFunctions": true,
-      "remoteFunctionData": null,
+      "stage": "dev",
+      "versionFunctions": false,
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -205,12 +204,24 @@
         }
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "layers": {},
+    "initialServerlessConfig": {
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
+      }
+    },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-api-gw-export-shared/dev/1588581698613-2020-05-04T08:41:38.613Z",
+    "artifactDirectoryName": "serverless/test-api-gw-export-shared/dev/1605874759913-2020-11-20T12:19:19.913Z",
     "artifact": ""
   }
 }
