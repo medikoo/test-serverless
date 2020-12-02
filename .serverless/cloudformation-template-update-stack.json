@@ -44,6 +44,21 @@
                       "/*"
                     ]
                   ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
                 }
               ],
               "Condition": {
@@ -59,7 +74,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-lambda-dev-function"
+        "LogGroupName": "/aws/lambda/test-lambda-image-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,7 +102,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-lambda",
+                  "test-lambda-image",
                   "dev",
                   "lambda"
                 ]
@@ -104,7 +119,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-image-dev*:*"
                     }
                   ]
                 },
@@ -115,7 +130,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-image-dev*:*:*"
                     }
                   ]
                 }
@@ -128,7 +143,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-lambda",
+              "test-lambda-image",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -143,22 +158,18 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "S3Bucket": {
-            "Ref": "ServerlessDeploymentBucket"
-          },
-          "S3Key": "serverless/test-lambda/dev/1604912261708-2020-11-09T08:57:41.708Z/function.zip"
+          "ImageUri": "992311060759.dkr.ecr.us-east-2.amazonaws.com/test-lambda-image@sha256:6bb600b4d6e1d7cf521097177dd0c4e9ea373edb91984a505333be8ac9455d38"
         },
-        "FunctionName": "test-lambda-dev-function",
-        "Handler": "index.handler",
+        "PackageType": "Image",
+        "FunctionName": "test-lambda-image-dev-function",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6
+        }
       },
       "DependsOn": [
         "FunctionLogGroup"

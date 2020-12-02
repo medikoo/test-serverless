@@ -1,9 +1,9 @@
-service: test-lambda
+service: test-lambda-image
 
 provider:
   name: aws
   runtime: nodejs12.x
-  region: us-east-1
+  region: us-east-2
   stage: dev
   versionFunctions: false
 
@@ -12,7 +12,7 @@ package:
 
 functions:
   function:
-    handler: index.handler
+    image: 992311060759.dkr.ecr.us-east-2.amazonaws.com/test-lambda-image@sha256:6bb600b4d6e1d7cf521097177dd0c4e9ea373edb91984a505333be8ac9455d38
 
 plugins:
   - serverless-plugin-reducer
