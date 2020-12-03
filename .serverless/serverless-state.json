@@ -9,7 +9,7 @@
       "runtime": "nodejs12.x",
       "region": "us-east-2",
       "stage": "dev",
-      "versionFunctions": false,
+      "versionFunctions": true,
       "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -187,12 +187,28 @@
             "DependsOn": [
               "FunctionLogGroup"
             ]
+          },
+          "FunctionLambdaVersionkhJJnVxvujnq6JcCrB8fZuFOg7Zx9OmV2rKwY8Awsw": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "CodeSha256": "6bb600b4d6e1d7cf521097177dd0c4e9ea373edb91984a505333be8ac9455d38"
+            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "FunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "FunctionLambdaVersionkhJJnVxvujnq6JcCrB8fZuFOg7Zx9OmV2rKwY8Awsw"
             }
           }
         }
@@ -293,7 +309,8 @@
         "package": {},
         "memory": 1024,
         "timeout": 6,
-        "vpc": {}
+        "vpc": {},
+        "versionLogicalId": "FunctionLambdaVersionkhJJnVxvujnq6JcCrB8fZuFOg7Zx9OmV2rKwY8Awsw"
       }
     },
     "configValidationMode": "warn",
@@ -308,7 +325,7 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-lambda-image/dev/1606923501300-2020-12-02T15:38:21.300Z"
+        "artifactDirectoryName": "serverless/test-lambda-image/dev/1607004355122-2020-12-03T14:05:55.122Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -321,7 +338,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda-image/dev/1606923501300-2020-12-02T15:38:21.300Z",
+    "artifactDirectoryName": "serverless/test-lambda-image/dev/1607004355122-2020-12-03T14:05:55.122Z",
     "artifact": ""
   }
 }

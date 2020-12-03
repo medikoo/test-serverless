@@ -5,7 +5,7 @@ provider:
   runtime: nodejs12.x
   region: us-east-2
   stage: dev
-  versionFunctions: false
+  versionFunctions: true
 
 package:
   individually: true

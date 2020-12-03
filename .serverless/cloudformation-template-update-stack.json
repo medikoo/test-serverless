@@ -174,12 +174,28 @@
       "DependsOn": [
         "FunctionLogGroup"
       ]
+    },
+    "FunctionLambdaVersionkhJJnVxvujnq6JcCrB8fZuFOg7Zx9OmV2rKwY8Awsw": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FunctionLambdaFunction"
+        },
+        "CodeSha256": "6bb600b4d6e1d7cf521097177dd0c4e9ea373edb91984a505333be8ac9455d38"
+      }
     }
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "FunctionLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "FunctionLambdaVersionkhJJnVxvujnq6JcCrB8fZuFOg7Zx9OmV2rKwY8Awsw"
       }
     }
   }
