@@ -5,13 +5,12 @@
       "name": "test-event-bridge-lambda"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
+      "stage": "dev",
       "versionFunctions": false,
-      "remoteFunctionData": null,
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -58,6 +57,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -101,8 +115,8 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "dev",
                         "test-event-bridge-lambda",
+                        "dev",
                         "lambda"
                       ]
                     ]
@@ -160,23 +174,22 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-event-bridge-lambda/dev/1578070083226-2020-01-03T16:48:03.226Z/myFunction.zip"
+                "S3Key": "serverless/test-event-bridge-lambda/dev/1607010566909-2020-12-03T15:49:26.909Z/myFunction.zip"
               },
-              "FunctionName": "test-event-bridge-lambda-dev-myFunction",
               "Handler": "index.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "test-event-bridge-lambda-dev-myFunction",
               "MemorySize": 1024,
+              "Timeout": 6,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              },
-              "Runtime": "nodejs12.x",
-              "Timeout": 6
+              }
             },
             "DependsOn": [
-              "MyFunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "MyFunctionLogGroup"
             ]
           },
           "MyFunctionCustomEventBridge1": {
@@ -254,7 +267,7 @@
                               {
                                 "Ref": "AWS::AccountId"
                               },
-                              "rule/test-event-bridge-lambda-dev-myFunction-rule-1"
+                              "rule/*"
                             ]
                           ]
                         },
@@ -283,7 +296,7 @@
                                 "Ref": "AWS::AccountId"
                               },
                               "function",
-                              "test-event-bridge-lambda-dev-myFunction"
+                              "*"
                             ]
                           ]
                         },
@@ -305,7 +318,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-event-bridge-lambda/dev/1578070083226-2020-01-03T16:48:03.226Z/custom-resources.zip"
+                "S3Key": "serverless/test-event-bridge-lambda/dev/1607010566909-2020-12-03T15:49:26.909Z/custom-resources.zip"
               },
               "FunctionName": "test-event-bridge-lambda-dev-custom-resource-event-bridge",
               "Handler": "eventBridge/handler.handler",
@@ -378,6 +391,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -428,12 +456,32 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "layers": {},
+    "initialServerlessConfig": {
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-event-bridge-lambda/dev/1607010566909-2020-12-03T15:49:26.909Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      }
+    },
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-event-bridge-lambda/dev/1578070083226-2020-01-03T16:48:03.226Z",
+    "artifactDirectoryName": "serverless/test-event-bridge-lambda/dev/1607010566909-2020-12-03T15:49:26.909Z",
     "artifact": ""
   }
 }
