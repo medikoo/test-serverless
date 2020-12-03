@@ -44,6 +44,21 @@
                       "/*"
                     ]
                   ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
                 }
               ],
               "Condition": {
@@ -146,19 +161,19 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1604667844997-2020-11-06T13:04:04.997Z/function.zip"
+          "S3Key": "serverless/test-api-gw/dev/1607004386868-2020-12-03T14:06:26.868Z/function.zip"
         },
-        "FunctionName": "test-api-gw-dev-function",
         "Handler": "index.handler",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "test-api-gw-dev-function",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6
+        }
       },
       "DependsOn": [
         "FunctionLogGroup"
@@ -277,7 +292,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1604667844042": {
+    "ApiGatewayDeployment1607004385963": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
