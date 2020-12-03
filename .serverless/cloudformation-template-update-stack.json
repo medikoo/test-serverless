@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1607004386868-2020-12-03T14:06:26.868Z/function.zip"
+          "S3Key": "serverless/test-api-gw/dev/1607004422599-2020-12-03T14:07:02.599Z/function.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
@@ -182,7 +182,7 @@
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-test-api-gw",
+        "Name": "test-api-gw-dev",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
@@ -292,7 +292,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1607004385963": {
+    "ApiGatewayDeployment1607004421736": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
