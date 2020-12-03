@@ -5,13 +5,12 @@
       "name": "test-event-bridge"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
+      "stage": "dev",
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "versionFunctions": true,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -56,6 +55,21 @@
                               "Ref": "ServerlessDeploymentBucket"
                             },
                             "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
                           ]
                         ]
                       }
@@ -136,6 +150,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -177,11 +206,24 @@
         }
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "layers": {},
+    "initialServerlessConfig": {
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
+      }
+    },
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-event-bridge/dev/1578070659904-2020-01-03T16:57:39.904Z",
+    "artifactDirectoryName": "serverless/test-event-bridge/dev/1607010498816-2020-12-03T15:48:18.816Z",
     "artifact": ""
   }
 }
