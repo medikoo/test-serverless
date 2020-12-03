@@ -167,6 +167,52 @@
               }
             }
           },
+          "EnterpriseLogAccessIamRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "AWS": "arn:aws:iam::802587217904:root"
+                    },
+                    "Action": "sts:AssumeRole",
+                    "Condition": {
+                      "StringEquals": {
+                        "sts:ExternalId": "ServerlessEnterprise-1sJrygBdcH5mNKPSp8"
+                      }
+                    }
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": "LogFilterAccess",
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:FilterLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::GetAtt": [
+                              "FunctionLogGroup",
+                              "Arn"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
           "FunctionLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -197,12 +243,30 @@
               },
               "CodeSha256": "6bb600b4d6e1d7cf521097177dd0c4e9ea373edb91984a505333be8ac9455d38"
             }
+          },
+          "CloudWatchLogsSubscriptionFilterFunctionLogGroup": {
+            "Type": "AWS::Logs::SubscriptionFilter",
+            "Properties": {
+              "DestinationArn": "arn:aws:logs:us-east-2:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-lambda-image#dev",
+              "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
+              "LogGroupName": {
+                "Ref": "FunctionLogGroup"
+              }
+            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "EnterpriseLogAccessIamRole": {
+            "Value": {
+              "Fn::GetAtt": [
+                "EnterpriseLogAccessIamRole",
+                "Arn"
+              ]
             }
           },
           "FunctionLambdaFunctionQualifiedArn": {
@@ -315,17 +379,21 @@
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
+    "app": "medikoo-test",
+    "org": "medikoo",
     "layers": {},
     "initialServerlessConfig": {
       "service": {
         "$ref": "$[\"service\"][\"serviceObject\"]"
       },
+      "org": "medikoo",
+      "app": "medikoo-test",
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-lambda-image/dev/1607004355122-2020-12-03T14:05:55.122Z"
+        "artifactDirectoryName": "serverless/test-lambda-image/dev/1607008612053-2020-12-03T15:16:52.053Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -334,11 +402,14 @@
         "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
-    "isDashboardMonitoringPreconfigured": false
+    "isDashboardMonitoringPreconfigured": true,
+    "isDashboardAppPreconfigured": true,
+    "orgUid": "1sJrygBdcH5mNKPSp8",
+    "appUid": "GjXh77HjWzffv8X5SQ"
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda-image/dev/1607004355122-2020-12-03T14:05:55.122Z",
+    "artifactDirectoryName": "serverless/test-lambda-image/dev/1607008612053-2020-12-03T15:16:52.053Z",
     "artifact": ""
   }
 }
