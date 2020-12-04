@@ -44,6 +44,21 @@
                       "/*"
                     ]
                   ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
                 }
               ],
               "Condition": {
@@ -146,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-with-layer/dev/1593092876239-2020-06-25T13:47:56.239Z/layer.zip"
+          "S3Key": "serverless/test-lambda-with-layer/dev/1607091956843-2020-12-04T14:25:56.843Z/layer.zip"
         },
         "LayerName": "layer"
       }
@@ -158,19 +173,19 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-with-layer/dev/1598517206691-2020-08-27T08:33:26.691Z/test-lambda-with-layer.zip"
+          "S3Key": "serverless/test-lambda-with-layer/dev/1607091956843-2020-12-04T14:25:56.843Z/test-lambda-with-layer.zip"
         },
-        "FunctionName": "test-lambda-with-layer-dev-function",
         "Handler": "index.handler",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "test-lambda-with-layer-dev-function",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
         },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6,
         "Layers": [
           {
             "Ref": "LayerLambdaLayer"
@@ -196,11 +211,11 @@
     },
     "LayerLambdaLayerHash": {
       "Description": "Current Lambda layer hash",
-      "Value": "e3e83b6808cde5bc5e4fee47424fb3898b55c223"
+      "Value": "94013b46e4b095f47ef21d265541f5eabd0c99d0"
     },
     "LayerLambdaLayerS3Key": {
       "Description": "Current Lambda layer S3Key",
-      "Value": "serverless/test-lambda-with-layer/dev/1593092876239-2020-06-25T13:47:56.239Z/layer.zip"
+      "Value": "serverless/test-lambda-with-layer/dev/1607091956843-2020-12-04T14:25:56.843Z/layer.zip"
     }
   }
 }

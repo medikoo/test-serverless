@@ -8,7 +8,7 @@ provider:
   versionFunctions: false
 
 package:
-  excludeDevDependencies: false
+  artifact: ${opt:artifact, ''}
 
 functions:
   function:
@@ -18,4 +18,4 @@ functions:
 
 layers:
   layer:
-    path: layer
+    path: dist
