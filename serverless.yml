@@ -1,21 +1,16 @@
-service: test-lambda-with-layer
+service: test-issue-8576
 
 provider:
   name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
+  region: us-east-2
 
 package:
   artifact: ${opt:artifact, ''}
 
-functions:
-  function:
-    handler: index.handler
-    layers:
-      - { Ref: LayerLambdaLayer }
-
 layers:
-  layer:
+  my-lambda-layer:
     path: dist
+    description: xxx
+    compatibleRuntimes:
+      - nodejs12.x
+    retain: true

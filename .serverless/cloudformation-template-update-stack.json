@@ -71,130 +71,22 @@
         }
       }
     },
-    "FunctionLogGroup": {
-      "Type": "AWS::Logs::LogGroup",
-      "Properties": {
-        "LogGroupName": "/aws/lambda/test-lambda-with-layer-dev-function"
-      }
-    },
-    "IamRoleLambdaExecution": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
-              },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-        },
-        "Policies": [
-          {
-            "PolicyName": {
-              "Fn::Join": [
-                "-",
-                [
-                  "test-lambda-with-layer",
-                  "dev",
-                  "lambda"
-                ]
-              ]
-            },
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:CreateLogStream",
-                    "logs:CreateLogGroup"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-with-layer-dev*:*"
-                    }
-                  ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:PutLogEvents"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-with-layer-dev*:*:*"
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        ],
-        "Path": "/",
-        "RoleName": {
-          "Fn::Join": [
-            "-",
-            [
-              "test-lambda-with-layer",
-              "dev",
-              {
-                "Ref": "AWS::Region"
-              },
-              "lambdaRole"
-            ]
-          ]
-        }
-      }
-    },
-    "LayerLambdaLayer": {
+    "MyDashlambdaDashlayerLambdaLayer120948b1587a51e57a93cf59d6018d437223b6d6": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "Content": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-with-layer/dev/1607091956843-2020-12-04T14:25:56.843Z/layer.zip"
+          "S3Key": "serverless/test-issue-8576/dev/1607092153727-2020-12-04T14:29:13.727Z/my-lambda-layer.zip"
         },
-        "LayerName": "layer"
-      }
-    },
-    "FunctionLambdaFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "ServerlessDeploymentBucket"
-          },
-          "S3Key": "serverless/test-lambda-with-layer/dev/1607091956843-2020-12-04T14:25:56.843Z/test-lambda-with-layer.zip"
-        },
-        "Handler": "index.handler",
-        "Runtime": "nodejs12.x",
-        "FunctionName": "test-lambda-with-layer-dev-function",
-        "MemorySize": 1024,
-        "Timeout": 6,
-        "Role": {
-          "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
-            "Arn"
-          ]
-        },
-        "Layers": [
-          {
-            "Ref": "LayerLambdaLayer"
-          }
+        "LayerName": "my-lambda-layer",
+        "Description": "xxx",
+        "CompatibleRuntimes": [
+          "nodejs12.x"
         ]
       },
-      "DependsOn": [
-        "FunctionLogGroup"
-      ]
+      "DeletionPolicy": "Retain"
     }
   },
   "Outputs": {
@@ -203,19 +95,19 @@
         "Ref": "ServerlessDeploymentBucket"
       }
     },
-    "LayerLambdaLayerQualifiedArn": {
+    "MyDashlambdaDashlayerLambdaLayerQualifiedArn": {
       "Description": "Current Lambda layer version",
       "Value": {
-        "Ref": "LayerLambdaLayer"
+        "Ref": "MyDashlambdaDashlayerLambdaLayer120948b1587a51e57a93cf59d6018d437223b6d6"
       }
     },
-    "LayerLambdaLayerHash": {
+    "MyDashlambdaDashlayerLambdaLayerHash": {
       "Description": "Current Lambda layer hash",
-      "Value": "94013b46e4b095f47ef21d265541f5eabd0c99d0"
+      "Value": "120948b1587a51e57a93cf59d6018d437223b6d6"
     },
-    "LayerLambdaLayerS3Key": {
+    "MyDashlambdaDashlayerLambdaLayerS3Key": {
       "Description": "Current Lambda layer S3Key",
-      "Value": "serverless/test-lambda-with-layer/dev/1607091956843-2020-12-04T14:25:56.843Z/layer.zip"
+      "Value": "serverless/test-issue-8576/dev/1607092153727-2020-12-04T14:29:13.727Z/my-lambda-layer.zip"
     }
   }
 }
