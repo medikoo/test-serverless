@@ -44,6 +44,21 @@
                       "/*"
                     ]
                   ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
                 }
               ],
               "Condition": {
@@ -158,19 +173,19 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-with-layer/dev/1598517206691-2020-08-27T08:33:26.691Z/test-lambda-with-layer.zip"
+          "S3Key": "serverless/test-lambda-with-layer/dev/1607428768498-2020-12-08T11:59:28.498Z/test-lambda-with-layer.zip"
         },
-        "FunctionName": "test-lambda-with-layer-dev-function",
         "Handler": "index.handler",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "test-lambda-with-layer-dev-function",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
         },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6,
         "Layers": [
           {
             "Ref": "LayerLambdaLayer"
