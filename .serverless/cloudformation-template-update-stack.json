@@ -167,7 +167,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-function-artifact/dev/1609159949571-2020-12-28T12:52:29.571Z/handler.zip"
+          "S3Key": "serverless/test-function-artifact/dev/1609160039665-2020-12-28T12:53:59.665Z/handler.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
@@ -192,7 +192,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-function-artifact/dev/1609159949571-2020-12-28T12:52:29.571Z/handler.zip"
+          "S3Key": "serverless/test-function-artifact/dev/1609160039665-2020-12-28T12:53:59.665Z/handler.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
