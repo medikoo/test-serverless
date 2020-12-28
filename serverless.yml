@@ -1,4 +1,4 @@
-service: test-
+service: test-function-artifact
 
 provider:
   name: aws
@@ -10,5 +10,12 @@ provider:
 package:
   individually: true
 
-plugins:
-  - serverless-plugin-reducer
+functions:
+  fn1:
+    handler: index.handler
+    package:
+      artifact: first/handler.zip
+  fn2:
+    handler: index.handler
+    package:
+      artifact: second/handler.zip
