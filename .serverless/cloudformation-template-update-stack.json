@@ -44,6 +44,21 @@
                       "/*"
                     ]
                   ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
                 }
               ],
               "Condition": {
@@ -146,31 +161,31 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-provisioned-concurrency/dev/1598431279917-2020-08-26T08:41:19.917Z/function.zip"
+          "S3Key": "serverless/test-provisioned-concurrency/dev/1610553867671-2021-01-13T16:04:27.671Z/function.zip"
         },
-        "FunctionName": "test-provisioned-concurrency-dev-function",
         "Handler": "index.handler",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "test-provisioned-concurrency-dev-function",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6
+        }
       },
       "DependsOn": [
         "FunctionLogGroup"
       ]
     },
-    "FunctionLambdaVersion0WLkLj153C6Xjkso7uKDv2rg5kBDaGVw3oVqYy3Xo": {
+    "FunctionLambdaVersionKT45euNdLYXMwCqmpeSOWKMJ1Iq5J8xzGm0dkrcgvA": {
       "Type": "AWS::Lambda::Version",
       "Properties": {
         "FunctionName": {
           "Ref": "FunctionLambdaFunction"
         },
-        "CodeSha256": "slPRHFoR899cI+XTbq+1rZTbYmjghbyIdp5tgec+WcE="
+        "CodeSha256": "kFl7st3Lta3UwKSgR589bNRz/CBNODLpdMHcnRrVU08="
       }
     },
     "FunctionProvConcLambdaAlias": {
@@ -181,7 +196,7 @@
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "FunctionLambdaVersion0WLkLj153C6Xjkso7uKDv2rg5kBDaGVw3oVqYy3Xo",
+            "FunctionLambdaVersionKT45euNdLYXMwCqmpeSOWKMJ1Iq5J8xzGm0dkrcgvA",
             "Version"
           ]
         },
@@ -202,7 +217,7 @@
     "FunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "FunctionLambdaVersion0WLkLj153C6Xjkso7uKDv2rg5kBDaGVw3oVqYy3Xo"
+        "Ref": "FunctionLambdaVersionKT45euNdLYXMwCqmpeSOWKMJ1Iq5J8xzGm0dkrcgvA"
       }
     }
   }
