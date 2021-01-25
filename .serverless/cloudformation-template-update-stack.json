@@ -44,6 +44,21 @@
                       "/*"
                     ]
                   ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
                 }
               ],
               "Condition": {
@@ -146,19 +161,19 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-python-lambda/dev/1604072769124-2020-10-30T15:46:09.124Z/test-python-lambda.zip"
+          "S3Key": "serverless/test-python-lambda/dev/1611317045570-2021-01-22T12:04:05.570Z/test-python-lambda.zip"
         },
-        "FunctionName": "test-python-lambda-dev-function",
         "Handler": "handler.hello",
+        "Runtime": "python3.8",
+        "FunctionName": "test-python-lambda-dev-function",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        },
-        "Runtime": "python3.8",
-        "Timeout": 6
+        }
       },
       "DependsOn": [
         "FunctionLogGroup"
