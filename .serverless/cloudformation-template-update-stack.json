@@ -44,6 +44,21 @@
                       "/*"
                     ]
                   ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
                 }
               ],
               "Condition": {
@@ -59,7 +74,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-regular-lambda-dev-function"
+        "LogGroupName": "/aws/lambda/test-lambda-individually-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,8 +102,8 @@
               "Fn::Join": [
                 "-",
                 [
+                  "test-lambda-individually",
                   "dev",
-                  "test-regular-lambda",
                   "lambda"
                 ]
               ]
@@ -104,7 +119,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-individually-dev*:*"
                     }
                   ]
                 },
@@ -115,7 +130,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-regular-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-individually-dev*:*:*"
                     }
                   ]
                 }
@@ -128,7 +143,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-regular-lambda",
+              "test-lambda-individually",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -146,23 +161,22 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-regular-lambda/dev/1581464524101-2020-02-11T23:42:04.101Z/function.zip"
+          "S3Key": "serverless/test-lambda-individually/dev/1613062160719-2021-02-11T16:49:20.719Z/function.zip"
         },
-        "FunctionName": "test-regular-lambda-dev-function",
         "Handler": "foo/index.handler",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "test-lambda-individually-dev-function",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6
+        }
       },
       "DependsOn": [
-        "FunctionLogGroup",
-        "IamRoleLambdaExecution"
+        "FunctionLogGroup"
       ]
     }
   },

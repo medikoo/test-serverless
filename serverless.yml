@@ -1,4 +1,4 @@
-service: test-
+service: test-lambda-individually
 
 provider:
   name: aws
