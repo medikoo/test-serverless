@@ -5,12 +5,12 @@
       "name": "test-dashboard"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
+      "stage": "dev",
       "versionFunctions": false,
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -55,6 +55,21 @@
                               "Ref": "ServerlessDeploymentBucket"
                             },
                             "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
                           ]
                         ]
                       }
@@ -205,19 +220,19 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard/dev/1596801989758-2020-08-07T12:06:29.758Z/function.zip"
+                "S3Key": "serverless/test-dashboard/dev/1613393287277-2021-02-15T12:48:07.277Z/function.zip"
               },
-              "FunctionName": "test-dashboard-dev-function",
               "Handler": "s_function.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "test-dashboard-dev-function",
               "MemorySize": 1024,
+              "Timeout": 6,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              },
-              "Runtime": "nodejs12.x",
-              "Timeout": 6
+              }
             },
             "DependsOn": [
               "FunctionLogGroup"
@@ -296,6 +311,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -357,27 +387,23 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-dashboard/dev/1596801989758-2020-08-07T12:06:29.758Z"
+        "artifactDirectoryName": "serverless/test-dashboard/dev/1613393287277-2021-02-15T12:48:07.277Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       },
       "plugins": {
         "$ref": "$[\"service\"][\"plugins\"]"
-      },
-      "layers": {
-        "$ref": "$[\"service\"][\"layers\"]"
-      },
-      "configValidationMode": "warn"
+      }
     },
     "isDashboardMonitoringPreconfigured": true,
     "isDashboardAppPreconfigured": true,
-    "appUid": "GjXh77HjWzffv8X5SQ",
-    "orgUid": "1sJrygBdcH5mNKPSp8"
+    "orgUid": "1sJrygBdcH5mNKPSp8",
+    "appUid": "GjXh77HjWzffv8X5SQ"
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard/dev/1596801989758-2020-08-07T12:06:29.758Z",
+    "artifactDirectoryName": "serverless/test-dashboard/dev/1613393287277-2021-02-15T12:48:07.277Z",
     "artifact": ""
   }
 }
