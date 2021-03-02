@@ -1,14 +1,8 @@
-service: test-plain
+service: issue-9047
+
+custom:
+  foo: ${file(xyz.yml)}
+  bar: ${file(xyz.yml)}
 
 provider:
   name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
-
-package:
-  individually: true
-
-plugins:
-  - serverless-plugin-reducer

@@ -1,16 +1,15 @@
 {
   "service": {
-    "service": "test-plain",
+    "service": "issue-9047",
     "serviceObject": {
-      "name": "test-plain"
+      "name": "issue-9047"
     },
     "provider": {
       "name": "aws",
-      "runtime": "nodejs12.x",
-      "region": "us-east-1",
       "stage": "dev",
-      "versionFunctions": false,
       "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
+      "region": "us-east-1",
+      "versionFunctions": true,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -55,6 +54,21 @@
                               "Ref": "ServerlessDeploymentBucket"
                             },
                             "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
                           ]
                         ]
                       }
@@ -124,6 +138,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -146,9 +175,14 @@
         }
       }
     },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
+    "custom": {
+      "foo": {
+        "foo": "bar"
+      },
+      "bar": {
+        "foo": "bar"
+      }
+    },
     "pluginsData": {},
     "functions": {},
     "configValidationMode": "warn",
@@ -158,22 +192,17 @@
       "service": {
         "$ref": "$[\"service\"][\"serviceObject\"]"
       },
+      "custom": {
+        "$ref": "$[\"service\"][\"custom\"]"
+      },
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
-      },
-      "package": {
-        "individually": true,
-        "artifactDirectoryName": "serverless/test-plain/dev/1604667782019-2020-11-06T13:03:02.019Z"
-      },
-      "plugins": {
-        "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-plain/dev/1604667782019-2020-11-06T13:03:02.019Z",
+    "artifactDirectoryName": "serverless/issue-9047/dev/1614710491073-2021-03-02T18:41:31.073Z",
     "artifact": ""
   }
 }
