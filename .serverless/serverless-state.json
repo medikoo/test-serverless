@@ -5,12 +5,12 @@
       "name": "test-variables-ssm"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
+      "stage": "dev",
       "versionFunctions": false,
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -55,6 +55,21 @@
                               "Ref": "ServerlessDeploymentBucket"
                             },
                             "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
                           ]
                         ]
                       }
@@ -124,6 +139,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -164,20 +194,18 @@
     "serviceFilename": "serverless.yml",
     "layers": {},
     "initialServerlessConfig": {
-      "service": "test-variables-ssm",
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
       "provider": {
-        "name": "aws",
-        "runtime": "nodejs12.x",
-        "region": "us-east-1",
-        "stage": "dev",
-        "versionFunctions": false
+        "$ref": "$[\"service\"][\"provider\"]"
       },
       "custom": {
         "$ref": "$[\"service\"][\"custom\"]"
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-variables-ssm/dev/1600416485120-2020-09-18T08:08:05.120Z"
+        "artifactDirectoryName": "serverless/test-variables-ssm/dev/1614712331483-2021-03-02T19:12:11.483Z"
       },
       "plugins": {
         "$ref": "$[\"service\"][\"plugins\"]"
@@ -187,7 +215,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-variables-ssm/dev/1600416485120-2020-09-18T08:08:05.120Z",
+    "artifactDirectoryName": "serverless/test-variables-ssm/dev/1614712331483-2021-03-02T19:12:11.483Z",
     "artifact": ""
   }
 }
