@@ -33,5 +33,9 @@
 		"lint": "eslint --ignore-path=.gitignore .",
 		"prettify": "prettier --write '**/*.{css,html,js,json,md,yaml,yml}'"
 	},
-	"license": "ISC"
+	"license": "ISC",
+	"dependencies": {
+		"serverless-python-requirements": "^5.1.0",
+		"serverless-step-functions": "^2.29.0"
+	}
 }

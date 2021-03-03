@@ -1,8 +1,249 @@
-service: issue-9047
+service: SrvWWDashboard
 
-custom:
-  foo: ${file(xyz.yml)}
-  bar: ${file(xyz.yml)}
+frameworkVersion: "^2.1.0" # >=2.1.0 && <3.0.0
+
+package:
+  individually: true
+  exclude:
+    - artifacts/**
 
 provider:
   name: aws
+  runtime: python3.8
+  stage: ${opt:stage,'dev'}
+  region: ${opt:region, 'eu-central-1'}
+  versionFunctions: true
+  logRetentionInDays: 90 # Set the default RetentionInDays for a CloudWatch LogGroup
+  tracing:
+    lambda: true
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: ["ssm:Describe*", "ssm:Get*", "ssm:List*"]
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - "xray:PutTraceSegments"
+        - "xray:PutTelemetryRecords"
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - redshift-data:*
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - secretsmanager:GetSecretValue
+      Resource: "arn:aws:secretsmanager:eu-central-1:227956463654:secret:/redshift/masteruser/credentials-yyNJKc"
+    - Effect: "Allow"
+      Action:
+        - s3:*
+      Resource: ["arn:aws:s3:::msc-lambda-config", "arn:aws:s3:::msc-lambda-config/*"]
+
+  deploymentBucket:
+    name: mediascale-serverless-deployments-bucket # Deployment bucket name.
+    maxPreviousDeploymentArtifacts: 10 # On every deployment the framework prunes the bucket to remove artifacts older than this limit.
+    blockPublicAccess: true # Prevents public access via ACLs or bucket policies.
+  stackTags:
+    PROJECT: "weight-watchers"
+    LAMBDA-PURPOSE: "data-transformation"
+    CONNECTED-TO-EXTERNAL-APIS: "true"
+    TRIGGER: "cloudwatch-scheduled-event"
+    RUN-FREQUENCY: "daily"
+    USE-LAYERS: "true"
+
+resources:
+  Mappings:
+    ################### PIPELINE CONFIG PHASE PARAMETERS #########################
+    entryPointParameters:
+      dev:
+        bucket: "msc-lambda-config"
+        object: "ww-dashboard/dev/state_machine_config.json"
+      prod:
+        bucket: "msc-lambda-config"
+        object: "ww-dashboard/prod/state_machine_config.json"
+
+  # Custom Cloudformation resources
+  Resources:
+    wwDashboardStateMachineLogGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        RetentionInDays: 90 # keep CW logs for 3 months
+        LogGroupName: "/step-functions/ww-dashboard-${opt:stage,'dev'}"
+
+stepFunctions:
+  validate: true # enable pre-deployment definition validation (disabled by default)
+  stateMachines:
+    wwDashboardStateMachine:
+      alarms:
+        topics:
+          alarm: arn:aws:sns:eu-central-1:227956463654:step-functions-data-pipelines-alarms-notifications
+        metrics:
+          - executionsTimedOut
+          - executionsFailed
+          - executionsAborted
+          - executionThrottled
+        treatMissingData: missing
+      tracingConfig:
+        enabled: true
+      loggingConfig:
+        level: ERROR
+        includeExecutionData: true
+        destinations:
+          - Fn::GetAtt: [wwDashboardStateMachineLogGroup, Arn]
+      events:
+        - schedule:
+            description: "WW dashboard scheduled event"
+            rate: cron(0 6 * * ? *) # Run every day at 8am (belgium time)
+      name: "weight-watchers-dashboard-${opt:stage,'dev'}"
+
+      definition:
+        Comment: "The WW dashboard state machine definition"
+        StartAt: EntryPointState
+        States:
+          ################### PIPELINE CONFIG PHASE STATE #########################
+          EntryPointState:
+            Type: Task
+            Retry:
+              - ErrorEquals:
+                  - Lambda.SdkClientException
+                  - Lambda.AWSLambdaException
+                  - Lambda.ServiceException
+                IntervalSeconds: 2
+                MaxAttempts: 6
+                BackoffRate: 2
+            Resource:
+              Fn::GetAtt: [EntryPoint, Arn]
+            Next: BuildStagingTablesState
+
+          ################### STAGING TABLES BUILD STATE #########################
+
+          BuildStagingTablesState:
+            Type: Task
+            InputPath: "$.config.states.build_staging_tables_state"
+            ResultPath: "$.results.states.build_staging_tables_state"
+            Retry:
+              - ErrorEquals:
+                  - Lambda.SdkClientException
+                  - Lambda.AWSLambdaException
+                  - Lambda.ServiceException
+                IntervalSeconds: 2
+                MaxAttempts: 6
+                BackoffRate: 2
+            Resource:
+              Fn::GetAtt: [RedshiftAsynchExec, Arn]
+            Next: Wait1MinStagingState
+
+          ################### WAIT 1 MINUTE STATE #########################
+          Wait1MinStagingState:
+            Type: Wait
+            Seconds: 60
+            Next: StagingTablesExecutionValidationState
+
+          ###################  STAGING TABLES BUILD QUERIES EXECUTION VALIDATION STATE #########################
+          StagingTablesExecutionValidationState:
+            Type: Task
+            InputPath: "$.results.states.build_staging_tables_state"
+            ResultPath: "$.results.states.build_staging_tables_state"
+            Retry:
+              - ErrorEquals:
+                  - Lambda.SdkClientException
+                  - Lambda.AWSLambdaException
+                  - Lambda.ServiceException
+                IntervalSeconds: 2
+                MaxAttempts: 6
+                BackoffRate: 2
+              - ErrorEquals:
+                  - AsynchronousQueriesValidationInProgressException
+                IntervalSeconds: 10
+                MaxAttempts: 6
+                BackoffRate: 4
+            Resource:
+              Fn::GetAtt: [RedshiftAsynchReport, Arn]
+            Next: BuildDashboardTablesState
+
+          ################### DASHBOARD TABLES BUILD STATE #########################
+          BuildDashboardTablesState:
+            Type: Task
+            InputPath: "$.config.states.build_dashboard_tables_state"
+            ResultPath: "$.results.states.build_dashboard_tables_state"
+            Retry:
+              - ErrorEquals:
+                  - Lambda.SdkClientException
+                  - Lambda.AWSLambdaException
+                  - Lambda.ServiceException
+                IntervalSeconds: 2
+                MaxAttempts: 6
+                BackoffRate: 2
+            Resource:
+              Fn::GetAtt: [RedshiftAsynchExec, Arn]
+            Next: Wait3MinuteDashboardState
+
+          ################### WAIT 1 MINUTE DASH STATE #########################
+          Wait3MinuteDashboardState:
+            Type: Wait
+            Seconds: 180
+            Next: DashboardQueriesExecutionValidationState
+
+          ################### DASHBOARD QUERIES EXECUTION VALIDATION STATE #########################
+          DashboardQueriesExecutionValidationState:
+            Type: Task
+            InputPath: "$.results.states.build_dashboard_tables_state"
+            ResultPath: "$.results.states.build_dashboard_tables_state"
+            OutputPath: "$.results"
+            Retry:
+              - ErrorEquals:
+                  - Lambda.SdkClientException
+                  - Lambda.AWSLambdaException
+                  - Lambda.ServiceException
+                IntervalSeconds: 2
+                MaxAttempts: 6
+                BackoffRate: 2
+              - ErrorEquals:
+                  - AsynchronousQueriesValidationInProgressException
+                IntervalSeconds: 10
+                MaxAttempts: 6
+                BackoffRate: 4
+            Resource:
+              Fn::GetAtt: [RedshiftAsynchReport, Arn]
+            End: True
+
+functions:
+  EntryPoint:
+    module: entry-point
+    handler: handler.run
+    environment:
+      LOG_LEVEL: INFO
+      S3_CONFIG_BUCKET: !FindInMap [entryPointParameters, "${self:provider.stage}", bucket]
+      S3_CONFIG_KEY: !FindInMap [entryPointParameters, "${self:provider.stage}", object]
+    timeout: 60
+    memorySize: 128
+    layers:
+      - arn:aws:lambda:eu-central-1:770693421928:layer:Klayers-python38-aws-lambda-powertools:56
+
+  RedshiftAsynchExec:
+    module: asynch-redshift-modules/asynch-redshift-exec
+    handler: handler.run
+    environment:
+      LOG_LEVEL: INFO
+    timeout: 60
+    memorySize: 256
+    layers:
+      - arn:aws:lambda:eu-central-1:770693421928:layer:Klayers-python38-aws-lambda-powertools:56
+      - arn:aws:lambda:eu-central-1:770693421928:layer:Klayers-python38-boto3:56
+
+  RedshiftAsynchReport:
+    module: asynch-redshift-modules/asynch-redshift-report
+    handler: handler.run
+    environment:
+      LOG_LEVEL: INFO
+    timeout: 60
+    memorySize: 256
+    layers:
+      - arn:aws:lambda:eu-central-1:770693421928:layer:Klayers-python38-aws-lambda-powertools:56
+      - arn:aws:lambda:eu-central-1:770693421928:layer:Klayers-python38-boto3:56
+
+plugins:
+  - serverless-python-requirements
+  - serverless-step-functions
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
