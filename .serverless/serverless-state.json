@@ -174,7 +174,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z/function.zip"
+                "S3Key": "serverless/test-lambda/dev/1614851549065-2021-03-04T09:52:29.065Z/test-lambda.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
@@ -285,18 +285,13 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
     "pluginsData": {},
     "functions": {
       "function": {
         "handler": "index.handler",
         "events": [],
         "name": "test-lambda-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
+        "package": {},
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
@@ -313,22 +308,15 @@
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
-      "package": {
-        "individually": true,
-        "artifactDirectoryName": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z"
-      },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
-      },
-      "plugins": {
-        "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
-    "isDashboardMonitoringPreconfigured": false
+    "isDashboardMonitoringPreconfigured": false,
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-lambda.zip"
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z",
-    "artifact": ""
+    "artifactDirectoryName": "serverless/test-lambda/dev/1614851549065-2021-03-04T09:52:29.065Z",
+    "artifact": "test-lambda.zip"
   }
 }
