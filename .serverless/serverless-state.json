@@ -5,11 +5,10 @@
       "name": "test-api-gw-api-keys"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
+      "stage": "dev",
       "versionFunctions": false,
       "apiKeys": [
         {
@@ -21,6 +20,7 @@
           "value": "no-name-key-asdf-asdf-asdf-adfafdadfadfadfadfafafdafadf"
         }
       ],
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -65,6 +65,21 @@
                               "Ref": "ServerlessDeploymentBucket"
                             },
                             "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
                           ]
                         ]
                       }
@@ -169,19 +184,19 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-api-keys/dev/1599554383943-2020-09-08T08:39:43.943Z/function.zip"
+                "S3Key": "serverless/test-api-gw-api-keys/dev/1615460266347-2021-03-11T10:57:46.347Z/function.zip"
               },
-              "FunctionName": "test-api-gw-api-keys-dev-function",
               "Handler": "index.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "test-api-gw-api-keys-dev-function",
               "MemorySize": 1024,
+              "Timeout": 6,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              },
-              "Runtime": "nodejs12.x",
-              "Timeout": 6
+              }
             },
             "DependsOn": [
               "FunctionLogGroup"
@@ -300,7 +315,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1599554383151": {
+          "ApiGatewayDeployment1615460265235": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -328,7 +343,7 @@
                 }
               ]
             },
-            "DependsOn": "ApiGatewayDeployment1599554383151"
+            "DependsOn": "ApiGatewayDeployment1615460265235"
           },
           "ApiGatewayApiKey2": {
             "Type": "AWS::ApiGateway::ApiKey",
@@ -344,7 +359,7 @@
                 }
               ]
             },
-            "DependsOn": "ApiGatewayDeployment1599554383151"
+            "DependsOn": "ApiGatewayDeployment1615460265235"
           },
           "ApiGatewayApiKey3": {
             "Type": "AWS::ApiGateway::ApiKey",
@@ -360,11 +375,11 @@
                 }
               ]
             },
-            "DependsOn": "ApiGatewayDeployment1599554383151"
+            "DependsOn": "ApiGatewayDeployment1615460265235"
           },
           "ApiGatewayUsagePlan": {
             "Type": "AWS::ApiGateway::UsagePlan",
-            "DependsOn": "ApiGatewayDeployment1599554383151",
+            "DependsOn": "ApiGatewayDeployment1615460265235",
             "Properties": {
               "ApiStages": [
                 {
@@ -529,6 +544,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -589,27 +619,15 @@
     "serviceFilename": "serverless.yml",
     "layers": {},
     "initialServerlessConfig": {
-      "service": "test-api-gw-api-keys",
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
       "provider": {
-        "name": "aws",
-        "runtime": "nodejs12.x",
-        "region": "us-east-1",
-        "stage": "dev",
-        "versionFunctions": false,
-        "apiKeys": [
-          {
-            "name": "full-key",
-            "value": "full-key-asdf-asdf-asdf-adfafdadfadfadfadfafafdafadf"
-          },
-          "no-value-key",
-          {
-            "value": "no-name-key-asdf-asdf-asdf-adfafdadfadfadfadfafafdafadf"
-          }
-        ]
+        "$ref": "$[\"service\"][\"provider\"]"
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-api-gw-api-keys/dev/1599554383943-2020-09-08T08:39:43.943Z"
+        "artifactDirectoryName": "serverless/test-api-gw-api-keys/dev/1615460266347-2021-03-11T10:57:46.347Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -622,7 +640,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-api-keys/dev/1599554383943-2020-09-08T08:39:43.943Z",
+    "artifactDirectoryName": "serverless/test-api-gw-api-keys/dev/1615460266347-2021-03-11T10:57:46.347Z",
     "artifact": ""
   }
 }
