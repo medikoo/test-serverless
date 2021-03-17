@@ -1,18 +1,28 @@
-service: test-lambda
+service: serverless-starter
 
 provider:
   name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
-
-package:
-  individually: true
+  runtime: nodejs4.3
 
 functions:
-  function:
-    handler: index.handler
-
-plugins:
-  - serverless-plugin-reducer
+  single:
+    handler: single.handler
+    events:
+      - http:
+          path: single
+          method: get
+      - http:
+          path: single
+          method: post
+  multiCreate:
+    handler: multiCreate.handler
+    events:
+      - http:
+          path: multi/create
+          method: get
+  multiShow:
+    handler: multiShow.handler
+    events:
+      - http:
+          path: multi/show/{id}
+          method: get
