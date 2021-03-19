@@ -1,16 +1,23 @@
 {
   "service": {
-    "service": "test-lambda",
+    "service": "test-9146",
     "serviceObject": {
-      "name": "test-lambda"
+      "name": "test-9146"
     },
     "provider": {
       "name": "aws",
       "runtime": "nodejs12.x",
-      "region": "us-east-1",
       "stage": "dev",
-      "versionFunctions": false,
+      "region": "eu-central-1",
+      "logRetentionInDays": 14,
+      "timeout": 10,
+      "deploymentBucket": null,
       "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
+      "versionFunctions": true,
+      "deploymentBucketObject": {
+        "blockPublicAccess": true,
+        "serverSideEncryption": "AES256"
+      },
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -26,6 +33,12 @@
                     }
                   }
                 ]
+              },
+              "PublicAccessBlockConfiguration": {
+                "BlockPublicAcls": true,
+                "BlockPublicPolicy": true,
+                "IgnorePublicAcls": true,
+                "RestrictPublicBuckets": true
               }
             }
           },
@@ -87,7 +100,8 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-9146-dev-function",
+              "RetentionInDays": 14
             }
           },
           "IamRoleLambdaExecution": {
@@ -115,7 +129,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-lambda",
+                        "test-9146",
                         "dev",
                         "lambda"
                       ]
@@ -132,7 +146,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-9146-dev*:*"
                           }
                         ]
                       },
@@ -143,7 +157,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-9146-dev*:*:*"
                           }
                         ]
                       }
@@ -156,7 +170,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-lambda",
+                    "test-9146",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -174,13 +188,13 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z/function.zip"
+                "S3Key": "serverless/test-9146/dev/1616150250214-2021-03-19T10:37:30.214Z/test-9146.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
-              "FunctionName": "test-lambda-dev-function",
+              "FunctionName": "test-9146-dev-function",
               "MemorySize": 1024,
-              "Timeout": 6,
+              "Timeout": 10,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -191,12 +205,28 @@
             "DependsOn": [
               "FunctionLogGroup"
             ]
+          },
+          "FunctionLambdaVersion4HeM5tEg3jmI92evW5OwtInxhpMoWWMbkt3eLlf0": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "CodeSha256": "KHQbSgSrbIv7Pw77pmuBu9uEZ65JproNqyXky6J5dDI="
+            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "FunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "FunctionLambdaVersion4HeM5tEg3jmI92evW5OwtInxhpMoWWMbkt3eLlf0"
             }
           }
         }
@@ -216,6 +246,12 @@
                     }
                   }
                 ]
+              },
+              "PublicAccessBlockConfiguration": {
+                "BlockPublicAcls": true,
+                "BlockPublicPolicy": true,
+                "IgnorePublicAcls": true,
+                "RestrictPublicBuckets": true
               }
             }
           },
@@ -293,14 +329,13 @@
       "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-lambda-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
+        "name": "test-9146-dev-function",
+        "package": {},
         "memory": 1024,
-        "timeout": 6,
+        "timeout": 10,
         "runtime": "nodejs12.x",
-        "vpc": {}
+        "vpc": {},
+        "versionLogicalId": "FunctionLambdaVersion4HeM5tEg3jmI92evW5OwtInxhpMoWWMbkt3eLlf0"
       }
     },
     "configValidationMode": "warn",
@@ -310,12 +345,14 @@
       "service": {
         "$ref": "$[\"service\"][\"serviceObject\"]"
       },
+      "useDotenv": true,
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
       "package": {
-        "individually": true,
-        "artifactDirectoryName": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z"
+        "excludeDevDependencies": true,
+        "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-9146.zip",
+        "artifactDirectoryName": "serverless/test-9146/dev/1616150250214-2021-03-19T10:37:30.214Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -324,11 +361,11 @@
         "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
-    "isDashboardMonitoringPreconfigured": false
+    "isDashboardMonitoringPreconfigured": false,
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-9146.zip"
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z",
-    "artifact": ""
+    "artifactDirectoryName": "serverless/test-9146/dev/1616150250214-2021-03-19T10:37:30.214Z",
+    "artifact": "test-9146.zip"
   }
 }

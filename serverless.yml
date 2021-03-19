@@ -1,14 +1,20 @@
-service: test-lambda
+service: test-9146
+
+useDotenv: true
 
 provider:
-  name: aws
   runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'eu-central-1'}
+  logRetentionInDays: 14
+  timeout: 10
+
+  deploymentBucket:
+    blockPublicAccess: true
+    serverSideEncryption: AES256
 
 package:
-  individually: true
+  excludeDevDependencies: true
 
 functions:
   function:
