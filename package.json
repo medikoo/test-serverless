@@ -4,8 +4,7 @@
 	"devDependencies": {
 		"eslint": "^7.10.0",
 		"eslint-config-medikoo": "^3.1.0",
-		"prettier-elastic": "^2.0.5",
-		"serverless-plugin-reducer": "^3.2.3"
+		"prettier-elastic": "^2.0.5"
 	},
 	"eslintConfig": {
 		"extends": "medikoo/node",
@@ -33,5 +32,8 @@
 		"lint": "eslint --ignore-path=.gitignore .",
 		"prettify": "prettier --write '**/*.{css,html,js,json,md,yaml,yml}'"
 	},
-	"license": "ISC"
+	"license": "ISC",
+	"dependencies": {
+		"serverless-azure-functions": "^2.1.0"
+	}
 }

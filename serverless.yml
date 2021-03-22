@@ -1,18 +1,41 @@
-service: test-lambda
+service: test-azure
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: "2"
 
 provider:
-  name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
+  name: azure
+  region: West US 2
+  runtime: nodejs12
 
+plugins: # look for additional plugins in the community plugins repo: https://github.com/serverless/plugins
+  - serverless-azure-functions
+
+# you can add packaging information here
 package:
-  individually: true
+  # include:
+  #   - include-me.js
+  #   - include-me-dir/**
+  exclude:
+    # - exclude-me.js
+    # - exclude-me-dir/**
+    - local.settings.json
+    - .vscode/**
 
 functions:
-  function:
-    handler: index.handler
+  hello:
+    handler: src/handlers/hello.sayHello
+    events:
+      - http: true
+        methods:
+          - GET
+        authLevel: anonymous # can also be `function` or `admin`
 
-plugins:
-  - serverless-plugin-reducer
+  goodbye:
+    handler: src/handlers/goodbye.sayGoodbye
+    events:
+      - http: true
+        methods:
+          - GET
+        authLevel: anonymous
