@@ -1,16 +1,16 @@
 {
   "service": {
-    "service": "test-offline-lambda",
+    "service": "test-plugin-offline",
     "serviceObject": {
-      "name": "test-offline-lambda"
+      "name": "test-plugin-offline"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
       "name": "aws",
-      "runtime": "nodejs10.x",
+      "runtime": "nodejs12.x",
+      "region": "us-east-1",
+      "stage": "dev",
       "versionFunctions": false,
-      "remoteFunctionData": null,
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -29,16 +29,71 @@
               }
             }
           },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-offline-lambda-dev-myFunction"
+              "LogGroupName": "/aws/lambda/test-plugin-offline-dev-myFunction"
             }
           },
           "MyFunction2LogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-offline-lambda-dev-myFunction2"
+              "LogGroupName": "/aws/lambda/test-plugin-offline-dev-myFunction2"
             }
           },
           "IamRoleLambdaExecution": {
@@ -66,8 +121,8 @@
                     "Fn::Join": [
                       "-",
                       [
+                        "test-plugin-offline",
                         "dev",
-                        "test-offline-lambda",
                         "lambda"
                       ]
                     ]
@@ -78,11 +133,12 @@
                       {
                         "Effect": "Allow",
                         "Action": [
-                          "logs:CreateLogStream"
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup"
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-offline-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-offline-dev*:*"
                           }
                         ]
                       },
@@ -93,7 +149,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-offline-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-offline-dev*:*:*"
                           }
                         ]
                       }
@@ -106,7 +162,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-offline-lambda",
+                    "test-plugin-offline",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -124,23 +180,22 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-offline-lambda/dev/1561623513632-2019-06-27T08:18:33.632Z/myFunction.zip"
+                "S3Key": "serverless/test-plugin-offline/dev/1617356429491-2021-04-02T09:40:29.491Z/myFunction.zip"
               },
-              "FunctionName": "test-offline-lambda-dev-myFunction",
               "Handler": "index.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "test-plugin-offline-dev-myFunction",
               "MemorySize": 1024,
+              "Timeout": 6,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              },
-              "Runtime": "nodejs10.x",
-              "Timeout": 6
+              }
             },
             "DependsOn": [
-              "MyFunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "MyFunctionLogGroup"
             ]
           },
           "MyFunction2LambdaFunction": {
@@ -150,34 +205,34 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-offline-lambda/dev/1561623513632-2019-06-27T08:18:33.632Z/myFunction2.zip"
+                "S3Key": "serverless/test-plugin-offline/dev/1617356429491-2021-04-02T09:40:29.491Z/myFunction2.zip"
               },
-              "FunctionName": "test-offline-lambda-dev-myFunction2",
               "Handler": "index.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "test-plugin-offline-dev-myFunction2",
               "MemorySize": 1024,
+              "Timeout": 6,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              },
-              "Runtime": "nodejs10.x",
-              "Timeout": 6
+              }
             },
             "DependsOn": [
-              "MyFunction2LogGroup",
-              "IamRoleLambdaExecution"
+              "MyFunction2LogGroup"
             ]
           },
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "dev-test-offline-lambda",
+              "Name": "dev-test-plugin-offline",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
                 ]
-              }
+              },
+              "Policy": ""
             }
           },
           "ApiGatewayResourceTestDashget": {
@@ -238,7 +293,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1561623511855": {
+          "ApiGatewayDeployment1617356427643": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -336,6 +391,61 @@
                 ]
               }
             }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
           }
         },
         "Outputs": {
@@ -365,34 +475,54 @@
             }
           }
         ],
-        "name": "test-offline-lambda-dev-myFunction",
+        "name": "test-plugin-offline-dev-myFunction",
         "package": {
-          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction.zip"
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs10.x",
+        "runtime": "nodejs12.x",
         "vpc": {}
       },
       "myFunction2": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-offline-lambda-dev-myFunction2",
+        "name": "test-plugin-offline-dev-myFunction2",
         "package": {
-          "artifact": "/Users/medikoo/Projects/tests/serverless-test/.serverless/myFunction2.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/myFunction2.zip"
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs10.x",
+        "runtime": "nodejs12.x",
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "layers": {},
+    "initialServerlessConfig": {
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-plugin-offline/dev/1617356429491-2021-04-02T09:40:29.491Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      }
+    },
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-offline-lambda/dev/1561623513632-2019-06-27T08:18:33.632Z",
+    "artifactDirectoryName": "serverless/test-plugin-offline/dev/1617356429491-2021-04-02T09:40:29.491Z",
     "artifact": ""
   }
 }

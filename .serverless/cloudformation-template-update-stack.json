@@ -16,16 +16,71 @@
         }
       }
     },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-offline-lambda-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-plugin-offline-dev-myFunction"
       }
     },
     "MyFunction2LogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-offline-lambda-dev-myFunction2"
+        "LogGroupName": "/aws/lambda/test-plugin-offline-dev-myFunction2"
       }
     },
     "IamRoleLambdaExecution": {
@@ -53,8 +108,8 @@
               "Fn::Join": [
                 "-",
                 [
+                  "test-plugin-offline",
                   "dev",
-                  "test-offline-lambda",
                   "lambda"
                 ]
               ]
@@ -65,11 +120,12 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "logs:CreateLogStream"
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup"
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-offline-lambda-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-offline-dev*:*"
                     }
                   ]
                 },
@@ -80,7 +136,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-offline-lambda-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-offline-dev*:*:*"
                     }
                   ]
                 }
@@ -93,7 +149,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-offline-lambda",
+              "test-plugin-offline",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -111,23 +167,22 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-offline-lambda/dev/1561623513632-2019-06-27T08:18:33.632Z/myFunction.zip"
+          "S3Key": "serverless/test-plugin-offline/dev/1617356429491-2021-04-02T09:40:29.491Z/myFunction.zip"
         },
-        "FunctionName": "test-offline-lambda-dev-myFunction",
         "Handler": "index.handler",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "test-plugin-offline-dev-myFunction",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        },
-        "Runtime": "nodejs10.x",
-        "Timeout": 6
+        }
       },
       "DependsOn": [
-        "MyFunctionLogGroup",
-        "IamRoleLambdaExecution"
+        "MyFunctionLogGroup"
       ]
     },
     "MyFunction2LambdaFunction": {
@@ -137,34 +192,34 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-offline-lambda/dev/1561623513632-2019-06-27T08:18:33.632Z/myFunction2.zip"
+          "S3Key": "serverless/test-plugin-offline/dev/1617356429491-2021-04-02T09:40:29.491Z/myFunction2.zip"
         },
-        "FunctionName": "test-offline-lambda-dev-myFunction2",
         "Handler": "index.handler",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "test-plugin-offline-dev-myFunction2",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        },
-        "Runtime": "nodejs10.x",
-        "Timeout": 6
+        }
       },
       "DependsOn": [
-        "MyFunction2LogGroup",
-        "IamRoleLambdaExecution"
+        "MyFunction2LogGroup"
       ]
     },
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-test-offline-lambda",
+        "Name": "dev-test-plugin-offline",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
           ]
-        }
+        },
+        "Policy": ""
       }
     },
     "ApiGatewayResourceTestDashget": {
@@ -225,7 +280,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1561623511855": {
+    "ApiGatewayDeployment1617356427643": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
