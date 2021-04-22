@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z/function.zip"
+          "S3Key": "serverless/test-lambda/dev/1619081175596-2021-04-22T08:46:15.596Z/function.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
