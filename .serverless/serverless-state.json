@@ -5,13 +5,11 @@
       "name": "test-dashboard-python-lambda"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
       "runtime": "python3.8",
       "region": "us-east-1",
+      "stage": "dev",
       "versionFunctions": false,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -58,6 +56,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -101,7 +114,8 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-dashboard-python-lambda-dev",
+                        "test-dashboard-python-lambda",
+                        "dev",
                         "lambda"
                       ]
                     ]
@@ -141,7 +155,8 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-dashboard-python-lambda-dev",
+                    "test-dashboard-python-lambda",
+                    "dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -204,26 +219,25 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard-python-lambda/dev/1588923214451-2020-05-08T07:33:34.451Z/test-dashboard-python-lambda.zip"
+                "S3Key": "serverless/test-dashboard-python-lambda/dev/1623235267536-2021-06-09T10:41:07.536Z/test-dashboard-python-lambda.zip"
               },
-              "FunctionName": "test-dashboard-python-lambda-dev-function",
               "Handler": "s_function.handler",
+              "Runtime": "python3.8",
+              "FunctionName": "test-dashboard-python-lambda-dev-function",
               "MemorySize": 1024,
+              "Timeout": 6,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              },
-              "Runtime": "python3.8",
-              "Timeout": 6
+              }
             },
             "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "FunctionLogGroup"
             ]
           },
-          "CloudWatchLogsSubscriptionFilterFunctionLogGroup": {
+          "CWLSubFilterFunctionLogGroupUsEast1": {
             "Type": "AWS::Logs::SubscriptionFilter",
             "Properties": {
               "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard-python-lambda#dev",
@@ -238,6 +252,9 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-test-dashboard-python-lambda-dev-ServerlessDeploymentBucketName"
             }
           },
           "EnterpriseLogAccessIamRole": {
@@ -246,6 +263,9 @@
                 "EnterpriseLogAccessIamRole",
                 "Arn"
               ]
+            },
+            "Export": {
+              "Name": "sls-test-dashboard-python-lambda-dev-EnterpriseLogAccessIamRole"
             }
           }
         }
@@ -296,6 +316,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -332,18 +367,32 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "app": "medikoo-test",
     "org": "medikoo",
     "layers": {},
+    "initialServerlessConfig": {
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
+      "org": "medikoo",
+      "app": "medikoo-test",
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      }
+    },
     "isDashboardMonitoringPreconfigured": true,
     "isDashboardAppPreconfigured": true,
-    "appUid": "GjXh77HjWzffv8X5SQ",
     "orgUid": "1sJrygBdcH5mNKPSp8",
+    "appUid": "GjXh77HjWzffv8X5SQ",
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-dashboard-python-lambda.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-dashboard-python-lambda/dev/1588923214451-2020-05-08T07:33:34.451Z",
+    "artifactDirectoryName": "serverless/test-dashboard-python-lambda/dev/1623235267536-2021-06-09T10:41:07.536Z",
     "artifact": "test-dashboard-python-lambda.zip"
   }
 }
