@@ -1,7 +1,9 @@
 service: test-dashboard
 
-tenant: medikoo
+org: medikoo
 app: medikoo-test
+
+variablesResolutionMode: 20210326
 
 custom:
   marko2: ${param:5}
