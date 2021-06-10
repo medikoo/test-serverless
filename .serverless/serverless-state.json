@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-dashboard-python-lambda",
+    "service": "test-issue-plugin-592",
     "serviceObject": {
-      "name": "test-dashboard-python-lambda"
+      "name": "test-issue-plugin-592"
     },
     "provider": {
       "name": "aws",
@@ -86,7 +86,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-dashboard-python-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-issue-plugin-592-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -114,7 +114,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-dashboard-python-lambda",
+                        "test-issue-plugin-592",
                         "dev",
                         "lambda"
                       ]
@@ -131,7 +131,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-python-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-plugin-592-dev*:*"
                           }
                         ]
                       },
@@ -142,7 +142,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-python-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-plugin-592-dev*:*:*"
                           }
                         ]
                       }
@@ -155,7 +155,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-dashboard-python-lambda",
+                    "test-issue-plugin-592",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -219,11 +219,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard-python-lambda/dev/1623235267536-2021-06-09T10:41:07.536Z/test-dashboard-python-lambda.zip"
+                "S3Key": "serverless/test-issue-plugin-592/dev/1623319753473-2021-06-10T10:09:13.473Z/test-issue-plugin-592.zip"
               },
               "Handler": "s_function.handler",
-              "Runtime": "python3.8",
-              "FunctionName": "test-dashboard-python-lambda-dev-function",
+              "Runtime": "python3.7",
+              "FunctionName": "test-issue-plugin-592-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -237,10 +237,47 @@
               "FunctionLogGroup"
             ]
           },
+          "FunctionEventsRuleSchedule1": {
+            "Type": "AWS::Events::Rule",
+            "Properties": {
+              "ScheduleExpression": "rate(1 minute)",
+              "State": "ENABLED",
+              "Targets": [
+                {
+                  "Arn": {
+                    "Fn::GetAtt": [
+                      "FunctionLambdaFunction",
+                      "Arn"
+                    ]
+                  },
+                  "Id": "functionSchedule"
+                }
+              ]
+            }
+          },
+          "FunctionLambdaPermissionEventsRuleSchedule1": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "FunctionLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "events.amazonaws.com",
+              "SourceArn": {
+                "Fn::GetAtt": [
+                  "FunctionEventsRuleSchedule1",
+                  "Arn"
+                ]
+              }
+            }
+          },
           "CWLSubFilterFunctionLogGroupUsEast1": {
             "Type": "AWS::Logs::SubscriptionFilter",
             "Properties": {
-              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard-python-lambda#dev",
+              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-issue-plugin-592#dev",
               "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
               "LogGroupName": {
                 "Ref": "FunctionLogGroup"
@@ -254,7 +291,7 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-test-dashboard-python-lambda-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-test-issue-plugin-592-dev-ServerlessDeploymentBucketName"
             }
           },
           "EnterpriseLogAccessIamRole": {
@@ -265,7 +302,7 @@
               ]
             },
             "Export": {
-              "Name": "sls-test-dashboard-python-lambda-dev-EnterpriseLogAccessIamRole"
+              "Name": "sls-test-issue-plugin-592-dev-EnterpriseLogAccessIamRole"
             }
           }
         }
@@ -354,16 +391,23 @@
       },
       "vpc": {}
     },
+    "plugins": [
+      "serverless-python-requirements"
+    ],
     "pluginsData": {},
     "functions": {
       "function": {
         "handler": "s_function.handler",
-        "events": [],
-        "name": "test-dashboard-python-lambda-dev-function",
+        "runtime": "python3.7",
+        "events": [
+          {
+            "schedule": "rate(1 minute)"
+          }
+        ],
+        "name": "test-issue-plugin-592-dev-function",
         "package": {},
         "memory": 1024,
         "timeout": 6,
-        "runtime": "python3.8",
         "vpc": {}
       }
     },
@@ -383,16 +427,19 @@
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
     "isDashboardMonitoringPreconfigured": true,
     "isDashboardAppPreconfigured": true,
     "orgUid": "1sJrygBdcH5mNKPSp8",
     "appUid": "GjXh77HjWzffv8X5SQ",
-    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-dashboard-python-lambda.zip"
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-issue-plugin-592.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-dashboard-python-lambda/dev/1623235267536-2021-06-09T10:41:07.536Z",
-    "artifact": "test-dashboard-python-lambda.zip"
+    "artifactDirectoryName": "serverless/test-issue-plugin-592/dev/1623319753473-2021-06-10T10:09:13.473Z",
+    "artifact": "test-issue-plugin-592.zip"
   }
 }

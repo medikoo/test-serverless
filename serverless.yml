@@ -1,4 +1,4 @@
-service: test-dashboard-python-lambda
+service: test-issue-plugin-592
 
 org: medikoo
 app: medikoo-test
@@ -12,4 +12,10 @@ provider:
 
 functions:
   function:
-    handler: handler.hello
+    handler: handler.process
+    runtime: python3.7
+    events:
+      - schedule: rate(1 minute)
+
+plugins:
+  - serverless-python-requirements
