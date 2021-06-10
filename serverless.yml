@@ -1,4 +1,4 @@
-service: test-dashboard
+service: test-dashboard-params
 
 org: medikoo
 app: medikoo-test
