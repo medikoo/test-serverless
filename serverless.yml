@@ -25,9 +25,6 @@ provider:
   stage: many-params
   versionFunctions: false
 
-package:
-  individually: true
-
 functions:
   function:
     handler: index.handler

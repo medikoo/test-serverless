@@ -207,7 +207,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-dashboard/many-params/1623346530441-2021-06-10T17:35:30.441Z/function.zip"
+          "S3Key": "serverless/test-dashboard/many-params/1623347365688-2021-06-10T17:49:25.688Z/test-dashboard.zip"
         },
         "Handler": "s_function.handler",
         "Runtime": "nodejs12.x",

@@ -219,7 +219,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard/many-params/1623346530441-2021-06-10T17:35:30.441Z/function.zip"
+                "S3Key": "serverless/test-dashboard/many-params/1623347365688-2021-06-10T17:49:25.688Z/test-dashboard.zip"
               },
               "Handler": "s_function.handler",
               "Runtime": "nodejs12.x",
@@ -373,13 +373,7 @@
         "handler": "s_function.handler",
         "events": [],
         "name": "test-dashboard-many-params-function",
-        "package": {
-          "include": [
-            "s_function.js",
-            "serverless_sdk/**"
-          ],
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
+        "package": {},
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
@@ -404,10 +398,6 @@
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
-      "package": {
-        "individually": true,
-        "artifactDirectoryName": "serverless/test-dashboard/many-params/1623346530441-2021-06-10T17:35:30.441Z"
-      },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       }
@@ -415,11 +405,11 @@
     "isDashboardMonitoringPreconfigured": true,
     "isDashboardAppPreconfigured": true,
     "orgUid": "1sJrygBdcH5mNKPSp8",
-    "appUid": "GjXh77HjWzffv8X5SQ"
+    "appUid": "GjXh77HjWzffv8X5SQ",
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-dashboard.zip"
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard/many-params/1623346530441-2021-06-10T17:35:30.441Z",
-    "artifact": ""
+    "artifactDirectoryName": "serverless/test-dashboard/many-params/1623347365688-2021-06-10T17:49:25.688Z",
+    "artifact": "test-dashboard.zip"
   }
 }
