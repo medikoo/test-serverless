@@ -176,7 +176,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-offline/dev/1623764057817-2021-06-15T13:34:17.817Z/function.zip"
+                "S3Key": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z/function.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
@@ -307,7 +307,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1623764054950": {
+          "ApiGatewayDeployment1623766999882": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -479,6 +479,9 @@
       },
       "vpc": {}
     },
+    "plugins": [
+      "serverless-offline"
+    ],
     "pluginsData": {},
     "functions": {
       "function": {
@@ -520,10 +523,13 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1623764057817-2021-06-15T13:34:17.817Z"
+        "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
     "layers": {},
@@ -531,7 +537,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1623764057817-2021-06-15T13:34:17.817Z",
+    "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z",
     "artifact": ""
   }
 }
