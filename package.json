@@ -5,7 +5,8 @@
 		"eslint": "^7.23.0",
 		"eslint-config-medikoo": "^3.1.0",
 		"prettier-elastic": "^2.1.2",
-		"serverless-plugin-reducer": "^3.2.4"
+		"serverless": "^2.46.0",
+		"serverless-offline": "^7.0.0"
 	},
 	"eslintConfig": {
 		"extends": "medikoo/node",

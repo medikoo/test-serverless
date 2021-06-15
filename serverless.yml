@@ -1,4 +1,4 @@
-service: test-api-gw
+service: test-plugin-serverless-offline
 
 provider:
   name: aws
@@ -24,4 +24,4 @@ functions:
           method: POST
 
 plugins:
-  - serverless-plugin-reducer
+  - serverless-offline
