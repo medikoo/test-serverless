@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-lambda",
+    "service": "test-issue-9619",
     "serviceObject": {
-      "name": "test-lambda"
+      "name": "test-issue-9619"
     },
     "provider": {
       "name": "aws",
@@ -10,7 +10,6 @@
       "region": "us-east-1",
       "stage": "dev",
       "versionFunctions": false,
-      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -87,7 +86,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-issue-9619-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -115,7 +114,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-lambda",
+                        "test-issue-9619",
                         "dev",
                         "lambda"
                       ]
@@ -132,7 +131,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-9619-dev*:*"
                           }
                         ]
                       },
@@ -143,7 +142,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-9619-dev*:*:*"
                           }
                         ]
                       }
@@ -156,7 +155,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-lambda",
+                    "test-issue-9619",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -174,11 +173,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z/function.zip"
+                "S3Key": "serverless/test-issue-9619/dev/1624259907553-2021-06-21T07:18:27.553Z/function.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
-              "FunctionName": "test-lambda-dev-function",
+              "FunctionName": "test-issue-9619-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -197,6 +196,9 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-test-issue-9619-dev-ServerlessDeploymentBucketName"
             }
           }
         }
@@ -285,15 +287,12 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
     "pluginsData": {},
     "functions": {
       "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-lambda-dev-function",
+        "name": "test-issue-9619-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -305,7 +304,6 @@
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "layers": {},
     "initialServerlessConfig": {
       "service": {
         "$ref": "$[\"service\"][\"serviceObject\"]"
@@ -315,20 +313,18 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z"
+        "artifactDirectoryName": "serverless/test-issue-9619/dev/1624259907553-2021-06-21T07:18:27.553Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
-      },
-      "plugins": {
-        "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
+    "layers": {},
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z",
+    "artifactDirectoryName": "serverless/test-issue-9619/dev/1624259907553-2021-06-21T07:18:27.553Z",
     "artifact": ""
   }
 }

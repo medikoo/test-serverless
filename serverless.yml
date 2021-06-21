@@ -1,4 +1,4 @@
-service: test-lambda
+service: test-issue-9619
 
 provider:
   name: aws
@@ -13,6 +13,3 @@ package:
 functions:
   function:
     handler: index.handler
-
-plugins:
-  - serverless-plugin-reducer
