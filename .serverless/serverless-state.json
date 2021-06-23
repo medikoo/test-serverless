@@ -1,15 +1,16 @@
 {
   "service": {
-    "service": "test-issue-9619",
+    "service": "${file(./config.all.yml):servicesPrefixName}-xyz",
     "serviceObject": {
-      "name": "test-issue-9619"
+      "name": "${file(./config.all.yml):servicesPrefixName}-xyz"
     },
     "provider": {
       "name": "aws",
-      "runtime": "nodejs12.x",
-      "region": "us-east-1",
+      "lambdaHashingVersion": "20201221",
+      "runtime": "nodejs14.x",
       "stage": "dev",
-      "versionFunctions": false,
+      "region": "us-east-1",
+      "versionFunctions": true,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -86,7 +87,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-issue-9619-dev-function"
+              "LogGroupName": "/aws/lambda/${file(./config.all.yml):servicesPrefixName}-xyz-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -114,7 +115,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-issue-9619",
+                        "${file(./config.all.yml):servicesPrefixName}-xyz",
                         "dev",
                         "lambda"
                       ]
@@ -131,7 +132,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-9619-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${file(./config.all.yml):servicesPrefixName}-xyz-dev*:*"
                           }
                         ]
                       },
@@ -142,7 +143,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-9619-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${file(./config.all.yml):servicesPrefixName}-xyz-dev*:*:*"
                           }
                         ]
                       }
@@ -155,7 +156,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-issue-9619",
+                    "${file(./config.all.yml):servicesPrefixName}-xyz",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -173,11 +174,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-issue-9619/dev/1624259907553-2021-06-21T07:18:27.553Z/function.zip"
+                "S3Key": "serverless/${file(./config.all.yml):servicesPrefixName}-xyz/dev/1624356149889-2021-06-22T10:02:29.889Z/config.all.yml):servicesPrefixName}-xyz.zip"
               },
               "Handler": "index.handler",
-              "Runtime": "nodejs12.x",
-              "FunctionName": "test-issue-9619-dev-function",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "${file(./config.all.yml):servicesPrefixName}-xyz-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -190,6 +191,16 @@
             "DependsOn": [
               "FunctionLogGroup"
             ]
+          },
+          "FunctionLambdaVersionn8kkPYX8H5efmJfYzcXQfwaNl8iXRZSOKwTNJfa9iY": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "CodeSha256": "yxz1Opo9CLpTHbOiRGGRFepZOVpiS69ZIRFrOu05A5E="
+            }
           }
         },
         "Outputs": {
@@ -198,7 +209,16 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-test-issue-9619-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-${file(./config.all.yml):servicesPrefixName}-xyz-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "FunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "FunctionLambdaVersionn8kkPYX8H5efmJfYzcXQfwaNl8iXRZSOKwTNJfa9iY"
+            },
+            "Export": {
+              "Name": "sls-${file(./config.all.yml):servicesPrefixName}-xyz-dev-FunctionLambdaFunctionQualifiedArn"
             }
           }
         }
@@ -287,19 +307,21 @@
       },
       "vpc": {}
     },
+    "custom": {
+      "myStage": "sandbox"
+    },
     "pluginsData": {},
     "functions": {
       "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-issue-9619-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
+        "name": "${file(./config.all.yml):servicesPrefixName}-xyz-dev-function",
+        "package": {},
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs12.x",
-        "vpc": {}
+        "runtime": "nodejs14.x",
+        "vpc": {},
+        "versionLogicalId": "FunctionLambdaVersionn8kkPYX8H5efmJfYzcXQfwaNl8iXRZSOKwTNJfa9iY"
       }
     },
     "configValidationMode": "warn",
@@ -308,23 +330,23 @@
       "service": {
         "$ref": "$[\"service\"][\"serviceObject\"]"
       },
+      "variablesResolutionMode": "20210326",
+      "custom": {
+        "$ref": "$[\"service\"][\"custom\"]"
+      },
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
-      },
-      "package": {
-        "individually": true,
-        "artifactDirectoryName": "serverless/test-issue-9619/dev/1624259907553-2021-06-21T07:18:27.553Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       }
     },
     "layers": {},
-    "isDashboardMonitoringPreconfigured": false
+    "isDashboardMonitoringPreconfigured": false,
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/${file(./config.all.yml):servicesPrefixName}-xyz.zip"
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-issue-9619/dev/1624259907553-2021-06-21T07:18:27.553Z",
-    "artifact": ""
+    "artifactDirectoryName": "serverless/${file(./config.all.yml):servicesPrefixName}-xyz/dev/1624356149889-2021-06-22T10:02:29.889Z",
+    "artifact": "config.all.yml):servicesPrefixName}-xyz.zip"
   }
 }

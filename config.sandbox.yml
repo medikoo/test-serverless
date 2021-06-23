@@ -1,0 +1,1 @@
+servicesPrefixName: ${file(./config.all.yml):servicesPrefixName}

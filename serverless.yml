@@ -1,14 +1,14 @@
-service: test-issue-9619
+service: ${file(./config.sandbox.yml):servicesPrefixName}-xyz
+
+variablesResolutionMode: 20210326
+
+custom:
+  myStage: "sandbox"
 
 provider:
   name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
-
-package:
-  individually: true
+  lambdaHashingVersion: 20201221
+  runtime: nodejs14.x
 
 functions:
   function:
