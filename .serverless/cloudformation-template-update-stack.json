@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/aws-abc-services-xyz/dev/1624969971950-2021-06-29T12:32:51.950Z/aws-abc-services-xyz.zip"
+          "S3Key": "serverless/aws-abc-services-xyz/dev/1624973822491-2021-06-29T13:37:02.491Z/aws-abc-services-xyz.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs14.x",
@@ -179,14 +179,14 @@
         "FunctionLogGroup"
       ]
     },
-    "FunctionLambdaVersionvdegx2RwiUhJ5uYCohxJVdNmm8fWuqANBRMIx5NmLOc": {
+    "FunctionLambdaVersionkfLEkiS1C0mH8MAhsQYLqlX0l4Bit0KI0Vp48GYYNw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "FunctionLambdaFunction"
         },
-        "CodeSha256": "yxz1Opo9CLpTHbOiRGGRFepZOVpiS69ZIRFrOu05A5E="
+        "CodeSha256": "4k+2NmvD3zoR2EhRssWNoyeqdAMcWsRq8bCs1fP8B14="
       }
     }
   },
@@ -202,7 +202,7 @@
     "FunctionLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "FunctionLambdaVersionvdegx2RwiUhJ5uYCohxJVdNmm8fWuqANBRMIx5NmLOc"
+        "Ref": "FunctionLambdaVersionkfLEkiS1C0mH8MAhsQYLqlX0l4Bit0KI0Vp48GYYNw"
       },
       "Export": {
         "Name": "sls-aws-abc-services-xyz-dev-FunctionLambdaFunctionQualifiedArn"

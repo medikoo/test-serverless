@@ -1,1 +1,1 @@
-servicesPrefixName: ${file(./config.all.yml):servicesPrefixName}
+foo: ${file(./config.all.yml)}

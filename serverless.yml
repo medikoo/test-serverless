@@ -1,4 +1,4 @@
-service: ${file(./config.sandbox.yml):servicesPrefixName}-xyz
+service: ${file(./config.sandbox.yml):foo.bar}-xyz
 
 variablesResolutionMode: 20210326
 
