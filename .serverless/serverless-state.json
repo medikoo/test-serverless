@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "${file(./config.all.yml):servicesPrefixName}-xyz",
+    "service": "aws-abc-services-xyz",
     "serviceObject": {
-      "name": "${file(./config.all.yml):servicesPrefixName}-xyz"
+      "name": "aws-abc-services-xyz"
     },
     "provider": {
       "name": "aws",
@@ -87,7 +87,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/${file(./config.all.yml):servicesPrefixName}-xyz-dev-function"
+              "LogGroupName": "/aws/lambda/aws-abc-services-xyz-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -115,7 +115,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "${file(./config.all.yml):servicesPrefixName}-xyz",
+                        "aws-abc-services-xyz",
                         "dev",
                         "lambda"
                       ]
@@ -132,7 +132,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${file(./config.all.yml):servicesPrefixName}-xyz-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/aws-abc-services-xyz-dev*:*"
                           }
                         ]
                       },
@@ -143,7 +143,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${file(./config.all.yml):servicesPrefixName}-xyz-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/aws-abc-services-xyz-dev*:*:*"
                           }
                         ]
                       }
@@ -156,7 +156,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "${file(./config.all.yml):servicesPrefixName}-xyz",
+                    "aws-abc-services-xyz",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -174,11 +174,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/${file(./config.all.yml):servicesPrefixName}-xyz/dev/1624356149889-2021-06-22T10:02:29.889Z/config.all.yml):servicesPrefixName}-xyz.zip"
+                "S3Key": "serverless/aws-abc-services-xyz/dev/1624969971950-2021-06-29T12:32:51.950Z/aws-abc-services-xyz.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs14.x",
-              "FunctionName": "${file(./config.all.yml):servicesPrefixName}-xyz-dev-function",
+              "FunctionName": "aws-abc-services-xyz-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -192,7 +192,7 @@
               "FunctionLogGroup"
             ]
           },
-          "FunctionLambdaVersionn8kkPYX8H5efmJfYzcXQfwaNl8iXRZSOKwTNJfa9iY": {
+          "FunctionLambdaVersionvdegx2RwiUhJ5uYCohxJVdNmm8fWuqANBRMIx5NmLOc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
@@ -209,16 +209,16 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-${file(./config.all.yml):servicesPrefixName}-xyz-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-aws-abc-services-xyz-dev-ServerlessDeploymentBucketName"
             }
           },
           "FunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FunctionLambdaVersionn8kkPYX8H5efmJfYzcXQfwaNl8iXRZSOKwTNJfa9iY"
+              "Ref": "FunctionLambdaVersionvdegx2RwiUhJ5uYCohxJVdNmm8fWuqANBRMIx5NmLOc"
             },
             "Export": {
-              "Name": "sls-${file(./config.all.yml):servicesPrefixName}-xyz-dev-FunctionLambdaFunctionQualifiedArn"
+              "Name": "sls-aws-abc-services-xyz-dev-FunctionLambdaFunctionQualifiedArn"
             }
           }
         }
@@ -315,13 +315,13 @@
       "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "${file(./config.all.yml):servicesPrefixName}-xyz-dev-function",
+        "name": "aws-abc-services-xyz-dev-function",
         "package": {},
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs14.x",
         "vpc": {},
-        "versionLogicalId": "FunctionLambdaVersionn8kkPYX8H5efmJfYzcXQfwaNl8iXRZSOKwTNJfa9iY"
+        "versionLogicalId": "FunctionLambdaVersionvdegx2RwiUhJ5uYCohxJVdNmm8fWuqANBRMIx5NmLOc"
       }
     },
     "configValidationMode": "warn",
@@ -343,10 +343,10 @@
     },
     "layers": {},
     "isDashboardMonitoringPreconfigured": false,
-    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/${file(./config.all.yml):servicesPrefixName}-xyz.zip"
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/aws-abc-services-xyz.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/${file(./config.all.yml):servicesPrefixName}-xyz/dev/1624356149889-2021-06-22T10:02:29.889Z",
-    "artifact": "config.all.yml):servicesPrefixName}-xyz.zip"
+    "artifactDirectoryName": "serverless/aws-abc-services-xyz/dev/1624969971950-2021-06-29T12:32:51.950Z",
+    "artifact": "aws-abc-services-xyz.zip"
   }
 }
