@@ -5,7 +5,8 @@
 		"eslint": "^7.23.0",
 		"eslint-config-medikoo": "^3.1.0",
 		"prettier-elastic": "^2.1.2",
-		"serverless-webpack": "^5.5.1"
+		"serverless-webpack": "^5.5.1",
+		"webpack": "^5.41.1"
 	},
 	"eslintConfig": {
 		"extends": "medikoo/node",
