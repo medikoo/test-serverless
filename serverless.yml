@@ -1,4 +1,4 @@
-service: test-python-lambda
+service: test-plugin-serverless-python-requirements
 
 provider:
   name: aws
@@ -10,3 +10,6 @@ provider:
 functions:
   function:
     handler: handler.hello
+
+plugins:
+  - serverless-python-requirements

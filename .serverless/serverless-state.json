@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-python-lambda",
+    "service": "test-plugin-serverless-python-requirements",
     "serviceObject": {
-      "name": "test-python-lambda"
+      "name": "test-plugin-serverless-python-requirements"
     },
     "provider": {
       "name": "aws",
@@ -10,7 +10,6 @@
       "region": "us-east-1",
       "stage": "dev",
       "versionFunctions": false,
-      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -87,7 +86,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-python-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-plugin-serverless-python-requirements-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -115,7 +114,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-python-lambda",
+                        "test-plugin-serverless-python-requirements",
                         "dev",
                         "lambda"
                       ]
@@ -132,7 +131,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-python-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-python-requirements-dev*:*"
                           }
                         ]
                       },
@@ -143,7 +142,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-python-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-python-requirements-dev*:*:*"
                           }
                         ]
                       }
@@ -156,7 +155,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-python-lambda",
+                    "test-plugin-serverless-python-requirements",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -174,11 +173,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-python-lambda/dev/1619160954323-2021-04-23T06:55:54.323Z/test-python-lambda.zip"
+                "S3Key": "serverless/test-plugin-serverless-python-requirements/dev/1625138184295-2021-07-01T11:16:24.295Z/test-plugin-serverless-python-requirements.zip"
               },
               "Handler": "handler.hello",
               "Runtime": "python3.8",
-              "FunctionName": "test-python-lambda-dev-function",
+              "FunctionName": "test-plugin-serverless-python-requirements-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -199,7 +198,7 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-test-python-lambda-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-test-plugin-serverless-python-requirements-dev-ServerlessDeploymentBucketName"
             }
           }
         }
@@ -288,12 +287,15 @@
       },
       "vpc": {}
     },
+    "plugins": [
+      "serverless-python-requirements"
+    ],
     "pluginsData": {},
     "functions": {
       "function": {
         "handler": "handler.hello",
         "events": [],
-        "name": "test-python-lambda-dev-function",
+        "name": "test-plugin-serverless-python-requirements-dev-function",
         "package": {},
         "memory": 1024,
         "timeout": 6,
@@ -303,7 +305,6 @@
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "layers": {},
     "initialServerlessConfig": {
       "service": {
         "$ref": "$[\"service\"][\"serviceObject\"]"
@@ -313,13 +314,17 @@
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
+    "layers": {},
     "isDashboardMonitoringPreconfigured": false,
-    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-python-lambda.zip"
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-plugin-serverless-python-requirements.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-python-lambda/dev/1619160954323-2021-04-23T06:55:54.323Z",
-    "artifact": "test-python-lambda.zip"
+    "artifactDirectoryName": "serverless/test-plugin-serverless-python-requirements/dev/1625138184295-2021-07-01T11:16:24.295Z",
+    "artifact": "test-plugin-serverless-python-requirements.zip"
   }
 }
