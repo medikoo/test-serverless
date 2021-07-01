@@ -7,6 +7,11 @@ provider:
   stage: dev
   versionFunctions: false
 
+custom:
+  pythonRequirements:
+    dockerizePip: false
+    pythonBin: /usr/local/bin/python3
+
 functions:
   function:
     handler: handler.hello
