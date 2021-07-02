@@ -1,4 +1,4 @@
-service: test-plugin-serverless-domain-manager
+service: test-plugin-serverless-prune-plugin
 
 provider:
   name: aws
@@ -8,10 +8,6 @@ provider:
   versionFunctions: false
   apiGateway:
     shouldStartNameWithService: true
-
-custom:
-  customDomain:
-    domainName: api.example.com
 
 functions:
   function:
@@ -25,4 +21,4 @@ functions:
           method: POST
 
 plugins:
-  - serverless-domain-manager
+  - serverless-prune-plugin
