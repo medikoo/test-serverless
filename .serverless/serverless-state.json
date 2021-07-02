@@ -176,7 +176,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z/function.zip"
+                "S3Key": "serverless/test-plugin-serverless-offline/dev/1625227375329-2021-07-02T12:02:55.329Z/test-plugin-serverless-offline.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
@@ -262,7 +262,10 @@
                 }
               },
               "MethodResponses": []
-            }
+            },
+            "DependsOn": [
+              "FunctionLambdaPermissionApiGateway"
+            ]
           },
           "ApiGatewayMethodFooPost": {
             "Type": "AWS::ApiGateway::Method",
@@ -305,9 +308,12 @@
                 }
               },
               "MethodResponses": []
-            }
+            },
+            "DependsOn": [
+              "FunctionLambdaPermissionApiGateway"
+            ]
           },
-          "ApiGatewayDeployment1623766999882": {
+          "ApiGatewayDeployment1625227372652": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -479,8 +485,21 @@
       },
       "vpc": {}
     },
+    "custom": {
+      "customDomain": {
+        "domainName": "serverless.foo.com",
+        "stage": "ci",
+        "basePath": "api",
+        "certificateName": "*.foo.com",
+        "createRoute53Record": true,
+        "endpointType": "regional",
+        "securityPolicy": "tls_1_2",
+        "apiType": "rest",
+        "autoDomain": false
+      }
+    },
     "plugins": [
-      "serverless-offline"
+      "serverless-domain-manager"
     ],
     "pluginsData": {},
     "functions": {
@@ -503,9 +522,7 @@
           }
         ],
         "name": "test-plugin-serverless-offline-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
+        "package": {},
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
@@ -521,9 +538,8 @@
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
-      "package": {
-        "individually": true,
-        "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z"
+      "custom": {
+        "$ref": "$[\"service\"][\"custom\"]"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -533,11 +549,11 @@
       }
     },
     "layers": {},
-    "isDashboardMonitoringPreconfigured": false
+    "isDashboardMonitoringPreconfigured": false,
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-plugin-serverless-offline.zip"
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z",
-    "artifact": ""
+    "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1625227375329-2021-07-02T12:02:55.329Z",
+    "artifact": "test-plugin-serverless-offline.zip"
   }
 }

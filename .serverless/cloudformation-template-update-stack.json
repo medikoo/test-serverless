@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z/function.zip"
+          "S3Key": "serverless/test-plugin-serverless-offline/dev/1625227375329-2021-07-02T12:02:55.329Z/test-plugin-serverless-offline.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
@@ -247,7 +247,10 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "FunctionLambdaPermissionApiGateway"
+      ]
     },
     "ApiGatewayMethodFooPost": {
       "Type": "AWS::ApiGateway::Method",
@@ -290,9 +293,12 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "FunctionLambdaPermissionApiGateway"
+      ]
     },
-    "ApiGatewayDeployment1623766999882": {
+    "ApiGatewayDeployment1625227372652": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {

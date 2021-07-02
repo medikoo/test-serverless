@@ -9,8 +9,17 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
 
-package:
-  individually: true
+custom:
+  customDomain:
+    domainName: serverless.foo.com
+    stage: ci
+    basePath: api
+    certificateName: "*.foo.com"
+    createRoute53Record: true
+    endpointType: "regional"
+    securityPolicy: tls_1_2
+    apiType: rest
+    autoDomain: false
 
 functions:
   function:
