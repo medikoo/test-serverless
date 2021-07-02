@@ -24,4 +24,4 @@ functions:
           method: POST
 
 plugins:
-  - serverless-offline
+  - serverless-domain-manager
