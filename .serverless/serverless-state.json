@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-plugin-serverless-offline",
+    "service": "test-plugin-serverless-domain-manager",
     "serviceObject": {
-      "name": "test-plugin-serverless-offline"
+      "name": "test-plugin-serverless-domain-manager"
     },
     "provider": {
       "name": "aws",
@@ -89,7 +89,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-plugin-serverless-offline-dev-function"
+              "LogGroupName": "/aws/lambda/test-plugin-serverless-domain-manager-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -117,7 +117,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-plugin-serverless-offline",
+                        "test-plugin-serverless-domain-manager",
                         "dev",
                         "lambda"
                       ]
@@ -134,7 +134,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-offline-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-domain-manager-dev*:*"
                           }
                         ]
                       },
@@ -145,7 +145,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-offline-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-domain-manager-dev*:*:*"
                           }
                         ]
                       }
@@ -158,7 +158,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-plugin-serverless-offline",
+                    "test-plugin-serverless-domain-manager",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -176,11 +176,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-offline/dev/1625227375329-2021-07-02T12:02:55.329Z/test-plugin-serverless-offline.zip"
+                "S3Key": "serverless/test-plugin-serverless-domain-manager/dev/1625227904689-2021-07-02T12:11:44.689Z/test-plugin-serverless-domain-manager.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
-              "FunctionName": "test-plugin-serverless-offline-dev-function",
+              "FunctionName": "test-plugin-serverless-domain-manager-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -197,7 +197,7 @@
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "test-plugin-serverless-offline-dev",
+              "Name": "test-plugin-serverless-domain-manager-dev",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -313,7 +313,7 @@
               "FunctionLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1625227372652": {
+          "ApiGatewayDeployment1625227902974": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -370,7 +370,7 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-test-plugin-serverless-offline-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-test-plugin-serverless-domain-manager-dev-ServerlessDeploymentBucketName"
             }
           },
           "ServiceEndpoint": {
@@ -396,7 +396,7 @@
               ]
             },
             "Export": {
-              "Name": "sls-test-plugin-serverless-offline-dev-ServiceEndpoint"
+              "Name": "sls-test-plugin-serverless-domain-manager-dev-ServiceEndpoint"
             }
           }
         }
@@ -487,15 +487,7 @@
     },
     "custom": {
       "customDomain": {
-        "domainName": "serverless.foo.com",
-        "stage": "ci",
-        "basePath": "api",
-        "certificateName": "*.foo.com",
-        "createRoute53Record": true,
-        "endpointType": "regional",
-        "securityPolicy": "tls_1_2",
-        "apiType": "rest",
-        "autoDomain": false
+        "domainName": "api.example.com"
       }
     },
     "plugins": [
@@ -521,7 +513,7 @@
             }
           }
         ],
-        "name": "test-plugin-serverless-offline-dev-function",
+        "name": "test-plugin-serverless-domain-manager-dev-function",
         "package": {},
         "memory": 1024,
         "timeout": 6,
@@ -550,10 +542,10 @@
     },
     "layers": {},
     "isDashboardMonitoringPreconfigured": false,
-    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-plugin-serverless-offline.zip"
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-plugin-serverless-domain-manager.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1625227375329-2021-07-02T12:02:55.329Z",
-    "artifact": "test-plugin-serverless-offline.zip"
+    "artifactDirectoryName": "serverless/test-plugin-serverless-domain-manager/dev/1625227904689-2021-07-02T12:11:44.689Z",
+    "artifact": "test-plugin-serverless-domain-manager.zip"
   }
 }

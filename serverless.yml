@@ -1,4 +1,4 @@
-service: test-plugin-serverless-offline
+service: test-plugin-serverless-domain-manager
 
 provider:
   name: aws
@@ -11,15 +11,7 @@ provider:
 
 custom:
   customDomain:
-    domainName: serverless.foo.com
-    stage: ci
-    basePath: api
-    certificateName: "*.foo.com"
-    createRoute53Record: true
-    endpointType: "regional"
-    securityPolicy: tls_1_2
-    apiType: rest
-    autoDomain: false
+    domainName: api.example.com
 
 functions:
   function:
