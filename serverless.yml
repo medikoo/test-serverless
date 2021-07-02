@@ -3,14 +3,7 @@ service: test-plugin-serverless-python-requirements
 provider:
   name: aws
   runtime: python3.8
-  region: us-east-1
-  stage: dev
-  versionFunctions: false
-
-custom:
-  pythonRequirements:
-    dockerizePip: false
-    pythonBin: /usr/local/bin/python3
+  lambdaHashingVersion: 20201221
 
 functions:
   function:

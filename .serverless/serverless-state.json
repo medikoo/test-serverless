@@ -7,9 +7,10 @@
     "provider": {
       "name": "aws",
       "runtime": "python3.8",
-      "region": "us-east-1",
+      "lambdaHashingVersion": "20201221",
       "stage": "dev",
-      "versionFunctions": false,
+      "region": "us-east-1",
+      "versionFunctions": true,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -173,7 +174,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-python-requirements/dev/1625147112632-2021-07-01T13:45:12.632Z/test-plugin-serverless-python-requirements.zip"
+                "S3Key": "serverless/test-plugin-serverless-python-requirements/dev/1625227070177-2021-07-02T11:57:50.177Z/test-plugin-serverless-python-requirements.zip"
               },
               "Handler": "handler.hello",
               "Runtime": "python3.8",
@@ -190,6 +191,16 @@
             "DependsOn": [
               "FunctionLogGroup"
             ]
+          },
+          "FunctionLambdaVersionK5okRPsa6wmGhhaOnmzyesoR8q5ggBRSdUGZ0FVAok": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "CodeSha256": "K5P2P3k54BV+AuMmyQ/HYOVyQZgVYHobq/lJKwik25Q="
+            }
           }
         },
         "Outputs": {
@@ -199,6 +210,15 @@
             },
             "Export": {
               "Name": "sls-test-plugin-serverless-python-requirements-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "FunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "FunctionLambdaVersionK5okRPsa6wmGhhaOnmzyesoR8q5ggBRSdUGZ0FVAok"
+            },
+            "Export": {
+              "Name": "sls-test-plugin-serverless-python-requirements-dev-FunctionLambdaFunctionQualifiedArn"
             }
           }
         }
@@ -287,12 +307,6 @@
       },
       "vpc": {}
     },
-    "custom": {
-      "pythonRequirements": {
-        "dockerizePip": false,
-        "pythonBin": "/usr/local/bin/python3"
-      }
-    },
     "plugins": [
       "serverless-python-requirements"
     ],
@@ -306,7 +320,8 @@
         "memory": 1024,
         "timeout": 6,
         "runtime": "python3.8",
-        "vpc": {}
+        "vpc": {},
+        "versionLogicalId": "FunctionLambdaVersionK5okRPsa6wmGhhaOnmzyesoR8q5ggBRSdUGZ0FVAok"
       }
     },
     "configValidationMode": "warn",
@@ -317,9 +332,6 @@
       },
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
-      },
-      "custom": {
-        "$ref": "$[\"service\"][\"custom\"]"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -333,7 +345,7 @@
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-plugin-serverless-python-requirements.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-plugin-serverless-python-requirements/dev/1625147112632-2021-07-01T13:45:12.632Z",
+    "artifactDirectoryName": "serverless/test-plugin-serverless-python-requirements/dev/1625227070177-2021-07-02T11:57:50.177Z",
     "artifact": "test-plugin-serverless-python-requirements.zip"
   }
 }
