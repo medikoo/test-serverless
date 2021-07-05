@@ -174,7 +174,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-python-requirements/dev/1625227070177-2021-07-02T11:57:50.177Z/test-plugin-serverless-python-requirements.zip"
+                "S3Key": "serverless/test-plugin-serverless-python-requirements/dev/1625483291724-2021-07-05T11:08:11.724Z/test-plugin-serverless-python-requirements.zip"
               },
               "Handler": "handler.hello",
               "Runtime": "python3.8",
@@ -192,14 +192,14 @@
               "FunctionLogGroup"
             ]
           },
-          "FunctionLambdaVersionK5okRPsa6wmGhhaOnmzyesoR8q5ggBRSdUGZ0FVAok": {
+          "FunctionLambdaVersion8Pxjs7874THCLdALXyZs1aJkxWI0x7x8UUkcmQdYZk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "FunctionLambdaFunction"
               },
-              "CodeSha256": "K5P2P3k54BV+AuMmyQ/HYOVyQZgVYHobq/lJKwik25Q="
+              "CodeSha256": "oKFUSFY1EOHW7Lkw6DmlkTljNOL3olWSKZaEZVFkyOw="
             }
           }
         },
@@ -215,7 +215,7 @@
           "FunctionLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FunctionLambdaVersionK5okRPsa6wmGhhaOnmzyesoR8q5ggBRSdUGZ0FVAok"
+              "Ref": "FunctionLambdaVersion8Pxjs7874THCLdALXyZs1aJkxWI0x7x8UUkcmQdYZk"
             },
             "Export": {
               "Name": "sls-test-plugin-serverless-python-requirements-dev-FunctionLambdaFunctionQualifiedArn"
@@ -321,7 +321,7 @@
         "timeout": 6,
         "runtime": "python3.8",
         "vpc": {},
-        "versionLogicalId": "FunctionLambdaVersionK5okRPsa6wmGhhaOnmzyesoR8q5ggBRSdUGZ0FVAok"
+        "versionLogicalId": "FunctionLambdaVersion8Pxjs7874THCLdALXyZs1aJkxWI0x7x8UUkcmQdYZk"
       }
     },
     "configValidationMode": "warn",
@@ -345,7 +345,7 @@
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-plugin-serverless-python-requirements.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-plugin-serverless-python-requirements/dev/1625227070177-2021-07-02T11:57:50.177Z",
+    "artifactDirectoryName": "serverless/test-plugin-serverless-python-requirements/dev/1625483291724-2021-07-05T11:08:11.724Z",
     "artifact": "test-plugin-serverless-python-requirements.zip"
   }
 }
