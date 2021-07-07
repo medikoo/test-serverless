@@ -1,4 +1,4 @@
-service: test-plugin-serverless-prune-plugin
+service: test-plugin-serverless-pseudo-parameters
 
 provider:
   name: aws
@@ -21,4 +21,4 @@ functions:
           method: POST
 
 plugins:
-  - serverless-prune-plugin
+  - serverless-pseudo-parameters
