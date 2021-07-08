@@ -13,7 +13,10 @@
       "apiGateway": {
         "shouldStartNameWithService": true
       },
-      "environment": {},
+      "environment": {
+        "FOO": "bar",
+        "SECOND": "one"
+      },
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -177,7 +180,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-dotenv-plugin/dev/1625752579602-2021-07-08T13:56:19.602Z/test-plugin-serverless-dotenv-plugin.zip"
+                "S3Key": "serverless/test-plugin-serverless-dotenv-plugin/dev/1625753639019-2021-07-08T14:13:59.019Z/test-plugin-serverless-dotenv-plugin.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
@@ -185,7 +188,10 @@
               "MemorySize": 1024,
               "Timeout": 6,
               "Environment": {
-                "Variables": {}
+                "Variables": {
+                  "FOO": "bar",
+                  "SECOND": "one"
+                }
               },
               "Role": {
                 "Fn::GetAtt": [
@@ -317,7 +323,7 @@
               "FunctionLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1625752561646": {
+          "ApiGatewayDeployment1625753625569": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -526,6 +532,7 @@
       "service": {
         "$ref": "$[\"service\"][\"serviceObject\"]"
       },
+      "useDotenv": true,
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
@@ -541,7 +548,7 @@
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-plugin-serverless-dotenv-plugin.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-plugin-serverless-dotenv-plugin/dev/1625752579602-2021-07-08T13:56:19.602Z",
+    "artifactDirectoryName": "serverless/test-plugin-serverless-dotenv-plugin/dev/1625753639019-2021-07-08T14:13:59.019Z",
     "artifact": "test-plugin-serverless-dotenv-plugin.zip"
   }
 }

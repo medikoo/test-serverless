@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-plugin-serverless-dotenv-plugin/dev/1625752579602-2021-07-08T13:56:19.602Z/test-plugin-serverless-dotenv-plugin.zip"
+          "S3Key": "serverless/test-plugin-serverless-dotenv-plugin/dev/1625753639019-2021-07-08T14:13:59.019Z/test-plugin-serverless-dotenv-plugin.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
@@ -169,7 +169,10 @@
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
-          "Variables": {}
+          "Variables": {
+            "FOO": "bar",
+            "SECOND": "one"
+          }
         },
         "Role": {
           "Fn::GetAtt": [
@@ -301,7 +304,7 @@
         "FunctionLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1625752561646": {
+    "ApiGatewayDeployment1625753625569": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
