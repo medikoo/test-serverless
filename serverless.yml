@@ -1,4 +1,4 @@
-service: test-cognito-user-pool-existing
+service: test-cognito-user-pool
 
 provider:
   name: aws
@@ -15,9 +15,8 @@ functions:
     handler: index.handler
     events:
       - cognitoUserPool:
-          pool: test-pool
+          pool: test-pool-embedded
           trigger: PostConfirmation
-          existing: true
 
 plugins:
   - serverless-plugin-reducer
