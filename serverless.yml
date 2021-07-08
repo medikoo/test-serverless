@@ -1,4 +1,4 @@
-service: test-plugin-serverless-pseudo-parameters
+service: test-plugin-serverless-dotenv-plugin
 
 provider:
   name: aws
@@ -21,4 +21,4 @@ functions:
           method: POST
 
 plugins:
-  - serverless-pseudo-parameters
+  - serverless-dotenv-plugin
