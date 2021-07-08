@@ -5,13 +5,11 @@
       "name": "test-cognito-user-pool-existing"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "eu-west-1",
+      "stage": "dev",
       "versionFunctions": false,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -58,6 +56,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -101,8 +114,8 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "dev",
                         "test-cognito-user-pool-existing",
+                        "dev",
                         "lambda"
                       ]
                     ]
@@ -113,7 +126,8 @@
                       {
                         "Effect": "Allow",
                         "Action": [
-                          "logs:CreateLogStream"
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup"
                         ],
                         "Resource": [
                           {
@@ -159,23 +173,22 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-cognito-user-pool-existing/dev/1576753162537-2019-12-19T10:59:22.537Z/function.zip"
+                "S3Key": "serverless/test-cognito-user-pool-existing/dev/1625737286581-2021-07-08T09:41:26.581Z/function.zip"
               },
-              "FunctionName": "test-cognito-user-pool-existing-dev-function",
               "Handler": "index.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "test-cognito-user-pool-existing-dev-function",
               "MemorySize": 1024,
+              "Timeout": 6,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              },
-              "Runtime": "nodejs12.x",
-              "Timeout": 6
+              }
             },
             "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "FunctionLogGroup"
             ]
           },
           "FunctionCustomCognitoUserPool1": {
@@ -246,10 +259,21 @@
                       },
                       {
                         "Effect": "Allow",
-                        "Resource": "arn:aws:lambda:*:*:function:test-cognito-user-pool-existing-dev-function",
+                        "Resource": {
+                          "Fn::Sub": "arn:${AWS::Partition}:lambda:*:*:function:test-cognito-user-pool-existing-dev-function"
+                        },
                         "Action": [
                           "lambda:AddPermission",
                           "lambda:RemovePermission"
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Resource": {
+                          "Fn::Sub": "arn:${AWS::Partition}:iam::*:role/*"
+                        },
+                        "Action": [
+                          "iam:PassRole"
                         ]
                       }
                     ]
@@ -265,7 +289,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-cognito-user-pool-existing/dev/1576753162537-2019-12-19T10:59:22.537Z/custom-resources.zip"
+                "S3Key": "serverless/test-cognito-user-pool-existing/dev/1625737286581-2021-07-08T09:41:26.581Z/custom-resources.zip"
               },
               "FunctionName": "test-cognito-user-pool-existing-dev-custom-resource-existing-cup",
               "Handler": "cognitoUserPool/handler.handler",
@@ -288,6 +312,9 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-test-cognito-user-pool-existing-dev-ServerlessDeploymentBucketName"
             }
           }
         }
@@ -336,6 +363,21 @@
                               "Ref": "ServerlessDeploymentBucket"
                             },
                             "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
                           ]
                         ]
                       }
@@ -387,12 +429,32 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "layers": {}
+    "initialServerlessConfig": {
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-cognito-user-pool-existing/dev/1625737286581-2021-07-08T09:41:26.581Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      }
+    },
+    "layers": {},
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-cognito-user-pool-existing/dev/1576753162537-2019-12-19T10:59:22.537Z",
+    "artifactDirectoryName": "serverless/test-cognito-user-pool-existing/dev/1625737286581-2021-07-08T09:41:26.581Z",
     "artifact": ""
   }
 }
