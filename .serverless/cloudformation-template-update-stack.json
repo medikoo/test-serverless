@@ -74,7 +74,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-plugin-serverless-domain-manager-dev-function"
+        "LogGroupName": "/aws/lambda/test-plugin-serverless-dotenv-plugin-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -102,7 +102,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-plugin-serverless-domain-manager",
+                  "test-plugin-serverless-dotenv-plugin",
                   "dev",
                   "lambda"
                 ]
@@ -119,7 +119,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-domain-manager-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-dotenv-plugin-dev*:*"
                     }
                   ]
                 },
@@ -130,7 +130,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-domain-manager-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-dotenv-plugin-dev*:*:*"
                     }
                   ]
                 }
@@ -143,7 +143,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-plugin-serverless-domain-manager",
+              "test-plugin-serverless-dotenv-plugin",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -161,13 +161,16 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-plugin-serverless-domain-manager/dev/1625227904689-2021-07-02T12:11:44.689Z/test-plugin-serverless-domain-manager.zip"
+          "S3Key": "serverless/test-plugin-serverless-dotenv-plugin/dev/1625752579602-2021-07-08T13:56:19.602Z/test-plugin-serverless-dotenv-plugin.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
-        "FunctionName": "test-plugin-serverless-domain-manager-dev-function",
+        "FunctionName": "test-plugin-serverless-dotenv-plugin-dev-function",
         "MemorySize": 1024,
         "Timeout": 6,
+        "Environment": {
+          "Variables": {}
+        },
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
@@ -182,7 +185,7 @@
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "test-plugin-serverless-domain-manager-dev",
+        "Name": "test-plugin-serverless-dotenv-plugin-dev",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
@@ -298,7 +301,7 @@
         "FunctionLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1625227902974": {
+    "ApiGatewayDeployment1625752561646": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -355,7 +358,7 @@
         "Ref": "ServerlessDeploymentBucket"
       },
       "Export": {
-        "Name": "sls-test-plugin-serverless-domain-manager-dev-ServerlessDeploymentBucketName"
+        "Name": "sls-test-plugin-serverless-dotenv-plugin-dev-ServerlessDeploymentBucketName"
       }
     },
     "ServiceEndpoint": {
@@ -381,7 +384,7 @@
         ]
       },
       "Export": {
-        "Name": "sls-test-plugin-serverless-domain-manager-dev-ServiceEndpoint"
+        "Name": "sls-test-plugin-serverless-dotenv-plugin-dev-ServiceEndpoint"
       }
     }
   }
