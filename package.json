@@ -5,7 +5,7 @@
 		"eslint": "^7.23.0",
 		"eslint-config-medikoo": "^3.1.0",
 		"prettier-elastic": "^2.1.2",
-		"serverless-dotenv-plugin": "^3.9.0"
+		"serverless-iam-roles-per-function": "^3.2.0"
 	},
 	"eslintConfig": {
 		"extends": "medikoo/node",

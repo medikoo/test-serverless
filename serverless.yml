@@ -1,6 +1,4 @@
-service: test-plugin-serverless-dotenv-plugin
-
-useDotenv: true
+service: test-plugin-serverless-iam-roles-per-function
 
 provider:
   name: aws
@@ -23,4 +21,4 @@ functions:
           method: POST
 
 plugins:
-  - serverless-dotenv-plugin
+  - serverless-iam-roles-per-function
