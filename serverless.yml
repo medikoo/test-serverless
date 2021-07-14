@@ -12,6 +12,12 @@ provider:
 functions:
   function:
     handler: index.handler
+    iamRoleStatementsName: fn-plugin-role-name
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:GetItem
+        Resource: "arn:aws:dynamodb:${aws:region}:*:table/mytable"
     events:
       - http:
           path: foo
