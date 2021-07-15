@@ -1,4 +1,4 @@
-service: test-plugin-serverless-offline
+service: test-plugin-serverless-typescript
 
 provider:
   name: aws
@@ -24,4 +24,4 @@ functions:
           method: POST
 
 plugins:
-  - serverless-offline
+  - serverless-plugin-typescript
