@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-plugin-serverless-offline",
+    "service": "test-plugin-serverless-typescript",
     "serviceObject": {
-      "name": "test-plugin-serverless-offline"
+      "name": "test-plugin-serverless-typescript"
     },
     "provider": {
       "name": "aws",
@@ -89,7 +89,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-plugin-serverless-offline-dev-function"
+              "LogGroupName": "/aws/lambda/test-plugin-serverless-typescript-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -117,7 +117,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-plugin-serverless-offline",
+                        "test-plugin-serverless-typescript",
                         "dev",
                         "lambda"
                       ]
@@ -134,7 +134,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-offline-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-typescript-dev*:*"
                           }
                         ]
                       },
@@ -145,7 +145,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-offline-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-plugin-serverless-typescript-dev*:*:*"
                           }
                         ]
                       }
@@ -158,7 +158,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-plugin-serverless-offline",
+                    "test-plugin-serverless-typescript",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -176,11 +176,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z/function.zip"
+                "S3Key": "serverless/test-plugin-serverless-typescript/dev/1626344284121-2021-07-15T10:18:04.121Z/test-plugin-serverless-typescript.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
-              "FunctionName": "test-plugin-serverless-offline-dev-function",
+              "FunctionName": "test-plugin-serverless-typescript-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -197,7 +197,7 @@
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "test-plugin-serverless-offline-dev",
+              "Name": "test-plugin-serverless-typescript-dev",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -262,7 +262,10 @@
                 }
               },
               "MethodResponses": []
-            }
+            },
+            "DependsOn": [
+              "FunctionLambdaPermissionApiGateway"
+            ]
           },
           "ApiGatewayMethodFooPost": {
             "Type": "AWS::ApiGateway::Method",
@@ -305,9 +308,12 @@
                 }
               },
               "MethodResponses": []
-            }
+            },
+            "DependsOn": [
+              "FunctionLambdaPermissionApiGateway"
+            ]
           },
-          "ApiGatewayDeployment1623766999882": {
+          "ApiGatewayDeployment1626344276663": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -364,7 +370,7 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-test-plugin-serverless-offline-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-test-plugin-serverless-typescript-dev-ServerlessDeploymentBucketName"
             }
           },
           "ServiceEndpoint": {
@@ -390,7 +396,7 @@
               ]
             },
             "Export": {
-              "Name": "sls-test-plugin-serverless-offline-dev-ServiceEndpoint"
+              "Name": "sls-test-plugin-serverless-typescript-dev-ServiceEndpoint"
             }
           }
         }
@@ -480,7 +486,7 @@
       "vpc": {}
     },
     "plugins": [
-      "serverless-offline"
+      "serverless-plugin-typescript"
     ],
     "pluginsData": {},
     "functions": {
@@ -502,9 +508,12 @@
             }
           }
         ],
-        "name": "test-plugin-serverless-offline-dev-function",
+        "name": "test-plugin-serverless-typescript-dev-function",
         "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
+          "exclude": [
+            "node_modules/serverless-plugin-typescript"
+          ],
+          "include": []
         },
         "memory": 1024,
         "timeout": 6,
@@ -521,10 +530,6 @@
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
-      "package": {
-        "individually": true,
-        "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z"
-      },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       },
@@ -533,11 +538,11 @@
       }
     },
     "layers": {},
-    "isDashboardMonitoringPreconfigured": false
+    "isDashboardMonitoringPreconfigured": false,
+    "artifact": "/Users/medikoo/Projects/test-serverless/.build/.serverless/test-plugin-serverless-typescript.zip"
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z",
-    "artifact": ""
+    "artifactDirectoryName": "serverless/test-plugin-serverless-typescript/dev/1626344284121-2021-07-15T10:18:04.121Z",
+    "artifact": "test-plugin-serverless-typescript.zip"
   }
 }
