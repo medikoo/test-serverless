@@ -176,7 +176,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-typescript/dev/1626344284121-2021-07-15T10:18:04.121Z/test-plugin-serverless-typescript.zip"
+                "S3Key": "serverless/test-plugin-serverless-typescript/dev/1626439567425-2021-07-16T12:46:07.425Z/test-plugin-serverless-typescript.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
@@ -313,7 +313,7 @@
               "FunctionLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1626344276663": {
+          "ApiGatewayDeployment1626439559298": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -542,7 +542,7 @@
     "artifact": "/Users/medikoo/Projects/test-serverless/.build/.serverless/test-plugin-serverless-typescript.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-plugin-serverless-typescript/dev/1626344284121-2021-07-15T10:18:04.121Z",
+    "artifactDirectoryName": "serverless/test-plugin-serverless-typescript/dev/1626439567425-2021-07-16T12:46:07.425Z",
     "artifact": "test-plugin-serverless-typescript.zip"
   }
 }
