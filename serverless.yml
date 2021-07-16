@@ -1,4 +1,4 @@
-service: test-plugin-serverless-offline
+service: test-plugin-serverless-step-functions
 
 provider:
   name: aws
@@ -8,9 +8,6 @@ provider:
   versionFunctions: false
   apiGateway:
     shouldStartNameWithService: true
-
-package:
-  individually: true
 
 functions:
   function:
@@ -24,4 +21,4 @@ functions:
           method: POST
 
 plugins:
-  - serverless-offline
+  - serverless-step-functions
