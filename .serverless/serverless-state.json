@@ -1,16 +1,30 @@
 {
   "service": {
-    "service": "test-lambda",
+    "service": "test-9861",
     "serviceObject": {
-      "name": "test-lambda"
+      "name": "test-9861"
     },
     "provider": {
       "name": "aws",
-      "runtime": "nodejs12.x",
-      "region": "us-east-1",
-      "stage": "dev",
       "versionFunctions": false,
-      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
+      "stage": "dev",
+      "region": "us-east-1",
+      "runtime": "nodejs12.x",
+      "tracing": {
+        "lambda": "Active"
+      },
+      "apiGateway": {
+        "minimumCompressionSize": 1024,
+        "shouldStartNameWithService": true
+      },
+      "iamRoleStatements": [],
+      "environment": {
+        "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+        "APPLICATION_AND_QUALIFIER": "test-9861",
+        "ACCOUNT_ID": "992311060759",
+        "REGION": "us-east-1",
+        "ENVIRONMENT": "dev"
+      },
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -84,10 +98,10 @@
               }
             }
           },
-          "FunctionLogGroup": {
+          "HelloLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-9861-dev-hello"
             }
           },
           "IamRoleLambdaExecution": {
@@ -115,7 +129,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-lambda",
+                        "test-9861",
                         "dev",
                         "lambda"
                       ]
@@ -132,7 +146,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-9861-dev*:*"
                           }
                         ]
                       },
@@ -143,8 +157,18 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-9861-dev*:*:*"
                           }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "xray:PutTraceSegments",
+                          "xray:PutTelemetryRecords"
+                        ],
+                        "Resource": [
+                          "*"
                         ]
                       }
                     ]
@@ -156,7 +180,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-lambda",
+                    "test-9861",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -167,20 +191,32 @@
               }
             }
           },
-          "FunctionLambdaFunction": {
+          "HelloLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z/function.zip"
+                "S3Key": "serverless/test-9861/dev/1629394548812-2021-08-19T17:35:48.812Z/test-9861.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
-              "FunctionName": "test-lambda-dev-function",
+              "FunctionName": "test-9861-dev-hello",
               "MemorySize": 1024,
               "Timeout": 6,
+              "TracingConfig": {
+                "Mode": "Active"
+              },
+              "Environment": {
+                "Variables": {
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                  "APPLICATION_AND_QUALIFIER": "test-9861",
+                  "ACCOUNT_ID": "992311060759",
+                  "REGION": "us-east-1",
+                  "ENVIRONMENT": "dev"
+                }
+              },
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -189,15 +225,182 @@
               }
             },
             "DependsOn": [
-              "FunctionLogGroup"
+              "HelloLogGroup"
             ]
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "test-9861-dev",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              },
+              "Policy": "",
+              "MinimumCompressionSize": 1024
+            }
+          },
+          "ApiGatewayResourceHello": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "hello",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodHelloGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceHello"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "HelloLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "HelloLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1629394546001": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodHelloGet"
+            ]
+          },
+          "HelloLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "HelloLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-test-9861-dev-ServerlessDeploymentBucketName"
             }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
+            },
+            "Export": {
+              "Name": "sls-test-9861-dev-ServiceEndpoint"
+            }
+          }
+        },
+        "Conditions": {
+          "IsDev": {
+            "Fn::Equals": [
+              "dev",
+              "dev"
+            ]
+          },
+          "IsNotDev": {
+            "Fn::Not": [
+              {
+                "Condition": "IsDev"
+              }
+            ]
           }
         }
       },
@@ -285,17 +488,37 @@
       },
       "vpc": {}
     },
+    "custom": {
+      "namespace": "test-9861-dev",
+      "config": {
+        "env": {
+          "foo": "bar"
+        }
+      },
+      "webpack": {
+        "webpackConfig": "./webpack.config.js",
+        "includeModules": true
+      }
+    },
     "plugins": [
-      "serverless-plugin-reducer"
+      "serverless-webpack"
     ],
     "pluginsData": {},
     "functions": {
-      "function": {
+      "hello": {
         "handler": "index.handler",
-        "events": [],
-        "name": "test-lambda-dev-function",
+        "events": [
+          {
+            "http": {
+              "method": "get",
+              "path": "hello",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "test-9861-dev-hello",
         "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
+          "artifact": ".serverless/test-9861.zip"
         },
         "memory": 1024,
         "timeout": 6,
@@ -303,32 +526,53 @@
         "vpc": {}
       }
     },
+    "resources": {
+      "Conditions": {
+        "IsDev": {
+          "Fn::Equals": [
+            "dev",
+            "dev"
+          ]
+        },
+        "IsNotDev": {
+          "Fn::Not": [
+            {
+              "Condition": "IsDev"
+            }
+          ]
+        }
+      },
+      "Resources": {},
+      "Outputs": {}
+    },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "layers": {},
     "initialServerlessConfig": {
+      "frameworkVersion": "2",
       "service": {
         "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
+      "custom": {
+        "$ref": "$[\"service\"][\"custom\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
       },
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
-      "package": {
-        "individually": true,
-        "artifactDirectoryName": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z"
-      },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       },
-      "plugins": {
-        "$ref": "$[\"service\"][\"plugins\"]"
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
       }
     },
+    "layers": {},
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda/dev/1607948734498-2020-12-14T12:25:34.498Z",
+    "artifactDirectoryName": "serverless/test-9861/dev/1629394548812-2021-08-19T17:35:48.812Z",
     "artifact": ""
   }
 }

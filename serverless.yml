@@ -1,18 +1,50 @@
-service: test-lambda
+frameworkVersion: "2"
+service: test-9861
+
+custom:
+  namespace: ${self:service}-${opt:stage}
+  config:
+    env: ${file(config/${opt:stage}.yml)}
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
+plugins:
+  - serverless-webpack
 
 provider:
   name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: dev
   versionFunctions: false
-
-package:
-  individually: true
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  runtime: nodejs12.x
+  tracing:
+    lambda: Active
+  apiGateway:
+    minimumCompressionSize: 1024
+    shouldStartNameWithService: true
+  iamRoleStatements: []
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    APPLICATION_AND_QUALIFIER: ${self:service}
+    ACCOUNT_ID: ${aws:accountId}
+    REGION: ${aws:region}
+    ENVIRONMENT: ${opt:stage}
 
 functions:
-  function:
+  hello:
     handler: index.handler
+    events:
+      - http:
+          method: get
+          path: hello
 
-plugins:
-  - serverless-plugin-reducer
+resources:
+  - Conditions:
+      IsDev:
+        Fn::Equals:
+          - ${opt:stage}
+          - dev
+      IsNotDev:
+        Fn::Not:
+          - Condition: IsDev
