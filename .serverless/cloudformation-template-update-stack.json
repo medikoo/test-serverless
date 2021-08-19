@@ -171,7 +171,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-9861/dev/1629394548812-2021-08-19T17:35:48.812Z/test-9861.zip"
+          "S3Key": "serverless/test-9861/dev/1629403616485-2021-08-19T20:06:56.485Z/test-9861.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
@@ -275,7 +275,7 @@
         "HelloLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1629394546001": {
+    "ApiGatewayDeployment1629403613228": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
