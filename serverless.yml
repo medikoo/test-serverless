@@ -19,6 +19,3 @@ functions:
       - http:
           path: bar
           method: GET
-
-plugins:
-  - serverless-plugin-reducer
