@@ -44,6 +44,21 @@
                       "/*"
                     ]
                   ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
                 }
               ],
               "Condition": {
@@ -146,19 +161,19 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-shared/dev/1605874915847-2020-11-20T12:21:55.847Z/myFunction.zip"
+          "S3Key": "serverless/test-api-gw-shared/dev/1631778098482-2021-09-16T07:41:38.482Z/myFunction.zip"
         },
-        "FunctionName": "test-api-gw-shared-dev-myFunction",
         "Handler": "index.handler",
+        "Runtime": "nodejs10.x",
+        "FunctionName": "test-api-gw-shared-dev-myFunction",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        },
-        "Runtime": "nodejs10.x",
-        "Timeout": 6
+        }
       },
       "DependsOn": [
         "MyFunctionLogGroup"
@@ -211,9 +226,12 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "MyFunctionLambdaPermissionApiGateway"
+      ]
     },
-    "ApiGatewayDeployment1605874914910": {
+    "ApiGatewayDeployment1631778096585": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": "pkhriceyzl",
@@ -263,6 +281,9 @@
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      },
+      "Export": {
+        "Name": "sls-test-api-gw-shared-dev-ServerlessDeploymentBucketName"
       }
     },
     "ServiceEndpoint": {
@@ -284,6 +305,9 @@
             "/dev"
           ]
         ]
+      },
+      "Export": {
+        "Name": "sls-test-api-gw-shared-dev-ServiceEndpoint"
       }
     }
   }
