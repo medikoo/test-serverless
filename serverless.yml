@@ -24,6 +24,3 @@ functions:
       - http:
           path: foo
           method: GET
-
-plugins:
-  - serverless-plugin-reducer
