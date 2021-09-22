@@ -5,11 +5,10 @@
       "name": "test-api-gw-logs"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*?]+?)}",
       "name": "aws",
       "runtime": "nodejs12.x",
       "region": "us-east-1",
+      "stage": "dev",
       "versionFunctions": false,
       "logs": {
         "restApi": {
@@ -20,7 +19,6 @@
         },
         "frameworkLambda": true
       },
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -67,6 +65,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -110,7 +123,8 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-api-gw-logs-dev",
+                        "test-api-gw-logs",
+                        "dev",
                         "lambda"
                       ]
                     ]
@@ -150,7 +164,8 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw-logs-dev",
+                    "test-api-gw-logs",
+                    "dev",
                     {
                       "Ref": "AWS::Region"
                     },
@@ -167,23 +182,22 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1582684441241-2020-02-26T02:34:01.241Z/function.zip"
+                "S3Key": "serverless/test-api-gw-logs/dev/1632313616153-2021-09-22T12:26:56.153Z/function.zip"
               },
-              "FunctionName": "test-api-gw-logs-dev-function",
               "Handler": "index.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "test-api-gw-logs-dev-function",
               "MemorySize": 1024,
+              "Timeout": 6,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              },
-              "Runtime": "nodejs12.x",
-              "Timeout": 6
+              }
             },
             "DependsOn": [
-              "FunctionLogGroup",
-              "IamRoleLambdaExecution"
+              "FunctionLogGroup"
             ]
           },
           "ApiGatewayRestApi": {
@@ -254,9 +268,12 @@
                 }
               },
               "MethodResponses": []
-            }
+            },
+            "DependsOn": [
+              "FunctionLambdaPermissionApiGateway"
+            ]
           },
-          "ApiGatewayDeployment1582684438881": {
+          "ApiGatewayDeployment1632313614357": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -437,7 +454,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-logs/dev/1582684441241-2020-02-26T02:34:01.241Z/custom-resources.zip"
+                "S3Key": "serverless/test-api-gw-logs/dev/1632313616153-2021-09-22T12:26:56.153Z/custom-resources.zip"
               },
               "FunctionName": "test-api-gw-logs-dev-custom-resource-apigw-cw-role",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -467,6 +484,9 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-test-api-gw-logs-dev-ServerlessDeploymentBucketName"
             }
           },
           "ServiceEndpoint": {
@@ -490,6 +510,9 @@
                   "/dev"
                 ]
               ]
+            },
+            "Export": {
+              "Name": "sls-test-api-gw-logs-dev-ServiceEndpoint"
             }
           }
         }
@@ -540,6 +563,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -563,9 +601,6 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
     "pluginsData": {},
     "functions": {
       "function": {
@@ -589,13 +624,29 @@
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
+    "initialServerlessConfig": {
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "package": {
+        "individually": true,
+        "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1632313616153-2021-09-22T12:26:56.153Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      }
+    },
     "layers": {},
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1582684441241-2020-02-26T02:34:01.241Z",
+    "artifactDirectoryName": "serverless/test-api-gw-logs/dev/1632313616153-2021-09-22T12:26:56.153Z",
     "artifact": ""
   }
 }
