@@ -1,4 +1,4 @@
-service: test-lambda
+service: test-plugin-local
 
 provider:
   name: aws
@@ -13,3 +13,6 @@ package:
 functions:
   function:
     handler: index.handler
+
+plugins:
+  - ./plugin
