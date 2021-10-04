@@ -1,4 +1,5 @@
 service: test-lambda
+configValidationMode: error
 
 provider:
   name: aws
@@ -7,9 +8,15 @@ provider:
   stage: dev
   versionFunctions: false
 
-package:
-  individually: true
+custom:
+  warmup:
+    default:
+      enabled: true
+      memorySize: foo
 
 functions:
   function:
     handler: index.handler
+
+plugins:
+  - serverless-plugin-warmup
