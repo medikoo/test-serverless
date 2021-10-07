@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gw",
+    "service": "test-api-gateway",
     "serviceObject": {
-      "name": "test-api-gw"
+      "name": "test-api-gateway"
     },
     "provider": {
       "name": "aws",
@@ -13,7 +13,6 @@
       "apiGateway": {
         "shouldStartNameWithService": true
       },
-      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -90,7 +89,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gw-dev-function"
+              "LogGroupName": "/aws/lambda/test-api-gateway-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -118,7 +117,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-api-gw",
+                        "test-api-gateway",
                         "dev",
                         "lambda"
                       ]
@@ -135,7 +134,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gateway-dev*:*"
                           }
                         ]
                       },
@@ -146,7 +145,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gateway-dev*:*:*"
                           }
                         ]
                       }
@@ -159,7 +158,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gw",
+                    "test-api-gateway",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -177,11 +176,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw/dev/1607004422599-2020-12-03T14:07:02.599Z/function.zip"
+                "S3Key": "serverless/test-api-gateway/dev/1633594271868-2021-10-07T08:11:11.868Z/function.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
-              "FunctionName": "test-api-gw-dev-function",
+              "FunctionName": "test-api-gateway-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -198,7 +197,7 @@
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "test-api-gw-dev",
+              "Name": "test-api-gateway-dev",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -263,7 +262,10 @@
                 }
               },
               "MethodResponses": []
-            }
+            },
+            "DependsOn": [
+              "FunctionLambdaPermissionApiGateway"
+            ]
           },
           "ApiGatewayMethodFooPost": {
             "Type": "AWS::ApiGateway::Method",
@@ -306,9 +308,12 @@
                 }
               },
               "MethodResponses": []
-            }
+            },
+            "DependsOn": [
+              "FunctionLambdaPermissionApiGateway"
+            ]
           },
-          "ApiGatewayDeployment1607004421736": {
+          "ApiGatewayDeployment1633594267228": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -363,6 +368,9 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-test-api-gateway-dev-ServerlessDeploymentBucketName"
             }
           },
           "ServiceEndpoint": {
@@ -386,6 +394,9 @@
                   "/dev"
                 ]
               ]
+            },
+            "Export": {
+              "Name": "sls-test-api-gateway-dev-ServiceEndpoint"
             }
           }
         }
@@ -474,9 +485,6 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
     "pluginsData": {},
     "functions": {
       "function": {
@@ -497,7 +505,7 @@
             }
           }
         ],
-        "name": "test-api-gw-dev-function",
+        "name": "test-api-gateway-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -509,7 +517,6 @@
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "layers": {},
     "initialServerlessConfig": {
       "service": {
         "$ref": "$[\"service\"][\"serviceObject\"]"
@@ -519,20 +526,18 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-api-gw/dev/1607004422599-2020-12-03T14:07:02.599Z"
+        "artifactDirectoryName": "serverless/test-api-gateway/dev/1633594271868-2021-10-07T08:11:11.868Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
-      },
-      "plugins": {
-        "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
+    "layers": {},
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw/dev/1607004422599-2020-12-03T14:07:02.599Z",
+    "artifactDirectoryName": "serverless/test-api-gateway/dev/1633594271868-2021-10-07T08:11:11.868Z",
     "artifact": ""
   }
 }

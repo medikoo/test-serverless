@@ -1,4 +1,4 @@
-service: test-api-gw
+service: test-api-gateway
 
 provider:
   name: aws
