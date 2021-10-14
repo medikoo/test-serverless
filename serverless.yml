@@ -16,6 +16,3 @@ package:
 functions:
   function:
     handler: index.handler
-
-plugins:
-  - serverless-plugin-reducer
