@@ -11,7 +11,7 @@ provider:
 
 custom:
   customDomain:
-    domainName: api.example.com
+    domainName: test.medikoo.org
 
 functions:
   function:

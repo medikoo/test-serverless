@@ -176,7 +176,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-domain-manager/dev/1625227904689-2021-07-02T12:11:44.689Z/test-plugin-serverless-domain-manager.zip"
+                "S3Key": "serverless/test-plugin-serverless-domain-manager/dev/1636558752495-2021-11-10T15:39:12.495Z/test-plugin-serverless-domain-manager.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
@@ -313,7 +313,7 @@
               "FunctionLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1625227902974": {
+          "ApiGatewayDeployment1636558750652": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -487,7 +487,7 @@
     },
     "custom": {
       "customDomain": {
-        "domainName": "api.example.com"
+        "domainName": "test.medikoo.org"
       }
     },
     "plugins": [
@@ -545,7 +545,7 @@
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-plugin-serverless-domain-manager.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-plugin-serverless-domain-manager/dev/1625227904689-2021-07-02T12:11:44.689Z",
+    "artifactDirectoryName": "serverless/test-plugin-serverless-domain-manager/dev/1636558752495-2021-11-10T15:39:12.495Z",
     "artifact": "test-plugin-serverless-domain-manager.zip"
   }
 }
