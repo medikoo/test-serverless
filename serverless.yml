@@ -1,4 +1,4 @@
-service: test-api-gateway
+service: test-api-gateway-binary
 
 provider:
   name: aws
@@ -8,6 +8,13 @@ provider:
   versionFunctions: false
   apiGateway:
     shouldStartNameWithService: true
+    binaryMediaTypes:
+      - "*/*"
+  logs:
+    restApi:
+      accessLogging: true
+      executionLogging: true
+      fullExecutionData: true
 
 package:
   individually: true
@@ -19,6 +26,7 @@ functions:
       - http:
           path: foo
           method: GET
-      - http:
-          path: foo
-          method: POST
+          integration: lambda
+          response:
+            headers:
+              "Content-Type": "'image/jpg'"
