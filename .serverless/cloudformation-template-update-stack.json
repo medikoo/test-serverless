@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gateway-binary/dev/1637754536569-2021-11-24T11:48:56.569Z/function.zip"
+          "S3Key": "serverless/test-api-gateway-binary/dev/1637943339313-2021-11-26T16:15:39.313Z/function.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
@@ -184,7 +184,7 @@
       "Properties": {
         "Name": "test-api-gateway-binary-dev",
         "BinaryMediaTypes": [
-          "*/*"
+          "image/jpeg"
         ],
         "EndpointConfiguration": {
           "Types": [
@@ -258,15 +258,16 @@
               "StatusCode": "200",
               "SelectionPattern": "",
               "ResponseParameters": {
-                "method.response.header.Content-Type": "'image/jpg'"
+                "method.response.header.Content-Type": "'image/jpeg'"
               },
-              "ResponseTemplates": {}
+              "ResponseTemplates": {},
+              "ContentHandling": "CONVERT_TO_BINARY"
             },
             {
               "StatusCode": "400",
               "SelectionPattern": "[\\s\\S]*\\[400\\][\\s\\S]*",
               "ResponseParameters": {
-                "method.response.header.Content-Type": "'image/jpg'"
+                "method.response.header.Content-Type": "'image/jpeg'"
               },
               "ResponseTemplates": {}
             },
@@ -274,7 +275,7 @@
               "StatusCode": "401",
               "SelectionPattern": "[\\s\\S]*\\[401\\][\\s\\S]*",
               "ResponseParameters": {
-                "method.response.header.Content-Type": "'image/jpg'"
+                "method.response.header.Content-Type": "'image/jpeg'"
               },
               "ResponseTemplates": {}
             },
@@ -282,7 +283,7 @@
               "StatusCode": "403",
               "SelectionPattern": "[\\s\\S]*\\[403\\][\\s\\S]*",
               "ResponseParameters": {
-                "method.response.header.Content-Type": "'image/jpg'"
+                "method.response.header.Content-Type": "'image/jpeg'"
               },
               "ResponseTemplates": {}
             },
@@ -290,7 +291,7 @@
               "StatusCode": "404",
               "SelectionPattern": "[\\s\\S]*\\[404\\][\\s\\S]*",
               "ResponseParameters": {
-                "method.response.header.Content-Type": "'image/jpg'"
+                "method.response.header.Content-Type": "'image/jpeg'"
               },
               "ResponseTemplates": {}
             },
@@ -298,7 +299,7 @@
               "StatusCode": "422",
               "SelectionPattern": "[\\s\\S]*\\[422\\][\\s\\S]*",
               "ResponseParameters": {
-                "method.response.header.Content-Type": "'image/jpg'"
+                "method.response.header.Content-Type": "'image/jpeg'"
               },
               "ResponseTemplates": {}
             },
@@ -306,7 +307,7 @@
               "StatusCode": "500",
               "SelectionPattern": "[\\s\\S]*(Process\\s?exited\\s?before\\s?completing\\s?request|\\[500\\])[\\s\\S]*",
               "ResponseParameters": {
-                "method.response.header.Content-Type": "'image/jpg'"
+                "method.response.header.Content-Type": "'image/jpeg'"
               },
               "ResponseTemplates": {}
             },
@@ -314,7 +315,7 @@
               "StatusCode": "502",
               "SelectionPattern": "[\\s\\S]*\\[502\\][\\s\\S]*",
               "ResponseParameters": {
-                "method.response.header.Content-Type": "'image/jpg'"
+                "method.response.header.Content-Type": "'image/jpeg'"
               },
               "ResponseTemplates": {}
             },
@@ -322,7 +323,7 @@
               "StatusCode": "504",
               "SelectionPattern": "([\\s\\S]*\\[504\\][\\s\\S]*)|(.*Task timed out after \\d+\\.\\d+ seconds$)",
               "ResponseParameters": {
-                "method.response.header.Content-Type": "'image/jpg'"
+                "method.response.header.Content-Type": "'image/jpeg'"
               },
               "ResponseTemplates": {}
             }
@@ -398,7 +399,7 @@
         "FunctionLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1637754534144": {
+    "ApiGatewayDeployment1637943337085": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -556,7 +557,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gateway-binary/dev/1637754536569-2021-11-24T11:48:56.569Z/custom-resources.zip"
+          "S3Key": "serverless/test-api-gateway-binary/dev/1637943339313-2021-11-26T16:15:39.313Z/custom-resources.zip"
         },
         "FunctionName": "test-api-gateway-binary-dev-custom-resource-apigw-cw-role",
         "Handler": "apiGatewayCloudWatchRole/handler.handler",
