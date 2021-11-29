@@ -1,4 +1,4 @@
-service: test-
+service: test-plugin-serverless-plugin-reducer
 
 provider:
   name: aws
@@ -9,3 +9,17 @@ provider:
 
 package:
   individually: true
+  patterns:
+    - playground/**
+    - "!playground/ignore"
+
+functions:
+  function:
+    handler: index.handler
+    package:
+      patterns:
+        - playground/ignore/but-take/**
+        - "!playground/ignore/but-take/but-not-this"
+
+plugins:
+  - serverless-plugin-reducer

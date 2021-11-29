@@ -1,5 +1,7 @@
 "use strict";
 
+require("./taken");
+
 module.exports.handler = (event, context, callback) => {
 	callback(null, {
 		statusCode: 200,
