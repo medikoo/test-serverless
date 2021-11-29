@@ -1,10 +1,8 @@
-interface User { name: string; id: number }
-
-export const user: User = { name: "Hayes", id: 23424 };
+import { user } from "./user.js";
 
 export const handler = (event, context, callback) => {
 	callback(null, {
 		statusCode: 200,
-		body: JSON.stringify({ message: "Regular lambda test", input: event }, null, 2)
+		body: JSON.stringify({ message: user.name, input: event }, null, 2)
 	});
 };

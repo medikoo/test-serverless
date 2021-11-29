@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-plugin-serverless-typescript/dev/1626439567425-2021-07-16T12:46:07.425Z/test-plugin-serverless-typescript.zip"
+          "S3Key": "serverless/test-plugin-serverless-typescript/dev/1638174271007-2021-11-29T08:24:31.007Z/test-plugin-serverless-typescript.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
@@ -298,7 +298,7 @@
         "FunctionLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1626439559298": {
+    "ApiGatewayDeployment1638174264912": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
