@@ -8,8 +8,6 @@ provider:
   versionFunctions: false
   apiGateway:
     shouldStartNameWithService: true
-    binaryMediaTypes:
-      - "image/jpeg"
   logs:
     restApi:
       accessLogging: true
