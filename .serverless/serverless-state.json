@@ -173,7 +173,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-plugin-reducer/dev/1638205000129-2021-11-29T16:56:40.129Z/function.zip"
+                "S3Key": "serverless/test-plugin-serverless-plugin-reducer/dev/1638350174649-2021-12-01T09:16:14.649Z/function.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
@@ -324,7 +324,7 @@
           "playground/**",
           "!playground/ignore"
         ],
-        "artifactDirectoryName": "serverless/test-plugin-serverless-plugin-reducer/dev/1638205000129-2021-11-29T16:56:40.129Z"
+        "artifactDirectoryName": "serverless/test-plugin-serverless-plugin-reducer/dev/1638350174649-2021-12-01T09:16:14.649Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -338,7 +338,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-plugin-serverless-plugin-reducer/dev/1638205000129-2021-11-29T16:56:40.129Z",
+    "artifactDirectoryName": "serverless/test-plugin-serverless-plugin-reducer/dev/1638350174649-2021-12-01T09:16:14.649Z",
     "artifact": ""
   }
 }
