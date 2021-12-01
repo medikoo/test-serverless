@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gateway-binary/dev/1637943717068-2021-11-26T16:21:57.068Z/function.zip"
+          "S3Key": "serverless/test-api-gateway-binary/dev/1638376392036-2021-12-01T16:33:12.036Z/function.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
@@ -183,6 +183,9 @@
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
         "Name": "test-api-gateway-binary-dev",
+        "BinaryMediaTypes": [
+          "image/jpeg"
+        ],
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
@@ -257,8 +260,7 @@
               "ResponseParameters": {
                 "method.response.header.Content-Type": "'image/jpeg'"
               },
-              "ResponseTemplates": {},
-              "ContentHandling": "CONVERT_TO_BINARY"
+              "ResponseTemplates": {}
             },
             {
               "StatusCode": "400",
@@ -396,7 +398,7 @@
         "FunctionLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1637943714950": {
+    "ApiGatewayDeployment1638376389881": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -554,7 +556,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gateway-binary/dev/1637943717068-2021-11-26T16:21:57.068Z/custom-resources.zip"
+          "S3Key": "serverless/test-api-gateway-binary/dev/1638376392036-2021-12-01T16:33:12.036Z/custom-resources.zip"
         },
         "FunctionName": "test-api-gateway-binary-dev-custom-resource-apigw-cw-role",
         "Handler": "apiGatewayCloudWatchRole/handler.handler",

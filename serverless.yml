@@ -8,6 +8,8 @@ provider:
   versionFunctions: false
   apiGateway:
     shouldStartNameWithService: true
+    binaryMediaTypes:
+      - image/jpeg
   logs:
     restApi:
       accessLogging: true
@@ -26,6 +28,5 @@ functions:
           method: GET
           integration: lambda
           response:
-            contentHandling: CONVERT_TO_BINARY
             headers:
               "Content-Type": "'image/jpeg'"
