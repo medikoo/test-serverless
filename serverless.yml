@@ -1,4 +1,4 @@
-service: test-api-gw
+service: test-api-gw-cors
 
 provider:
   name: aws
@@ -21,6 +21,3 @@ functions:
       - http:
           path: foo
           method: POST
-
-plugins:
-  - serverless-plugin-reducer
