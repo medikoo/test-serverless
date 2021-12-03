@@ -44,6 +44,21 @@
                       "/*"
                     ]
                   ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
                 }
               ],
               "Condition": {
@@ -59,7 +74,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-api-gw-dev-function"
+        "LogGroupName": "/aws/lambda/test-api-gw-cors-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -87,7 +102,8 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-api-gw-dev",
+                  "test-api-gw-cors",
+                  "dev",
                   "lambda"
                 ]
               ]
@@ -103,7 +119,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-cors-dev*:*"
                     }
                   ]
                 },
@@ -114,7 +130,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-cors-dev*:*:*"
                     }
                   ]
                 }
@@ -127,7 +143,8 @@
           "Fn::Join": [
             "-",
             [
-              "test-api-gw-dev",
+              "test-api-gw-cors",
+              "dev",
               {
                 "Ref": "AWS::Region"
               },
@@ -144,29 +161,28 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw/dev/1584402923075-2020-03-16T23:55:23.075Z/function.zip"
+          "S3Key": "serverless/test-api-gw-cors/dev/1638545681963-2021-12-03T15:34:41.963Z/function.zip"
         },
-        "FunctionName": "test-api-gw-dev-function",
         "Handler": "index.handler",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "test-api-gw-cors-dev-function",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6
+        }
       },
       "DependsOn": [
-        "FunctionLogGroup",
-        "IamRoleLambdaExecution"
+        "FunctionLogGroup"
       ]
     },
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-test-api-gw",
+        "Name": "dev-test-api-gw-cors",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
@@ -222,7 +238,7 @@
                 "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
               },
               "ResponseTemplates": {
-                "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".*\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                "application/json": ""
               }
             }
           ]
@@ -276,7 +292,10 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "FunctionLambdaPermissionApiGateway"
+      ]
     },
     "ApiGatewayMethodFooPost": {
       "Type": "AWS::ApiGateway::Method",
@@ -319,9 +338,12 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "FunctionLambdaPermissionApiGateway"
+      ]
     },
-    "ApiGatewayDeployment1584402921842": {
+    "ApiGatewayDeployment1638545679739": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -377,6 +399,9 @@
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      },
+      "Export": {
+        "Name": "sls-test-api-gw-cors-dev-ServerlessDeploymentBucketName"
       }
     },
     "ServiceEndpoint": {
@@ -400,6 +425,9 @@
             "/dev"
           ]
         ]
+      },
+      "Export": {
+        "Name": "sls-test-api-gw-cors-dev-ServiceEndpoint"
       }
     }
   }
