@@ -7,9 +7,6 @@ provider:
   stage: dev
   versionFunctions: false
 
-package:
-  excludeDevDependencies: false
-
 functions:
   function:
     handler: index.handler
