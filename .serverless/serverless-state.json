@@ -10,7 +10,6 @@
       "region": "us-east-1",
       "stage": "dev",
       "versionFunctions": false,
-      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -186,7 +185,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-with-layer/dev/1607428768498-2020-12-08T11:59:28.498Z/test-lambda-with-layer.zip"
+                "S3Key": "serverless/test-lambda-with-layer/dev/1639131378677-2021-12-10T10:16:18.677Z/test-lambda-with-layer.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
@@ -214,21 +213,33 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-test-lambda-with-layer-dev-ServerlessDeploymentBucketName"
             }
           },
           "LayerLambdaLayerQualifiedArn": {
             "Description": "Current Lambda layer version",
             "Value": {
               "Ref": "LayerLambdaLayer"
+            },
+            "Export": {
+              "Name": "sls-test-lambda-with-layer-dev-LayerLambdaLayerQualifiedArn"
             }
           },
           "LayerLambdaLayerHash": {
             "Description": "Current Lambda layer hash",
-            "Value": "e3e83b6808cde5bc5e4fee47424fb3898b55c223"
+            "Value": "e3e83b6808cde5bc5e4fee47424fb3898b55c223",
+            "Export": {
+              "Name": "sls-test-lambda-with-layer-dev-LayerLambdaLayerHash"
+            }
           },
           "LayerLambdaLayerS3Key": {
             "Description": "Current Lambda layer S3Key",
-            "Value": "serverless/test-lambda-with-layer/dev/1593092876239-2020-06-25T13:47:56.239Z/layer.zip"
+            "Value": "serverless/test-lambda-with-layer/dev/1593092876239-2020-06-25T13:47:56.239Z/layer.zip",
+            "Export": {
+              "Name": "sls-test-lambda-with-layer-dev-LayerLambdaLayerS3Key"
+            }
           }
         }
       },
@@ -334,15 +345,6 @@
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "layers": {
-      "layer": {
-        "path": "layer",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/layer.zip"
-        },
-        "artifactAlreadyUploaded": true
-      }
-    },
     "initialServerlessConfig": {
       "service": {
         "$ref": "$[\"service\"][\"serviceObject\"]"
@@ -350,23 +352,27 @@
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
-      "package": {
-        "excludeDevDependencies": false,
-        "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-lambda-with-layer.zip",
-        "artifactDirectoryName": "serverless/test-lambda-with-layer/dev/1607428768498-2020-12-08T11:59:28.498Z"
-      },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       },
       "layers": {
-        "$ref": "$[\"service\"][\"layers\"]"
+        "layer": {
+          "path": "layer",
+          "package": {
+            "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/layer.zip"
+          },
+          "artifactAlreadyUploaded": true
+        }
       }
+    },
+    "layers": {
+      "$ref": "$[\"service\"][\"initialServerlessConfig\"][\"layers\"]"
     },
     "isDashboardMonitoringPreconfigured": false,
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-lambda-with-layer.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-lambda-with-layer/dev/1607428768498-2020-12-08T11:59:28.498Z",
+    "artifactDirectoryName": "serverless/test-lambda-with-layer/dev/1639131378677-2021-12-10T10:16:18.677Z",
     "artifact": "test-lambda-with-layer.zip"
   }
 }
