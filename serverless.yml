@@ -1,4 +1,4 @@
-service: test-lambda
+service: test-issue-10362
 
 provider:
   name: aws
@@ -13,3 +13,5 @@ package:
 functions:
   function:
     handler: index.handler
+    provisionedConcurrency: 1
+    maximumRetryAttempts: 0
