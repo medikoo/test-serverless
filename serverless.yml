@@ -1,4 +1,4 @@
-service: test-api-gateway-binary
+service: test-api-gateway-binary-proxy
 
 provider:
   name: aws
@@ -8,6 +8,8 @@ provider:
   versionFunctions: false
   apiGateway:
     shouldStartNameWithService: true
+    binaryMediaTypes:
+      - "*/*"
   logs:
     restApi:
       accessLogging: true
@@ -24,8 +26,3 @@ functions:
       - http:
           path: foo
           method: GET
-          integration: lambda
-          response:
-            contentHandling: CONVERT_TO_BINARY
-            headers:
-              "Content-Type": "'image/jpeg'"

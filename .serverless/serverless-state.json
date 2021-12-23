@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-api-gateway-binary",
+    "service": "test-api-gateway-binary-proxy",
     "serviceObject": {
-      "name": "test-api-gateway-binary"
+      "name": "test-api-gateway-binary-proxy"
     },
     "provider": {
       "name": "aws",
@@ -11,7 +11,10 @@
       "stage": "dev",
       "versionFunctions": false,
       "apiGateway": {
-        "shouldStartNameWithService": true
+        "shouldStartNameWithService": true,
+        "binaryMediaTypes": [
+          "*/*"
+        ]
       },
       "logs": {
         "restApi": {
@@ -96,7 +99,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-api-gateway-binary-dev-function"
+              "LogGroupName": "/aws/lambda/test-api-gateway-binary-proxy-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -124,7 +127,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-api-gateway-binary",
+                        "test-api-gateway-binary-proxy",
                         "dev",
                         "lambda"
                       ]
@@ -141,7 +144,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gateway-binary-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gateway-binary-proxy-dev*:*"
                           }
                         ]
                       },
@@ -152,7 +155,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gateway-binary-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gateway-binary-proxy-dev*:*:*"
                           }
                         ]
                       }
@@ -165,7 +168,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-api-gateway-binary",
+                    "test-api-gateway-binary-proxy",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -183,11 +186,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gateway-binary/dev/1637943717068-2021-11-26T16:21:57.068Z/function.zip"
+                "S3Key": "serverless/test-api-gateway-binary-proxy/dev/1640257124555-2021-12-23T10:58:44.555Z/function.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
-              "FunctionName": "test-api-gateway-binary-dev-function",
+              "FunctionName": "test-api-gateway-binary-proxy-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -204,7 +207,10 @@
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "test-api-gateway-binary-dev",
+              "Name": "test-api-gateway-binary-proxy-dev",
+              "BinaryMediaTypes": [
+                "*/*"
+              ],
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -243,7 +249,7 @@
               "AuthorizationType": "NONE",
               "Integration": {
                 "IntegrationHttpMethod": "POST",
-                "Type": "AWS",
+                "Type": "AWS_PROXY",
                 "Uri": {
                   "Fn::Join": [
                     "",
@@ -266,159 +272,15 @@
                       "/invocations"
                     ]
                   ]
-                },
-                "PassthroughBehavior": "NEVER",
-                "RequestTemplates": {
-                  "application/json": "\n    #set( $body = $input.json(\"$\") )\n\n    \n  #define( $loop )\n    {\n    #foreach($key in $map.keySet())\n        #set( $k = $util.escapeJavaScript($key) )\n        #set( $v = $util.escapeJavaScript($map.get($key)).replaceAll(\"\\\\'\", \"'\") )\n        \"$k\":\n          \"$v\"\n          #if( $foreach.hasNext ) , #end\n    #end\n    }\n  #end\n\n  {\n    \"body\": $body,\n    \"method\": \"$context.httpMethod\",\n    \"principalId\": \"$context.authorizer.principalId\",\n    \"stage\": \"$context.stage\",\n\n    \"cognitoPoolClaims\" : {\n       \n       \"sub\": \"$context.authorizer.claims.sub\"\n    },\n\n    #set( $map = $context.authorizer )\n    \"enhancedAuthContext\": $loop,\n\n    #set( $map = $input.params().header )\n    \"headers\": $loop,\n\n    #set( $map = $input.params().querystring )\n    \"query\": $loop,\n\n    #set( $map = $input.params().path )\n    \"path\": $loop,\n\n    #set( $map = $context.identity )\n    \"identity\": $loop,\n\n    #set( $map = $stageVariables )\n    \"stageVariables\": $loop,\n\n    \"requestPath\": \"$context.resourcePath\"\n  }\n\n  ",
-                  "application/x-www-form-urlencoded": "\n    #define( $body )\n      {\n      #foreach( $token in $input.path('$').split('&') )\n        #set( $keyVal = $token.split('=') )\n        #set( $keyValSize = $keyVal.size() )\n        #if( $keyValSize >= 1 )\n          #set( $key = $util.escapeJavaScript($util.urlDecode($keyVal[0])) )\n          #if( $keyValSize >= 2 )\n            #set($val = $util.escapeJavaScript($util.urlDecode($keyVal[1])).replaceAll(\"\\\\'\",\"'\"))\n          #else\n            #set( $val = '' )\n          #end\n          \"$key\": \"$val\"#if($foreach.hasNext),#end\n        #end\n      #end\n      }\n    #end\n\n    \n  #define( $loop )\n    {\n    #foreach($key in $map.keySet())\n        #set( $k = $util.escapeJavaScript($key) )\n        #set( $v = $util.escapeJavaScript($map.get($key)).replaceAll(\"\\\\'\", \"'\") )\n        \"$k\":\n          \"$v\"\n          #if( $foreach.hasNext ) , #end\n    #end\n    }\n  #end\n\n  {\n    \"body\": $body,\n    \"method\": \"$context.httpMethod\",\n    \"principalId\": \"$context.authorizer.principalId\",\n    \"stage\": \"$context.stage\",\n\n    \"cognitoPoolClaims\" : {\n       \n       \"sub\": \"$context.authorizer.claims.sub\"\n    },\n\n    #set( $map = $context.authorizer )\n    \"enhancedAuthContext\": $loop,\n\n    #set( $map = $input.params().header )\n    \"headers\": $loop,\n\n    #set( $map = $input.params().querystring )\n    \"query\": $loop,\n\n    #set( $map = $input.params().path )\n    \"path\": $loop,\n\n    #set( $map = $context.identity )\n    \"identity\": $loop,\n\n    #set( $map = $stageVariables )\n    \"stageVariables\": $loop,\n\n    \"requestPath\": \"$context.resourcePath\"\n  }\n\n  "
-                },
-                "IntegrationResponses": [
-                  {
-                    "StatusCode": "200",
-                    "SelectionPattern": "",
-                    "ResponseParameters": {
-                      "method.response.header.Content-Type": "'image/jpeg'"
-                    },
-                    "ResponseTemplates": {},
-                    "ContentHandling": "CONVERT_TO_BINARY"
-                  },
-                  {
-                    "StatusCode": "400",
-                    "SelectionPattern": "[\\s\\S]*\\[400\\][\\s\\S]*",
-                    "ResponseParameters": {
-                      "method.response.header.Content-Type": "'image/jpeg'"
-                    },
-                    "ResponseTemplates": {}
-                  },
-                  {
-                    "StatusCode": "401",
-                    "SelectionPattern": "[\\s\\S]*\\[401\\][\\s\\S]*",
-                    "ResponseParameters": {
-                      "method.response.header.Content-Type": "'image/jpeg'"
-                    },
-                    "ResponseTemplates": {}
-                  },
-                  {
-                    "StatusCode": "403",
-                    "SelectionPattern": "[\\s\\S]*\\[403\\][\\s\\S]*",
-                    "ResponseParameters": {
-                      "method.response.header.Content-Type": "'image/jpeg'"
-                    },
-                    "ResponseTemplates": {}
-                  },
-                  {
-                    "StatusCode": "404",
-                    "SelectionPattern": "[\\s\\S]*\\[404\\][\\s\\S]*",
-                    "ResponseParameters": {
-                      "method.response.header.Content-Type": "'image/jpeg'"
-                    },
-                    "ResponseTemplates": {}
-                  },
-                  {
-                    "StatusCode": "422",
-                    "SelectionPattern": "[\\s\\S]*\\[422\\][\\s\\S]*",
-                    "ResponseParameters": {
-                      "method.response.header.Content-Type": "'image/jpeg'"
-                    },
-                    "ResponseTemplates": {}
-                  },
-                  {
-                    "StatusCode": "500",
-                    "SelectionPattern": "[\\s\\S]*(Process\\s?exited\\s?before\\s?completing\\s?request|\\[500\\])[\\s\\S]*",
-                    "ResponseParameters": {
-                      "method.response.header.Content-Type": "'image/jpeg'"
-                    },
-                    "ResponseTemplates": {}
-                  },
-                  {
-                    "StatusCode": "502",
-                    "SelectionPattern": "[\\s\\S]*\\[502\\][\\s\\S]*",
-                    "ResponseParameters": {
-                      "method.response.header.Content-Type": "'image/jpeg'"
-                    },
-                    "ResponseTemplates": {}
-                  },
-                  {
-                    "StatusCode": "504",
-                    "SelectionPattern": "([\\s\\S]*\\[504\\][\\s\\S]*)|(.*Task timed out after \\d+\\.\\d+ seconds$)",
-                    "ResponseParameters": {
-                      "method.response.header.Content-Type": "'image/jpeg'"
-                    },
-                    "ResponseTemplates": {}
-                  }
-                ]
-              },
-              "MethodResponses": [
-                {
-                  "ResponseParameters": {
-                    "method.response.header.Content-Type": true
-                  },
-                  "ResponseModels": {},
-                  "StatusCode": "200"
-                },
-                {
-                  "ResponseParameters": {
-                    "method.response.header.Content-Type": true
-                  },
-                  "ResponseModels": {},
-                  "StatusCode": "400"
-                },
-                {
-                  "ResponseParameters": {
-                    "method.response.header.Content-Type": true
-                  },
-                  "ResponseModels": {},
-                  "StatusCode": "401"
-                },
-                {
-                  "ResponseParameters": {
-                    "method.response.header.Content-Type": true
-                  },
-                  "ResponseModels": {},
-                  "StatusCode": "403"
-                },
-                {
-                  "ResponseParameters": {
-                    "method.response.header.Content-Type": true
-                  },
-                  "ResponseModels": {},
-                  "StatusCode": "404"
-                },
-                {
-                  "ResponseParameters": {
-                    "method.response.header.Content-Type": true
-                  },
-                  "ResponseModels": {},
-                  "StatusCode": "422"
-                },
-                {
-                  "ResponseParameters": {
-                    "method.response.header.Content-Type": true
-                  },
-                  "ResponseModels": {},
-                  "StatusCode": "500"
-                },
-                {
-                  "ResponseParameters": {
-                    "method.response.header.Content-Type": true
-                  },
-                  "ResponseModels": {},
-                  "StatusCode": "502"
-                },
-                {
-                  "ResponseParameters": {
-                    "method.response.header.Content-Type": true
-                  },
-                  "ResponseModels": {},
-                  "StatusCode": "504"
                 }
-              ]
+              },
+              "MethodResponses": []
             },
             "DependsOn": [
               "FunctionLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1637943714950": {
+          "ApiGatewayDeployment1640257121496": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -470,7 +332,7 @@
           "ApiGatewayLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/api-gateway/test-api-gateway-binary-dev"
+              "LogGroupName": "/aws/api-gateway/test-api-gateway-binary-proxy-dev"
             }
           },
           "CustomApiGatewayAccountCloudWatchRole": {
@@ -511,7 +373,7 @@
                       "-",
                       [
                         "dev",
-                        "test-api-gateway-binary",
+                        "test-api-gateway-binary-proxy",
                         "custom-resources-lambda"
                       ]
                     ]
@@ -576,9 +438,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gateway-binary/dev/1637943717068-2021-11-26T16:21:57.068Z/custom-resources.zip"
+                "S3Key": "serverless/test-api-gateway-binary-proxy/dev/1640257124555-2021-12-23T10:58:44.555Z/custom-resources.zip"
               },
-              "FunctionName": "test-api-gateway-binary-dev-custom-resource-apigw-cw-role",
+              "FunctionName": "test-api-gateway-binary-proxy-dev-custom-resource-apigw-cw-role",
               "Handler": "apiGatewayCloudWatchRole/handler.handler",
               "MemorySize": 1024,
               "Runtime": "nodejs12.x",
@@ -601,7 +463,7 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-test-api-gateway-binary-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-test-api-gateway-binary-proxy-dev-ServerlessDeploymentBucketName"
             }
           },
           "ServiceEndpoint": {
@@ -627,7 +489,7 @@
               ]
             },
             "Export": {
-              "Name": "sls-test-api-gateway-binary-dev-ServiceEndpoint"
+              "Name": "sls-test-api-gateway-binary-proxy-dev-ServiceEndpoint"
             }
           }
         }
@@ -725,49 +587,11 @@
             "http": {
               "path": "foo",
               "method": "get",
-              "integration": "AWS",
-              "response": {
-                "contentHandling": "CONVERT_TO_BINARY",
-                "headers": {
-                  "Content-Type": "'image/jpeg'"
-                },
-                "statusCodes": {
-                  "200": {
-                    "pattern": ""
-                  },
-                  "400": {
-                    "pattern": "[\\s\\S]*\\[400\\][\\s\\S]*"
-                  },
-                  "401": {
-                    "pattern": "[\\s\\S]*\\[401\\][\\s\\S]*"
-                  },
-                  "403": {
-                    "pattern": "[\\s\\S]*\\[403\\][\\s\\S]*"
-                  },
-                  "404": {
-                    "pattern": "[\\s\\S]*\\[404\\][\\s\\S]*"
-                  },
-                  "422": {
-                    "pattern": "[\\s\\S]*\\[422\\][\\s\\S]*"
-                  },
-                  "500": {
-                    "pattern": "[\\s\\S]*(Process\\s?exited\\s?before\\s?completing\\s?request|\\[500\\])[\\s\\S]*"
-                  },
-                  "502": {
-                    "pattern": "[\\s\\S]*\\[502\\][\\s\\S]*"
-                  },
-                  "504": {
-                    "pattern": "([\\s\\S]*\\[504\\][\\s\\S]*)|(.*Task timed out after \\d+\\.\\d+ seconds$)"
-                  }
-                }
-              },
-              "request": {
-                "passThrough": "NEVER"
-              }
+              "integration": "AWS_PROXY"
             }
           }
         ],
-        "name": "test-api-gateway-binary-dev-function",
+        "name": "test-api-gateway-binary-proxy-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -788,7 +612,7 @@
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-api-gateway-binary/dev/1637943717068-2021-11-26T16:21:57.068Z"
+        "artifactDirectoryName": "serverless/test-api-gateway-binary-proxy/dev/1640257124555-2021-12-23T10:58:44.555Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -799,7 +623,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gateway-binary/dev/1637943717068-2021-11-26T16:21:57.068Z",
+    "artifactDirectoryName": "serverless/test-api-gateway-binary-proxy/dev/1640257124555-2021-12-23T10:58:44.555Z",
     "artifact": ""
   }
 }
