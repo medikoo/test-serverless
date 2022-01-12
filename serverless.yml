@@ -6,17 +6,18 @@ app: medikoo-test
 variablesResolutionMode: 20210326
 
 custom:
-  marko2: ${param:5}
-  marko: ${param:three}
-  marko10: ${param:5}
-  marko3: ${param:5}
-  marko4: ${param:5}
-  marko5: ${param:5}
-  marko6: ${param:5}
-  marko7: ${param:5}
-  marko8: ${param:5}
-  marko9: ${param:5}
-  elo: ${param:two}
+  instanceParam: ${param:instance-level}
+  serviceParam: ${param:service-level}
+
+params:
+  default:
+    instance-level: instance-overriden-at-default
+    service-level: service-overriden-at-default
+    local-service-level: service-local-at-default
+    local-instance-level: instance-local-at-default
+  many-params:
+    instance-level: instance-overriden-at-stage
+    local-instance-level: instance-local-at-stage
 
 provider:
   name: aws
