@@ -3,7 +3,12 @@ service: test-dashboard-params
 org: medikoo
 app: medikoo-test
 
-variablesResolutionMode: 20210326
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  stage: many-params
+  versionFunctions: false
 
 custom:
   instanceParam: ${param:instance-level}
@@ -13,18 +18,11 @@ params:
   default:
     instance-level: instance-overriden-at-default
     service-level: service-overriden-at-default
-    local-service-level: service-local-at-default
     local-instance-level: instance-local-at-default
+    local-service-level: service-local-at-default
   many-params:
     instance-level: instance-overriden-at-stage
     local-instance-level: instance-local-at-stage
-
-provider:
-  name: aws
-  runtime: nodejs12.x
-  region: us-east-1
-  stage: many-params
-  versionFunctions: false
 
 functions:
   function:
