@@ -1,0 +1,36 @@
+{
+	"name": "test-serverless",
+	"author": "Mariusz Nowak <medyk@medikoo.com> (https://www.medikoo.com/)",
+	"devDependencies": {
+		"eslint": "^8.3.0",
+		"eslint-config-medikoo": "^4.1.0",
+		"prettier-elastic": "^2.2.1"
+	},
+	"eslintConfig": {
+		"extends": "medikoo/node",
+		"root": true,
+		"rules": {
+			"no-console": "off"
+		}
+	},
+	"prettier": {
+		"printWidth": 100,
+		"tabWidth": 4,
+		"overrides": [
+			{
+				"files": [
+					"*.md",
+					"*.yml"
+				],
+				"options": {
+					"tabWidth": 2
+				}
+			}
+		]
+	},
+	"scripts": {
+		"lint": "eslint --ignore-path=.gitignore .",
+		"prettify": "prettier --write '**/*.{css,html,js,json,md,yaml,yml}'"
+	},
+	"license": "ISC"
+}

@@ -1,0 +1,15 @@
+service: test-multi-service-1
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-1
+  stage: dev
+  versionFunctions: false
+
+package:
+  individually: true
+
+functions:
+  function:
+    handler: index.handler

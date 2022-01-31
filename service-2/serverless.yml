@@ -1,4 +1,4 @@
-service: test-lambda
+service: test-multi-service-2
 
 provider:
   name: aws
