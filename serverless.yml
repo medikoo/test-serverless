@@ -1,7 +1,7 @@
 service: test-dashboard
 
 org: medikoo
-app: medikoo-test
+console: true
 
 provider:
   name: aws

@@ -10,7 +10,6 @@
       "region": "us-east-1",
       "stage": "dev",
       "versionFunctions": false,
-      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -167,50 +166,16 @@
               }
             }
           },
-          "EnterpriseLogAccessIamRole": {
-            "Type": "AWS::IAM::Role",
+          "SlsConsoleOtelExtension": {
+            "Type": "AWS::Lambda::LayerVersion",
             "Properties": {
-              "AssumeRolePolicyDocument": {
-                "Version": "2012-10-17",
-                "Statement": [
-                  {
-                    "Effect": "Allow",
-                    "Principal": {
-                      "AWS": "arn:aws:iam::802587217904:root"
-                    },
-                    "Action": "sts:AssumeRole",
-                    "Condition": {
-                      "StringEquals": {
-                        "sts:ExternalId": "ServerlessEnterprise-1sJrygBdcH5mNKPSp8"
-                      }
-                    }
-                  }
-                ]
+              "Content": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-dashboard/dev/code-artifacts/sls-otel.0.2.0.zip"
               },
-              "Policies": [
-                {
-                  "PolicyName": "LogFilterAccess",
-                  "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                      {
-                        "Effect": "Allow",
-                        "Action": [
-                          "logs:FilterLogEvents"
-                        ],
-                        "Resource": [
-                          {
-                            "Fn::GetAtt": [
-                              "FunctionLogGroup",
-                              "Arn"
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ]
+              "LayerName": "sls-console-otel-extension-0-2-0"
             }
           },
           "FunctionLambdaFunction": {
@@ -220,9 +185,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard/dev/1613393287277-2021-02-15T12:48:07.277Z/function.zip"
+                "S3Key": "serverless/test-dashboard/dev/1647445057431-2022-03-16T15:37:37.431Z/function.zip"
               },
-              "Handler": "s_function.handler",
+              "Handler": "index.handler",
               "Runtime": "nodejs12.x",
               "FunctionName": "test-dashboard-dev-function",
               "MemorySize": 1024,
@@ -232,35 +197,34 @@
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              }
+              },
+              "Environment": {
+                "Variables": {
+                  "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=371db903-a093-4360-b81d-481b66016b94",
+                  "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
+                  "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
+                  "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-dashboard,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
+                  "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension/internal/exec-wrapper.sh"
+                }
+              },
+              "Layers": [
+                {
+                  "Ref": "SlsConsoleOtelExtension"
+                }
+              ]
             },
             "DependsOn": [
               "FunctionLogGroup"
             ]
-          },
-          "CloudWatchLogsSubscriptionFilterFunctionLogGroup": {
-            "Type": "AWS::Logs::SubscriptionFilter",
-            "Properties": {
-              "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard#dev",
-              "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
-              "LogGroupName": {
-                "Ref": "FunctionLogGroup"
-              }
-            }
           }
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
-            }
-          },
-          "EnterpriseLogAccessIamRole": {
-            "Value": {
-              "Fn::GetAtt": [
-                "EnterpriseLogAccessIamRole",
-                "Arn"
-              ]
+            },
+            "Export": {
+              "Name": "sls-test-dashboard-dev-ServerlessDeploymentBucketName"
             }
           }
         }
@@ -349,20 +313,13 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
     "pluginsData": {},
     "functions": {
       "function": {
-        "handler": "s_function.handler",
+        "handler": "index.handler",
         "events": [],
         "name": "test-dashboard-dev-function",
         "package": {
-          "include": [
-            "s_function.js",
-            "serverless_sdk/**"
-          ],
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
         "memory": 1024,
@@ -373,37 +330,38 @@
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "app": "medikoo-test",
-    "org": "medikoo",
-    "layers": {},
     "initialServerlessConfig": {
-      "service": {
-        "$ref": "$[\"service\"][\"serviceObject\"]"
-      },
+      "service": "test-dashboard",
       "org": "medikoo",
       "app": "medikoo-test",
+      "console": true,
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-dashboard/dev/1613393287277-2021-02-15T12:48:07.277Z"
+        "artifactsS3KeyDirname": "serverless/test-dashboard/dev/code-artifacts",
+        "artifactDirectoryName": "serverless/test-dashboard/dev/1647445057431-2022-03-16T15:37:37.431Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
-      },
-      "plugins": {
-        "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
-    "isDashboardMonitoringPreconfigured": true,
-    "isDashboardAppPreconfigured": true,
-    "orgUid": "1sJrygBdcH5mNKPSp8",
-    "appUid": "GjXh77HjWzffv8X5SQ"
+    "app": "medikoo-test",
+    "org": "medikoo",
+    "layers": {}
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard/dev/1613393287277-2021-02-15T12:48:07.277Z",
+    "artifactDirectoryName": "serverless/test-dashboard/dev/1647445057431-2022-03-16T15:37:37.431Z",
     "artifact": ""
+  },
+  "console": {
+    "schemaVersion": "1",
+    "otelIngestionToken": "371db903-a093-4360-b81d-481b66016b94",
+    "extensionLayerVersionPostfix": "0.2.0",
+    "service": "test-dashboard",
+    "stage": "dev",
+    "orgId": "1sJrygBdcH5mNKPSp8"
   }
 }
