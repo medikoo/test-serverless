@@ -173,9 +173,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard/dev/code-artifacts/sls-otel.0.2.0.zip"
+                "S3Key": "serverless/test-dashboard/dev/code-artifacts/sls-otel.0.2.2.zip"
               },
-              "LayerName": "sls-console-otel-extension-0-2-0"
+              "LayerName": "sls-console-otel-extension-0-2-2"
             }
           },
           "FunctionLambdaFunction": {
@@ -185,7 +185,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard/dev/1647445057431-2022-03-16T15:37:37.431Z/function.zip"
+                "S3Key": "serverless/test-dashboard/dev/1647611116273-2022-03-18T13:45:16.273Z/function.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
@@ -333,7 +333,6 @@
     "initialServerlessConfig": {
       "service": "test-dashboard",
       "org": "medikoo",
-      "app": "medikoo-test",
       "console": true,
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
@@ -341,27 +340,27 @@
       "package": {
         "individually": true,
         "artifactsS3KeyDirname": "serverless/test-dashboard/dev/code-artifacts",
-        "artifactDirectoryName": "serverless/test-dashboard/dev/1647445057431-2022-03-16T15:37:37.431Z"
+        "artifactDirectoryName": "serverless/test-dashboard/dev/1647611116273-2022-03-18T13:45:16.273Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       }
     },
-    "app": "medikoo-test",
     "org": "medikoo",
     "layers": {}
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard/dev/1647445057431-2022-03-16T15:37:37.431Z",
+    "artifactDirectoryName": "serverless/test-dashboard/dev/1647611116273-2022-03-18T13:45:16.273Z",
     "artifact": ""
   },
   "console": {
     "schemaVersion": "1",
     "otelIngestionToken": "371db903-a093-4360-b81d-481b66016b94",
-    "extensionLayerVersionPostfix": "0.2.0",
+    "extensionLayerVersionPostfix": "0.2.2",
     "service": "test-dashboard",
     "stage": "dev",
+    "region": "us-east-1",
     "orgId": "1sJrygBdcH5mNKPSp8"
   }
 }
