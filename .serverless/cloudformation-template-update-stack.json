@@ -207,7 +207,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-dashboard/dev/1613393287277-2021-02-15T12:48:07.277Z/function.zip"
+          "S3Key": "serverless/test-dashboard/dev/1648125283631-2022-03-24T12:34:43.631Z/function.zip"
         },
         "Handler": "s_function.handler",
         "Runtime": "nodejs12.x",
@@ -225,7 +225,7 @@
         "FunctionLogGroup"
       ]
     },
-    "CloudWatchLogsSubscriptionFilterFunctionLogGroup": {
+    "CWLSubFilterFunctionLogGroupUsEast1": {
       "Type": "AWS::Logs::SubscriptionFilter",
       "Properties": {
         "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:1sJrygBdcH5mNKPSp8#GjXh77HjWzffv8X5SQ#test-dashboard#dev",
@@ -240,6 +240,9 @@
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      },
+      "Export": {
+        "Name": "sls-test-dashboard-dev-ServerlessDeploymentBucketName"
       }
     },
     "EnterpriseLogAccessIamRole": {
@@ -248,6 +251,9 @@
           "EnterpriseLogAccessIamRole",
           "Arn"
         ]
+      },
+      "Export": {
+        "Name": "sls-test-dashboard-dev-EnterpriseLogAccessIamRole"
       }
     }
   }

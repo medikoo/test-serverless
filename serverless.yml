@@ -12,6 +12,9 @@ provider:
 
 package:
   individually: true
+  patterns:
+    - "!.*"
+    - "!**/*.json"
 
 functions:
   function:

@@ -5,7 +5,7 @@ serverlessSDK = new serverlessSDK({
   applicationName: 'medikoo-test',
   appUid: 'GjXh77HjWzffv8X5SQ',
   orgUid: '1sJrygBdcH5mNKPSp8',
-  deploymentUid: 'b26a4d48-99bc-474e-947d-9825745ea7bc',
+  deploymentUid: '1aa90666-7071-4577-af82-addf3c1d9366',
   serviceName: 'test-dashboard',
   shouldLogMeta: true,
   shouldCompressLogs: true,
@@ -15,7 +15,7 @@ serverlessSDK = new serverlessSDK({
   serverlessPlatformStage: 'prod',
   devModeEnabled: false,
   accessKey: null,
-  pluginVersion: '4.4.3',
+  pluginVersion: '6.1.6',
   disableFrameworksInstrumentation: false
 });
 
