@@ -83,10 +83,34 @@
               }
             }
           },
-          "FunctionLogGroup": {
+          "Function1LogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-lambda-many-layers-dev-function"
+              "LogGroupName": "/aws/lambda/test-lambda-many-layers-dev-function1"
+            }
+          },
+          "Function2LogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-lambda-many-layers-dev-function2"
+            }
+          },
+          "Function3LogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-lambda-many-layers-dev-function3"
+            }
+          },
+          "Function4LogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-lambda-many-layers-dev-function4"
+            }
+          },
+          "Function5LogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-lambda-many-layers-dev-function5"
             }
           },
           "IamRoleLambdaExecution": {
@@ -173,21 +197,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer1.zip"
+                "S3Key": "serverless/test-lambda-many-layers/dev/1648121222292-2022-03-24T11:27:02.292Z/layer1.zip"
               },
               "LayerName": "layer1"
-            }
-          },
-          "Layer2LambdaLayer": {
-            "Type": "AWS::Lambda::LayerVersion",
-            "Properties": {
-              "Content": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer2.zip"
-              },
-              "LayerName": "layer2"
             }
           },
           "Layer3LambdaLayer": {
@@ -197,7 +209,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer3.zip"
+                "S3Key": "serverless/test-lambda-many-layers/dev/1648121222292-2022-03-24T11:27:02.292Z/layer3.zip"
               },
               "LayerName": "layer3"
             }
@@ -209,23 +221,134 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer4.zip"
+                "S3Key": "serverless/test-lambda-many-layers/dev/1648121222292-2022-03-24T11:27:02.292Z/layer4.zip"
               },
               "LayerName": "layer4"
             }
           },
-          "FunctionLambdaFunction": {
+          "Layer2LambdaLayer": {
+            "Type": "AWS::Lambda::LayerVersion",
+            "Properties": {
+              "Content": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-lambda-many-layers/dev/1648121222292-2022-03-24T11:27:02.292Z/layer2.zip"
+              },
+              "LayerName": "layer2"
+            }
+          },
+          "Function1LambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/function.zip"
+                "S3Key": "serverless/test-lambda-many-layers/dev/1648126034979-2022-03-24T12:47:14.979Z/function1.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
-              "FunctionName": "test-lambda-many-layers-dev-function",
+              "FunctionName": "test-lambda-many-layers-dev-function1",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Layers": [
+                {
+                  "Ref": "Layer1LambdaLayer"
+                }
+              ]
+            },
+            "DependsOn": [
+              "Function1LogGroup"
+            ]
+          },
+          "Function2LambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-lambda-many-layers/dev/1648126034979-2022-03-24T12:47:14.979Z/function2.zip"
+              },
+              "Handler": "index.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "test-lambda-many-layers-dev-function2",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Layers": [
+                {
+                  "Ref": "Layer1LambdaLayer"
+                },
+                {
+                  "Ref": "Layer2LambdaLayer"
+                }
+              ]
+            },
+            "DependsOn": [
+              "Function2LogGroup"
+            ]
+          },
+          "Function3LambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-lambda-many-layers/dev/1648126034979-2022-03-24T12:47:14.979Z/function3.zip"
+              },
+              "Handler": "index.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "test-lambda-many-layers-dev-function3",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Layers": [
+                {
+                  "Ref": "Layer1LambdaLayer"
+                },
+                {
+                  "Ref": "Layer2LambdaLayer"
+                },
+                {
+                  "Ref": "Layer3LambdaLayer"
+                }
+              ]
+            },
+            "DependsOn": [
+              "Function3LogGroup"
+            ]
+          },
+          "Function4LambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-lambda-many-layers/dev/1648126034979-2022-03-24T12:47:14.979Z/function4.zip"
+              },
+              "Handler": "index.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "test-lambda-many-layers-dev-function4",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -250,7 +373,46 @@
               ]
             },
             "DependsOn": [
-              "FunctionLogGroup"
+              "Function4LogGroup"
+            ]
+          },
+          "Function5LambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-lambda-many-layers/dev/1648126034979-2022-03-24T12:47:14.979Z/function5.zip"
+              },
+              "Handler": "index.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "test-lambda-many-layers-dev-function5",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Layers": [
+                {
+                  "Ref": "Layer1LambdaLayer"
+                },
+                {
+                  "Ref": "Layer2LambdaLayer"
+                },
+                {
+                  "Ref": "Layer3LambdaLayer"
+                },
+                {
+                  "Ref": "Layer4LambdaLayer"
+                }
+              ]
+            },
+            "DependsOn": [
+              "Function5LogGroup"
             ]
           }
         },
@@ -281,32 +443,9 @@
           },
           "Layer1LambdaLayerS3Key": {
             "Description": "Current Lambda layer S3Key",
-            "Value": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer1.zip",
+            "Value": "serverless/test-lambda-many-layers/dev/1648121222292-2022-03-24T11:27:02.292Z/layer1.zip",
             "Export": {
               "Name": "sls-test-lambda-many-layers-dev-Layer1LambdaLayerS3Key"
-            }
-          },
-          "Layer2LambdaLayerQualifiedArn": {
-            "Description": "Current Lambda layer version",
-            "Value": {
-              "Ref": "Layer2LambdaLayer"
-            },
-            "Export": {
-              "Name": "sls-test-lambda-many-layers-dev-Layer2LambdaLayerQualifiedArn"
-            }
-          },
-          "Layer2LambdaLayerHash": {
-            "Description": "Current Lambda layer hash",
-            "Value": "eb734b3a7ca8d16a5487cb8e69662ea8e3f885a2",
-            "Export": {
-              "Name": "sls-test-lambda-many-layers-dev-Layer2LambdaLayerHash"
-            }
-          },
-          "Layer2LambdaLayerS3Key": {
-            "Description": "Current Lambda layer S3Key",
-            "Value": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer2.zip",
-            "Export": {
-              "Name": "sls-test-lambda-many-layers-dev-Layer2LambdaLayerS3Key"
             }
           },
           "Layer3LambdaLayerQualifiedArn": {
@@ -327,7 +466,7 @@
           },
           "Layer3LambdaLayerS3Key": {
             "Description": "Current Lambda layer S3Key",
-            "Value": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer3.zip",
+            "Value": "serverless/test-lambda-many-layers/dev/1648121222292-2022-03-24T11:27:02.292Z/layer3.zip",
             "Export": {
               "Name": "sls-test-lambda-many-layers-dev-Layer3LambdaLayerS3Key"
             }
@@ -350,9 +489,32 @@
           },
           "Layer4LambdaLayerS3Key": {
             "Description": "Current Lambda layer S3Key",
-            "Value": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer4.zip",
+            "Value": "serverless/test-lambda-many-layers/dev/1648121222292-2022-03-24T11:27:02.292Z/layer4.zip",
             "Export": {
               "Name": "sls-test-lambda-many-layers-dev-Layer4LambdaLayerS3Key"
+            }
+          },
+          "Layer2LambdaLayerQualifiedArn": {
+            "Description": "Current Lambda layer version",
+            "Value": {
+              "Ref": "Layer2LambdaLayer"
+            },
+            "Export": {
+              "Name": "sls-test-lambda-many-layers-dev-Layer2LambdaLayerQualifiedArn"
+            }
+          },
+          "Layer2LambdaLayerHash": {
+            "Description": "Current Lambda layer hash",
+            "Value": "eb734b3a7ca8d16a5487cb8e69662ea8e3f885a2",
+            "Export": {
+              "Name": "sls-test-lambda-many-layers-dev-Layer2LambdaLayerHash"
+            }
+          },
+          "Layer2LambdaLayerS3Key": {
+            "Description": "Current Lambda layer S3Key",
+            "Value": "serverless/test-lambda-many-layers/dev/1648121222292-2022-03-24T11:27:02.292Z/layer2.zip",
+            "Export": {
+              "Name": "sls-test-lambda-many-layers-dev-Layer2LambdaLayerS3Key"
             }
           }
         }
@@ -443,15 +605,75 @@
     },
     "pluginsData": {},
     "functions": {
-      "function": {
+      "function1": {
         "handler": "index.handler",
         "layers": {
-          "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"FunctionLambdaFunction\"][\"Properties\"][\"Layers\"]"
+          "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"Function1LambdaFunction\"][\"Properties\"][\"Layers\"]"
         },
         "events": [],
-        "name": "test-lambda-many-layers-dev-function",
+        "name": "test-lambda-many-layers-dev-function1",
         "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function1.zip"
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {}
+      },
+      "function2": {
+        "handler": "index.handler",
+        "layers": {
+          "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"Function2LambdaFunction\"][\"Properties\"][\"Layers\"]"
+        },
+        "events": [],
+        "name": "test-lambda-many-layers-dev-function2",
+        "package": {
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function2.zip"
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {}
+      },
+      "function3": {
+        "handler": "index.handler",
+        "layers": {
+          "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"Function3LambdaFunction\"][\"Properties\"][\"Layers\"]"
+        },
+        "events": [],
+        "name": "test-lambda-many-layers-dev-function3",
+        "package": {
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function3.zip"
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {}
+      },
+      "function4": {
+        "handler": "index.handler",
+        "layers": {
+          "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"Function4LambdaFunction\"][\"Properties\"][\"Layers\"]"
+        },
+        "events": [],
+        "name": "test-lambda-many-layers-dev-function4",
+        "package": {
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function4.zip"
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {}
+      },
+      "function5": {
+        "handler": "index.handler",
+        "layers": {
+          "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"Function5LambdaFunction\"][\"Properties\"][\"Layers\"]"
+        },
+        "events": [],
+        "name": "test-lambda-many-layers-dev-function5",
+        "package": {
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function5.zip"
         },
         "memory": 1024,
         "timeout": 6,
@@ -469,7 +691,7 @@
       "package": {
         "individually": true,
         "artifactsS3KeyDirname": "serverless/test-lambda-many-layers/dev/code-artifacts",
-        "artifactDirectoryName": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z"
+        "artifactDirectoryName": "serverless/test-lambda-many-layers/dev/1648126034979-2022-03-24T12:47:14.979Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -479,35 +701,40 @@
           "path": "layer",
           "package": {
             "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/layer1.zip"
-          }
+          },
+          "artifactAlreadyUploaded": true
         },
         "layer2": {
           "path": "layer",
           "package": {
             "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/layer2.zip"
-          }
+          },
+          "artifactAlreadyUploaded": true
         },
         "layer3": {
           "path": "layer",
           "package": {
             "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/layer3.zip"
-          }
+          },
+          "artifactAlreadyUploaded": true
         },
         "layer4": {
           "path": "layer",
           "package": {
             "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/layer4.zip"
-          }
+          },
+          "artifactAlreadyUploaded": true
         }
       }
     },
     "layers": {
       "$ref": "$[\"service\"][\"initialServerlessConfig\"][\"layers\"]"
-    }
+    },
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z",
+    "artifactDirectoryName": "serverless/test-lambda-many-layers/dev/1648126034979-2022-03-24T12:47:14.979Z",
     "artifact": ""
   }
 }

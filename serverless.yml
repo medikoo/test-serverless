@@ -11,7 +11,29 @@ package:
   individually: true
 
 functions:
-  function:
+  function1:
+    handler: index.handler
+    layers:
+      - { Ref: Layer1LambdaLayer }
+  function2:
+    handler: index.handler
+    layers:
+      - { Ref: Layer1LambdaLayer }
+      - { Ref: Layer2LambdaLayer }
+  function3:
+    handler: index.handler
+    layers:
+      - { Ref: Layer1LambdaLayer }
+      - { Ref: Layer2LambdaLayer }
+      - { Ref: Layer3LambdaLayer }
+  function4:
+    handler: index.handler
+    layers:
+      - { Ref: Layer1LambdaLayer }
+      - { Ref: Layer2LambdaLayer }
+      - { Ref: Layer3LambdaLayer }
+      - { Ref: Layer4LambdaLayer }
+  function5:
     handler: index.handler
     layers:
       - { Ref: Layer1LambdaLayer }
