@@ -74,7 +74,7 @@
     "FunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-lambda-with-layer-dev-function"
+        "LogGroupName": "/aws/lambda/test-lambda-many-layers-dev-function"
       }
     },
     "IamRoleLambdaExecution": {
@@ -102,7 +102,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-lambda-with-layer",
+                  "test-lambda-many-layers",
                   "dev",
                   "lambda"
                 ]
@@ -119,7 +119,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-with-layer-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-many-layers-dev*:*"
                     }
                   ]
                 },
@@ -130,7 +130,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-with-layer-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-many-layers-dev*:*:*"
                     }
                   ]
                 }
@@ -143,7 +143,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-lambda-with-layer",
+              "test-lambda-many-layers",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -161,9 +161,45 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-with-layer/dev/1648118847736-2022-03-24T10:47:27.736Z/layer1.zip"
+          "S3Key": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer1.zip"
         },
         "LayerName": "layer1"
+      }
+    },
+    "Layer2LambdaLayer": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer2.zip"
+        },
+        "LayerName": "layer2"
+      }
+    },
+    "Layer3LambdaLayer": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer3.zip"
+        },
+        "LayerName": "layer3"
+      }
+    },
+    "Layer4LambdaLayer": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer4.zip"
+        },
+        "LayerName": "layer4"
       }
     },
     "FunctionLambdaFunction": {
@@ -173,11 +209,11 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-with-layer/dev/1648118847736-2022-03-24T10:47:27.736Z/function.zip"
+          "S3Key": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/function.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
-        "FunctionName": "test-lambda-with-layer-dev-function",
+        "FunctionName": "test-lambda-many-layers-dev-function",
         "MemorySize": 1024,
         "Timeout": 6,
         "Role": {
@@ -189,6 +225,15 @@
         "Layers": [
           {
             "Ref": "Layer1LambdaLayer"
+          },
+          {
+            "Ref": "Layer2LambdaLayer"
+          },
+          {
+            "Ref": "Layer3LambdaLayer"
+          },
+          {
+            "Ref": "Layer4LambdaLayer"
           }
         ]
       },
@@ -203,7 +248,7 @@
         "Ref": "ServerlessDeploymentBucket"
       },
       "Export": {
-        "Name": "sls-test-lambda-with-layer-dev-ServerlessDeploymentBucketName"
+        "Name": "sls-test-lambda-many-layers-dev-ServerlessDeploymentBucketName"
       }
     },
     "Layer1LambdaLayerQualifiedArn": {
@@ -212,21 +257,90 @@
         "Ref": "Layer1LambdaLayer"
       },
       "Export": {
-        "Name": "sls-test-lambda-with-layer-dev-Layer1LambdaLayerQualifiedArn"
+        "Name": "sls-test-lambda-many-layers-dev-Layer1LambdaLayerQualifiedArn"
       }
     },
     "Layer1LambdaLayerHash": {
       "Description": "Current Lambda layer hash",
       "Value": "e7306e77cf8e54f65c92b19761c8b3e3faf480ee",
       "Export": {
-        "Name": "sls-test-lambda-with-layer-dev-Layer1LambdaLayerHash"
+        "Name": "sls-test-lambda-many-layers-dev-Layer1LambdaLayerHash"
       }
     },
     "Layer1LambdaLayerS3Key": {
       "Description": "Current Lambda layer S3Key",
-      "Value": "serverless/test-lambda-with-layer/dev/1648118847736-2022-03-24T10:47:27.736Z/layer1.zip",
+      "Value": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer1.zip",
       "Export": {
-        "Name": "sls-test-lambda-with-layer-dev-Layer1LambdaLayerS3Key"
+        "Name": "sls-test-lambda-many-layers-dev-Layer1LambdaLayerS3Key"
+      }
+    },
+    "Layer2LambdaLayerQualifiedArn": {
+      "Description": "Current Lambda layer version",
+      "Value": {
+        "Ref": "Layer2LambdaLayer"
+      },
+      "Export": {
+        "Name": "sls-test-lambda-many-layers-dev-Layer2LambdaLayerQualifiedArn"
+      }
+    },
+    "Layer2LambdaLayerHash": {
+      "Description": "Current Lambda layer hash",
+      "Value": "eb734b3a7ca8d16a5487cb8e69662ea8e3f885a2",
+      "Export": {
+        "Name": "sls-test-lambda-many-layers-dev-Layer2LambdaLayerHash"
+      }
+    },
+    "Layer2LambdaLayerS3Key": {
+      "Description": "Current Lambda layer S3Key",
+      "Value": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer2.zip",
+      "Export": {
+        "Name": "sls-test-lambda-many-layers-dev-Layer2LambdaLayerS3Key"
+      }
+    },
+    "Layer3LambdaLayerQualifiedArn": {
+      "Description": "Current Lambda layer version",
+      "Value": {
+        "Ref": "Layer3LambdaLayer"
+      },
+      "Export": {
+        "Name": "sls-test-lambda-many-layers-dev-Layer3LambdaLayerQualifiedArn"
+      }
+    },
+    "Layer3LambdaLayerHash": {
+      "Description": "Current Lambda layer hash",
+      "Value": "2512e1f61eb6ad04fa55a420cf40d36e9193a13e",
+      "Export": {
+        "Name": "sls-test-lambda-many-layers-dev-Layer3LambdaLayerHash"
+      }
+    },
+    "Layer3LambdaLayerS3Key": {
+      "Description": "Current Lambda layer S3Key",
+      "Value": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer3.zip",
+      "Export": {
+        "Name": "sls-test-lambda-many-layers-dev-Layer3LambdaLayerS3Key"
+      }
+    },
+    "Layer4LambdaLayerQualifiedArn": {
+      "Description": "Current Lambda layer version",
+      "Value": {
+        "Ref": "Layer4LambdaLayer"
+      },
+      "Export": {
+        "Name": "sls-test-lambda-many-layers-dev-Layer4LambdaLayerQualifiedArn"
+      }
+    },
+    "Layer4LambdaLayerHash": {
+      "Description": "Current Lambda layer hash",
+      "Value": "4bba50c99b85767d5109bddc28678e5937639989",
+      "Export": {
+        "Name": "sls-test-lambda-many-layers-dev-Layer4LambdaLayerHash"
+      }
+    },
+    "Layer4LambdaLayerS3Key": {
+      "Description": "Current Lambda layer S3Key",
+      "Value": "serverless/test-lambda-many-layers/dev/1648120543654-2022-03-24T11:15:43.654Z/layer4.zip",
+      "Export": {
+        "Name": "sls-test-lambda-many-layers-dev-Layer4LambdaLayerS3Key"
       }
     }
   }
