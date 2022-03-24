@@ -14,8 +14,8 @@ functions:
   function:
     handler: index.handler
     layers:
-      - { Ref: LayerLambdaLayer }
+      - { Ref: Layer1LambdaLayer }
 
 layers:
-  layer:
+  layer1:
     path: layer

@@ -154,16 +154,16 @@
         }
       }
     },
-    "LayerLambdaLayer": {
+    "Layer1LambdaLayer": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "Content": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-with-layer/dev/1593092876239-2020-06-25T13:47:56.239Z/layer.zip"
+          "S3Key": "serverless/test-lambda-with-layer/dev/1648118847736-2022-03-24T10:47:27.736Z/layer1.zip"
         },
-        "LayerName": "layer"
+        "LayerName": "layer1"
       }
     },
     "FunctionLambdaFunction": {
@@ -173,7 +173,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-with-layer/dev/1648118662159-2022-03-24T10:44:22.159Z/function.zip"
+          "S3Key": "serverless/test-lambda-with-layer/dev/1648118847736-2022-03-24T10:47:27.736Z/function.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs12.x",
@@ -188,7 +188,7 @@
         },
         "Layers": [
           {
-            "Ref": "LayerLambdaLayer"
+            "Ref": "Layer1LambdaLayer"
           }
         ]
       },
@@ -206,27 +206,27 @@
         "Name": "sls-test-lambda-with-layer-dev-ServerlessDeploymentBucketName"
       }
     },
-    "LayerLambdaLayerQualifiedArn": {
+    "Layer1LambdaLayerQualifiedArn": {
       "Description": "Current Lambda layer version",
       "Value": {
-        "Ref": "LayerLambdaLayer"
+        "Ref": "Layer1LambdaLayer"
       },
       "Export": {
-        "Name": "sls-test-lambda-with-layer-dev-LayerLambdaLayerQualifiedArn"
+        "Name": "sls-test-lambda-with-layer-dev-Layer1LambdaLayerQualifiedArn"
       }
     },
-    "LayerLambdaLayerHash": {
+    "Layer1LambdaLayerHash": {
       "Description": "Current Lambda layer hash",
-      "Value": "e3e83b6808cde5bc5e4fee47424fb3898b55c223",
+      "Value": "e7306e77cf8e54f65c92b19761c8b3e3faf480ee",
       "Export": {
-        "Name": "sls-test-lambda-with-layer-dev-LayerLambdaLayerHash"
+        "Name": "sls-test-lambda-with-layer-dev-Layer1LambdaLayerHash"
       }
     },
-    "LayerLambdaLayerS3Key": {
+    "Layer1LambdaLayerS3Key": {
       "Description": "Current Lambda layer S3Key",
-      "Value": "serverless/test-lambda-with-layer/dev/1593092876239-2020-06-25T13:47:56.239Z/layer.zip",
+      "Value": "serverless/test-lambda-with-layer/dev/1648118847736-2022-03-24T10:47:27.736Z/layer1.zip",
       "Export": {
-        "Name": "sls-test-lambda-with-layer-dev-LayerLambdaLayerS3Key"
+        "Name": "sls-test-lambda-with-layer-dev-Layer1LambdaLayerS3Key"
       }
     }
   }
