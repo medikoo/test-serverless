@@ -1,8 +1,8 @@
-service: test-lambda
+service: test-plugin-esbuild
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   region: us-east-1
   stage: dev
   versionFunctions: false
@@ -13,3 +13,6 @@ package:
 functions:
   function:
     handler: index.handler
+
+plugins:
+  - serverless-esbuild

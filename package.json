@@ -2,17 +2,25 @@
 	"name": "test-serverless",
 	"author": "Mariusz Nowak <medyk@medikoo.com> (https://www.medikoo.com/)",
 	"devDependencies": {
+		"esbuild": "^0.14.27",
 		"eslint": "^8.3.0",
 		"eslint-config-medikoo": "^4.1.0",
-		"prettier-elastic": "^2.2.1"
+		"prettier-elastic": "^2.2.1",
+		"serverless-esbuild": "^1.26.1"
 	},
 	"eslintConfig": {
 		"extends": "medikoo/node",
 		"root": true,
+		"eslintConfig": {
+			"parserOptions": {
+				"sourceType": "module"
+			}
+		},
 		"rules": {
 			"no-console": "off"
 		}
 	},
+	"type": "module",
 	"prettier": {
 		"printWidth": 100,
 		"tabWidth": 4,
