@@ -1,4 +1,4 @@
-service: test-lambda
+service: test-express-serverless-http
 
 provider:
   name: aws
@@ -11,5 +11,7 @@ package:
   individually: true
 
 functions:
-  function:
+  api:
     handler: index.handler
+    events:
+      - httpApi: "*"

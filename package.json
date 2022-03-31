@@ -32,5 +32,9 @@
 		"lint": "eslint --ignore-path=.gitignore .",
 		"prettify": "prettier --write '**/*.{css,html,js,json,md,yaml,yml}'"
 	},
-	"license": "ISC"
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.17.3",
+		"serverless-http": "^2.7.0"
+	}
 }

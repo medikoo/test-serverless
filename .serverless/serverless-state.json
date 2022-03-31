@@ -1,12 +1,12 @@
 {
   "service": {
-    "service": "test-lambda",
+    "service": "test-express-serverless-http",
     "serviceObject": {
-      "name": "test-lambda"
+      "name": "test-express-serverless-http"
     },
     "provider": {
       "name": "aws",
-      "runtime": "nodejs12.x",
+      "runtime": "nodejs14.x",
       "region": "us-east-1",
       "stage": "dev",
       "versionFunctions": false,
@@ -83,10 +83,10 @@
               }
             }
           },
-          "FunctionLogGroup": {
+          "ApiLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-lambda-dev-function"
+              "LogGroupName": "/aws/lambda/test-express-serverless-http-dev-api"
             }
           },
           "IamRoleLambdaExecution": {
@@ -114,7 +114,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-lambda",
+                        "test-express-serverless-http",
                         "dev",
                         "lambda"
                       ]
@@ -131,7 +131,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-express-serverless-http-dev*:*"
                           }
                         ]
                       },
@@ -142,7 +142,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-lambda-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-express-serverless-http-dev*:*:*"
                           }
                         ]
                       }
@@ -155,7 +155,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-lambda",
+                    "test-express-serverless-http",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -166,18 +166,18 @@
               }
             }
           },
-          "FunctionLambdaFunction": {
+          "ApiLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda/dev/1647881431875-2022-03-21T16:50:31.875Z/function.zip"
+                "S3Key": "serverless/test-express-serverless-http/dev/1648753829698-2022-03-31T19:10:29.698Z/api.zip"
               },
               "Handler": "index.handler",
-              "Runtime": "nodejs12.x",
-              "FunctionName": "test-lambda-dev-function",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "test-express-serverless-http-dev-api",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -188,8 +188,100 @@
               }
             },
             "DependsOn": [
-              "FunctionLogGroup"
+              "ApiLogGroup"
             ]
+          },
+          "HttpApi": {
+            "Type": "AWS::ApiGatewayV2::Api",
+            "Properties": {
+              "Name": "dev-test-express-serverless-http",
+              "ProtocolType": "HTTP"
+            }
+          },
+          "HttpApiStage": {
+            "Type": "AWS::ApiGatewayV2::Stage",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "StageName": "$default",
+              "AutoDeploy": true,
+              "DefaultRouteSettings": {
+                "DetailedMetricsEnabled": false
+              }
+            }
+          },
+          "ApiLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "ApiLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationApi": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"ApiLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 6500
+            }
+          },
+          "HttpApiRouteDefault": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "$default",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationApi"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationApi"
           }
         },
         "Outputs": {
@@ -198,7 +290,41 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-test-lambda-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-test-express-serverless-http-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "HttpApiId": {
+            "Description": "Id of the HTTP API",
+            "Value": {
+              "Ref": "HttpApi"
+            },
+            "Export": {
+              "Name": "sls-test-express-serverless-http-dev-HttpApiId"
+            }
+          },
+          "HttpApiUrl": {
+            "Description": "URL of the HTTP API",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "HttpApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  }
+                ]
+              ]
+            },
+            "Export": {
+              "Name": "sls-test-express-serverless-http-dev-HttpApiUrl"
             }
           }
         }
@@ -289,40 +415,46 @@
     },
     "pluginsData": {},
     "functions": {
-      "function": {
+      "api": {
         "handler": "index.handler",
-        "events": [],
-        "name": "test-lambda-dev-function",
+        "events": [
+          {
+            "httpApi": "*",
+            "resolvedMethod": "ANY"
+          }
+        ],
+        "name": "test-express-serverless-http-dev-api",
         "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
+          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/api.zip"
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs12.x",
+        "runtime": "nodejs14.x",
         "vpc": {}
       }
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "initialServerlessConfig": {
-      "service": "test-lambda",
+      "service": "test-express-serverless-http",
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
       "package": {
         "individually": true,
-        "artifactsS3KeyDirname": "serverless/test-lambda/dev/code-artifacts",
-        "artifactDirectoryName": "serverless/test-lambda/dev/1647881431875-2022-03-21T16:50:31.875Z"
+        "artifactsS3KeyDirname": "serverless/test-express-serverless-http/dev/code-artifacts",
+        "artifactDirectoryName": "serverless/test-express-serverless-http/dev/1648753829698-2022-03-31T19:10:29.698Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       }
     },
-    "layers": {}
+    "layers": {},
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda/dev/1647881431875-2022-03-21T16:50:31.875Z",
+    "artifactDirectoryName": "serverless/test-express-serverless-http/dev/1648753829698-2022-03-31T19:10:29.698Z",
     "artifact": ""
   }
 }
