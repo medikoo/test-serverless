@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "test-dashboard",
+    "service": "test-console",
     "serviceObject": {
-      "name": "test-dashboard"
+      "name": "test-console"
     },
     "provider": {
       "name": "aws",
@@ -86,7 +86,7 @@
           "FunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-dashboard-dev-function"
+              "LogGroupName": "/aws/lambda/test-console-dev-function"
             }
           },
           "IamRoleLambdaExecution": {
@@ -114,7 +114,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "test-dashboard",
+                        "test-console",
                         "dev",
                         "lambda"
                       ]
@@ -131,7 +131,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-console-dev*:*"
                           }
                         ]
                       },
@@ -142,7 +142,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-dashboard-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-console-dev*:*:*"
                           }
                         ]
                       }
@@ -155,7 +155,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "test-dashboard",
+                    "test-console",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -173,9 +173,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard/dev/code-artifacts/sls-otel.0.2.2.zip"
+                "S3Key": "serverless/test-console/dev/code-artifacts/sls-otel.0.2.19.zip"
               },
-              "LayerName": "sls-console-otel-extension-0-2-2"
+              "LayerName": "sls-console-otel-extension-0-2-19"
             }
           },
           "FunctionLambdaFunction": {
@@ -185,11 +185,11 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-dashboard/dev/1647611116273-2022-03-18T13:45:16.273Z/function.zip"
+                "S3Key": "serverless/test-console/dev/1650622684074-2022-04-22T10:18:04.074Z/function.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs12.x",
-              "FunctionName": "test-dashboard-dev-function",
+              "FunctionName": "test-console-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -200,11 +200,13 @@
               },
               "Environment": {
                 "Variables": {
-                  "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=371db903-a093-4360-b81d-481b66016b94",
+                  "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580",
                   "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
                   "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
-                  "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-dashboard,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
-                  "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension/internal/exec-wrapper.sh"
+                  "SLS_OTEL_USER_SETTINGS": "{}",
+                  "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-console,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
+                  "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension/internal/exec-wrapper.sh",
+                  "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs"
                 }
               },
               "Layers": [
@@ -224,7 +226,7 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-test-dashboard-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-test-console-dev-ServerlessDeploymentBucketName"
             }
           }
         }
@@ -318,7 +320,7 @@
       "function": {
         "handler": "index.handler",
         "events": [],
-        "name": "test-dashboard-dev-function",
+        "name": "test-console-dev-function",
         "package": {
           "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
         },
@@ -331,7 +333,7 @@
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "initialServerlessConfig": {
-      "service": "test-dashboard",
+      "service": "test-console",
       "org": "medikoo",
       "console": true,
       "provider": {
@@ -339,26 +341,28 @@
       },
       "package": {
         "individually": true,
-        "artifactsS3KeyDirname": "serverless/test-dashboard/dev/code-artifacts",
-        "artifactDirectoryName": "serverless/test-dashboard/dev/1647611116273-2022-03-18T13:45:16.273Z"
+        "artifactsS3KeyDirname": "serverless/test-console/dev/code-artifacts",
+        "artifactDirectoryName": "serverless/test-console/dev/1650622684074-2022-04-22T10:18:04.074Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       }
     },
     "org": "medikoo",
-    "layers": {}
+    "layers": {},
+    "isDashboardMonitoringPreconfigured": true,
+    "isDashboardAppPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-dashboard/dev/1647611116273-2022-03-18T13:45:16.273Z",
+    "artifactDirectoryName": "serverless/test-console/dev/1650622684074-2022-04-22T10:18:04.074Z",
     "artifact": ""
   },
   "console": {
     "schemaVersion": "1",
-    "otelIngestionToken": "371db903-a093-4360-b81d-481b66016b94",
-    "extensionLayerVersionPostfix": "0.2.2",
-    "service": "test-dashboard",
+    "otelIngestionToken": "8044fbda-ce5c-40ed-b134-011a5fba3580",
+    "extensionLayerVersionPostfix": "0.2.19",
+    "service": "test-console",
     "stage": "dev",
     "region": "us-east-1",
     "orgId": "1sJrygBdcH5mNKPSp8"

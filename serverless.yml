@@ -1,4 +1,4 @@
-service: test-dashboard
+service: test-console
 
 org: medikoo
 console: true
