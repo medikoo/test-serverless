@@ -44,6 +44,21 @@
                       "/*"
                     ]
                   ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
                 }
               ],
               "Condition": {
@@ -145,6 +160,18 @@
         }
       }
     },
+    "SlsConsoleOtelExtension": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/test-http-api/dev/code-artifacts/sls-otel.0.2.20.zip"
+        },
+        "LayerName": "sls-console-otel-extension-0-2-20"
+      }
+    },
     "FunctionLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -152,19 +179,36 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1604912228466-2020-11-09T08:57:08.466Z/function.zip"
+          "S3Key": "serverless/test-http-api/dev/1651239767276-2022-04-29T13:42:47.276Z/function.zip"
         },
-        "FunctionName": "test-http-api-dev-function",
         "Handler": "index.handler",
+        "Runtime": "nodejs14.x",
+        "FunctionName": "test-http-api-dev-function",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
         },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6
+        "Environment": {
+          "Variables": {
+            "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=d3f3e482-5dc5-421a-a481-667b22432d80",
+            "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
+            "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
+            "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-http-api,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
+            "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension/internal/exec-wrapper.sh",
+            "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs",
+            "SLS_OTEL_REPORT_REQUEST_RESPONSE_URL": "https://core.serverless.com/ingestion/kinesis/v1/request-response",
+            "SLS_OTEL_USER_SETTINGS": "{}"
+          }
+        },
+        "Layers": [
+          {
+            "Ref": "SlsConsoleOtelExtension"
+          }
+        ]
       },
       "DependsOn": [
         "FunctionLogGroup"
@@ -177,19 +221,36 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-http-api/dev/1604912228466-2020-11-09T08:57:08.466Z/other.zip"
+          "S3Key": "serverless/test-http-api/dev/1651239767276-2022-04-29T13:42:47.276Z/other.zip"
         },
-        "FunctionName": "test-http-api-dev-other",
         "Handler": "other.handler",
+        "Runtime": "nodejs14.x",
+        "FunctionName": "test-http-api-dev-other",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
         },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6
+        "Environment": {
+          "Variables": {
+            "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=d3f3e482-5dc5-421a-a481-667b22432d80",
+            "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
+            "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
+            "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-http-api,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
+            "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension/internal/exec-wrapper.sh",
+            "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs",
+            "SLS_OTEL_REPORT_REQUEST_RESPONSE_URL": "https://core.serverless.com/ingestion/kinesis/v1/request-response",
+            "SLS_OTEL_USER_SETTINGS": "{}"
+          }
+        },
+        "Layers": [
+          {
+            "Ref": "SlsConsoleOtelExtension"
+          }
+        ]
       },
       "DependsOn": [
         "OtherLogGroup"
@@ -231,7 +292,10 @@
           "Ref": "HttpApi"
         },
         "StageName": "$default",
-        "AutoDeploy": true
+        "AutoDeploy": true,
+        "DefaultRouteSettings": {
+          "DetailedMetricsEnabled": false
+        }
       }
     },
     "FunctionLambdaPermissionHttpApi": {
@@ -410,6 +474,18 @@
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      },
+      "Export": {
+        "Name": "sls-test-http-api-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "HttpApiId": {
+      "Description": "Id of the HTTP API",
+      "Value": {
+        "Ref": "HttpApi"
+      },
+      "Export": {
+        "Name": "sls-test-http-api-dev-HttpApiId"
       }
     },
     "HttpApiUrl": {
@@ -432,6 +508,9 @@
             }
           ]
         ]
+      },
+      "Export": {
+        "Name": "sls-test-http-api-dev-HttpApiUrl"
       }
     }
   }
