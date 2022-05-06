@@ -1,4 +1,4 @@
-service: test-lambda
+service: test-lambda-arch
 
 provider:
   name: aws
@@ -6,9 +6,6 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
-
-package:
-  individually: true
 
 functions:
   function:
