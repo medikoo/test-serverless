@@ -6,6 +6,7 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
+  architecture: arm64
 
 functions:
   function:

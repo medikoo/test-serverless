@@ -161,13 +161,16 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-arch/dev/1651833310468-2022-05-06T10:35:10.468Z/test-lambda-arch.zip"
+          "S3Key": "serverless/test-lambda-arch/dev/1651834148550-2022-05-06T10:49:08.550Z/test-lambda-arch.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs14.x",
         "FunctionName": "test-lambda-arch-dev-function",
         "MemorySize": 1024,
         "Timeout": 6,
+        "Architectures": [
+          "arm64"
+        ],
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
