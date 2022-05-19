@@ -5,14 +5,13 @@ console: true
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   region: us-east-1
   stage: dev
   versionFunctions: false
 
-package:
-  individually: true
-
 functions:
-  function:
-    handler: index.handler
+  success:
+    handler: success.handler
+  timeout:
+    handler: timeout.handler

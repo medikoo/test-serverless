@@ -6,7 +6,7 @@
     },
     "provider": {
       "name": "aws",
-      "runtime": "nodejs12.x",
+      "runtime": "nodejs14.x",
       "region": "us-east-1",
       "stage": "dev",
       "versionFunctions": false,
@@ -83,10 +83,16 @@
               }
             }
           },
-          "FunctionLogGroup": {
+          "SuccessLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-console-dev-function"
+              "LogGroupName": "/aws/lambda/test-console-dev-success"
+            }
+          },
+          "TimeoutLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-console-dev-timeout"
             }
           },
           "IamRoleLambdaExecution": {
@@ -173,23 +179,23 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-console/dev/code-artifacts/sls-otel.0.2.19.zip"
+                "S3Key": "serverless/test-console/dev/code-artifacts/sls-otel.0.2.21.zip"
               },
-              "LayerName": "sls-console-otel-extension-0-2-19"
+              "LayerName": "sls-console-otel-extension-0-2-21"
             }
           },
-          "FunctionLambdaFunction": {
+          "SuccessLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-console/dev/1650622684074-2022-04-22T10:18:04.074Z/function.zip"
+                "S3Key": "serverless/test-console/dev/1652954140633-2022-05-19T09:55:40.633Z/test-console.zip"
               },
-              "Handler": "index.handler",
-              "Runtime": "nodejs12.x",
-              "FunctionName": "test-console-dev-function",
+              "Handler": "success.handler",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "test-console-dev-success",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -203,10 +209,11 @@
                   "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580",
                   "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
                   "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
-                  "SLS_OTEL_USER_SETTINGS": "{}",
                   "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-console,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
                   "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension/internal/exec-wrapper.sh",
-                  "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs"
+                  "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs",
+                  "SLS_OTEL_REPORT_REQUEST_RESPONSE_URL": "https://core.serverless.com/ingestion/kinesis/v1/request-response",
+                  "SLS_OTEL_USER_SETTINGS": "{}"
                 }
               },
               "Layers": [
@@ -216,7 +223,49 @@
               ]
             },
             "DependsOn": [
-              "FunctionLogGroup"
+              "SuccessLogGroup"
+            ]
+          },
+          "TimeoutLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-console/dev/1652954140633-2022-05-19T09:55:40.633Z/test-console.zip"
+              },
+              "Handler": "timeout.handler",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "test-console-dev-timeout",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Environment": {
+                "Variables": {
+                  "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580",
+                  "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
+                  "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
+                  "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-console,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
+                  "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension/internal/exec-wrapper.sh",
+                  "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs",
+                  "SLS_OTEL_REPORT_REQUEST_RESPONSE_URL": "https://core.serverless.com/ingestion/kinesis/v1/request-response",
+                  "SLS_OTEL_USER_SETTINGS": "{}"
+                }
+              },
+              "Layers": [
+                {
+                  "Ref": "SlsConsoleOtelExtension"
+                }
+              ]
+            },
+            "DependsOn": [
+              "TimeoutLogGroup"
             ]
           }
         },
@@ -317,16 +366,24 @@
     },
     "pluginsData": {},
     "functions": {
-      "function": {
-        "handler": "index.handler",
+      "success": {
+        "handler": "success.handler",
         "events": [],
-        "name": "test-console-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
+        "name": "test-console-dev-success",
+        "package": {},
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs12.x",
+        "runtime": "nodejs14.x",
+        "vpc": {}
+      },
+      "timeout": {
+        "handler": "timeout.handler",
+        "events": [],
+        "name": "test-console-dev-timeout",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs14.x",
         "vpc": {}
       }
     },
@@ -339,11 +396,6 @@
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
-      "package": {
-        "individually": true,
-        "artifactsS3KeyDirname": "serverless/test-console/dev/code-artifacts",
-        "artifactDirectoryName": "serverless/test-console/dev/1650622684074-2022-04-22T10:18:04.074Z"
-      },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       }
@@ -351,17 +403,17 @@
     "org": "medikoo",
     "layers": {},
     "isDashboardMonitoringPreconfigured": true,
-    "isDashboardAppPreconfigured": false
+    "isDashboardAppPreconfigured": false,
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-console.zip"
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-console/dev/1650622684074-2022-04-22T10:18:04.074Z",
-    "artifact": ""
+    "artifactDirectoryName": "serverless/test-console/dev/1652954140633-2022-05-19T09:55:40.633Z",
+    "artifact": "test-console.zip"
   },
   "console": {
     "schemaVersion": "1",
     "otelIngestionToken": "8044fbda-ce5c-40ed-b134-011a5fba3580",
-    "extensionLayerVersionPostfix": "0.2.19",
+    "extensionLayerVersionPostfix": "0.2.21",
     "service": "test-console",
     "stage": "dev",
     "region": "us-east-1",
