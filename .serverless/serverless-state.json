@@ -10,6 +10,9 @@
       "region": "us-east-1",
       "stage": "dev",
       "versionFunctions": false,
+      "environment": {
+        "DEBUG_SLS_OTEL_LAYER": "1"
+      },
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -179,9 +182,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-console/dev/code-artifacts/sls-otel.0.2.21.zip"
+                "S3Key": "serverless/test-console/dev/code-artifacts/sls-otel.0.3.1.zip"
               },
-              "LayerName": "sls-console-otel-extension-0-2-21"
+              "LayerName": "sls-console-otel-extension-0-3-1"
             }
           },
           "SuccessLambdaFunction": {
@@ -191,30 +194,31 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-console/dev/1652954140633-2022-05-19T09:55:40.633Z/test-console.zip"
+                "S3Key": "serverless/test-console/dev/1653663575915-2022-05-27T14:59:35.915Z/test-console.zip"
               },
               "Handler": "success.handler",
               "Runtime": "nodejs14.x",
               "FunctionName": "test-console-dev-success",
               "MemorySize": 1024,
               "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DEBUG_SLS_OTEL_LAYER": "1",
+                  "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580",
+                  "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
+                  "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
+                  "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-console,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
+                  "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension-internal-node/exec-wrapper.sh",
+                  "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs",
+                  "SLS_OTEL_REPORT_REQUEST_RESPONSE_URL": "https://core.serverless.com/ingestion/kinesis/v1/request-response",
+                  "SLS_OTEL_USER_SETTINGS": "{}"
+                }
+              },
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              },
-              "Environment": {
-                "Variables": {
-                  "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580",
-                  "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
-                  "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
-                  "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-console,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
-                  "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension/internal/exec-wrapper.sh",
-                  "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs",
-                  "SLS_OTEL_REPORT_REQUEST_RESPONSE_URL": "https://core.serverless.com/ingestion/kinesis/v1/request-response",
-                  "SLS_OTEL_USER_SETTINGS": "{}"
-                }
               },
               "Layers": [
                 {
@@ -233,30 +237,31 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-console/dev/1652954140633-2022-05-19T09:55:40.633Z/test-console.zip"
+                "S3Key": "serverless/test-console/dev/1653663575915-2022-05-27T14:59:35.915Z/test-console.zip"
               },
               "Handler": "timeout.handler",
               "Runtime": "nodejs14.x",
               "FunctionName": "test-console-dev-timeout",
               "MemorySize": 1024,
               "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DEBUG_SLS_OTEL_LAYER": "1",
+                  "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580",
+                  "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
+                  "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
+                  "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-console,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
+                  "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension-internal-node/exec-wrapper.sh",
+                  "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs",
+                  "SLS_OTEL_REPORT_REQUEST_RESPONSE_URL": "https://core.serverless.com/ingestion/kinesis/v1/request-response",
+                  "SLS_OTEL_USER_SETTINGS": "{}"
+                }
+              },
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              },
-              "Environment": {
-                "Variables": {
-                  "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580",
-                  "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
-                  "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
-                  "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-console,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
-                  "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension/internal/exec-wrapper.sh",
-                  "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs",
-                  "SLS_OTEL_REPORT_REQUEST_RESPONSE_URL": "https://core.serverless.com/ingestion/kinesis/v1/request-response",
-                  "SLS_OTEL_USER_SETTINGS": "{}"
-                }
               },
               "Layers": [
                 {
@@ -407,13 +412,13 @@
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-console.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-console/dev/1652954140633-2022-05-19T09:55:40.633Z",
+    "artifactDirectoryName": "serverless/test-console/dev/1653663575915-2022-05-27T14:59:35.915Z",
     "artifact": "test-console.zip"
   },
   "console": {
     "schemaVersion": "1",
     "otelIngestionToken": "8044fbda-ce5c-40ed-b134-011a5fba3580",
-    "extensionLayerVersionPostfix": "0.2.21",
+    "extensionLayerVersionPostfix": "0.3.1",
     "service": "test-console",
     "stage": "dev",
     "region": "us-east-1",

@@ -9,6 +9,8 @@ provider:
   region: us-east-1
   stage: dev
   versionFunctions: false
+  environment:
+    DEBUG_SLS_OTEL_LAYER: "1"
 
 functions:
   success:

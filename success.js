@@ -1,3 +1,6 @@
 "use strict";
 
-module.exports.handler = (event, context, callback) => callback(null, { ok: true });
+module.exports.handler = (event, context, callback) => {
+	console.log("Test log");
+	callback(null, { ok: true });
+};
