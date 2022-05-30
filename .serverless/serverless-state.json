@@ -6,7 +6,7 @@
     },
     "provider": {
       "name": "aws",
-      "runtime": "nodejs12.x",
+      "runtime": "nodejs14.x",
       "region": "us-east-1",
       "stage": "dev",
       "versionFunctions": false,
@@ -176,10 +176,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z/function.zip"
+                "S3Key": "serverless/test-plugin-serverless-offline/dev/1653913550903-2022-05-30T12:25:50.903Z/test-plugin-serverless-offline.zip"
               },
               "Handler": "index.handler",
-              "Runtime": "nodejs12.x",
+              "Runtime": "nodejs14.x",
               "FunctionName": "test-plugin-serverless-offline-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
@@ -262,7 +262,10 @@
                 }
               },
               "MethodResponses": []
-            }
+            },
+            "DependsOn": [
+              "FunctionLambdaPermissionApiGateway"
+            ]
           },
           "ApiGatewayMethodFooPost": {
             "Type": "AWS::ApiGateway::Method",
@@ -305,9 +308,12 @@
                 }
               },
               "MethodResponses": []
-            }
+            },
+            "DependsOn": [
+              "FunctionLambdaPermissionApiGateway"
+            ]
           },
-          "ApiGatewayDeployment1623766999882": {
+          "ApiGatewayDeployment1653913548067": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -503,27 +509,19 @@
           }
         ],
         "name": "test-plugin-serverless-offline-dev-function",
-        "package": {
-          "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/function.zip"
-        },
+        "package": {},
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs12.x",
+        "runtime": "nodejs14.x",
         "vpc": {}
       }
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "initialServerlessConfig": {
-      "service": {
-        "$ref": "$[\"service\"][\"serviceObject\"]"
-      },
+      "service": "test-plugin-serverless-offline",
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
-      },
-      "package": {
-        "individually": true,
-        "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -533,11 +531,11 @@
       }
     },
     "layers": {},
-    "isDashboardMonitoringPreconfigured": false
+    "isDashboardMonitoringPreconfigured": false,
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-plugin-serverless-offline.zip"
   },
   "package": {
-    "individually": true,
-    "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1623767010873-2021-06-15T14:23:30.873Z",
-    "artifact": ""
+    "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1653913550903-2022-05-30T12:25:50.903Z",
+    "artifact": "test-plugin-serverless-offline.zip"
   }
 }

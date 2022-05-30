@@ -9,9 +9,6 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
 
-package:
-  individually: true
-
 functions:
   function:
     handler: index.handler
