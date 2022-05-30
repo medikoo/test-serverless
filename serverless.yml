@@ -1,5 +1,9 @@
 service: test-plugin-serverless-offline
 
+custom:
+  serverless-offline:
+    useChildProcesses: true
+
 provider:
   name: aws
   runtime: nodejs14.x
@@ -11,7 +15,7 @@ provider:
 
 functions:
   function:
-    handler: index.handler
+    handler: main.handler
     events:
       - http:
           path: foo
@@ -21,5 +25,5 @@ functions:
           method: POST
 
 plugins:
-  - serverless-offline
   - serverless-webpack
+  - serverless-offline
