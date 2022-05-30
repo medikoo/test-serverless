@@ -176,7 +176,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-offline/dev/1653913550903-2022-05-30T12:25:50.903Z/test-plugin-serverless-offline.zip"
+                "S3Key": "serverless/test-plugin-serverless-offline/dev/1653913694284-2022-05-30T12:28:14.284Z/test-plugin-serverless-offline.zip"
               },
               "Handler": "index.handler",
               "Runtime": "nodejs14.x",
@@ -313,7 +313,7 @@
               "FunctionLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1653913548067": {
+          "ApiGatewayDeployment1653913692677": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -486,7 +486,8 @@
       "vpc": {}
     },
     "plugins": [
-      "serverless-offline"
+      "serverless-offline",
+      "serverless-webpack"
     ],
     "pluginsData": {},
     "functions": {
@@ -509,7 +510,9 @@
           }
         ],
         "name": "test-plugin-serverless-offline-dev-function",
-        "package": {},
+        "package": {
+          "artifact": ".serverless/test-plugin-serverless-offline.zip"
+        },
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs14.x",
@@ -531,11 +534,10 @@
       }
     },
     "layers": {},
-    "isDashboardMonitoringPreconfigured": false,
-    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-plugin-serverless-offline.zip"
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1653913550903-2022-05-30T12:25:50.903Z",
-    "artifact": "test-plugin-serverless-offline.zip"
+    "artifactDirectoryName": "serverless/test-plugin-serverless-offline/dev/1653913694284-2022-05-30T12:28:14.284Z",
+    "artifact": ""
   }
 }
