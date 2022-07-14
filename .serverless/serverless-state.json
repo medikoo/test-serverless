@@ -98,6 +98,12 @@
               "LogGroupName": "/aws/lambda/test-console-dev-timeout"
             }
           },
+          "HttpApiLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/test-console-dev-httpApi"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -182,9 +188,9 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-console/dev/code-artifacts/sls-otel.0.3.1.zip"
+                "S3Key": "serverless/test-console/dev/code-artifacts/sls-otel.0.4.5.zip"
               },
-              "LayerName": "sls-console-otel-extension-0-3-1"
+              "LayerName": "sls-console-otel-extension-0-4-5"
             }
           },
           "SuccessLambdaFunction": {
@@ -194,7 +200,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-console/dev/1653663575915-2022-05-27T14:59:35.915Z/test-console.zip"
+                "S3Key": "serverless/test-console/dev/1656526227391-2022-06-29T18:10:27.391Z/test-console.zip"
               },
               "Handler": "success.handler",
               "Runtime": "nodejs14.x",
@@ -204,14 +210,9 @@
               "Environment": {
                 "Variables": {
                   "DEBUG_SLS_OTEL_LAYER": "1",
-                  "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580",
-                  "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
-                  "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
                   "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-console,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
                   "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension-internal-node/exec-wrapper.sh",
-                  "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs",
-                  "SLS_OTEL_REPORT_REQUEST_RESPONSE_URL": "https://core.serverless.com/ingestion/kinesis/v1/request-response",
-                  "SLS_OTEL_USER_SETTINGS": "{}"
+                  "SLS_OTEL_USER_SETTINGS": "{\"common\":{\"destination\":{\"requestHeaders\":\"serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580\"}},\"logs\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/logs\"},\"metrics\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/metrics\"},\"request\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/request-response\"},\"response\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/request-response\"},\"traces\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/traces\"}}"
                 }
               },
               "Role": {
@@ -237,7 +238,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-console/dev/1653663575915-2022-05-27T14:59:35.915Z/test-console.zip"
+                "S3Key": "serverless/test-console/dev/1656526227391-2022-06-29T18:10:27.391Z/test-console.zip"
               },
               "Handler": "timeout.handler",
               "Runtime": "nodejs14.x",
@@ -247,14 +248,9 @@
               "Environment": {
                 "Variables": {
                   "DEBUG_SLS_OTEL_LAYER": "1",
-                  "SLS_OTEL_REPORT_REQUEST_HEADERS": "serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580",
-                  "SLS_OTEL_REPORT_METRICS_URL": "https://core.serverless.com/ingestion/kinesis/v1/metrics",
-                  "SLS_OTEL_REPORT_TRACES_URL": "https://core.serverless.com/ingestion/kinesis/v1/traces",
                   "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-console,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
                   "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension-internal-node/exec-wrapper.sh",
-                  "SLS_OTEL_REPORT_LOGS_URL": "https://core.serverless.com/ingestion/kinesis/v1/logs",
-                  "SLS_OTEL_REPORT_REQUEST_RESPONSE_URL": "https://core.serverless.com/ingestion/kinesis/v1/request-response",
-                  "SLS_OTEL_USER_SETTINGS": "{}"
+                  "SLS_OTEL_USER_SETTINGS": "{\"common\":{\"destination\":{\"requestHeaders\":\"serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580\"}},\"logs\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/logs\"},\"metrics\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/metrics\"},\"request\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/request-response\"},\"response\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/request-response\"},\"traces\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/traces\"}}"
                 }
               },
               "Role": {
@@ -272,6 +268,136 @@
             "DependsOn": [
               "TimeoutLogGroup"
             ]
+          },
+          "HttpApiLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/test-console/dev/1656526227391-2022-06-29T18:10:27.391Z/test-console.zip"
+              },
+              "Handler": "success.handler",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "test-console-dev-httpApi",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DEBUG_SLS_OTEL_LAYER": "1",
+                  "OTEL_RESOURCE_ATTRIBUTES": "sls_service_name=test-console,sls_stage=dev,sls_org_id=1sJrygBdcH5mNKPSp8",
+                  "AWS_LAMBDA_EXEC_WRAPPER": "/opt/otel-extension-internal-node/exec-wrapper.sh",
+                  "SLS_OTEL_USER_SETTINGS": "{\"common\":{\"destination\":{\"requestHeaders\":\"serverless_token=8044fbda-ce5c-40ed-b134-011a5fba3580\"}},\"logs\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/logs\"},\"metrics\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/metrics\"},\"request\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/request-response\"},\"response\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/request-response\"},\"traces\":{\"destination\":\"https://core.serverless.com/ingestion/kinesis/v1/traces\"}}"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Layers": [
+                {
+                  "Ref": "SlsConsoleOtelExtension"
+                }
+              ]
+            },
+            "DependsOn": [
+              "HttpApiLogGroup"
+            ]
+          },
+          "HttpApi": {
+            "Type": "AWS::ApiGatewayV2::Api",
+            "Properties": {
+              "Name": "dev-test-console",
+              "ProtocolType": "HTTP"
+            }
+          },
+          "HttpApiStage": {
+            "Type": "AWS::ApiGatewayV2::Stage",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "StageName": "$default",
+              "AutoDeploy": true,
+              "DefaultRouteSettings": {
+                "DetailedMetricsEnabled": false
+              }
+            }
+          },
+          "HttpApiLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "HttpApiLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationHttpApi": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"HttpApiLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 6500
+            }
+          },
+          "HttpApiRouteGetFoo": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /foo",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationHttpApi"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationHttpApi"
           }
         },
         "Outputs": {
@@ -281,6 +407,40 @@
             },
             "Export": {
               "Name": "sls-test-console-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "HttpApiId": {
+            "Description": "Id of the HTTP API",
+            "Value": {
+              "Ref": "HttpApi"
+            },
+            "Export": {
+              "Name": "sls-test-console-dev-HttpApiId"
+            }
+          },
+          "HttpApiUrl": {
+            "Description": "URL of the HTTP API",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "HttpApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  }
+                ]
+              ]
+            },
+            "Export": {
+              "Name": "sls-test-console-dev-HttpApiUrl"
             }
           }
         }
@@ -390,6 +550,22 @@
         "timeout": 6,
         "runtime": "nodejs14.x",
         "vpc": {}
+      },
+      "httpApi": {
+        "handler": "success.handler",
+        "events": [
+          {
+            "httpApi": "GET /foo",
+            "resolvedMethod": "GET",
+            "resolvedPath": "/foo"
+          }
+        ],
+        "name": "test-console-dev-httpApi",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs14.x",
+        "vpc": {}
       }
     },
     "configValidationMode": "warn",
@@ -412,13 +588,13 @@
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-console.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-console/dev/1653663575915-2022-05-27T14:59:35.915Z",
+    "artifactDirectoryName": "serverless/test-console/dev/1656526227391-2022-06-29T18:10:27.391Z",
     "artifact": "test-console.zip"
   },
   "console": {
     "schemaVersion": "1",
     "otelIngestionToken": "8044fbda-ce5c-40ed-b134-011a5fba3580",
-    "extensionLayerVersionPostfix": "0.3.1",
+    "extensionLayerVersionPostfix": "0.4.5",
     "service": "test-console",
     "stage": "dev",
     "region": "us-east-1",

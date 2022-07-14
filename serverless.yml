@@ -17,3 +17,7 @@ functions:
     handler: success.handler
   timeout:
     handler: timeout.handler
+  httpApi:
+    handler: success.handler
+    events:
+      - httpApi: "GET /foo"
