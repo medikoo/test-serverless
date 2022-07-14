@@ -6,7 +6,7 @@
     },
     "provider": {
       "name": "aws",
-      "runtime": "nodejs12.x",
+      "runtime": "nodejs14.x",
       "region": "us-east-1",
       "stage": "dev",
       "versionFunctions": false,
@@ -173,7 +173,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-with-layer/dev/1648118847736-2022-03-24T10:47:27.736Z/layer1.zip"
+                "S3Key": "serverless/test-lambda-with-layer/dev/1648118944199-2022-03-24T10:49:04.199Z/layer1.zip"
               },
               "LayerName": "layer1"
             }
@@ -185,10 +185,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-lambda-with-layer/dev/1648118847736-2022-03-24T10:47:27.736Z/function.zip"
+                "S3Key": "serverless/test-lambda-with-layer/dev/1657793521938-2022-07-14T10:12:01.938Z/function.zip"
               },
               "Handler": "index.handler",
-              "Runtime": "nodejs12.x",
+              "Runtime": "nodejs14.x",
               "FunctionName": "test-lambda-with-layer-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
@@ -236,7 +236,7 @@
           },
           "Layer1LambdaLayerS3Key": {
             "Description": "Current Lambda layer S3Key",
-            "Value": "serverless/test-lambda-with-layer/dev/1648118847736-2022-03-24T10:47:27.736Z/layer1.zip",
+            "Value": "serverless/test-lambda-with-layer/dev/1648118944199-2022-03-24T10:49:04.199Z/layer1.zip",
             "Export": {
               "Name": "sls-test-lambda-with-layer-dev-Layer1LambdaLayerS3Key"
             }
@@ -341,7 +341,7 @@
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs12.x",
+        "runtime": "nodejs14.x",
         "vpc": {}
       }
     },
@@ -355,7 +355,7 @@
       "package": {
         "individually": true,
         "artifactsS3KeyDirname": "serverless/test-lambda-with-layer/dev/code-artifacts",
-        "artifactDirectoryName": "serverless/test-lambda-with-layer/dev/1648118847736-2022-03-24T10:47:27.736Z"
+        "artifactDirectoryName": "serverless/test-lambda-with-layer/dev/1657793521938-2022-07-14T10:12:01.938Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -365,17 +365,19 @@
           "path": "layer",
           "package": {
             "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/layer1.zip"
-          }
+          },
+          "artifactAlreadyUploaded": true
         }
       }
     },
     "layers": {
       "$ref": "$[\"service\"][\"initialServerlessConfig\"][\"layers\"]"
-    }
+    },
+    "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-lambda-with-layer/dev/1648118847736-2022-03-24T10:47:27.736Z",
+    "artifactDirectoryName": "serverless/test-lambda-with-layer/dev/1657793521938-2022-07-14T10:12:01.938Z",
     "artifact": ""
   }
 }
