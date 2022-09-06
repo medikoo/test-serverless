@@ -9,3 +9,9 @@ provider:
 
 package:
   individually: true
+
+functions:
+  function:
+    handler: index.handler
+    events:
+      - sns: dispatch
