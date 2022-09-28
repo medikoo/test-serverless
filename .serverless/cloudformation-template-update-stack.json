@@ -44,6 +44,21 @@
                       "/*"
                     ]
                   ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
                 }
               ],
               "Condition": {
@@ -146,19 +161,19 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-package-artifact/dev/1589988676278-2020-05-20T15:31:16.278Z/artifact.zip"
+          "S3Key": "serverless/test-package-artifact/dev/1664397809703-2022-09-28T20:43:29.703Z/artifact.zip"
         },
-        "FunctionName": "test-package-artifact-dev-function",
         "Handler": "index.handler",
+        "Runtime": "nodejs14.x",
+        "FunctionName": "test-package-artifact-dev-function",
         "MemorySize": 1024,
+        "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        },
-        "Runtime": "nodejs12.x",
-        "Timeout": 6
+        }
       },
       "DependsOn": [
         "FunctionLogGroup"
@@ -169,6 +184,9 @@
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      },
+      "Export": {
+        "Name": "sls-test-package-artifact-dev-ServerlessDeploymentBucketName"
       }
     }
   }

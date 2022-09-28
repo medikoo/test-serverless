@@ -5,13 +5,11 @@
       "name": "test-package-artifact"
     },
     "provider": {
-      "stage": "dev",
-      "variableSyntax": "\\${([^{}]+?)}",
       "name": "aws",
-      "runtime": "nodejs12.x",
+      "runtime": "nodejs14.x",
       "region": "us-east-1",
+      "stage": "dev",
       "versionFunctions": false,
-      "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -56,6 +54,21 @@
                               "Ref": "ServerlessDeploymentBucket"
                             },
                             "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
                           ]
                         ]
                       }
@@ -160,19 +173,19 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-package-artifact/dev/1589988676278-2020-05-20T15:31:16.278Z/artifact.zip"
+                "S3Key": "serverless/test-package-artifact/dev/1664397809703-2022-09-28T20:43:29.703Z/artifact.zip"
               },
-              "FunctionName": "test-package-artifact-dev-function",
               "Handler": "index.handler",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "test-package-artifact-dev-function",
               "MemorySize": 1024,
+              "Timeout": 6,
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              },
-              "Runtime": "nodejs12.x",
-              "Timeout": 6
+              }
             },
             "DependsOn": [
               "FunctionLogGroup"
@@ -183,6 +196,9 @@
           "ServerlessDeploymentBucketName": {
             "Value": {
               "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-test-package-artifact-dev-ServerlessDeploymentBucketName"
             }
           }
         }
@@ -233,6 +249,21 @@
                             "/*"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
                       }
                     ],
                     "Condition": {
@@ -256,9 +287,6 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-plugin-reducer"
-    ],
     "pluginsData": {},
     "functions": {
       "function": {
@@ -268,16 +296,31 @@
         "package": {},
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs12.x",
+        "runtime": "nodejs14.x",
         "vpc": {}
       }
     },
+    "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
+    "initialServerlessConfig": {
+      "service": "test-package-artifact",
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "package": {
+        "artifact": "artifact.zip",
+        "artifactsS3KeyDirname": "serverless/test-package-artifact/dev/code-artifacts",
+        "artifactDirectoryName": "serverless/test-package-artifact/dev/1664397809703-2022-09-28T20:43:29.703Z"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      }
+    },
     "layers": {},
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-package-artifact/dev/1589988676278-2020-05-20T15:31:16.278Z",
+    "artifactDirectoryName": "serverless/test-package-artifact/dev/1664397809703-2022-09-28T20:43:29.703Z",
     "artifact": "artifact.zip"
   }
 }
