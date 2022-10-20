@@ -6,7 +6,7 @@
     },
     "provider": {
       "name": "aws",
-      "runtime": "nodejs10.x",
+      "runtime": "nodejs14.x",
       "region": "us-east-1",
       "versionFunctions": false,
       "apiGateway": {
@@ -177,10 +177,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-api-gw-shared/dev/1631778098482-2021-09-16T07:41:38.482Z/myFunction.zip"
+                "S3Key": "serverless/test-api-gw-shared/dev/1666252301835-2022-10-20T07:51:41.835Z/myFunction.zip"
               },
               "Handler": "index.handler",
-              "Runtime": "nodejs10.x",
+              "Runtime": "nodejs14.x",
               "FunctionName": "test-api-gw-shared-dev-myFunction",
               "MemorySize": 1024,
               "Timeout": 6,
@@ -247,7 +247,7 @@
               "MyFunctionLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1631778096585": {
+          "ApiGatewayDeployment1666252300109": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": "pkhriceyzl",
@@ -431,22 +431,21 @@
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs10.x",
+        "runtime": "nodejs14.x",
         "vpc": {}
       }
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "initialServerlessConfig": {
-      "service": {
-        "$ref": "$[\"service\"][\"serviceObject\"]"
-      },
+      "service": "test-api-gw-shared",
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
       "package": {
         "individually": true,
-        "artifactDirectoryName": "serverless/test-api-gw-shared/dev/1631778098482-2021-09-16T07:41:38.482Z"
+        "artifactsS3KeyDirname": "serverless/test-api-gw-shared/dev/code-artifacts",
+        "artifactDirectoryName": "serverless/test-api-gw-shared/dev/1666252301835-2022-10-20T07:51:41.835Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -457,7 +456,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-api-gw-shared/dev/1631778098482-2021-09-16T07:41:38.482Z",
+    "artifactDirectoryName": "serverless/test-api-gw-shared/dev/1666252301835-2022-10-20T07:51:41.835Z",
     "artifact": ""
   }
 }
