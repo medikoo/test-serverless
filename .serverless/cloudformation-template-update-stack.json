@@ -16,6 +16,61 @@
         }
       }
     },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
@@ -29,14 +84,14 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-custom-role-with-eb/dev/1566894781134-2019-08-27T08:33:01.134Z/myFunction.zip"
+          "S3Key": "serverless/test-custom-role-with-eb/dev/1668524145417-2022-11-15T14:55:45.417Z/test-custom-role-with-eb.zip"
         },
-        "FunctionName": "test-custom-role-with-eb-dev-myFunction",
         "Handler": "index.handler",
+        "Runtime": "nodejs14.x",
+        "FunctionName": "test-custom-role-with-eb-dev-myFunction",
         "MemorySize": 1024,
-        "Role": "arn:aws:iam::992311060759:role/test-custom-role",
-        "Runtime": "nodejs10.x",
-        "Timeout": 6
+        "Timeout": 6,
+        "Role": "arn:aws:iam::992311060759:role/test-custom-role"
       },
       "DependsOn": [
         "MyFunctionLogGroup"
@@ -50,7 +105,8 @@
           "Types": [
             "EDGE"
           ]
-        }
+        },
+        "Policy": ""
       }
     },
     "ApiGatewayResourceFoo": {
@@ -109,9 +165,12 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "MyFunctionLambdaPermissionApiGateway"
+      ]
     },
-    "ApiGatewayDeployment1566894780340": {
+    "ApiGatewayDeployment1668524143587": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -160,140 +219,61 @@
         }
       }
     },
-    "MyFunctionCustomEventBridge2": {
-      "Type": "Custom::EventBridge",
-      "Version": 1,
-      "DependsOn": [
-        "MyFunctionLambdaFunction",
-        "CustomDashresourceDasheventDashbridgeLambdaFunction"
-      ],
+    "TestcustomrolewithebdevmyFunctionrule2EventBridgeRule": {
+      "Type": "AWS::Events::Rule",
       "Properties": {
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "CustomDashresourceDasheventDashbridgeLambdaFunction",
-            "Arn"
-          ]
-        },
-        "FunctionName": "test-custom-role-with-eb-dev-myFunction",
-        "EventBridgeConfig": {
-          "RuleName": "test-custom-role-with-eb-dev-myFunction-rule-2",
-          "Schedule": "rate(7 days)",
-          "Input": {
-            "key1": "value1"
-          }
-        }
-      }
-    },
-    "CustomDashresourceDasheventDashbridgeLambdaFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "ServerlessDeploymentBucket"
-          },
-          "S3Key": "serverless/test-custom-role-with-eb/dev/1566894781134-2019-08-27T08:33:01.134Z/custom-resources.zip"
-        },
-        "FunctionName": "test-custom-role-with-eb-dev-custom-resource-event-bridge",
-        "Handler": "eventBridge/handler.handler",
-        "MemorySize": 1024,
-        "Role": {
-          "Fn::GetAtt": [
-            "IamRoleCustomResourcesLambdaExecution",
-            "Arn"
-          ]
-        },
-        "Runtime": "nodejs10.x",
-        "Timeout": 180
-      },
-      "DependsOn": [
-        "IamRoleCustomResourcesLambdaExecution"
-      ]
-    },
-    "IamRoleCustomResourcesLambdaExecution": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
-              },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-        },
-        "Policies": [
+        "Name": "test-custom-role-with-eb-dev-myFunction-rule-2",
+        "ScheduleExpression": "rate(7 days)",
+        "State": "ENABLED",
+        "Targets": [
           {
-            "PolicyName": {
-              "Fn::Join": [
-                "-",
-                [
-                  "dev",
-                  "test-custom-role-with-eb",
-                  "custom-resources-lambda"
-                ]
+            "Arn": {
+              "Fn::GetAtt": [
+                "MyFunctionLambdaFunction",
+                "Arn"
               ]
             },
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      ":",
-                      [
-                        "arn:aws:events",
-                        {
-                          "Ref": "AWS::Region"
-                        },
-                        {
-                          "Ref": "AWS::AccountId"
-                        },
-                        "rule/test-custom-role-with-eb-dev-myFunction-rule-2"
-                      ]
-                    ]
-                  },
-                  "Action": [
-                    "events:PutRule",
-                    "events:RemoveTargets",
-                    "events:PutTargets",
-                    "events:DeleteRule"
-                  ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      ":",
-                      [
-                        "arn:aws:lambda",
-                        {
-                          "Ref": "AWS::Region"
-                        },
-                        {
-                          "Ref": "AWS::AccountId"
-                        },
-                        "function",
-                        "test-custom-role-with-eb-dev-myFunction"
-                      ]
-                    ]
-                  },
-                  "Action": [
-                    "lambda:AddPermission",
-                    "lambda:RemovePermission"
-                  ]
-                }
-              ]
-            }
+            "Id": "test-custom-role-with-eb-dev-myFunction-rule-2-target",
+            "Input": "{\"key1\":\"value1\"}"
           }
         ]
+      }
+    },
+    "MyFunctionEventBridgeLambdaPermission2": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Ref": "MyFunctionLambdaFunction"
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            ":",
+            [
+              "arn",
+              {
+                "Ref": "AWS::Partition"
+              },
+              "events",
+              {
+                "Ref": "AWS::Region"
+              },
+              {
+                "Ref": "AWS::AccountId"
+              },
+              {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "rule",
+                    "test-custom-role-with-eb-dev-myFunction-rule-2"
+                  ]
+                ]
+              }
+            ]
+          ]
+        }
       }
     }
   },
@@ -301,6 +281,9 @@
     "ServerlessDeploymentBucketName": {
       "Value": {
         "Ref": "ServerlessDeploymentBucket"
+      },
+      "Export": {
+        "Name": "sls-test-custom-role-with-eb-dev-ServerlessDeploymentBucketName"
       }
     },
     "ServiceEndpoint": {
@@ -324,6 +307,9 @@
             "/dev"
           ]
         ]
+      },
+      "Export": {
+        "Name": "sls-test-custom-role-with-eb-dev-ServiceEndpoint"
       }
     }
   }
