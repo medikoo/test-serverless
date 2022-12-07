@@ -1,0 +1,4 @@
+functions:
+  myFunction:
+    handler: Service.Lambda::My.Service.Functions.myFucntion::Handle
+    iamRoleStatementsName: ${self:service}-function-role

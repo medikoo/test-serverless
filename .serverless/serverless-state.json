@@ -1,16 +1,14 @@
 {
   "service": {
-    "service": "test-custom-role-with-eb",
+    "service": "backend",
     "serviceObject": {
-      "name": "test-custom-role-with-eb"
+      "name": "backend"
     },
     "provider": {
       "name": "aws",
-      "runtime": "nodejs14.x",
-      "region": "us-east-1",
       "stage": "dev",
-      "versionFunctions": false,
-      "role": "arn:aws:iam::992311060759:role/test-custom-role",
+      "region": "us-east-1",
+      "versionFunctions": true,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -87,7 +85,84 @@
           "MyFunctionLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/test-custom-role-with-eb-dev-myFunction"
+              "LogGroupName": "/aws/lambda/backend-dev-myFunction"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "backend",
+                        "dev",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/backend-dev*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/backend-dev*:*:*"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "backend",
+                    "dev",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "lambdaRole"
+                  ]
+                ]
+              }
             }
           },
           "MyFunctionLambdaFunction": {
@@ -97,196 +172,32 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-custom-role-with-eb/dev/1668524145417-2022-11-15T14:55:45.417Z/test-custom-role-with-eb.zip"
+                "S3Key": "serverless/backend/dev/1670420241320-2022-12-07T13:37:21.320Z/backend.zip"
               },
-              "Handler": "index.handler",
+              "Handler": "Service.Lambda::My.Service.Functions.myFucntion::Handle",
               "Runtime": "nodejs14.x",
-              "FunctionName": "test-custom-role-with-eb-dev-myFunction",
+              "FunctionName": "backend-dev-myFunction",
               "MemorySize": 1024,
               "Timeout": 6,
-              "Role": "arn:aws:iam::992311060759:role/test-custom-role"
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
             },
             "DependsOn": [
               "MyFunctionLogGroup"
             ]
           },
-          "ApiGatewayRestApi": {
-            "Type": "AWS::ApiGateway::RestApi",
+          "MyFunctionLambdaVersionpukn8VHupDW4NYs9TYCKm0YMamGd2DgKwIHgXTO8Vg": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
             "Properties": {
-              "Name": "dev-test-custom-role-with-eb",
-              "EndpointConfiguration": {
-                "Types": [
-                  "EDGE"
-                ]
-              },
-              "Policy": ""
-            }
-          },
-          "ApiGatewayResourceFoo": {
-            "Type": "AWS::ApiGateway::Resource",
-            "Properties": {
-              "ParentId": {
-                "Fn::GetAtt": [
-                  "ApiGatewayRestApi",
-                  "RootResourceId"
-                ]
-              },
-              "PathPart": "foo",
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
-          "ApiGatewayMethodFooGet": {
-            "Type": "AWS::ApiGateway::Method",
-            "Properties": {
-              "HttpMethod": "GET",
-              "RequestParameters": {},
-              "ResourceId": {
-                "Ref": "ApiGatewayResourceFoo"
-              },
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "ApiKeyRequired": false,
-              "AuthorizationType": "NONE",
-              "Integration": {
-                "IntegrationHttpMethod": "POST",
-                "Type": "AWS_PROXY",
-                "Uri": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":apigateway:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":lambda:path/2015-03-31/functions/",
-                      {
-                        "Fn::GetAtt": [
-                          "MyFunctionLambdaFunction",
-                          "Arn"
-                        ]
-                      },
-                      "/invocations"
-                    ]
-                  ]
-                }
-              },
-              "MethodResponses": []
-            },
-            "DependsOn": [
-              "MyFunctionLambdaPermissionApiGateway"
-            ]
-          },
-          "ApiGatewayDeployment1668524143587": {
-            "Type": "AWS::ApiGateway::Deployment",
-            "Properties": {
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "StageName": "dev"
-            },
-            "DependsOn": [
-              "ApiGatewayMethodFooGet"
-            ]
-          },
-          "MyFunctionLambdaPermissionApiGateway": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-              "FunctionName": {
-                "Fn::GetAtt": [
-                  "MyFunctionLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "apigateway.amazonaws.com",
-              "SourceArn": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition"
-                    },
-                    ":execute-api:",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId"
-                    },
-                    ":",
-                    {
-                      "Ref": "ApiGatewayRestApi"
-                    },
-                    "/*/*"
-                  ]
-                ]
-              }
-            }
-          },
-          "TestcustomrolewithebdevmyFunctionrule2EventBridgeRule": {
-            "Type": "AWS::Events::Rule",
-            "Properties": {
-              "Name": "test-custom-role-with-eb-dev-myFunction-rule-2",
-              "ScheduleExpression": "rate(7 days)",
-              "State": "ENABLED",
-              "Targets": [
-                {
-                  "Arn": {
-                    "Fn::GetAtt": [
-                      "MyFunctionLambdaFunction",
-                      "Arn"
-                    ]
-                  },
-                  "Id": "test-custom-role-with-eb-dev-myFunction-rule-2-target",
-                  "Input": "{\"key1\":\"value1\"}"
-                }
-              ]
-            }
-          },
-          "MyFunctionEventBridgeLambdaPermission2": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-              "Action": "lambda:InvokeFunction",
               "FunctionName": {
                 "Ref": "MyFunctionLambdaFunction"
               },
-              "Principal": "events.amazonaws.com",
-              "SourceArn": {
-                "Fn::Join": [
-                  ":",
-                  [
-                    "arn",
-                    {
-                      "Ref": "AWS::Partition"
-                    },
-                    "events",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    {
-                      "Ref": "AWS::AccountId"
-                    },
-                    {
-                      "Fn::Join": [
-                        "/",
-                        [
-                          "rule",
-                          "test-custom-role-with-eb-dev-myFunction-rule-2"
-                        ]
-                      ]
-                    }
-                  ]
-                ]
-              }
+              "CodeSha256": "7VrAr7p6QF3R2Hnp5PmU19Hi1QXKaonuxR3FEe0GZn0="
             }
           }
         },
@@ -296,33 +207,16 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-test-custom-role-with-eb-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-backend-dev-ServerlessDeploymentBucketName"
             }
           },
-          "ServiceEndpoint": {
-            "Description": "URL of the service endpoint",
+          "MyFunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
             "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "https://",
-                  {
-                    "Ref": "ApiGatewayRestApi"
-                  },
-                  ".execute-api.",
-                  {
-                    "Ref": "AWS::Region"
-                  },
-                  ".",
-                  {
-                    "Ref": "AWS::URLSuffix"
-                  },
-                  "/dev"
-                ]
-              ]
+              "Ref": "MyFunctionLambdaVersionpukn8VHupDW4NYs9TYCKm0YMamGd2DgKwIHgXTO8Vg"
             },
             "Export": {
-              "Name": "sls-test-custom-role-with-eb-dev-ServiceEndpoint"
+              "Name": "sls-backend-dev-MyFunctionLambdaFunctionQualifiedArn"
             }
           }
         }
@@ -414,36 +308,22 @@
     "pluginsData": {},
     "functions": {
       "myFunction": {
-        "handler": "index.handler",
-        "events": [
-          {
-            "http": {
-              "path": "foo",
-              "method": "get",
-              "integration": "AWS_PROXY"
-            }
-          },
-          {
-            "eventBridge": {
-              "schedule": "rate(7 days)",
-              "input": {
-                "key1": "value1"
-              }
-            }
-          }
-        ],
-        "name": "test-custom-role-with-eb-dev-myFunction",
+        "handler": "Service.Lambda::My.Service.Functions.myFucntion::Handle",
+        "iamRoleStatementsName": "backend-function-role",
+        "events": [],
+        "name": "backend-dev-myFunction",
         "package": {},
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs14.x",
-        "vpc": {}
+        "vpc": {},
+        "versionLogicalId": "MyFunctionLambdaVersionpukn8VHupDW4NYs9TYCKm0YMamGd2DgKwIHgXTO8Vg"
       }
     },
     "configValidationMode": "warn",
-    "serviceFilename": "serverless.yml",
+    "serviceFilename": "serverless.legacy.yml",
     "initialServerlessConfig": {
-      "service": "test-custom-role-with-eb",
+      "service": "backend",
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
@@ -453,10 +333,10 @@
     },
     "layers": {},
     "isDashboardMonitoringPreconfigured": false,
-    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-custom-role-with-eb.zip"
+    "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/backend.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-custom-role-with-eb/dev/1668524145417-2022-11-15T14:55:45.417Z",
-    "artifact": "test-custom-role-with-eb.zip"
+    "artifactDirectoryName": "serverless/backend/dev/1670420241320-2022-12-07T13:37:21.320Z",
+    "artifact": "backend.zip"
   }
 }

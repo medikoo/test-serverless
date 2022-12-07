@@ -1,0 +1,6 @@
+service: "backend"
+provider:
+  name: aws
+
+functions:
+  - ${file(./functions.yml):functions}
