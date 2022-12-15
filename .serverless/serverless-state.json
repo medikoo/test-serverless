@@ -173,7 +173,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-python-lambda/dev/1671095397358-2022-12-15T09:09:57.358Z/test-python-lambda.zip"
+                "S3Key": "serverless/test-python-lambda/dev/1671095925136-2022-12-15T09:18:45.136Z/test-python-lambda.zip"
               },
               "Handler": "handler.hello",
               "Runtime": "python3.8",
@@ -191,6 +191,34 @@
               "FunctionLogGroup"
             ]
           },
+          "FunctionLambdaVersionAPbDi02sNrEKXW2NisgiTd7SApQxx8G7OXU3lo6M": {
+            "Type": "AWS::Lambda::Version",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "CodeSha256": "P5tCE6UvCmgKEsflE3Zh68dQkGQtzIWIyUoOaIJPLdo="
+            }
+          },
+          "FunctionProvConcLambdaAlias": {
+            "Type": "AWS::Lambda::Alias",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "FunctionVersion": {
+                "Fn::GetAtt": [
+                  "FunctionLambdaVersionAPbDi02sNrEKXW2NisgiTd7SApQxx8G7OXU3lo6M",
+                  "Version"
+                ]
+              },
+              "Name": "provisioned",
+              "ProvisionedConcurrencyConfig": {
+                "ProvisionedConcurrentExecutions": 1
+              }
+            },
+            "DependsOn": "FunctionLambdaFunction"
+          },
           "FunctionLambdaEvConf": {
             "Type": "AWS::Lambda::EventInvokeConfig",
             "Properties": {
@@ -198,9 +226,10 @@
                 "Ref": "FunctionLambdaFunction"
               },
               "DestinationConfig": {},
-              "Qualifier": "$LATEST",
+              "Qualifier": "provisioned",
               "MaximumRetryAttempts": 0
-            }
+            },
+            "DependsOn": "FunctionProvConcLambdaAlias"
           }
         },
         "Outputs": {
@@ -210,6 +239,15 @@
             },
             "Export": {
               "Name": "sls-test-python-lambda-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "FunctionLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "FunctionLambdaVersionAPbDi02sNrEKXW2NisgiTd7SApQxx8G7OXU3lo6M"
+            },
+            "Export": {
+              "Name": "sls-test-python-lambda-dev-FunctionLambdaFunctionQualifiedArn"
             }
           }
         }
@@ -303,13 +341,19 @@
       "function": {
         "handler": "handler.hello",
         "maximumRetryAttempts": 0,
+        "provisionedConcurrency": 1,
         "events": [],
         "name": "test-python-lambda-dev-function",
         "package": {},
         "memory": 1024,
         "timeout": 6,
         "runtime": "python3.8",
-        "vpc": {}
+        "vpc": {},
+        "versionLogicalId": "FunctionLambdaVersionAPbDi02sNrEKXW2NisgiTd7SApQxx8G7OXU3lo6M",
+        "targetAlias": {
+          "name": "provisioned",
+          "logicalId": "FunctionProvConcLambdaAlias"
+        }
       }
     },
     "configValidationMode": "warn",
@@ -328,7 +372,7 @@
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-python-lambda.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-python-lambda/dev/1671095397358-2022-12-15T09:09:57.358Z",
+    "artifactDirectoryName": "serverless/test-python-lambda/dev/1671095925136-2022-12-15T09:18:45.136Z",
     "artifact": "test-python-lambda.zip"
   }
 }

@@ -11,3 +11,4 @@ functions:
   function:
     handler: handler.hello
     maximumRetryAttempts: 0
+    provisionedConcurrency: 1

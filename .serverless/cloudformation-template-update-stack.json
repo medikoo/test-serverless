@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-python-lambda/dev/1671095397358-2022-12-15T09:09:57.358Z/test-python-lambda.zip"
+          "S3Key": "serverless/test-python-lambda/dev/1671095925136-2022-12-15T09:18:45.136Z/test-python-lambda.zip"
         },
         "Handler": "handler.hello",
         "Runtime": "python3.8",
@@ -179,6 +179,34 @@
         "FunctionLogGroup"
       ]
     },
+    "FunctionLambdaVersionAPbDi02sNrEKXW2NisgiTd7SApQxx8G7OXU3lo6M": {
+      "Type": "AWS::Lambda::Version",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FunctionLambdaFunction"
+        },
+        "CodeSha256": "P5tCE6UvCmgKEsflE3Zh68dQkGQtzIWIyUoOaIJPLdo="
+      }
+    },
+    "FunctionProvConcLambdaAlias": {
+      "Type": "AWS::Lambda::Alias",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FunctionLambdaFunction"
+        },
+        "FunctionVersion": {
+          "Fn::GetAtt": [
+            "FunctionLambdaVersionAPbDi02sNrEKXW2NisgiTd7SApQxx8G7OXU3lo6M",
+            "Version"
+          ]
+        },
+        "Name": "provisioned",
+        "ProvisionedConcurrencyConfig": {
+          "ProvisionedConcurrentExecutions": 1
+        }
+      },
+      "DependsOn": "FunctionLambdaFunction"
+    },
     "FunctionLambdaEvConf": {
       "Type": "AWS::Lambda::EventInvokeConfig",
       "Properties": {
@@ -186,9 +214,10 @@
           "Ref": "FunctionLambdaFunction"
         },
         "DestinationConfig": {},
-        "Qualifier": "$LATEST",
+        "Qualifier": "provisioned",
         "MaximumRetryAttempts": 0
-      }
+      },
+      "DependsOn": "FunctionProvConcLambdaAlias"
     }
   },
   "Outputs": {
@@ -198,6 +227,15 @@
       },
       "Export": {
         "Name": "sls-test-python-lambda-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "FunctionLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "FunctionLambdaVersionAPbDi02sNrEKXW2NisgiTd7SApQxx8G7OXU3lo6M"
+      },
+      "Export": {
+        "Name": "sls-test-python-lambda-dev-FunctionLambdaFunctionQualifiedArn"
       }
     }
   }
