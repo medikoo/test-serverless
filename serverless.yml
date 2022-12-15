@@ -10,3 +10,4 @@ provider:
 functions:
   function:
     handler: handler.hello
+    maximumRetryAttempts: 0

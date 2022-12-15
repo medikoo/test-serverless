@@ -10,7 +10,6 @@
       "region": "us-east-1",
       "stage": "dev",
       "versionFunctions": false,
-      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "The AWS CloudFormation template for this Serverless application",
@@ -174,7 +173,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-python-lambda/dev/1619160954323-2021-04-23T06:55:54.323Z/test-python-lambda.zip"
+                "S3Key": "serverless/test-python-lambda/dev/1671095397358-2022-12-15T09:09:57.358Z/test-python-lambda.zip"
               },
               "Handler": "handler.hello",
               "Runtime": "python3.8",
@@ -191,6 +190,17 @@
             "DependsOn": [
               "FunctionLogGroup"
             ]
+          },
+          "FunctionLambdaEvConf": {
+            "Type": "AWS::Lambda::EventInvokeConfig",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "FunctionLambdaFunction"
+              },
+              "DestinationConfig": {},
+              "Qualifier": "$LATEST",
+              "MaximumRetryAttempts": 0
+            }
           }
         },
         "Outputs": {
@@ -292,6 +302,7 @@
     "functions": {
       "function": {
         "handler": "handler.hello",
+        "maximumRetryAttempts": 0,
         "events": [],
         "name": "test-python-lambda-dev-function",
         "package": {},
@@ -303,11 +314,8 @@
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
-    "layers": {},
     "initialServerlessConfig": {
-      "service": {
-        "$ref": "$[\"service\"][\"serviceObject\"]"
-      },
+      "service": "test-python-lambda",
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
@@ -315,11 +323,12 @@
         "$ref": "$[\"service\"][\"functions\"]"
       }
     },
+    "layers": {},
     "isDashboardMonitoringPreconfigured": false,
     "artifact": "/Users/medikoo/Projects/test-serverless/.serverless/test-python-lambda.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/test-python-lambda/dev/1619160954323-2021-04-23T06:55:54.323Z",
+    "artifactDirectoryName": "serverless/test-python-lambda/dev/1671095397358-2022-12-15T09:09:57.358Z",
     "artifact": "test-python-lambda.zip"
   }
 }

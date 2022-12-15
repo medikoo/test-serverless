@@ -161,7 +161,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-python-lambda/dev/1619160954323-2021-04-23T06:55:54.323Z/test-python-lambda.zip"
+          "S3Key": "serverless/test-python-lambda/dev/1671095397358-2022-12-15T09:09:57.358Z/test-python-lambda.zip"
         },
         "Handler": "handler.hello",
         "Runtime": "python3.8",
@@ -178,6 +178,17 @@
       "DependsOn": [
         "FunctionLogGroup"
       ]
+    },
+    "FunctionLambdaEvConf": {
+      "Type": "AWS::Lambda::EventInvokeConfig",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FunctionLambdaFunction"
+        },
+        "DestinationConfig": {},
+        "Qualifier": "$LATEST",
+        "MaximumRetryAttempts": 0
+      }
     }
   },
   "Outputs": {
