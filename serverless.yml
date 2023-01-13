@@ -1,4 +1,4 @@
-service: test-api-gateway
+service: test-api-gateway-custom-stage
 
 provider:
   name: aws
@@ -8,6 +8,7 @@ provider:
   versionFunctions: false
   apiGateway:
     shouldStartNameWithService: true
+    stage: custom
 
 package:
   individually: true
