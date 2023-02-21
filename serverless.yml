@@ -1,4 +1,4 @@
-service: test-api-gw-shared
+service: test-issue-11748
 
 provider:
   name: aws
@@ -9,13 +9,16 @@ provider:
     restApiId: pkhriceyzl
     restApiRootResourceId: 1xufji4tak
 
-package:
-  individually: true
-
 functions:
   myFunction:
     handler: index.handler
     events:
       - http:
-          path: bar
+          path: /release
           method: GET
+          private: true
+          request:
+            parameters:
+              querystrings:
+                AccountGuid: true
+                TelephoneNumber: true

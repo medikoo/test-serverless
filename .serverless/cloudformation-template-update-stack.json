@@ -74,7 +74,7 @@
     "MyFunctionLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/test-api-gw-shared-dev-myFunction"
+        "LogGroupName": "/aws/lambda/test-issue-11748-dev-myFunction"
       }
     },
     "IamRoleLambdaExecution": {
@@ -102,7 +102,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "test-api-gw-shared",
+                  "test-issue-11748",
                   "dev",
                   "lambda"
                 ]
@@ -119,7 +119,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-11748-dev*:*"
                     }
                   ]
                 },
@@ -130,7 +130,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-api-gw-shared-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/test-issue-11748-dev*:*:*"
                     }
                   ]
                 }
@@ -143,7 +143,7 @@
           "Fn::Join": [
             "-",
             [
-              "test-api-gw-shared",
+              "test-issue-11748",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -161,11 +161,11 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-api-gw-shared/dev/1666252301835-2022-10-20T07:51:41.835Z/myFunction.zip"
+          "S3Key": "serverless/test-issue-11748/dev/1676976645857-2023-02-21T10:50:45.857Z/test-issue-11748.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs14.x",
-        "FunctionName": "test-api-gw-shared-dev-myFunction",
+        "FunctionName": "test-issue-11748-dev-myFunction",
         "MemorySize": 1024,
         "Timeout": 6,
         "Role": {
@@ -179,24 +179,27 @@
         "MyFunctionLogGroup"
       ]
     },
-    "ApiGatewayResourceBar": {
+    "ApiGatewayResourceRelease": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": "1xufji4tak",
-        "PathPart": "bar",
+        "PathPart": "release",
         "RestApiId": "pkhriceyzl"
       }
     },
-    "ApiGatewayMethodBarGet": {
+    "ApiGatewayMethodReleaseGet": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
-        "RequestParameters": {},
+        "RequestParameters": {
+          "method.request.querystring.AccountGuid": true,
+          "method.request.querystring.TelephoneNumber": true
+        },
         "ResourceId": {
-          "Ref": "ApiGatewayResourceBar"
+          "Ref": "ApiGatewayResourceRelease"
         },
         "RestApiId": "pkhriceyzl",
-        "ApiKeyRequired": false,
+        "ApiKeyRequired": true,
         "AuthorizationType": "NONE",
         "Integration": {
           "IntegrationHttpMethod": "POST",
@@ -225,20 +228,32 @@
             ]
           }
         },
-        "MethodResponses": []
+        "MethodResponses": [],
+        "RequestValidatorId": {
+          "Ref": "ApiGatewayTestissue11748RequestValidator"
+        }
       },
       "DependsOn": [
         "MyFunctionLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1666252300109": {
+    "ApiGatewayTestissue11748RequestValidator": {
+      "Type": "AWS::ApiGateway::RequestValidator",
+      "Properties": {
+        "RestApiId": "pkhriceyzl",
+        "ValidateRequestBody": true,
+        "ValidateRequestParameters": true,
+        "Name": "test-issue-11748-dev | Validate request body and querystring parameters"
+      }
+    },
+    "ApiGatewayDeployment1676976642280": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": "pkhriceyzl",
         "StageName": "dev"
       },
       "DependsOn": [
-        "ApiGatewayMethodBarGet"
+        "ApiGatewayMethodReleaseGet"
       ]
     },
     "MyFunctionLambdaPermissionApiGateway": {
@@ -283,7 +298,7 @@
         "Ref": "ServerlessDeploymentBucket"
       },
       "Export": {
-        "Name": "sls-test-api-gw-shared-dev-ServerlessDeploymentBucketName"
+        "Name": "sls-test-issue-11748-dev-ServerlessDeploymentBucketName"
       }
     },
     "ServiceEndpoint": {
@@ -307,7 +322,7 @@
         ]
       },
       "Export": {
-        "Name": "sls-test-api-gw-shared-dev-ServiceEndpoint"
+        "Name": "sls-test-issue-11748-dev-ServiceEndpoint"
       }
     }
   }
