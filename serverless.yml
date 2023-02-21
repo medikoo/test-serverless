@@ -6,8 +6,8 @@ provider:
   region: us-east-1
   versionFunctions: false
   apiGateway:
-    restApiId: pkhriceyzl
-    restApiRootResourceId: 1xufji4tak
+    restApiId: pkhriceyzl # TODO: Replace with accessible REST API id
+    restApiRootResourceId: 1xufji4tak # TODO: Replace root resource id for above listed Rest API
 
 functions:
   myFunction:
