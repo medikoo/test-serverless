@@ -115,7 +115,8 @@
                   "Effect": "Allow",
                   "Action": [
                     "logs:CreateLogStream",
-                    "logs:CreateLogGroup"
+                    "logs:CreateLogGroup",
+                    "logs:TagResource"
                   ],
                   "Resource": [
                     {
@@ -161,9 +162,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-with-layer/dev/1648118944199-2022-03-24T10:49:04.199Z/layer1.zip"
+          "S3Key": "serverless/test-lambda-with-layer/dev/1686299047936-2023-06-09T08:24:07.936Z/layer1.zip"
         },
-        "LayerName": "layer1"
+        "LayerName": "foo_12.1"
       }
     },
     "FunctionLambdaFunction": {
@@ -173,7 +174,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-lambda-with-layer/dev/1657793521938-2022-07-14T10:12:01.938Z/function.zip"
+          "S3Key": "serverless/test-lambda-with-layer/dev/1686299047936-2023-06-09T08:24:07.936Z/function.zip"
         },
         "Handler": "index.handler",
         "Runtime": "nodejs14.x",
@@ -217,14 +218,14 @@
     },
     "Layer1LambdaLayerHash": {
       "Description": "Current Lambda layer hash",
-      "Value": "e7306e77cf8e54f65c92b19761c8b3e3faf480ee",
+      "Value": "240c38fad13c1f294b94d066a2207b7471f7e82e",
       "Export": {
         "Name": "sls-test-lambda-with-layer-dev-Layer1LambdaLayerHash"
       }
     },
     "Layer1LambdaLayerS3Key": {
       "Description": "Current Lambda layer S3Key",
-      "Value": "serverless/test-lambda-with-layer/dev/1648118944199-2022-03-24T10:49:04.199Z/layer1.zip",
+      "Value": "serverless/test-lambda-with-layer/dev/1686299047936-2023-06-09T08:24:07.936Z/layer1.zip",
       "Export": {
         "Name": "sls-test-lambda-with-layer-dev-Layer1LambdaLayerS3Key"
       }

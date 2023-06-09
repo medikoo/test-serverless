@@ -19,3 +19,4 @@ functions:
 layers:
   layer1:
     path: layer
+    name: foo_12.1
