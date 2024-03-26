@@ -1,4 +1,4 @@
-// Node.js v6+
+// Node.js v14+
 
 "use strict";
 
