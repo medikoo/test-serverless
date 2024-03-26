@@ -6,7 +6,7 @@
     },
     "provider": {
       "name": "aws",
-      "runtime": "nodejs12.x",
+      "runtime": "nodejs14.x",
       "region": "us-east-1",
       "stage": "dev",
       "versionFunctions": false,
@@ -127,7 +127,8 @@
                         "Effect": "Allow",
                         "Action": [
                           "logs:CreateLogStream",
-                          "logs:CreateLogGroup"
+                          "logs:CreateLogGroup",
+                          "logs:TagResource"
                         ],
                         "Resource": [
                           {
@@ -173,10 +174,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/test-plugin-serverless-plugin-reducer/dev/1638350288886-2021-12-01T09:18:08.886Z/function.zip"
+                "S3Key": "serverless/test-plugin-serverless-plugin-reducer/dev/1711481330654-2024-03-26T19:28:50.654Z/function.zip"
               },
               "Handler": "index.handler",
-              "Runtime": "nodejs12.x",
+              "Runtime": "nodejs14.x",
               "FunctionName": "test-plugin-serverless-plugin-reducer-dev-function",
               "MemorySize": 1024,
               "Timeout": 6,
@@ -288,7 +289,8 @@
       "vpc": {}
     },
     "plugins": [
-      "serverless-plugin-reducer"
+      "serverless-plugin-reducer",
+      "serverless-newrelic-lambda-layers"
     ],
     "pluginsData": {},
     "functions": {
@@ -305,16 +307,14 @@
         "name": "test-plugin-serverless-plugin-reducer-dev-function",
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs12.x",
+        "runtime": "nodejs14.x",
         "vpc": {}
       }
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "initialServerlessConfig": {
-      "service": {
-        "$ref": "$[\"service\"][\"serviceObject\"]"
-      },
+      "service": "test-plugin-serverless-plugin-reducer",
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
@@ -324,7 +324,8 @@
           "playground/**",
           "!playground/ignore"
         ],
-        "artifactDirectoryName": "serverless/test-plugin-serverless-plugin-reducer/dev/1638350288886-2021-12-01T09:18:08.886Z"
+        "artifactsS3KeyDirname": "serverless/test-plugin-serverless-plugin-reducer/dev/code-artifacts",
+        "artifactDirectoryName": "serverless/test-plugin-serverless-plugin-reducer/dev/1711481330654-2024-03-26T19:28:50.654Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -338,7 +339,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/test-plugin-serverless-plugin-reducer/dev/1638350288886-2021-12-01T09:18:08.886Z",
+    "artifactDirectoryName": "serverless/test-plugin-serverless-plugin-reducer/dev/1711481330654-2024-03-26T19:28:50.654Z",
     "artifact": ""
   }
 }

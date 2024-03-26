@@ -5,6 +5,7 @@
 		"eslint": "^8.38.0",
 		"eslint-config-medikoo": "^4.1.2",
 		"prettier-elastic": "^2.2.1",
+		"serverless-newrelic-lambda-layers": "^5.0.1",
 		"serverless-plugin-reducer": "^4.0.0"
 	},
 	"eslintConfig": {

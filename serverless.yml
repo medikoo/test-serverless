@@ -23,3 +23,4 @@ functions:
 
 plugins:
   - serverless-plugin-reducer
+  - serverless-newrelic-lambda-layers

@@ -115,7 +115,8 @@
                   "Effect": "Allow",
                   "Action": [
                     "logs:CreateLogStream",
-                    "logs:CreateLogGroup"
+                    "logs:CreateLogGroup",
+                    "logs:TagResource"
                   ],
                   "Resource": [
                     {
@@ -161,10 +162,10 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/test-plugin-serverless-plugin-reducer/dev/1638350288886-2021-12-01T09:18:08.886Z/function.zip"
+          "S3Key": "serverless/test-plugin-serverless-plugin-reducer/dev/1711481330654-2024-03-26T19:28:50.654Z/function.zip"
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs12.x",
+        "Runtime": "nodejs14.x",
         "FunctionName": "test-plugin-serverless-plugin-reducer-dev-function",
         "MemorySize": 1024,
         "Timeout": 6,
